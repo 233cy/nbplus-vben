@@ -10,7 +10,7 @@ export default {
     },
   ],
   plugins: ['prettier-plugin-tailwindcss'],
-  printWidth: 80,
+  printWidth: 180,
   proseWrap: 'never',
   semi: true,
   singleQuote: true,
