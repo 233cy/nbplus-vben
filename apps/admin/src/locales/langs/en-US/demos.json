@@ -1,13 +1,15 @@
 {
-  "title": "Demos",
   "antd": "Ant Design Vue",
+  "page": {
+    "title": "test components:pageSelect"
+  },
+  "title": "Demos",
   "vben": {
-    "title": "Project",
-    "about": "About",
+    "about": "About Us",
     "document": "Document",
-    "antdv": "Ant Design Vue Version",
-    "naive-ui": "Naive UI Version",
     "element-plus": "Element Plus Version",
-    "tdesign": "TDesign Vue Version"
+    "naive-ui": "Naive UI Version",
+    "tdesign": "TDesign Vue Version",
+    "title": "Project"
   }
 }

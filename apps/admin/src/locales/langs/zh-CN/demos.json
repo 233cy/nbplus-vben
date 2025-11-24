@@ -1,13 +1,15 @@
 {
-  "title": "演示",
   "antd": "Ant Design Vue",
+  "page": {
+    "title": "弹窗选择器测试"
+  },
+  "title": "测试",
   "vben": {
-    "title": "项目",
-    "about": "关于",
-    "document": "文档",
-    "antdv": "Ant Design Vue 版本",
-    "naive-ui": "Naive UI 版本",
-    "element-plus": "Element Plus 版本",
-    "tdesign": "TDesign Vue 版本"
+    "about": "关于我们",
+    "document": "测试Document",
+    "element-plus": "测试Element Plus Version",
+    "naive-ui": "测试Naive UI Version",
+    "tdesign": "测试TDesign Vue Version",
+    "title": "测试Project"
   }
 }

@@ -1,15 +1,29 @@
 {
   "auth": {
-    "login": "Login",
-    "register": "Register",
-    "codeLogin": "Code Login",
-    "qrcodeLogin": "Qr Code Login",
     "forgetPassword": "Forget Password",
-    "profile": "Profile"
+    "login": "Login",
+    "profile": "Profile",
+    "qrcodeLogin": "Qr Code Login",
+    "register": "Register"
   },
+  "clearAll": "Clear all",
   "dashboard": {
-    "title": "Dashboard",
     "analytics": "Analytics",
+    "title": "Dashboard",
     "workspace": "Workspace"
-  }
+  },
+  "foldUp": "fold up",
+  "itemsSelect": "{count} items have been selected",
+  "loadingSelectedData": "Loading selected data",
+  "noDataAvailable": "No data available",
+  "noSelectData": "No data selected",
+  "richTextEditor": {
+    "editContent": "Edit content",
+    "textContent": "Content length {len}"
+  },
+  "search": {
+    "keyword": "search keywords"
+  },
+  "selectData": "Select data",
+  "showMore": "Show more"
 }

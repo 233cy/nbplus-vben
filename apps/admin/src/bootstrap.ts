@@ -5,6 +5,7 @@ import { registerLoadingDirective } from '@vben/common-ui/es/loading';
 import { preferences } from '@vben/preferences';
 import { initStores } from '@vben/stores';
 import '@vben/styles';
+import '@vben/styles/admin';
 import '@vben/styles/antd';
 
 import { useTitle } from '@vueuse/core';
@@ -64,8 +65,7 @@ async function bootstrap(namespace: string) {
   watchEffect(() => {
     if (preferences.app.dynamicTitle) {
       const routeTitle = router.currentRoute.value.meta?.title;
-      const pageTitle =
-        (routeTitle ? `${$t(routeTitle)} - ` : '') + preferences.app.name;
+      const pageTitle = (routeTitle ? `${$t(routeTitle)} - ` : '') + preferences.app.name;
       useTitle(pageTitle);
     }
   });

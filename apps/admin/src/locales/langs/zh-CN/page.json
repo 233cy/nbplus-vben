@@ -1,15 +1,29 @@
 {
   "auth": {
-    "login": "登录",
-    "register": "注册",
-    "codeLogin": "验证码登录",
-    "qrcodeLogin": "二维码登录",
     "forgetPassword": "忘记密码",
-    "profile": "个人中心"
+    "login": "登录",
+    "profile": "个人中心",
+    "qrcodeLogin": "二维码登录",
+    "register": "注册"
   },
+  "clearAll": "清空全部",
   "dashboard": {
+    "analytics": "分析",
     "title": "概览",
-    "analytics": "分析页",
     "workspace": "工作台"
-  }
+  },
+  "foldUp": "收起",
+  "itemsSelect": "已选择 {count} 项",
+  "loadingSelectedData": "正在加载已选数据",
+  "noDataAvailable": "暂无数据",
+  "noSelectData": "尚未选择数据",
+  "richTextEditor": {
+    "editContent": "编辑内容",
+    "textContent": "内容长度 {len} 字符"
+  },
+  "search": {
+    "keyword": "搜索关键词"
+  },
+  "selectData": "选择数据",
+  "showMore": "显示更多"
 }

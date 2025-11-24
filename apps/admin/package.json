@@ -26,6 +26,11 @@
     "#/*": "./src/*"
   },
   "dependencies": {
+    "@uppy/aws-s3": "^5.0.2",
+    "@uppy/core": "^5.1.1",
+    "@uppy/dashboard": "^5.0.4",
+    "@uppy/golden-retriever": "^5.1.1",
+    "@uppy/vue": "^3.1.0",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",
@@ -41,10 +46,16 @@
     "@vben/types": "workspace:*",
     "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
     "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
     "pinia": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:"
+  },
+  "devDependencies": {
+    "unplugin-auto-import": "^20.2.0",
+    "unplugin-vue-components": "^30.0.0"
   }
 }

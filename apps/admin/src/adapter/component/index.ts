@@ -15,65 +15,35 @@ import { $t } from '@vben/locales';
 
 import { notification } from 'ant-design-vue';
 
-const AutoComplete = defineAsyncComponent(
-  () => import('ant-design-vue/es/auto-complete'),
-);
+const AutoComplete = defineAsyncComponent(() => import('ant-design-vue/es/auto-complete'));
 const Button = defineAsyncComponent(() => import('ant-design-vue/es/button'));
-const Checkbox = defineAsyncComponent(
-  () => import('ant-design-vue/es/checkbox'),
-);
-const CheckboxGroup = defineAsyncComponent(() =>
-  import('ant-design-vue/es/checkbox').then((res) => res.CheckboxGroup),
-);
-const DatePicker = defineAsyncComponent(
-  () => import('ant-design-vue/es/date-picker'),
-);
+const Checkbox = defineAsyncComponent(() => import('ant-design-vue/es/checkbox'));
+const CheckboxGroup = defineAsyncComponent(() => import('ant-design-vue/es/checkbox').then((res) => res.CheckboxGroup));
+const DatePicker = defineAsyncComponent(() => import('ant-design-vue/es/date-picker'));
 const Divider = defineAsyncComponent(() => import('ant-design-vue/es/divider'));
 const Input = defineAsyncComponent(() => import('ant-design-vue/es/input'));
-const InputNumber = defineAsyncComponent(
-  () => import('ant-design-vue/es/input-number'),
-);
-const InputPassword = defineAsyncComponent(() =>
-  import('ant-design-vue/es/input').then((res) => res.InputPassword),
-);
-const Mentions = defineAsyncComponent(
-  () => import('ant-design-vue/es/mentions'),
-);
+const InputNumber = defineAsyncComponent(() => import('ant-design-vue/es/input-number'));
+const InputPassword = defineAsyncComponent(() => import('ant-design-vue/es/input').then((res) => res.InputPassword));
+const Mentions = defineAsyncComponent(() => import('ant-design-vue/es/mentions'));
 const Radio = defineAsyncComponent(() => import('ant-design-vue/es/radio'));
-const RadioGroup = defineAsyncComponent(() =>
-  import('ant-design-vue/es/radio').then((res) => res.RadioGroup),
-);
-const RangePicker = defineAsyncComponent(() =>
-  import('ant-design-vue/es/date-picker').then((res) => res.RangePicker),
-);
+const RadioGroup = defineAsyncComponent(() => import('ant-design-vue/es/radio').then((res) => res.RadioGroup));
+const RangePicker = defineAsyncComponent(() => import('ant-design-vue/es/date-picker').then((res) => res.RangePicker));
 const Rate = defineAsyncComponent(() => import('ant-design-vue/es/rate'));
 const Select = defineAsyncComponent(() => import('ant-design-vue/es/select'));
 const Space = defineAsyncComponent(() => import('ant-design-vue/es/space'));
 const Switch = defineAsyncComponent(() => import('ant-design-vue/es/switch'));
-const Textarea = defineAsyncComponent(() =>
-  import('ant-design-vue/es/input').then((res) => res.Textarea),
-);
-const TimePicker = defineAsyncComponent(
-  () => import('ant-design-vue/es/time-picker'),
-);
-const TreeSelect = defineAsyncComponent(
-  () => import('ant-design-vue/es/tree-select'),
-);
+const Textarea = defineAsyncComponent(() => import('ant-design-vue/es/input').then((res) => res.Textarea));
+const TimePicker = defineAsyncComponent(() => import('ant-design-vue/es/time-picker'));
+const TreeSelect = defineAsyncComponent(() => import('ant-design-vue/es/tree-select'));
 const Upload = defineAsyncComponent(() => import('ant-design-vue/es/upload'));
+const Edit = defineAsyncComponent(() => import('#/components/wangEditor/index.vue'));
 
-const withDefaultPlaceholder = <T extends Component>(
-  component: T,
-  type: 'input' | 'select',
-  componentProps: Recordable<any> = {},
-) => {
+const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select', componentProps: Recordable<any> = {}) => {
   return defineComponent({
     name: component.name,
     inheritAttrs: false,
     setup: (props: any, { attrs, expose, slots }) => {
-      const placeholder =
-        props?.placeholder ||
-        attrs?.placeholder ||
-        $t(`ui.placeholder.${type}`);
+      const placeholder = props?.placeholder || attrs?.placeholder || $t(`ui.placeholder.${type}`);
       // 透传组件暴露的方法
       const innerRef = ref();
       expose(
@@ -85,12 +55,7 @@ const withDefaultPlaceholder = <T extends Component>(
           },
         ),
       );
-      return () =>
-        h(
-          component,
-          { ...componentProps, placeholder, ...props, ...attrs, ref: innerRef },
-          slots,
-        );
+      return () => h(component, { ...componentProps, placeholder, ...props, ...attrs, ref: innerRef }, slots);
     },
   });
 };
@@ -111,6 +76,7 @@ export type ComponentType =
   | 'InputPassword'
   | 'Mentions'
   | 'PrimaryButton'
+  | 'Edit'
   | 'Radio'
   | 'RadioGroup'
   | 'RangePicker'
@@ -190,6 +156,7 @@ async function initComponentAdapter() {
     TimePicker,
     TreeSelect: withDefaultPlaceholder(TreeSelect, 'select'),
     Upload,
+    Edit,
   };
 
   // 将组件注册到全局共享状态中
