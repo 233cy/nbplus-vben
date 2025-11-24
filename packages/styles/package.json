@@ -15,6 +15,9 @@
       "types": "./src/index.ts",
       "default": "./src/index.ts"
     },
+    "./admin": {
+      "default": "./src/admin/index.css"
+    },
     "./antd": {
       "default": "./src/antd/index.css"
     },
