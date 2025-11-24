@@ -22,21 +22,12 @@
     },
     {
       "type": "chrome",
-      "name": "vben admin ele dev",
+      "name": "233cy admin public",
       "request": "launch",
-      "url": "http://localhost:5777",
+      "url": "http://localhost:2300",
       "env": { "NODE_ENV": "development" },
       "sourceMaps": true,
-      "webRoot": "${workspaceFolder}/apps/web-ele"
-    },
-    {
-      "type": "chrome",
-      "name": "vben admin naive dev",
-      "request": "launch",
-      "url": "http://localhost:5888",
-      "env": { "NODE_ENV": "development" },
-      "sourceMaps": true,
-      "webRoot": "${workspaceFolder}/apps/web-naive"
+      "webRoot": "${workspaceFolder}/apps/admin"
     }
   ]
 }

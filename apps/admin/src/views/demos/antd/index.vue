@@ -299,7 +299,7 @@ const [BaseForm] = useVbenForm({
     </a-card>
     <a-card class="mb-5" title="Message">
       <a-space>
-        <a-button @click="info"> 信息 </a-button>
+        <a-button type="ghost" @click="info"> 信息 </a-button>
         <a-button type="dashed" danger @click="error"> 错误 </a-button>
         <a-button @click="warning"> 警告 </a-button>
         <a-button @click="success"> 成功 </a-button>
@@ -307,7 +307,7 @@ const [BaseForm] = useVbenForm({
     </a-card>
 
     <a-card class="mb-5" title="上传插件">
-      <upload></upload>
+      <upload />
     </a-card>
 
     <a-card class="mb-5" :title="$t('demos.page.title')">
@@ -324,7 +324,7 @@ const [BaseForm] = useVbenForm({
       <BaseForm />
     </a-card>
 
-    <a-card class="mb-5" title="富文本展示tinymce">
+    <a-card class="mb-5" title="富文本展示time">
       <wang-editor v-model="editHtml" />
     </a-card>
 
