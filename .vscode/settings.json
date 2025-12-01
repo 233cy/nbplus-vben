@@ -201,7 +201,7 @@
     "tailwind.config.mjs": "postcss.*"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": ["archiver", "axios", "dotenv", "isequal", "jspm", "napi", "nolebase", "rollup", "vitest"],
+  "cSpell.words": ["archiver", "axios", "dotenv", "isequal", "jspm", "napi", "nolebase", "rollup", "uppy", "vitest"],
   "editor.renderWhitespace": "all",
   "editor.rulers": [180],
 

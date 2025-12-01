@@ -1,24 +1,33 @@
 <script setup lang="ts">
+import type { AwsBody } from '@uppy/aws-s3';
+
 import { onBeforeUnmount, ref } from 'vue';
 
 import AwsS3 from '@uppy/aws-s3';
 import Uppy from '@uppy/core';
 import { Button, message, Upload } from 'ant-design-vue';
 
-// Antd 的文件列表
+// ---------- 基本配置 ----------
+const API_BASE = 'http://10.8.0.4:9501'; // 你的 Hyperf API
+
+// antd 的 fileList
 const fileList = ref<any[]>([]);
 
-// 你的后端 API 根地址
-const API_BASE = 'http://10.8.0.4:9501';
+// Uppy 泛型：Meta / Body
+type Meta = Record<string, unknown>;
 
-// 创建 Uppy 实例
-const uppy = new Uppy({
+const uppy = new Uppy<Meta, AwsBody>({
   autoProceed: true,
   allowMultipleUploadBatches: true,
 }).use(AwsS3, {
+  // 1) 决定什么时候走 Multipart
   shouldUseMultipart(file) {
-    return file.size > 100 * 1024 * 1024;
+    // 大于 $maxFile MB 走 切片上传
+    const maxFile = 5;
+    return (file.size ?? 0) > maxFile * 1024 * 1024;
   },
+
+  // 2) 普通 PUT：小文件
   async getUploadParameters(file, { signal }) {
     const res = await fetch(`${API_BASE}/s3/sign-put`, {
       method: 'POST',
@@ -34,22 +43,19 @@ const uppy = new Uppy({
       throw new Error('获取 PUT 签名失败');
     }
 
-    // 后端返回：{ url, headers }
     const data = await res.json();
-
-    // Uppy 需要的返回格式：
-    // { method, url, fields, headers }
+    // Uppy 需要：method / url / fields / headers:contentReference[oaicite:2]{index=2}
     return {
       method: 'PUT',
       url: data.url,
-      fields: {}, // presigned PUT 不用 fields
+      fields: {},
       headers: data.headers || {
         'content-type': file.type || 'application/octet-stream',
       },
     };
   },
 
-  // Multipart：创建上传
+  // 3) 创建 Multipart Upload
   async createMultipartUpload(file) {
     const res = await fetch(`${API_BASE}/s3/multipart/create`, {
       method: 'POST',
@@ -65,14 +71,12 @@ const uppy = new Uppy({
     }
 
     const data = await res.json();
-    console.warn('🔥 createMultipartUpload 返回：', data);
-
-    return data; // ⭐ 必须 return data
+    // 必须返回：{ uploadId, key }:contentReference[oaicite:3]{index=3}
+    return data;
   },
 
-  // Multipart：为某一分片签名
-  async signPart(_file, { uploadId, key, partNumber, signal }) {
-    console.log('signPart 参数：', uploadId, key, partNumber);
+  // 4) 为某一分片签名
+  async signPart(file, { uploadId, key, partNumber, signal }) {
     const res = await fetch(`${API_BASE}/s3/multipart/sign`, {
       method: 'POST',
       signal,
@@ -88,12 +92,31 @@ const uppy = new Uppy({
       throw new Error('签名分片失败');
     }
 
-    // 必须返回：{ url, headers? }
+    // 必须返回：{ url, headers? }:contentReference[oaicite:4]{index=4}
     return res.json();
   },
 
-  // Multipart：完成上传
-  async completeMultipartUpload(_file, { uploadId, key, parts }) {
+  // 5) 查询已上传的分片（用于断点续传等）
+  async listParts(file, { uploadId, key }) {
+    const res = await fetch(`${API_BASE}/s3/multipart/list`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        uploadId,
+        key,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error('获取分片列表失败');
+    }
+
+    // 返回 S3 风格 parts 数组：[{ PartNumber, Size, ETag }, ...]:contentReference[oaicite:5]{index=5}
+    return res.json();
+  },
+
+  // 6) 完成 Multipart
+  async completeMultipartUpload(file, { uploadId, key, parts }) {
     const res = await fetch(`${API_BASE}/s3/multipart/complete`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -108,68 +131,56 @@ const uppy = new Uppy({
       throw new Error('完成 multipart 失败');
     }
 
-    // 建议返回：{ location, bucket, key }
+    // 建议返回：{ location, key }
     return res.json();
   },
 
-  // 可选：取消 Multipart
-  async abortMultipartUpload(_file, { uploadId, key }) {
-    console.log('🔥 abortMultipartUpload:', uploadId, key);
-
+  // 7) 取消 Multipart（中止上传）
+  async abortMultipartUpload(file, { uploadId, key }) {
     await fetch(`${API_BASE}/s3/multipart/abort`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        uploadId,
-        key,
-      }),
+      body: JSON.stringify({ uploadId, key }),
     });
   },
-} as any);
+});
 
-// ----------------------
-// Uppy → Antd 进度同步
-// ----------------------
+// ---------- Uppy → Antd 同步 ----------
 uppy.on('upload-progress', (file, progress) => {
-  const target = fileList.value.find((f) => f.uid === file.meta.uid);
-  if (target) {
-    target.percent = progress.bytesTotal ? Number(((progress.bytesUploaded / progress.bytesTotal) * 100).toFixed(2)) : 0;
+  const f = file!; // 告诉 TS：file 不可能是 null/undefined
+  const t = fileList.value.find((val) => val.uid === f.meta.uid);
+  if (t) {
+    t.percent = progress.bytesTotal ? Number(((progress.bytesUploaded / progress.bytesTotal) * 100).toFixed(2)) : 0;
   }
 });
 
-// ----------------------
-// Uppy → Antd 上传成功
-// ----------------------
 uppy.on('upload-success', (file, response) => {
-  const target = fileList.value.find((f) => f.uid === file.meta.uid);
-  if (target) {
-    target.status = 'done';
-
-    const body = response?.body || {};
-    // 后端 completeMultipart / sign-put 最好返回 location
-    target.url = body.location || body.url || '';
-
-    message.success(`上传成功：${file.name}`);
+  const f = file!; // 告诉 TS：file 不可能是 null/undefined
+  const t = fileList.value.find((val) => val.uid === f.meta.uid);
+  if (t) {
+    t.status = 'done';
+    const body = (response?.body ?? {}) as {
+      location?: string;
+      url?: string;
+    };
+    t.url = body.location || body.url || '';
+    message.success(`上传成功：${f.name}`);
   }
 });
 
-// 错误处理
 uppy.on('error', (err) => {
   console.error(err);
   message.error(`上传失败：${err.message}`);
 });
 
-// 组件卸载时清理 Uppy
 onBeforeUnmount(() => {
-  uppy.close();
+  uppy.destroy();
 });
 
-// Antd beforeUpload：阻止默认上传，交给 Uppy
+// Antd 的 beforeUpload：阻止默认上传，交给 Uppy
 function beforeUpload(file: any) {
-  const uid = file.uid;
-
   fileList.value.push({
-    uid,
+    uid: file.uid,
     name: file.name,
     status: 'uploading',
     percent: 0,
@@ -179,7 +190,7 @@ function beforeUpload(file: any) {
     name: file.name,
     type: file.type,
     data: file,
-    meta: { uid },
+    meta: { uid: file.uid },
   });
 
   return false;
