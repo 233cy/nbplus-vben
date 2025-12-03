@@ -123,7 +123,8 @@ onBeforeUnmount(() => uppy.destroy());
 // =================================
 // Antd Upload 交互
 // =================================
-function handleBeforeUpload(raw: any) {
+function handleBeforeUpload(raw: any, fileList: any) {
+  console.log(raw, fileList);
   uploadFiles.value.push({
     uid: raw.uid,
     name: raw.name,
@@ -212,42 +213,49 @@ function findUIFile(file: any): UIFile {
     <a-button type="primary">选择文件</a-button>
 
     <template #itemRender="{ file }">
-      <div v-if="findUIFile(file)" class="flex w-full items-center justify-between py-2">
-        <!-- 左侧：信息 -->
-        <div class="flex-1">
-          <div class="font-medium">
-            {{ findUIFile(file).name }}
+      <a-list
+        v-if="findUIFile(file)"
+        item-layout="horizontal"
+        :data-source="[file]"
+        class="hover:text-regular bg-card mt-2 rounded-md border transition-all hover:bg-gray-100 dark:bg-gray-800 hover:dark:bg-gray-900"
+      >
+        <template #renderItem>
+          <a-list-item>
+            <template #actions>
+              <a-button v-if="findUIFile(file).isStart === false" type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))"> 上传 </a-button>
+              <a-button v-else-if="findUIFile(file).status === 'error'" type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))"> 重试 </a-button>
+              <a-button v-else type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))">
+                {{ findUIFile(file).paused ? '继续' : '暂停' }}
+              </a-button>
 
-            <!-- 上传速度 + ETA -->
-            <span v-if="findUIFile(file).status === 'uploading'" class="ml-1 text-gray-500">
-              （{{ findUIFile(file).uploadedMB?.toFixed(2) }} MB / {{ findUIFile(file).totalMB?.toFixed(2) }} MB， {{ findUIFile(file).speed?.toFixed(2) }} MB/s， 剩余
-              {{ findUIFile(file).eta?.toFixed(1) }}s）
-            </span>
-          </div>
+              <a-button type="link" size="small" :disabled="!findUIFile(file).downloadUrl" @click.stop="handleDownload(findUIFile(file))"> 下载 </a-button>
 
-          <!-- 进度条 -->
-          <a-progress
-            :percent="findUIFile(file).percent"
-            size="small"
-            :status="findUIFile(file).status === 'error' ? 'exception' : findUIFile(file).status === 'done' ? 'success' : undefined"
-            :stroke-color="findUIFile(file).paused ? '#faad14' : '#1677ff'"
-            class="mt-1"
-          />
-        </div>
-
-        <!-- 操作按钮 -->
-        <div class="ml-2 flex items-center gap-1">
-          <a-button v-if="findUIFile(file).isStart === false" type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))"> 上传 </a-button>
-          <a-button v-else-if="findUIFile(file).status === 'error'" type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))"> 重试 </a-button>
-          <a-button v-else type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))">
-            {{ findUIFile(file).paused ? '继续' : '暂停' }}
-          </a-button>
-
-          <a-button type="link" size="small" :disabled="!findUIFile(file).downloadUrl" @click.stop="handleDownload(findUIFile(file))"> 下载 </a-button>
-
-          <a-button type="link" danger size="small" @click.stop="handleRemove(findUIFile(file))"> 删除 </a-button>
-        </div>
-      </div>
+              <a-button type="link" danger size="small" @click.stop="handleRemove(findUIFile(file))"> 删除 </a-button>
+            </template>
+            <a-list-item-meta>
+              <template #title>
+                {{ findUIFile(file).name }}
+                <!-- 上传速度 + ETA -->
+                <span v-if="findUIFile(file).status === 'uploading'" class="ml-1 text-gray-500">
+                  （{{ findUIFile(file).uploadedMB?.toFixed(2) }} MB / {{ findUIFile(file).totalMB?.toFixed(2) }} MB， {{ findUIFile(file).speed?.toFixed(2) }} MB/s， 剩余
+                  {{ findUIFile(file).eta?.toFixed(1) }}s）
+                </span>
+              </template>
+              <template #description>
+                <!-- 进度条 -->
+                <a-progress
+                  :percent="findUIFile(file).percent"
+                  :status="findUIFile(file).status === 'error' ? 'exception' : findUIFile(file).status === 'done' ? 'success' : undefined"
+                  :stroke-color="findUIFile(file).paused ? '#faad14' : '#1677ff'"
+                />
+              </template>
+              <template #avatar>
+                <a-avatar src="https://joeschmoe.io/api/v1/random" />
+              </template>
+            </a-list-item-meta>
+          </a-list-item>
+        </template>
+      </a-list>
     </template>
   </a-upload>
 </template>
