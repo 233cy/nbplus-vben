@@ -307,7 +307,7 @@ const [BaseForm] = useVbenForm({
     </a-card>
 
     <a-card class="mb-5" title="上传插件">
-      <upload />
+      <Upload />
     </a-card>
 
     <a-card class="mb-5" :title="$t('demos.page.title')">

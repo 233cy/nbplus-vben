@@ -26,10 +26,8 @@
     "#/*": "./src/*"
   },
   "dependencies": {
-    "@uppy/aws-s3": "^5.0.2",
     "@uppy/core": "^5.1.1",
-    "@uppy/dashboard": "^5.0.4",
-    "@uppy/golden-retriever": "^5.1.1",
+    "@uppy/tus": "^5.0.2",
     "@uppy/vue": "^3.1.0",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",

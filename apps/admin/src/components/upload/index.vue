@@ -1,204 +1,253 @@
 <script setup lang="ts">
-import type { AwsBody } from '@uppy/aws-s3';
+import type { TusBody } from '@uppy/tus';
+import type { UploadFile } from 'ant-design-vue';
 
 import { onBeforeUnmount, ref } from 'vue';
 
-import AwsS3 from '@uppy/aws-s3';
 import Uppy from '@uppy/core';
-import { Button, message, Upload } from 'ant-design-vue';
+import Tus from '@uppy/tus';
+import { message } from 'ant-design-vue';
 
-// ---------- 基本配置 ----------
-const API_BASE = 'http://10.8.0.4:9501'; // 你的 Hyperf API
-
-// antd 的 fileList
-const fileList = ref<any[]>([]);
-
-// Uppy 泛型：Meta / Body
 type Meta = Record<string, unknown>;
 
-const uppy = new Uppy<Meta, AwsBody>({
-  autoProceed: true,
+// === 基础配置 ===
+const API_BASE = 'http://10.8.0.4:9501';
+const TUS_ENDPOINT = `${API_BASE}/tus`;
+
+// ================================
+// 上传文件类型定义
+// ================================
+
+type UIFile = {
+  downloadUrl?: string;
+  eta?: number; // 秒
+  isStart: boolean;
+
+  name: string;
+  paused?: boolean;
+  percent: number;
+
+  speed?: number; // MB/s
+  status: string;
+  totalMB?: number;
+  uid: string;
+  uploadedMB?: number;
+
+  uppyId: string;
+} & UploadFile;
+
+const uploadFiles = ref<UIFile[]>([]);
+
+// =================================
+// Uppy 初始化 + Tus
+// =================================
+const uppy = new Uppy<Meta, TusBody>({
+  autoProceed: false,
   allowMultipleUploadBatches: true,
-}).use(AwsS3, {
-  // 1) 决定什么时候走 Multipart
-  shouldUseMultipart(file) {
-    // 大于 $maxFile MB 走 切片上传
-    const maxFile = 5;
-    return (file.size ?? 0) > maxFile * 1024 * 1024;
-  },
-
-  // 2) 普通 PUT：小文件
-  async getUploadParameters(file, { signal }) {
-    const res = await fetch(`${API_BASE}/s3/sign-put`, {
-      method: 'POST',
-      signal,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        filename: file.name,
-        contentType: file.type || 'application/octet-stream',
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error('获取 PUT 签名失败');
-    }
-
-    const data = await res.json();
-    // Uppy 需要：method / url / fields / headers:contentReference[oaicite:2]{index=2}
-    return {
-      method: 'PUT',
-      url: data.url,
-      fields: {},
-      headers: data.headers || {
-        'content-type': file.type || 'application/octet-stream',
-      },
-    };
-  },
-
-  // 3) 创建 Multipart Upload
-  async createMultipartUpload(file) {
-    const res = await fetch(`${API_BASE}/s3/multipart/create`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        filename: file.name,
-        contentType: file.type || 'application/octet-stream',
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error('创建 multipart 失败');
-    }
-
-    const data = await res.json();
-    // 必须返回：{ uploadId, key }:contentReference[oaicite:3]{index=3}
-    return data;
-  },
-
-  // 4) 为某一分片签名
-  async signPart(file, { uploadId, key, partNumber, signal }) {
-    const res = await fetch(`${API_BASE}/s3/multipart/sign`, {
-      method: 'POST',
-      signal,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        uploadId,
-        key,
-        partNumber,
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error('签名分片失败');
-    }
-
-    // 必须返回：{ url, headers? }:contentReference[oaicite:4]{index=4}
-    return res.json();
-  },
-
-  // 5) 查询已上传的分片（用于断点续传等）
-  async listParts(file, { uploadId, key }) {
-    const res = await fetch(`${API_BASE}/s3/multipart/list`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        uploadId,
-        key,
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error('获取分片列表失败');
-    }
-
-    // 返回 S3 风格 parts 数组：[{ PartNumber, Size, ETag }, ...]:contentReference[oaicite:5]{index=5}
-    return res.json();
-  },
-
-  // 6) 完成 Multipart
-  async completeMultipartUpload(file, { uploadId, key, parts }) {
-    const res = await fetch(`${API_BASE}/s3/multipart/complete`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        uploadId,
-        key,
-        parts,
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error('完成 multipart 失败');
-    }
-
-    // 建议返回：{ location, key }
-    return res.json();
-  },
-
-  // 7) 取消 Multipart（中止上传）
-  async abortMultipartUpload(file, { uploadId, key }) {
-    await fetch(`${API_BASE}/s3/multipart/abort`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ uploadId, key }),
-    });
-  },
+}).use(Tus, {
+  endpoint: TUS_ENDPOINT,
+  chunkSize: 5 * 1024 * 1024,
+  retryDelays: [],
+  removeFingerprintOnSuccess: false,
 });
 
-// ---------- Uppy → Antd 同步 ----------
+// 绑定 uppyId
+uppy.on('file-added', (file) => {
+  const target = uploadFiles.value.find((f) => f.uid === file.meta.uid);
+  if (target) target.uppyId = file.id;
+});
+
+// =============================
+// 上传进度
+// =============================
+const progressData = new Map<string, { lastBytes: number; lastTime: number }>();
 uppy.on('upload-progress', (file, progress) => {
-  const f = file!; // 告诉 TS：file 不可能是 null/undefined
-  const t = fileList.value.find((val) => val.uid === f.meta.uid);
-  if (t) {
-    t.percent = progress.bytesTotal ? Number(((progress.bytesUploaded / progress.bytesTotal) * 100).toFixed(2)) : 0;
-  }
+  const files = file!;
+  const target = uploadFiles.value.find((f) => f.uppyId === files.id);
+  if (!target || !progress.bytesTotal) return;
+
+  const now = Date.now();
+  const pd = progressData.get(files.id) ?? {
+    lastBytes: progress.bytesUploaded,
+    lastTime: now,
+  };
+
+  const deltaBytes = progress.bytesUploaded - pd.lastBytes;
+  const deltaTime = (now - pd.lastTime) / 1000;
+
+  const speed = deltaTime > 0 ? deltaBytes / 1024 / 1024 / deltaTime : 0;
+  const remaining = progress.bytesTotal - progress.bytesUploaded;
+  const eta = speed > 0 ? remaining / 1024 / 1024 / speed : 0;
+
+  target.speed = speed;
+  target.eta = eta;
+  target.percent = Number(((progress.bytesUploaded / progress.bytesTotal) * 100).toFixed(2));
+  target.uploadedMB = progress.bytesUploaded / 1024 / 1024;
+  target.totalMB = progress.bytesTotal / 1024 / 1024;
+  target.status = 'uploading';
+
+  progressData.set(files.id, {
+    lastBytes: progress.bytesUploaded,
+    lastTime: now,
+  });
 });
 
-uppy.on('upload-success', (file, response) => {
-  const f = file!; // 告诉 TS：file 不可能是 null/undefined
-  const t = fileList.value.find((val) => val.uid === f.meta.uid);
-  if (t) {
-    t.status = 'done';
-    const body = (response?.body ?? {}) as {
-      location?: string;
-      url?: string;
-    };
-    t.url = body.location || body.url || '';
-    message.success(`上传成功：${f.name}`);
-  }
+// =============================
+// 上传成功
+// =============================
+uppy.on('upload-success', (file, response: any) => {
+  const files = file!;
+  const target = uploadFiles.value.find((f) => f.uppyId === files.id);
+  if (!target) return;
+
+  target.status = 'done';
+  target.percent = 100;
+  target.speed = 0;
+  target.eta = 0;
+
+  const url = response?.uploadURL || (file as any).uploadURL;
+  if (url) target.downloadUrl = url;
+
+  message.success(`上传成功：${files.name}`);
 });
 
-uppy.on('error', (err) => {
-  console.error(err);
-  message.error(`上传失败：${err.message}`);
+// 错误
+uppy.on('upload-error', (file) => {
+  const files = file!;
+  const target = uploadFiles.value.find((f) => f.uppyId === files.id);
+  if (target) target.status = 'error';
 });
 
-onBeforeUnmount(() => {
-  uppy.destroy();
-});
+onBeforeUnmount(() => uppy.destroy());
 
-// Antd 的 beforeUpload：阻止默认上传，交给 Uppy
-function beforeUpload(file: any) {
-  fileList.value.push({
-    uid: file.uid,
-    name: file.name,
+// =================================
+// Antd Upload 交互
+// =================================
+function handleBeforeUpload(raw: any) {
+  uploadFiles.value.push({
+    uid: raw.uid,
+    name: raw.name,
     status: 'uploading',
     percent: 0,
+    uppyId: '',
+    speed: 0,
+    eta: 0,
+    isStart: false,
   });
 
   uppy.addFile({
-    name: file.name,
-    type: file.type,
-    data: file,
-    meta: { uid: file.uid },
+    data: raw,
+    name: raw.name,
+    type: raw.type,
+    meta: { uid: raw.uid },
   });
 
   return false;
 }
+
+function handleRemove(file: UIFile) {
+  // if (file.uppyId) uppy.removeFile(file.uppyId);
+  // uploadFiles.value = uploadFiles.value.filter((f) => f.uid !== file.uid);
+  // return false;
+  if (file.uppyId) {
+    const uppyFile = uppy.getFile(file.uppyId);
+    const uploadURL = uppyFile?.uploadURL;
+
+    // ⭐ 1. 先发 DELETE 请求到 tus server
+    if (uploadURL) {
+      fetch(uploadURL, {
+        method: 'DELETE',
+        headers: {
+          'Tus-Resumable': '1.0.0',
+        },
+      });
+    }
+
+    // ⭐ 2. 再从 Uppy 队列移除
+    uppy.removeFile(file.uppyId);
+  }
+
+  // 3. 删除 UI 列表
+  uploadFiles.value = uploadFiles.value.filter((f) => f.uid !== file.uid);
+
+  return false;
+}
+
+function handleToggleAction(file: UIFile) {
+  if (file.isStart === false) {
+    uppy.upload();
+    file.isStart = true;
+  } else if (file.status === 'error') {
+    uppy.retryUpload(file.uppyId);
+  } else {
+    uppy.pauseResume(file.uppyId);
+    const updated = uppy.getFile(file.uppyId);
+    file.paused = !!updated?.isPaused;
+  }
+}
+
+function handleDownload(file: UIFile) {
+  if (!file.downloadUrl) return message.warning('文件未上传完成');
+  window.open(`${file.downloadUrl}/get`, '_blank');
+}
+
+function findUIFile(file: any): UIFile {
+  const f = uploadFiles.value.find((x) => x.uid === file.uid);
+  if (!f) throw new Error(`UIFile not found: ${file.uid}`);
+  return f;
+}
 </script>
 
 <template>
-  <Upload :before-upload="beforeUpload" :file-list="fileList" :show-upload-list="true">
-    <Button>选择文件</Button>
-  </Upload>
+  <a-upload
+    :before-upload="handleBeforeUpload"
+    :file-list="uploadFiles"
+    :show-upload-list="{
+      showRemoveIcon: false,
+      showDownloadIcon: false,
+      showPreviewIcon: false,
+    }"
+    :custom-request="() => {}"
+  >
+    <a-button type="primary">选择文件</a-button>
+
+    <template #itemRender="{ file }">
+      <div v-if="findUIFile(file)" class="flex w-full items-center justify-between py-2">
+        <!-- 左侧：信息 -->
+        <div class="flex-1">
+          <div class="font-medium">
+            {{ findUIFile(file).name }}
+
+            <!-- 上传速度 + ETA -->
+            <span v-if="findUIFile(file).status === 'uploading'" class="ml-1 text-gray-500">
+              （{{ findUIFile(file).uploadedMB?.toFixed(2) }} MB / {{ findUIFile(file).totalMB?.toFixed(2) }} MB， {{ findUIFile(file).speed?.toFixed(2) }} MB/s， 剩余
+              {{ findUIFile(file).eta?.toFixed(1) }}s）
+            </span>
+          </div>
+
+          <!-- 进度条 -->
+          <a-progress
+            :percent="findUIFile(file).percent"
+            size="small"
+            :status="findUIFile(file).status === 'error' ? 'exception' : findUIFile(file).status === 'done' ? 'success' : undefined"
+            :stroke-color="findUIFile(file).paused ? '#faad14' : '#1677ff'"
+            class="mt-1"
+          />
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="ml-2 flex items-center gap-1">
+          <a-button v-if="findUIFile(file).isStart === false" type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))"> 上传 </a-button>
+          <a-button v-else-if="findUIFile(file).status === 'error'" type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))"> 重试 </a-button>
+          <a-button v-else type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))">
+            {{ findUIFile(file).paused ? '继续' : '暂停' }}
+          </a-button>
+
+          <a-button type="link" size="small" :disabled="!findUIFile(file).downloadUrl" @click.stop="handleDownload(findUIFile(file))"> 下载 </a-button>
+
+          <a-button type="link" danger size="small" @click.stop="handleRemove(findUIFile(file))"> 删除 </a-button>
+        </div>
+      </div>
+    </template>
+  </a-upload>
 </template>

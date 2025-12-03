@@ -6,513 +6,18 @@ settings:
 
 catalogs:
   default:
-    '@changesets/changelog-github':
-      specifier: ^0.5.1
-      version: 0.5.1
-    '@changesets/cli':
-      specifier: ^2.29.5
-      version: 2.29.5
-    '@changesets/git':
-      specifier: ^3.0.4
-      version: 3.0.4
-    '@clack/prompts':
-      specifier: ^0.10.1
-      version: 0.10.1
-    '@commitlint/cli':
-      specifier: ^19.8.1
-      version: 19.8.1
-    '@commitlint/config-conventional':
-      specifier: ^19.8.1
-      version: 19.8.1
-    '@eslint/js':
-      specifier: ^9.30.1
-      version: 9.30.1
-    '@faker-js/faker':
-      specifier: ^9.9.0
-      version: 9.9.0
-    '@iconify/json':
-      specifier: ^2.2.354
-      version: 2.2.354
-    '@iconify/tailwind':
-      specifier: ^1.2.0
-      version: 1.2.0
-    '@iconify/vue':
-      specifier: ^5.0.0
-      version: 5.0.0
-    '@intlify/core-base':
-      specifier: ^11.1.7
-      version: 11.1.7
-    '@intlify/unplugin-vue-i18n':
-      specifier: ^6.0.8
-      version: 6.0.8
-    '@jspm/generator':
-      specifier: ^2.6.2
-      version: 2.6.2
-    '@manypkg/get-packages':
-      specifier: ^3.0.0
-      version: 3.0.0
-    '@nolebase/vitepress-plugin-git-changelog':
-      specifier: ^2.18.0
-      version: 2.18.0
-    '@playwright/test':
-      specifier: ^1.53.2
-      version: 1.53.2
-    '@pnpm/workspace.read-manifest':
-      specifier: ^1000.2.0
-      version: 1000.2.0
-    '@stylistic/stylelint-plugin':
-      specifier: ^3.1.3
-      version: 3.1.3
-    '@tailwindcss/nesting':
-      specifier: 0.0.0-insiders.565cd3e
-      version: 0.0.0-insiders.565cd3e
-    '@tailwindcss/typography':
-      specifier: ^0.5.16
-      version: 0.5.16
-    '@tanstack/vue-query':
-      specifier: ^5.81.5
-      version: 5.81.5
-    '@tanstack/vue-store':
-      specifier: ^0.7.1
-      version: 0.7.1
-    '@types/archiver':
-      specifier: ^6.0.3
-      version: 6.0.3
-    '@types/eslint':
-      specifier: ^9.6.1
-      version: 9.6.1
-    '@types/html-minifier-terser':
-      specifier: ^7.0.2
-      version: 7.0.2
-    '@types/json-bigint':
-      specifier: ^1.0.4
-      version: 1.0.4
-    '@types/jsonwebtoken':
-      specifier: ^9.0.10
-      version: 9.0.10
-    '@types/lodash.clonedeep':
-      specifier: ^4.5.9
-      version: 4.5.9
-    '@types/lodash.get':
-      specifier: ^4.4.9
-      version: 4.4.9
-    '@types/lodash.isequal':
-      specifier: ^4.5.8
-      version: 4.5.8
-    '@types/lodash.set':
-      specifier: ^4.3.9
-      version: 4.3.9
-    '@types/node':
-      specifier: ^22.16.0
-      version: 22.16.0
-    '@types/nprogress':
-      specifier: ^0.2.3
-      version: 0.2.3
-    '@types/postcss-import':
-      specifier: ^14.0.3
-      version: 14.0.3
-    '@types/qrcode':
-      specifier: ^1.5.5
-      version: 1.5.5
-    '@types/qs':
-      specifier: ^6.14.0
-      version: 6.14.0
-    '@types/sortablejs':
-      specifier: ^1.15.8
-      version: 1.15.8
-    '@typescript-eslint/eslint-plugin':
-      specifier: ^8.35.1
-      version: 8.35.1
-    '@typescript-eslint/parser':
-      specifier: ^8.35.1
-      version: 8.35.1
-    '@vee-validate/zod':
-      specifier: ^4.15.1
-      version: 4.15.1
-    '@vite-pwa/vitepress':
-      specifier: ^1.0.0
-      version: 1.0.0
-    '@vitejs/plugin-vue':
-      specifier: ^5.2.4
-      version: 5.2.4
-    '@vitejs/plugin-vue-jsx':
-      specifier: ^4.2.0
-      version: 4.2.0
-    '@vue/shared':
-      specifier: ^3.5.17
-      version: 3.5.17
-    '@vue/test-utils':
-      specifier: ^2.4.6
-      version: 2.4.6
     '@vueuse/core':
       specifier: ^13.4.0
       version: 13.4.0
-    '@vueuse/integrations':
-      specifier: ^13.4.0
-      version: 13.4.0
-    '@vueuse/motion':
-      specifier: ^3.0.3
-      version: 3.0.3
     ant-design-vue:
       specifier: ^4.2.6
       version: 4.2.6
-    archiver:
-      specifier: ^7.0.1
-      version: 7.0.1
-    autoprefixer:
-      specifier: ^10.4.21
-      version: 10.4.21
-    axios:
-      specifier: ^1.10.0
-      version: 1.10.0
-    axios-mock-adapter:
-      specifier: ^2.1.0
-      version: 2.1.0
-    cac:
-      specifier: ^6.7.14
-      version: 6.7.14
-    chalk:
-      specifier: ^5.4.1
-      version: 5.4.1
-    cheerio:
-      specifier: ^1.1.0
-      version: 1.1.0
-    circular-dependency-scanner:
-      specifier: ^2.3.0
-      version: 2.3.0
-    class-variance-authority:
-      specifier: ^0.7.1
-      version: 0.7.1
-    commitlint-plugin-function-rules:
-      specifier: ^4.0.2
-      version: 4.0.2
-    consola:
-      specifier: ^3.4.2
-      version: 3.4.2
-    cross-env:
-      specifier: ^7.0.3
-      version: 7.0.3
-    cspell:
-      specifier: ^8.19.4
-      version: 8.19.4
-    cssnano:
-      specifier: ^7.0.7
-      version: 7.0.7
-    cz-git:
-      specifier: ^1.11.2
-      version: 1.11.2
-    czg:
-      specifier: ^1.11.1
-      version: 1.11.1
     dayjs:
       specifier: ^1.11.13
       version: 1.11.13
-    defu:
-      specifier: ^6.1.4
-      version: 6.1.4
-    depcheck:
-      specifier: ^1.4.7
-      version: 1.4.7
-    dotenv:
-      specifier: ^16.6.1
-      version: 16.6.1
-    echarts:
-      specifier: ^5.6.0
-      version: 5.6.0
-    eslint:
-      specifier: ^9.30.1
-      version: 9.30.1
-    eslint-config-turbo:
-      specifier: ^2.5.4
-      version: 2.5.4
-    eslint-plugin-command:
-      specifier: ^3.3.1
-      version: 3.3.1
-    eslint-plugin-eslint-comments:
-      specifier: ^3.2.0
-      version: 3.2.0
-    eslint-plugin-import-x:
-      specifier: ^4.16.1
-      version: 4.16.1
-    eslint-plugin-jsdoc:
-      specifier: ^50.8.0
-      version: 50.8.0
-    eslint-plugin-jsonc:
-      specifier: ^2.20.1
-      version: 2.20.1
-    eslint-plugin-n:
-      specifier: ^17.20.0
-      version: 17.20.0
-    eslint-plugin-no-only-tests:
-      specifier: ^3.3.0
-      version: 3.3.0
-    eslint-plugin-perfectionist:
-      specifier: ^4.15.0
-      version: 4.15.0
-    eslint-plugin-prettier:
-      specifier: ^5.5.1
-      version: 5.5.1
-    eslint-plugin-regexp:
-      specifier: ^2.9.0
-      version: 2.9.0
-    eslint-plugin-unicorn:
-      specifier: ^59.0.1
-      version: 59.0.1
-    eslint-plugin-unused-imports:
-      specifier: ^4.1.4
-      version: 4.1.4
-    eslint-plugin-vitest:
-      specifier: ^0.5.4
-      version: 0.5.4
-    eslint-plugin-vue:
-      specifier: ^10.2.0
-      version: 10.2.0
-    execa:
-      specifier: ^9.6.0
-      version: 9.6.0
-    find-up:
-      specifier: ^7.0.0
-      version: 7.0.0
-    get-port:
-      specifier: ^7.1.0
-      version: 7.1.0
-    globals:
-      specifier: ^16.3.0
-      version: 16.3.0
-    h3:
-      specifier: ^1.15.3
-      version: 1.15.3
-    happy-dom:
-      specifier: ^17.6.3
-      version: 17.6.3
-    html-minifier-terser:
-      specifier: ^7.2.0
-      version: 7.2.0
-    is-ci:
-      specifier: ^4.1.0
-      version: 4.1.0
-    json-bigint:
-      specifier: ^1.0.0
-      version: 1.0.0
-    jsonc-eslint-parser:
-      specifier: ^2.4.0
-      version: 2.4.0
-    jsonwebtoken:
-      specifier: ^9.0.2
-      version: 9.0.2
-    lefthook:
-      specifier: ^1.11.14
-      version: 1.11.14
-    lodash.clonedeep:
-      specifier: ^4.5.0
-      version: 4.5.0
-    lodash.get:
-      specifier: ^4.4.2
-      version: 4.4.2
-    lodash.isequal:
-      specifier: ^4.5.0
-      version: 4.5.0
-    lodash.set:
-      specifier: ^4.3.2
-      version: 4.3.2
-    lucide-vue-next:
-      specifier: ^0.507.0
-      version: 0.507.0
-    medium-zoom:
-      specifier: ^1.1.0
-      version: 1.1.0
-    nitropack:
-      specifier: ^2.11.13
-      version: 2.11.13
-    nprogress:
-      specifier: ^0.2.0
-      version: 0.2.0
-    ora:
-      specifier: ^8.2.0
-      version: 8.2.0
-    pinia-plugin-persistedstate:
-      specifier: ^4.4.1
-      version: 4.4.1
-    pkg-types:
-      specifier: ^2.2.0
-      version: 2.2.0
-    playwright:
-      specifier: ^1.53.2
-      version: 1.53.2
-    postcss:
-      specifier: ^8.5.6
-      version: 8.5.6
-    postcss-antd-fixes:
-      specifier: ^0.2.0
-      version: 0.2.0
-    postcss-html:
-      specifier: ^1.8.0
-      version: 1.8.0
-    postcss-import:
-      specifier: ^16.1.1
-      version: 16.1.1
-    postcss-preset-env:
-      specifier: ^10.2.4
-      version: 10.2.4
-    postcss-scss:
-      specifier: ^4.0.9
-      version: 4.0.9
-    prettier:
-      specifier: ^3.6.2
-      version: 3.6.2
-    prettier-plugin-tailwindcss:
-      specifier: ^0.6.13
-      version: 0.6.13
-    publint:
-      specifier: ^0.3.12
-      version: 0.3.12
-    qrcode:
-      specifier: ^1.5.4
-      version: 1.5.4
-    qs:
-      specifier: ^6.14.0
-      version: 6.14.0
-    radix-vue:
-      specifier: ^1.9.17
-      version: 1.9.17
-    resolve.exports:
-      specifier: ^2.0.3
-      version: 2.0.3
-    rimraf:
-      specifier: ^6.0.1
-      version: 6.0.1
-    rollup:
-      specifier: ^4.44.1
-      version: 4.44.1
-    rollup-plugin-visualizer:
-      specifier: ^5.14.0
-      version: 5.14.0
-    sass:
-      specifier: ^1.89.2
-      version: 1.89.2
-    secure-ls:
-      specifier: ^2.0.0
-      version: 2.0.0
-    sortablejs:
-      specifier: ^1.15.6
-      version: 1.15.6
-    stylelint:
-      specifier: ^16.21.0
-      version: 16.21.0
-    stylelint-config-recess-order:
-      specifier: ^6.1.0
-      version: 6.1.0
-    stylelint-config-recommended:
-      specifier: ^16.0.0
-      version: 16.0.0
-    stylelint-config-recommended-scss:
-      specifier: ^14.1.0
-      version: 14.1.0
-    stylelint-config-recommended-vue:
-      specifier: ^1.6.1
-      version: 1.6.1
-    stylelint-config-standard:
-      specifier: ^38.0.0
-      version: 38.0.0
-    stylelint-order:
-      specifier: ^7.0.0
-      version: 7.0.0
-    stylelint-prettier:
-      specifier: ^5.0.3
-      version: 5.0.3
-    stylelint-scss:
-      specifier: ^6.12.1
-      version: 6.12.1
-    tailwind-merge:
-      specifier: ^2.6.0
-      version: 2.6.0
-    tailwindcss:
-      specifier: ^3.4.17
-      version: 3.4.17
-    tailwindcss-animate:
-      specifier: ^1.0.7
-      version: 1.0.7
-    theme-colors:
-      specifier: ^0.1.0
-      version: 0.1.0
-    tippy.js:
-      specifier: ^6.3.7
-      version: 6.3.7
-    turbo:
-      specifier: ^2.5.4
-      version: 2.5.4
-    typescript:
-      specifier: ^5.8.3
-      version: 5.8.3
-    unbuild:
-      specifier: ^3.5.0
-      version: 3.5.0
-    vee-validate:
-      specifier: ^4.15.1
-      version: 4.15.1
-    vite:
-      specifier: ^6.3.5
-      version: 6.3.5
-    vite-plugin-compression:
-      specifier: ^0.5.1
-      version: 0.5.1
-    vite-plugin-dts:
-      specifier: ^4.5.4
-      version: 4.5.4
-    vite-plugin-html:
-      specifier: ^3.2.2
-      version: 3.2.2
-    vite-plugin-lazy-import:
-      specifier: ^1.0.7
-      version: 1.0.7
-    vite-plugin-pwa:
-      specifier: ^1.0.1
-      version: 1.0.1
-    vite-plugin-vue-devtools:
-      specifier: ^7.7.7
-      version: 7.7.7
-    vitepress:
-      specifier: ^1.6.3
-      version: 1.6.3
-    vitepress-plugin-group-icons:
-      specifier: ^1.6.1
-      version: 1.6.1
-    vitest:
-      specifier: ^3.2.4
-      version: 3.2.4
-    vue-eslint-parser:
-      specifier: ^10.2.0
-      version: 10.2.0
-    vue-i18n:
-      specifier: ^11.1.7
-      version: 11.1.7
-    vue-json-viewer:
-      specifier: ^3.0.4
-      version: 3.0.4
     vue-router:
       specifier: ^4.5.1
       version: 4.5.1
-    vue-tippy:
-      specifier: ^6.7.1
-      version: 6.7.1
-    vue-tsc:
-      specifier: 2.2.10
-      version: 2.2.10
-    vxe-pc-ui:
-      specifier: ^4.7.12
-      version: 4.7.16
-    vxe-table:
-      specifier: ^4.14.4
-      version: 4.14.4
-    watermark-js-plus:
-      specifier: ^1.6.2
-      version: 1.6.2
-    zod:
-      specifier: ^3.25.67
-      version: 3.25.67
-    zod-defaults:
-      specifier: ^0.1.3
-      version: 0.1.3
 
 overrides:
   '@ast-grep/napi': ^0.37.0
@@ -625,18 +130,12 @@ importers:
 
   apps/admin:
     dependencies:
-      '@uppy/aws-s3':
-        specifier: ^5.0.2
-        version: 5.0.2(@uppy/core@5.1.1)
       '@uppy/core':
         specifier: ^5.1.1
         version: 5.1.1
-      '@uppy/dashboard':
-        specifier: ^5.0.4
-        version: 5.0.4(@uppy/core@5.1.1)
-      '@uppy/golden-retriever':
-        specifier: ^5.1.1
-        version: 5.1.1(@uppy/core@5.1.1)
+      '@uppy/tus':
+        specifier: ^5.0.2
+        version: 5.0.2(@uppy/core@5.1.1)
       '@uppy/vue':
         specifier: ^3.1.0
         version: 3.1.0(@uppy/core@5.1.1)(@uppy/dashboard@5.0.4(@uppy/core@5.1.1))(vue@3.5.17(typescript@5.8.3))
@@ -4935,11 +4434,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@uppy/aws-s3@5.0.2':
-    resolution: {integrity: sha512-0ttLWAkuPvcWP/SkANR9dE0okPKwZoEjxdqbtZPoTyoWntb/pak9+uz7Na33nJ3Z2EvGbhFn0eKA+BsPN8l7ng==}
-    peerDependencies:
-      '@uppy/core': ^5.1.1
-
   '@uppy/companion-client@2.2.2':
     resolution: {integrity: sha512-5mTp2iq97/mYSisMaBtFRry6PTgZA6SIL7LePteOV5x0/DxKfrZW3DEiQERJmYpHzy7k8johpm2gHnEKto56Og==}
 
@@ -4974,11 +4468,6 @@ packages:
     peerDependencies:
       '@uppy/core': ^5.1.1
 
-  '@uppy/golden-retriever@5.1.1':
-    resolution: {integrity: sha512-D2dJQ+riQ9SusjoHmIRMFZGZfTCAt3ZUOyxj6Ue88IWf7OEQQf7OV/JQ0Iwx7dqKHHjZy+Kdx72cgVTFEMUyxg==}
-    peerDependencies:
-      '@uppy/core': ^5.1.1
-
   '@uppy/provider-views@5.1.2':
     resolution: {integrity: sha512-lslYaRvBP8Mk8C+mZWgGaFtSpzKIqHf8ptZcbS8kjjZudAF3LNk77ynegr2l/wSQnG/gQQCqiZbefDEql+DDuw==}
     peerDependencies:
@@ -4992,6 +4481,11 @@ packages:
 
   '@uppy/thumbnail-generator@5.0.2':
     resolution: {integrity: sha512-MRNZEgjNO0gYC/CPji2ngmDx9dCZyHuXkeLQmZen986f+rHcOkeVXim163PBbkFT5CF1xavez03yNDJSeWl6PA==}
+    peerDependencies:
+      '@uppy/core': ^5.1.1
+
+  '@uppy/tus@5.0.2':
+    resolution: {integrity: sha512-sW1EEaCJJqyzzRm05XTmJCRl7gYBThWMXa6X6SmXUgNQo6WnKlyQ/6pVB7dypsVW8u2uzWpWfyUMfUNRFKleNw==}
     peerDependencies:
       '@uppy/core': ^5.1.1
 
@@ -6020,6 +5514,9 @@ packages:
   colorspace@1.1.4:
     resolution: {integrity: sha512-BgvKJiuVu1igBUF2kEjRCZXol6wiiGbY5ipL/oVPwm0BL9sIpMIzM8IK7vwuxIIzOXMV3Ey5w+vxhm0rR/TN8w==}
 
+  combine-errors@3.0.3:
+    resolution: {integrity: sha512-C8ikRNRMygCwaTx+Ek3Yr+OuZzgZjduCOfSQBjbM8V3MfgcjSTeto/GXP6PAwKvJz/v15b7GHZvx5rOlczFw/Q==}
+
   combined-stream@1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
     engines: {node: '>= 0.8'}
@@ -6351,6 +5848,9 @@ packages:
 
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
+
+  custom-error-instance@2.1.1:
+    resolution: {integrity: sha512-p6JFxJc3M4OTD2li2qaHkDCw9SfMw82Ldr6OC9Je1aXiGfhx2W8p3GaoeaGrPJTUN9NirTM/KTxHWMUdR1rsUg==}
 
   cz-git@1.11.2:
     resolution: {integrity: sha512-e54u6yJc80usJCWRQE9z8egpkqEvlM6aC70lTGjIsGI/ggtzeGU6udNAuHSBvLV+hMyss0ZS4KfodfwO9UJpqQ==}
@@ -8108,6 +7608,9 @@ packages:
   jju@1.4.0:
     resolution: {integrity: sha512-8wb9Yw966OSxApiCt0K3yNJL8pnNeIv+OEq2YMidz4FKP6nonSRoOXc80iXY4JaN2FC11B9qsNmDsm+ZOfMROA==}
 
+  js-base64@3.7.8:
+    resolution: {integrity: sha512-hNngCeKxIUQiEUN3GPJOkz4wF/YvdUdbNL9hsBcMQTkKzboD7T/q3OYOuuPZLUE6dBxSGpwhk5mwuDud7JVAow==}
+
   js-beautify@1.15.4:
     resolution: {integrity: sha512-9/KXeZUKKJwqCXUdBxFJ3vPh467OCckSBmYDwSK/EtV090K+iMJ7zx2S3HLVDIWFQdqMIsZWbnaGiba18aWhaA==}
     engines: {node: '>=14'}
@@ -8368,6 +7871,24 @@ packages:
   lodash-es@4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
 
+  lodash._baseiteratee@4.7.0:
+    resolution: {integrity: sha512-nqB9M+wITz0BX/Q2xg6fQ8mLkyfF7MU7eE+MNBNjTHFKeKaZAPEzEg+E8LWxKWf1DQVflNEn9N49yAuqKh2mWQ==}
+
+  lodash._basetostring@4.12.0:
+    resolution: {integrity: sha512-SwcRIbyxnN6CFEEK4K1y+zuApvWdpQdBHM/swxP962s8HIxPO3alBH5t3m/dl+f4CMUug6sJb7Pww8d13/9WSw==}
+
+  lodash._baseuniq@4.6.0:
+    resolution: {integrity: sha512-Ja1YevpHZctlI5beLA7oc5KNDhGcPixFhcqSiORHNsp/1QTv7amAXzw+gu4YOvErqVlMVyIJGgtzeepCnnur0A==}
+
+  lodash._createset@4.0.3:
+    resolution: {integrity: sha512-GTkC6YMprrJZCYU3zcqZj+jkXkrXzq3IPBcF/fIPpNEAB4hZEtXU8zp/RwKOvZl43NUmwDbyRk3+ZTbeRdEBXA==}
+
+  lodash._root@3.0.1:
+    resolution: {integrity: sha512-O0pWuFSK6x4EXhM1dhZ8gchNtG7JMqBtrHdoUFUWXD7dJnNSUze1GuyQr5sOs0aCvgGeI3o/OJW8f4ca7FDxmQ==}
+
+  lodash._stringtopath@4.8.0:
+    resolution: {integrity: sha512-SXL66C731p0xPDC5LZg4wI5H+dJo/EO4KTqOMwLYCH3+FmmfAKJEZCm6ohGpI+T1xwsDsJCfL4OnhorllvlTPQ==}
+
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
 
@@ -8453,6 +7974,9 @@ packages:
 
   lodash.uniq@4.5.0:
     resolution: {integrity: sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==}
+
+  lodash.uniqby@4.5.0:
+    resolution: {integrity: sha512-IRt7cfTtHy6f1aRVA5n7kT8rgN3N1nH6MOWLcHfpWG2SH19E3JksLK38MktLxZDhlAjCP9jpIXkOnRXlu6oByQ==}
 
   lodash.upperfirst@4.3.1:
     resolution: {integrity: sha512-sReKOYJIJf74dhJONhU4e0/shzi1trVbSWDOhKYE5XV2O+H7Sb2Dihwuc7xWxVl+DgFPyTqIN3zMfT9cq5iWDg==}
@@ -9855,6 +9379,9 @@ packages:
     resolution: {integrity: sha512-y+WKFlBR8BGXnsNlIHFGPZmyDf3DFMoLhaflAnyZgV6rG6xu+JwesTo2Q9R6XwYmtmwAFCkAk3e35jEdoeh/3g==}
     engines: {node: '>=10'}
 
+  proper-lockfile@4.1.2:
+    resolution: {integrity: sha512-TjNPblN4BwAWMXU8s9AEz4JmQxnD1NNL7bNOY/AKUzyamc379FWASUhc/K1pL2noVb+XmZKLL68cjzLsiOAMaA==}
+
   property-information@7.0.0:
     resolution: {integrity: sha512-7D/qOz/+Y4X/rzSB6jKxKUsQnphO046ei8qxG59mtM3RG3DHgTK81HrxrmoDVINJb8NKT5ZsRbwHvQ6B68Iyhg==}
 
@@ -9901,6 +9428,9 @@ packages:
 
   quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==}
+
+  querystringify@2.2.0:
+    resolution: {integrity: sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==}
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
@@ -10061,6 +9591,9 @@ packages:
 
   require-package-name@2.0.1:
     resolution: {integrity: sha512-uuoJ1hU/k6M0779t3VMVIYpb2VMJk05cehCaABFhXaibcbvfgR8wKiozLjVFSzJPmQMRqIcO0HMyTFqfV09V6Q==}
+
+  requires-port@1.0.0:
+    resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
 
   resize-observer-polyfill@1.5.1:
     resolution: {integrity: sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==}
@@ -10339,6 +9872,9 @@ packages:
 
   siginfo@2.0.0:
     resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
+
+  signal-exit@3.0.7:
+    resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
 
   signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
@@ -10961,6 +10497,10 @@ packages:
     resolution: {integrity: sha512-kc8ZibdRcuWUG1pbYSBFWqmIjynlD8Lp7IB6U3vIzvOv9VG+6Sp8bzyeBWE3Oi8XV5KsQrznyRTBPvrf99E4mA==}
     hasBin: true
 
+  tus-js-client@4.3.1:
+    resolution: {integrity: sha512-ZLeYmjrkaU1fUsKbIi8JML52uAocjEZtBx4DKjRrqzrZa0O4MYwT6db+oqePlspV+FxXJAyFBc/L5gwUi2OFsg==}
+    engines: {node: '>=18'}
+
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
@@ -11250,6 +10790,9 @@ packages:
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
+
+  url-parse@1.5.10:
+    resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
 
   urlpattern-polyfill@10.0.0:
     resolution: {integrity: sha512-H/A06tKD7sS1O1X2SshBVeA5FLycRpjqiBeqGKmBwBDBy28EnRjORxTNe269KSSr5un5qyWi1iL61wLxpd+ZOg==}
@@ -15265,12 +14808,6 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.9.2':
     optional: true
 
-  '@uppy/aws-s3@5.0.2(@uppy/core@5.1.1)':
-    dependencies:
-      '@uppy/companion-client': 5.1.1(@uppy/core@5.1.1)
-      '@uppy/core': 5.1.1
-      '@uppy/utils': 7.1.3
-
   '@uppy/companion-client@2.2.2':
     dependencies:
       '@uppy/utils': 4.1.3
@@ -15325,12 +14862,7 @@ snapshots:
       nanoid: 5.1.5
       preact: 10.26.5
       shallow-equal: 3.1.0
-
-  '@uppy/golden-retriever@5.1.1(@uppy/core@5.1.1)':
-    dependencies:
-      '@uppy/core': 5.1.1
-      '@uppy/utils': 7.1.3
-      lodash: 4.17.21
+    optional: true
 
   '@uppy/provider-views@5.1.2(@uppy/core@5.1.1)':
     dependencies:
@@ -15341,6 +14873,7 @@ snapshots:
       nanoid: 5.1.5
       p-queue: 8.1.1
       preact: 10.26.5
+    optional: true
 
   '@uppy/store-default@2.1.1': {}
 
@@ -15351,6 +14884,14 @@ snapshots:
       '@uppy/core': 5.1.1
       '@uppy/utils': 7.1.3
       exifr: 7.1.3
+    optional: true
+
+  '@uppy/tus@5.0.2(@uppy/core@5.1.1)':
+    dependencies:
+      '@uppy/companion-client': 5.1.1(@uppy/core@5.1.1)
+      '@uppy/core': 5.1.1
+      '@uppy/utils': 7.1.3
+      tus-js-client: 4.3.1
 
   '@uppy/utils@4.1.3':
     dependencies:
@@ -15829,7 +15370,7 @@ snapshots:
 
   '@wangeditor/basic-modules@1.1.7(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(lodash.throttle@4.1.1)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)':
     dependencies:
-      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
+      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@5.1.1))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
       dom7: 3.0.0
       is-url: 1.2.4
       lodash.throttle: 4.1.1
@@ -15839,13 +15380,13 @@ snapshots:
 
   '@wangeditor/code-highlight@1.0.3(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(slate@0.72.8)(snabbdom@3.6.3)':
     dependencies:
-      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
+      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@5.1.1))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
       dom7: 3.0.0
       prismjs: 1.30.0
       slate: 0.72.8
       snabbdom: 3.6.3
 
-  '@wangeditor/core@1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)':
+  '@wangeditor/core@1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@5.1.1))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)':
     dependencies:
       '@types/event-emitter': 0.3.5
       '@uppy/core': 5.1.1
@@ -15879,7 +15420,7 @@ snapshots:
       '@uppy/xhr-upload': 2.1.3(@uppy/core@5.1.1)
       '@wangeditor/basic-modules': 1.1.7(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(lodash.throttle@4.1.1)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
       '@wangeditor/code-highlight': 1.0.3(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(slate@0.72.8)(snabbdom@3.6.3)
-      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
+      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@5.1.1))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
       '@wangeditor/list-module': 1.0.5(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(slate@0.72.8)(snabbdom@3.6.3)
       '@wangeditor/table-module': 1.1.4(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
       '@wangeditor/upload-image-module': 1.0.2(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(@wangeditor/basic-modules@1.1.7(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(lodash.throttle@4.1.1)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(lodash.foreach@4.5.0)(slate@0.72.8)(snabbdom@3.6.3)
@@ -15899,14 +15440,14 @@ snapshots:
 
   '@wangeditor/list-module@1.0.5(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(slate@0.72.8)(snabbdom@3.6.3)':
     dependencies:
-      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
+      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@5.1.1))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
       dom7: 3.0.0
       slate: 0.72.8
       snabbdom: 3.6.3
 
   '@wangeditor/table-module@1.1.4(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)':
     dependencies:
-      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
+      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@5.1.1))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
       dom7: 3.0.0
       lodash.isequal: 4.5.0
       lodash.throttle: 4.1.1
@@ -15919,7 +15460,7 @@ snapshots:
       '@uppy/core': 2.3.4
       '@uppy/xhr-upload': 2.1.3(@uppy/core@5.1.1)
       '@wangeditor/basic-modules': 1.1.7(@wangeditor/core@1.1.19(@uppy/core@2.3.4)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3))(dom7@3.0.0)(lodash.throttle@4.1.1)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
-      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
+      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@5.1.1))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
       dom7: 3.0.0
       lodash.foreach: 4.5.0
       slate: 0.72.8
@@ -15929,7 +15470,7 @@ snapshots:
     dependencies:
       '@uppy/core': 2.3.4
       '@uppy/xhr-upload': 2.1.3(@uppy/core@5.1.1)
-      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@2.3.4))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
+      '@wangeditor/core': 1.1.19(@uppy/core@5.1.1)(@uppy/xhr-upload@2.1.3(@uppy/core@5.1.1))(dom7@3.0.0)(is-hotkey@0.2.0)(lodash.camelcase@4.3.0)(lodash.clonedeep@4.5.0)(lodash.debounce@4.0.8)(lodash.foreach@4.5.0)(lodash.isequal@4.5.0)(lodash.throttle@4.1.1)(lodash.toarray@4.4.0)(nanoid@3.3.11)(slate@0.72.8)(snabbdom@3.6.3)
       dom7: 3.0.0
       nanoid: 3.3.11
       slate: 0.72.8
@@ -16545,7 +16086,8 @@ snapshots:
     dependencies:
       clsx: 2.1.1
 
-  classnames@2.5.1: {}
+  classnames@2.5.1:
+    optional: true
 
   clean-css@5.3.3:
     dependencies:
@@ -16639,6 +16181,11 @@ snapshots:
     dependencies:
       color: 3.2.1
       text-hex: 1.0.0
+
+  combine-errors@3.0.3:
+    dependencies:
+      custom-error-instance: 2.1.1
+      lodash.uniqby: 4.5.0
 
   combined-stream@1.0.8:
     dependencies:
@@ -17025,6 +16572,8 @@ snapshots:
       css-tree: 2.2.1
 
   csstype@3.1.3: {}
+
+  custom-error-instance@2.1.1: {}
 
   cz-git@1.11.2: {}
 
@@ -17928,7 +17477,8 @@ snapshots:
       strip-final-newline: 4.0.0
       yoctocolors: 2.1.1
 
-  exifr@7.1.3: {}
+  exifr@7.1.3:
+    optional: true
 
   expand-tilde@2.0.2:
     dependencies:
@@ -18897,6 +18447,8 @@ snapshots:
 
   jju@1.4.0: {}
 
+  js-base64@3.7.8: {}
+
   js-beautify@1.15.4:
     dependencies:
       config-chain: 1.1.13
@@ -19163,6 +18715,25 @@ snapshots:
 
   lodash-es@4.17.21: {}
 
+  lodash._baseiteratee@4.7.0:
+    dependencies:
+      lodash._stringtopath: 4.8.0
+
+  lodash._basetostring@4.12.0: {}
+
+  lodash._baseuniq@4.6.0:
+    dependencies:
+      lodash._createset: 4.0.3
+      lodash._root: 3.0.1
+
+  lodash._createset@4.0.3: {}
+
+  lodash._root@3.0.1: {}
+
+  lodash._stringtopath@4.8.0:
+    dependencies:
+      lodash._basetostring: 4.12.0
+
   lodash.camelcase@4.3.0: {}
 
   lodash.castarray@4.4.0: {}
@@ -19218,6 +18789,11 @@ snapshots:
   lodash.truncate@4.4.2: {}
 
   lodash.uniq@4.5.0: {}
+
+  lodash.uniqby@4.5.0:
+    dependencies:
+      lodash._baseiteratee: 4.7.0
+      lodash._baseuniq: 4.6.0
 
   lodash.upperfirst@4.3.1: {}
 
@@ -19928,6 +19504,7 @@ snapshots:
     dependencies:
       eventemitter3: 5.0.1
       p-timeout: 6.1.4
+    optional: true
 
   p-retry@6.2.1:
     dependencies:
@@ -20670,6 +20247,12 @@ snapshots:
       err-code: 2.0.3
       retry: 0.12.0
 
+  proper-lockfile@4.1.2:
+    dependencies:
+      graceful-fs: 4.2.11
+      retry: 0.12.0
+      signal-exit: 3.0.7
+
   property-information@7.0.0: {}
 
   proto-list@1.2.4: {}
@@ -20712,6 +20295,8 @@ snapshots:
   quansync@0.2.10: {}
 
   quansync@0.2.11: {}
+
+  querystringify@2.2.0: {}
 
   queue-microtask@1.2.3: {}
 
@@ -20909,6 +20494,8 @@ snapshots:
   require-main-filename@2.0.0: {}
 
   require-package-name@2.0.1: {}
+
+  requires-port@1.0.0: {}
 
   resize-observer-polyfill@1.5.1: {}
 
@@ -21246,6 +20833,8 @@ snapshots:
       side-channel-weakmap: 1.0.2
 
   siginfo@2.0.0: {}
+
+  signal-exit@3.0.7: {}
 
   signal-exit@4.1.0: {}
 
@@ -21916,6 +21505,16 @@ snapshots:
       turbo-windows-64: 2.5.4
       turbo-windows-arm64: 2.5.4
 
+  tus-js-client@4.3.1:
+    dependencies:
+      buffer-from: 1.1.2
+      combine-errors: 3.0.3
+      is-stream: 2.0.1
+      js-base64: 3.7.8
+      lodash.throttle: 4.1.1
+      proper-lockfile: 4.1.2
+      url-parse: 1.5.10
+
   type-check@0.4.0:
     dependencies:
       prelude-ls: 1.2.1
@@ -22272,6 +21871,11 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
+
+  url-parse@1.5.10:
+    dependencies:
+      querystringify: 2.2.0
+      requires-port: 1.0.0
 
   urlpattern-polyfill@10.0.0: {}
 
