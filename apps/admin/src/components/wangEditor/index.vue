@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { UploadedFile } from '@uppy/core';
 import type { TusBody } from '@uppy/tus';
 
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue';
@@ -116,7 +115,8 @@ const customUploadImage: UploadFn = (file, insertFn) => {
   const uppy = uppyRef.value!;
 
   // 清空旧的队列
-  uppy.removeFile(uppy.getFiles().map((f) => f.id));
+  // Uppy.removeFile 接受单个 id，传入 string[] 会导致类型错误，改为遍历删除
+  uppy.getFiles().forEach((f) => uppy.removeFile(f.id));
 
   // 1. 将文件添加到 Uppy 队列
   uppy.addFile({
@@ -127,13 +127,13 @@ const customUploadImage: UploadFn = (file, insertFn) => {
   });
 
   // 2. 定义事件监听器
-  const onFileAdded = (addedFile: UploadedFile) => {
+  const onFileAdded = (addedFile: any) => {
     if (addedFile.name === file.name) {
       message.loading({ content: t('common.uploading') || '上传中...', key: addedFile.id, duration: 0 });
     }
   };
 
-  const onUploadSuccess = (uploadedFile: UploadedFile, response: any) => {
+  const onUploadSuccess = (uploadedFile: any, response: any) => {
     if (uploadedFile.name === file.name) {
       const url = response?.uploadURL || uploadedFile.uploadURL;
 
@@ -149,7 +149,7 @@ const customUploadImage: UploadFn = (file, insertFn) => {
     }
   };
 
-  const onUploadError = (uploadedFile: UploadedFile, error: Error) => {
+  const onUploadError = (uploadedFile: any, error: Error) => {
     if (uploadedFile.name === file.name) {
       message.destroy(uploadedFile.id);
       message.error(`${t('page.richTextEditor.upload.uploadFailed')}: ${error.message}`);
