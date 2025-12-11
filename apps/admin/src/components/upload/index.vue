@@ -123,8 +123,7 @@ onBeforeUnmount(() => uppy.destroy());
 // =================================
 // Antd Upload 交互
 // =================================
-function handleBeforeUpload(raw: any, fileList: any) {
-  console.log(raw, fileList);
+function handleBeforeUpload(raw: any, _fileList: any) {
   uploadFiles.value.push({
     uid: raw.uid,
     name: raw.name,
@@ -147,9 +146,6 @@ function handleBeforeUpload(raw: any, fileList: any) {
 }
 
 function handleRemove(file: UIFile) {
-  // if (file.uppyId) uppy.removeFile(file.uppyId);
-  // uploadFiles.value = uploadFiles.value.filter((f) => f.uid !== file.uid);
-  // return false;
   if (file.uppyId) {
     const uppyFile = uppy.getFile(file.uppyId);
     const uploadURL = uppyFile?.uploadURL;
