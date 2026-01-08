@@ -44,7 +44,7 @@ const emit = defineEmits(['update:modelValue']);
 /* -----------------------
    ⭐ Uppy/TUS 配置和初始化
 ------------------------- */
-const apiURL = 'http://10.8.0.4:9501';
+const apiURL = 'http://10.8.0.4:2330';
 // 假设 TUS 接口位于 API_BASE/tus
 const TUS_ENDPOINT = `${apiURL}/tus`;
 

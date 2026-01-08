@@ -11,7 +11,7 @@ import { message } from 'ant-design-vue';
 type Meta = Record<string, unknown>;
 
 // === 基础配置 ===
-const API_BASE = 'http://10.8.0.4:9501';
+const API_BASE = 'http://10.8.0.4:2330';
 const TUS_ENDPOINT = `${API_BASE}/tus`;
 
 // ================================

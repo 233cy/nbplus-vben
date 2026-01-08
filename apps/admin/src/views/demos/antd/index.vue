@@ -33,7 +33,7 @@ function success() {
 function notify(type: NotificationType) {
   notification[type]({
     duration: 2500,
-    message: '说点啥呢',
+    message: '测试说话。。。。。',
     type,
   });
 }
@@ -316,7 +316,7 @@ const [BaseForm] = useVbenForm({
 
     <a-card class="mb-5" title="主题样式示例">
       <div class="hover:text-regular hover:border-border-strong border-border bg-card text-primary hover:bg-muted rounded-md border p-4 transition-all">
-        使用 Vben Admin 内置类的主题示例：包含背景、边框、文字、悬停状态。
+        使用 Vben Admin 内置类的主题示例：包含背景、边框、文字、悬停状态。请参考transitioncss
       </div>
     </a-card>
 
