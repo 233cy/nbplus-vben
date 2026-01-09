@@ -29,6 +29,7 @@
     "@uppy/core": "^5.1.1",
     "@uppy/tus": "^5.0.2",
     "@uppy/vue": "^3.1.0",
+    "@uppy/xhr-upload": "^5.1.1",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",
@@ -50,7 +51,8 @@
     "dayjs": "catalog:",
     "pinia": "catalog:",
     "vue": "catalog:",
-    "vue-router": "catalog:"
+    "vue-router": "catalog:",
+    "xe-utils": "^3.8.4"
   },
   "devDependencies": {
     "unplugin-auto-import": "^20.2.0",
