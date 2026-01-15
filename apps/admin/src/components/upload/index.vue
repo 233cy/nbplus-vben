@@ -10,7 +10,7 @@ import XHRUpload from '@uppy/xhr-upload'; // ⭐ 1. 引入 XHR 插件
 import { message } from 'ant-design-vue';
 
 // === 基础配置 ===
-const API_BASE = 'http://127.0.0.1:2330';
+const API_BASE = 'http://10.8.0.4:2330';
 const TUS_ENDPOINT = `${API_BASE}/tus`;
 const SIMPLE_ENDPOINT = `${API_BASE}/upload/simple`; // ⭐ 2. 普通上传接口
 const BIG_FILE_THRESHOLD = 5 * 1024 * 1024; // ⭐ 3. 5MB 阈值

@@ -48,6 +48,7 @@
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
     "ant-design-vue": "catalog:",
+    "crypto-js": "^4.2.0",
     "dayjs": "catalog:",
     "pinia": "catalog:",
     "vue": "catalog:",

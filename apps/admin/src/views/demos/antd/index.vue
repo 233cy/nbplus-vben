@@ -277,6 +277,19 @@ const [BaseForm] = useVbenForm({
   ],
   wrapperClass: 'grid-cols-1',
 });
+
+/* 验证器 */
+const verify = ref<any>(null);
+const captchaType = ref('clickWord');
+
+const onShow = (type: any) => {
+  captchaType.value = type;
+  verify.value.show();
+};
+
+const handleSuccess = (res: any) => {
+  console.log('success');
+};
 </script>
 
 <template>
@@ -312,6 +325,12 @@ const [BaseForm] = useVbenForm({
 
     <a-card class="mb-5" :title="$t('demos.page.title')">
       <pageSelect :api="getExampleTableApi" :columns="columns" :multiple="true" label-field="productName" value-field="id" />
+    </a-card>
+
+    <a-card class="mb-5" title="验证器">
+      <a-button @click="onShow('blockPuzzle')">滑块</a-button>
+      <a-button class="ml-6" @click="onShow('clickWord')">点击文字</a-button>
+      <Verify mode="pop" :captcha-type="captchaType" :img-size="{ width: '400px', height: '200px' }" ref="verify" @success="handleSuccess" />
     </a-card>
 
     <a-card class="mb-5" title="主题样式示例">
