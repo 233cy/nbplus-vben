@@ -10,7 +10,7 @@ import XHRUpload from '@uppy/xhr-upload'; // ⭐ 1. 引入 XHR 插件
 import { message } from 'ant-design-vue';
 
 // === 基础配置 ===
-const API_BASE = 'http://10.8.0.4:2330';
+const API_BASE = 'http://host.233cy.com:2330';
 const TUS_ENDPOINT = `${API_BASE}/tus`;
 const SIMPLE_ENDPOINT = `${API_BASE}/upload/simple`; // ⭐ 2. 普通上传接口
 const BIG_FILE_THRESHOLD = 5 * 1024 * 1024; // ⭐ 3. 5MB 阈值
@@ -51,7 +51,7 @@ const uppyTus = new Uppy<Meta, TusBody>({
   id: 'uppy-tus', // 唯一ID
 }).use(Tus, {
   endpoint: TUS_ENDPOINT,
-  chunkSize: 5 * 1024 * 1024,
+  chunkSize: BIG_FILE_THRESHOLD,
   limit: 1,
   retryDelays: [1000, 3000],
   removeFingerprintOnSuccess: false,
@@ -114,6 +114,7 @@ function bindEvents(instance: Uppy<Meta, TusBody>) {
 
   // 成功
   instance.on('upload-success', (file, response: any) => {
+    console.log(file, response);
     const files = file!;
     const target = uploadFiles.value.find((f) => f.uppyId === files.id);
     if (!target) return;

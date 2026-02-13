@@ -1,137 +1,176 @@
-<script type="text/babel">
-import { computed, ref, toRefs, watchEffect } from 'vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 
 import VerifyPoints from './Verify/VerifyPoints.vue';
-/**
- * Verify 验证码组件
- * @description 分发验证码使用
- */
 import VerifySlide from './Verify/VerifySlide.vue';
 
-export default {
-  name: 'Vue2Verify',
-  components: {
-    VerifySlide,
-    VerifyPoints,
-  },
-  props: {
-    captchaType: {
-      type: String,
-      required: true,
-    },
-    figure: {
-      type: Number,
-    },
-    arith: {
-      type: Number,
-    },
-    mode: {
-      type: String,
-      default: 'pop',
-    },
-    vSpace: {
-      type: Number,
-    },
-    explain: {
-      type: String,
-    },
-    imgSize: {
-      type: Object,
-      default() {
-        return {
-          width: '310px',
-          height: '155px',
-        };
-      },
-    },
-    blockSize: {
-      type: Object,
-    },
-    barSize: {
-      type: Object,
-    },
-  },
-  setup(props) {
-    const { captchaType, figure, arith, mode, vSpace, explain, imgSize, blockSize, barSize } = toRefs(props);
-    const clickShow = ref(false);
-    const verifyType = ref(undefined);
-    const componentType = ref(undefined);
+/**
+ * 定义类型接口
+ */
+interface Props {
+  captchaType: string;
+  figure?: number;
+  arith?: number;
+  mode?: 'fixed' | 'pop'; // 限制 mode 的类型
+  space?: number;
+  explain?: string;
+  imgSize?: { height: string; width: string };
+  blockSize?: { height: string; width: string };
+  barSize?: { height: string; width: string };
+}
 
-    const instance = ref({});
+/**
+ * Props 定义与默认值
+ */
+const props = withDefaults(defineProps<Props>(), {
+  mode: 'pop',
+  figure: undefined,
+  arith: undefined,
+  space: undefined,
+  explain: undefined,
+  blockSize: undefined,
+  barSize: undefined,
+  imgSize: () => ({ width: '310px', height: '155px' }),
+});
 
-    const showBox = computed(() => {
-      return mode.value == 'pop' ? clickShow.value : true;
-    });
-    /**
-     * refresh
-     * @description 刷新
-     */
-    const refresh = () => {
-      if (instance.value.refresh) {
-        instance.value.refresh();
-      }
-    };
-    const closeBox = () => {
-      clickShow.value = false;
-    };
-    const show = () => {
-      if (mode.value == 'pop') {
-        clickShow.value = true;
-      }
-    };
-    watchEffect(() => {
-      switch (captchaType.value) {
-        case 'blockPuzzle': {
-          verifyType.value = '2';
-          componentType.value = 'VerifySlide';
-          break;
-        }
-        case 'clickWord': {
-          verifyType.value = '';
-          componentType.value = 'VerifyPoints';
-          break;
-        }
-      }
-    });
+/**
+ * Emits 定义 (转发子组件事件)
+ */
+const emit = defineEmits<{
+  (e: 'success', data: any): void;
+  (e: 'error', data: any): void;
+  (e: 'ready', instance: any): void;
+  (e: 'close'): void;
+}>();
 
-    return {
-      clickShow,
-      verifyType,
-      componentType,
-      instance,
-      showBox,
-      closeBox,
-      show,
-    };
-  },
+// 状态
+const clickShow = ref(false);
+// 这里的 instance 类型设为 any，因为它是动态组件，可能是 Slide 也可能是 Points
+const verifyInstance = ref<any>(null);
+
+/**
+ * 计算属性：当前应该渲染哪个组件
+ * 替代了原来的 switch (captchaType)
+ */
+const currentComponent = computed(() => {
+  return props.captchaType === 'clickWord' ? VerifyPoints : VerifySlide;
+});
+
+/**
+ * 计算属性：传递给子组件的 type 参数
+ */
+const verifyType = computed(() => {
+  return props.captchaType === 'blockPuzzle' ? '2' : undefined;
+});
+
+/**
+ * 计算属性：容器宽度样式
+ * 解决模板中 parseInt 报错问题
+ */
+const boxWidthStyle = computed(() => {
+  // 移除 px 后转数字，防止 parseInt 在 TS 中报错
+  const widthStr = String(props.imgSize.width).replace('px', '');
+  const width = Number.parseInt(widthStr) || 310;
+  return {
+    maxWidth: `${width + 30}px`,
+  };
+});
+
+/**
+ * 计算属性：是否显示容器
+ */
+const showBox = computed(() => {
+  return props.mode === 'pop' ? clickShow.value : true;
+});
+
+/**
+ * 方法：刷新
+ */
+const refresh = () => {
+  verifyInstance.value?.refresh?.();
 };
+
+/**
+ * 方法：关闭弹窗
+ */
+const closeBox = () => {
+  clickShow.value = false;
+  emit('close');
+};
+
+/**
+ * 方法：显示弹窗
+ */
+const show = () => {
+  if (props.mode === 'pop') {
+    clickShow.value = true;
+  }
+  clearVerifyVal();
+};
+
+const clearVerifyVal = () => {
+  verifyInstance.value.refresh();
+  successData.value = null;
+};
+
+/**
+ * 事件处理：转发子组件事件
+ */
+const successData = ref(null);
+const handleSuccess = (data: any) => {
+  successData.value = data;
+  emit('success', data);
+};
+const handleError = (data: any) => emit('error', data);
+const handleReady = (instance: any) => emit('ready', instance);
+
+// 暴露方法给父组件使用
+defineExpose({
+  show,
+  closeBox,
+  refresh,
+  clearVerifyVal,
+});
 </script>
+
 <template>
-  <div :class="mode === 'pop' ? 'mask' : ''" v-show="showBox">
-    <div :class="mode === 'pop' ? 'verifybox' : ''" :style="{ 'max-width': `${parseInt(imgSize.width) + 30}px` }">
-      <div class="verifybox-top" v-if="mode === 'pop'">
-        请完成安全验证
-        <span class="verifybox-close" @click="closeBox">
-          <i class="iconfont icon-close"></i>
-        </span>
-      </div>
-      <div class="verifybox-bottom" :style="{ padding: mode == 'pop' ? '15px' : '0' }">
-        <!-- 验证码容器 -->
-        <component
-          v-if="componentType"
-          :is="componentType"
-          :captcha-type="captchaType"
-          :type="verifyType"
-          :figure="figure"
-          :arith="arith"
-          :mode="mode"
-          :v-space="vSpace"
-          :explain="explain"
-          :img-size="imgSize"
-          :block-size="blockSize"
-          :bar-size="barSize"
-          ref="instance"
-        />
+  <div>
+    <div>
+      <a-button v-if="successData === null" @click="show()">点击进行验证</a-button>
+      <a-config-provider v-else :theme="{ token: { colorPrimary: '#52c41a' } }">
+        <a-button type="primary" icon="CheckOutlined">验证成功</a-button>
+      </a-config-provider>
+    </div>
+    <div :class="mode === 'pop' ? 'mask' : ''" v-show="showBox">
+      <div :class="mode === 'pop' ? 'verifybox' : ''" :style="boxWidthStyle">
+        <div class="verifybox-top" v-if="mode === 'pop'">
+          请完成安全验证
+          <span class="verifybox-close" @click="closeBox">
+            <i class="iconfont icon-close"></i>
+          </span>
+        </div>
+
+        <div class="verifybox-bottom" :style="{ padding: mode === 'pop' ? '15px' : '0' }">
+          <component
+            v-if="currentComponent"
+            :is="currentComponent"
+            ref="verifyInstance"
+            :captcha-type="captchaType"
+            :type="verifyType"
+            :figure="figure"
+            :arith="arith"
+            :mode="mode"
+            :space="space"
+            :explain="explain"
+            :img-size="imgSize"
+            :block-size="blockSize"
+            :bar-size="barSize"
+            @success="handleSuccess"
+            @error="handleError"
+            @ready="handleReady"
+            @close="closeBox"
+          />
+        </div>
       </div>
     </div>
   </div>
