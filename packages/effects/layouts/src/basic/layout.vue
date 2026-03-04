@@ -14,7 +14,7 @@ import {
   updatePreferences,
   usePreferences,
 } from '@vben/preferences';
-import { useAccessStore } from '@vben/stores';
+import { useAccessStore, useTabbarStore, useTimezoneStore } from '@vben/stores';
 import { cloneDeep, mapTree } from '@vben/utils';
 
 import { VbenAdminLayout } from '@vben-core/layout-ui';
@@ -52,6 +52,7 @@ const {
   theme,
 } = usePreferences();
 const accessStore = useAccessStore();
+const timezoneStore = useTimezoneStore();
 const { refresh } = useRefresh();
 
 const sidebarTheme = computed(() => {
@@ -158,7 +159,9 @@ function clickLogo() {
 function autoCollapseMenuByRouteMeta(route: RouteLocationNormalizedLoaded) {
   // 只在双列模式下生效
   if (
-    preferences.app.layout === 'sidebar-mixed-nav' &&
+    ['header-mixed-nav', 'sidebar-mixed-nav'].includes(
+      preferences.app.layout,
+    ) &&
     route.meta &&
     route.meta.hideInMenu
   ) {
@@ -185,9 +188,19 @@ watch(
   },
 );
 
+const tabbarStore = useTabbarStore();
+
+function refreshAll() {
+  tabbarStore.cachedTabs.clear();
+  refresh();
+}
+
 // 语言更新后，刷新页面
 // i18n.global.locale会在preference.app.locale变更之后才会更新，因此watchpreference.app.locale是不合适的，刷新页面时可能语言配置尚未完全加载完成
-watch(i18n.global.locale, refresh, { flush: 'post' });
+watch(i18n.global.locale, refreshAll, { flush: 'post' });
+
+// 时区更新后，刷新页面
+watch(() => timezoneStore.timezone, refreshAll, { flush: 'post' });
 
 const slots: SetupContext['slots'] = useSlots();
 const headerSlots = computed(() => {
@@ -257,6 +270,7 @@ const headerSlots = computed(() => {
         :class="logoClass"
         :collapsed="logoCollapsed"
         :src="preferences.logo.source"
+        :src-dark="preferences.logo.sourceDark"
         :text="preferences.app.name"
         :theme="showHeaderNav ? headerTheme : theme"
         @click="clickLogo"
@@ -299,6 +313,9 @@ const headerSlots = computed(() => {
         </template>
         <template #notification>
           <slot name="notification"></slot>
+        </template>
+        <template #timezone>
+          <slot name="timezone"></slot>
         </template>
         <template v-for="item in headerSlots" #[item]>
           <slot :name="item"></slot>

@@ -22,6 +22,7 @@ const defaultPreferences: Preferences = {
     enableCheckUpdates: true,
     enablePreferences: true,
     enableRefreshToken: false,
+    enableStickyPreferencesNavigationBar: true,
     isMobile: false,
     layout: 'sidebar-nav',
     locale: 'zh-CN',
@@ -29,6 +30,7 @@ const defaultPreferences: Preferences = {
     name: 'Vben Admin',
     preferencesButtonPosition: 'auto',
     watermark: false,
+    watermarkContent: '',
     zIndex: 200,
   },
   breadcrumb: {
@@ -104,6 +106,7 @@ const defaultPreferences: Preferences = {
     showMaximize: true,
     showMore: true,
     styleType: 'chrome',
+    visitHistory: true,
     wheelable: true,
   },
   theme: {
@@ -114,6 +117,7 @@ const defaultPreferences: Preferences = {
     colorWarning: 'hsl(42 84% 61%)',
     mode: 'dark',
     radius: '0.5',
+    fontSize: 16,
     semiDarkHeader: false,
     semiDarkSidebar: false,
   },
@@ -132,6 +136,7 @@ const defaultPreferences: Preferences = {
     refresh: true,
     sidebarToggle: true,
     themeToggle: true,
+    timezone: true,
   },
 };
 

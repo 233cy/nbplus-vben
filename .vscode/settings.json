@@ -165,7 +165,19 @@
   "typescript.preferences.preferTypeOnlyAutoImports": true,
   "typescript.preferences.includePackageJsonAutoImports": "on",
 
-  "eslint.validate": ["javascript", "typescript", "javascriptreact", "typescriptreact", "vue", "html", "markdown", "json", "jsonc", "json5"],
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "json5",
+    "yaml"
+  ],
 
   "tailwindCSS.experimental.classRegex": [["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]],
 
@@ -208,5 +220,6 @@
   /* 建议关闭自动检测任务，他会理解自动检测的任务为后台运行，会出现不可控的情况如关闭窗口导致任务还在运行等情况。 */
   "task.autoDetect": "off",
   "window.title": "${folderName}",
-  "prettier.printWidth": 160
+  "prettier.printWidth": 160,
+  "oxc.enable": false
 }
