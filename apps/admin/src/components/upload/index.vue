@@ -9,10 +9,11 @@ import Tus from '@uppy/tus';
 import XHRUpload from '@uppy/xhr-upload'; // ⭐ 1. 引入 XHR 插件
 import { message } from 'ant-design-vue';
 
+import { getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/core/upload';
+
 // === 基础配置 ===
-const API_BASE = 'http://host.233cy.com:2330';
-const TUS_ENDPOINT = `${API_BASE}/tus`;
-const SIMPLE_ENDPOINT = `${API_BASE}/upload/simple`; // ⭐ 2. 普通上传接口
+const TUS_ENDPOINT = getTusUrl(); // 通过 API 获取 Tus 端点，支持动态配置
+const SIMPLE_ENDPOINT = getUploadUrl(); // ⭐ 2. 普通上传接口
 const BIG_FILE_THRESHOLD = 5 * 1024 * 1024; // ⭐ 3. 5MB 阈值
 
 type Meta = Record<string, unknown>;
@@ -114,7 +115,6 @@ function bindEvents(instance: Uppy<Meta, TusBody>) {
 
   // 成功
   instance.on('upload-success', (file, response: any) => {
-    console.log(file, response);
     const files = file!;
     const target = uploadFiles.value.find((f) => f.uppyId === files.id);
     if (!target) return;
@@ -130,7 +130,10 @@ function bindEvents(instance: Uppy<Meta, TusBody>) {
     const url = response?.uploadURL || response?.body?.url || (file as any).uploadURL;
 
     if (url) target.downloadUrl = url;
-    message.success(`上传成功：${files.name}`);
+    const fileId = url.split('/').pop();
+    getTusFileInfo({ fileId }).then((res) => {
+      message.success(`上传成功：${files.name}`);
+    });
   });
 
   // 错误
@@ -233,6 +236,9 @@ function handleToggleAction(file: UIFile) {
 }
 
 function handleDownload(file: UIFile) {
+  /* 这里使用fileID来获取上传文件信息 */
+  getTusFileInfo().then((res) => {});
+
   if (!file.downloadUrl) return message.warning('文件未上传完成');
   // 假设后端返回的 path 需要拼接或已经是完整 URL
   window.open(file.downloadUrl, '_blank');
@@ -259,7 +265,7 @@ function findUIFile(file: any): UIFile {
         v-if="findUIFile(file)"
         item-layout="horizontal"
         :data-source="[file]"
-        class="hover:text-regular bg-card mt-2 rounded-md border transition-all hover:bg-gray-100 dark:bg-gray-800 hover:dark:bg-gray-900"
+        class="hover:text-regular mt-2 rounded-md border bg-card transition-all hover:bg-gray-100 dark:bg-gray-800 hover:dark:bg-gray-900"
       >
         <template #renderItem>
           <a-list-item>

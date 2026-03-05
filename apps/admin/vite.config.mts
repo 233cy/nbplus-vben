@@ -1,10 +1,10 @@
-import { defineConfig } from '@vben/vite-config';
+import { defineApplicationConfig } from '@vben/vite-config';
 
 import AutoImport from 'unplugin-auto-import/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import Components from 'unplugin-vue-components/vite';
 
-export default defineConfig(async () => {
+export default defineApplicationConfig(async () => {
   return {
     application: {},
     vite: {
@@ -44,7 +44,7 @@ export default defineConfig(async () => {
             changeOrigin: true,
             rewrite: (path) => path.replace(/^\/api/, ''),
             // mock代理目标地址
-            target: 'http://localhost:3000/api',
+            target: 'http://localhost:5320/api',
             ws: true,
           },
         },

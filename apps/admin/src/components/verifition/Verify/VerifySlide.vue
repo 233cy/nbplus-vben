@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 
-import { reqCheck, reqGet } from '#/api/core/verify';
+import { reqCheck, reqGet } from '#/api/core/captcha';
 
 import { aesEncrypt } from './../utils/ase';
 import { resetSize } from './../utils/util';
