@@ -6,117 +6,101 @@ import { onBeforeUnmount, ref } from 'vue';
 
 import Uppy from '@uppy/core';
 import Tus from '@uppy/tus';
-import XHRUpload from '@uppy/xhr-upload'; // ⭐ 1. 引入 XHR 插件
+import XHRUpload from '@uppy/xhr-upload';
 import { message } from 'ant-design-vue';
 
 import { getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/core/upload';
 
-// === 基础配置 ===
-const TUS_ENDPOINT = getTusUrl(); // 通过 API 获取 Tus 端点，支持动态配置
-const SIMPLE_ENDPOINT = getUploadUrl(); // ⭐ 2. 普通上传接口
-const BIG_FILE_THRESHOLD = 5 * 1024 * 1024; // ⭐ 3. 5MB 阈值
+const props = withDefaults(
+  defineProps<{
+    isPrivate?: boolean;
+  }>(),
+  {
+    isPrivate: false,
+  },
+);
+
+const TUS_ENDPOINT = getTusUrl();
+const SIMPLE_ENDPOINT = getUploadUrl();
+const BIG_FILE_THRESHOLD = 5 * 1024 * 1024;
 
 type Meta = Record<string, unknown>;
 
-// ================================
-// 上传文件类型定义
-// ================================
-
-type UIFile = {
+// 为了在模板中类型推导更完善，增加明确的接口定义
+interface UIFile extends Omit<UploadFile, 'status'> {
   downloadUrl?: string;
-  // ⭐ 4. 新增字段：标记该文件属于哪个引擎
   engine: 'tus' | 'xhr';
-  eta?: number;
+  eta: number;
+  fileId?: string;
   isStart: boolean;
   name: string;
-  paused?: boolean;
+  paused: boolean;
   percent: number;
-  speed?: number;
-  status: string;
-  totalMB?: number;
+  speed: number;
+  status: 'done' | 'error' | 'paused' | 'uploading' | 'wait';
+  totalMB: number;
   uid: string;
-  uploadedMB?: number;
-
+  uploadedMB: number;
   uppyId: string;
-} & UploadFile;
+}
 
 const uploadFiles = ref<UIFile[]>([]);
 
 // =================================
-// ⭐ 5. 双引擎初始化
+// 引擎初始化 (保持不变)
 // =================================
-
-// 引擎 A: Tus (大文件)
-const uppyTus = new Uppy<Meta, TusBody>({
-  autoProceed: false,
-  id: 'uppy-tus', // 唯一ID
-}).use(Tus, {
+const uppyTus = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-tus' }).use(Tus, {
   endpoint: TUS_ENDPOINT,
   chunkSize: BIG_FILE_THRESHOLD,
   limit: 1,
   retryDelays: [1000, 3000],
-  removeFingerprintOnSuccess: false,
+  removeFingerprintOnSuccess: true,
 });
 
-// 引擎 B: XHR (小文件)
-const uppyXhr = new Uppy<Meta, TusBody>({
-  autoProceed: false,
-  id: 'uppy-xhr', // 唯一ID
-}).use(XHRUpload, {
+const uppyXhr = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-xhr' }).use(XHRUpload, {
   endpoint: SIMPLE_ENDPOINT,
-  fieldName: 'file', // 后端接收的字段名
+  fieldName: 'file',
   formData: true,
-  bundle: false, // 设为 false 确保每个文件单独请求
+  bundle: false,
 });
 
 // =============================
-// ⭐ 6. 统一事件绑定逻辑
+// 统一事件监听 (增强响应式同步)
 // =============================
 const progressData = new Map<string, { lastBytes: number; lastTime: number }>();
 
-function bindEvents(instance: Uppy<Meta, TusBody>) {
-  // 绑定 uppyId
+function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
   instance.on('file-added', (file) => {
     const target = uploadFiles.value.find((f) => f.uid === file.meta.uid);
     if (target) target.uppyId = file.id;
   });
 
-  // 进度
   instance.on('upload-progress', (file, progress) => {
-    const files = file!;
-    const target = uploadFiles.value.find((f) => f.uppyId === files.id);
+    const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
     if (!target || !progress.bytesTotal) return;
 
     const now = Date.now();
-    const pd = progressData.get(files.id) ?? {
-      lastBytes: progress.bytesUploaded,
-      lastTime: now,
-    };
-
+    const pd = progressData.get(file!.id) ?? { lastBytes: progress.bytesUploaded, lastTime: now };
     const deltaBytes = progress.bytesUploaded - pd.lastBytes;
     const deltaTime = (now - pd.lastTime) / 1000;
 
     const speed = deltaTime > 0 ? deltaBytes / 1024 / 1024 / deltaTime : 0;
     const remaining = progress.bytesTotal - progress.bytesUploaded;
-    const eta = speed > 0 ? remaining / 1024 / 1024 / speed : 0;
 
     target.speed = speed;
-    target.eta = eta;
+    target.eta = speed > 0 ? remaining / 1024 / 1024 / speed : 0;
     target.percent = Number(((progress.bytesUploaded / progress.bytesTotal) * 100).toFixed(2));
     target.uploadedMB = progress.bytesUploaded / 1024 / 1024;
     target.totalMB = progress.bytesTotal / 1024 / 1024;
     target.status = 'uploading';
+    target.paused = false;
 
-    progressData.set(files.id, {
-      lastBytes: progress.bytesUploaded,
-      lastTime: now,
-    });
+    progressData.set(file!.id, { lastBytes: progress.bytesUploaded, lastTime: now });
   });
 
-  // 成功
+  // 🌟 核心修复：抹平 TUS 和 XHR 成功后的数据结构差异
   instance.on('upload-success', (file, response: any) => {
-    const files = file!;
-    const target = uploadFiles.value.find((f) => f.uppyId === files.id);
+    const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
     if (!target) return;
 
     target.status = 'done';
@@ -124,29 +108,41 @@ function bindEvents(instance: Uppy<Meta, TusBody>) {
     target.speed = 0;
     target.eta = 0;
 
-    // Tus 和 XHR 返回的 URL 结构可能不同，需兼容
-    // Tus 通常在 response.uploadURL
-    // XHR 通常在 response.body.url (取决于你后端返回的 JSON 结构)
-    const url = response?.uploadURL || response?.body?.url || (file as any).uploadURL;
-
-    if (url) target.downloadUrl = url;
-    const fileId = url.split('/').pop();
-    getTusFileInfo({ fileId }).then((res) => {
-      message.success(`上传成功：${files.name}`);
-    });
+    if (engineType === 'tus') {
+      const tusUrl = response?.uploadURL || (file as any).uploadURL;
+      if (tusUrl) {
+        target.fileId = tusUrl.split('/').pop();
+        // TUS 上传成功后，最好不要直接用 tusUrl 下载，因为那是临时分片接口
+        // 建议等调完 getTusFileInfo 拿到真实路径后再赋值，这里先不给 downloadUrl
+      }
+    } else {
+      // XHR 解析咱们后端的标准结构：{ code: 200, data: { id, path } }
+      const xhrData = response?.body?.data;
+      if (xhrData) {
+        target.fileId = xhrData.id;
+        target.downloadUrl = xhrData.fullUrl || xhrData.path;
+      }
+    }
+    message.success(`上传成功：${file?.name}`);
   });
 
-  // 错误
   instance.on('upload-error', (file) => {
-    const files = file!;
-    const target = uploadFiles.value.find((f) => f.uppyId === files.id);
+    const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
     if (target) target.status = 'error';
+  });
+
+  // 同步真正的暂停状态
+  instance.on('upload-pause', (file) => {
+    const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
+    if (target) {
+      target.paused = true;
+      target.status = 'paused';
+    }
   });
 }
 
-// 对两个实例应用相同的逻辑
-bindEvents(uppyTus);
-bindEvents(uppyXhr);
+bindEvents(uppyTus, 'tus');
+bindEvents(uppyXhr, 'xhr');
 
 onBeforeUnmount(() => {
   uppyTus.destroy();
@@ -154,100 +150,103 @@ onBeforeUnmount(() => {
 });
 
 // =================================
-// Antd Upload 交互
+// 交互逻辑
 // =================================
-function handleBeforeUpload(raw: any, _fileList: any) {
-  // ⭐ 7. 核心分流逻辑
+function handleBeforeUpload(raw: any) {
+  // 🌟 1. 核心体验优化：查重拦截！
+  // 检查队列中是否已经存在 [同名] 且 [同大小] 且 [还没传完] 的文件
+  const isDuplicate = uploadFiles.value.some((f) => {
+    // raw.size 是字节，我们要和之前存的 totalMB 换算比对一下，或者直接比对原始大小，为了保险我们通过名字和近似大小判断
+    const isSameFile = f.name === raw.name && Math.abs(f.totalMB - raw.size / 1024 / 1024) < 0.01;
+    const isUnfinished = ['paused', 'uploading', 'wait'].includes(f.status);
+    return isSameFile && isUnfinished;
+  });
+
+  if (isDuplicate) {
+    message.warning(`文件 [${raw.name}] 已在上传队列中，请勿重复添加！`);
+    return false; // 直接打回，不让它进 Uppy，也不让它进 UI 列表
+  }
+
+  // 2. 正常走接下来的流程
   const isBigFile = raw.size > BIG_FILE_THRESHOLD;
   const targetEngine = isBigFile ? 'tus' : 'xhr';
 
   uploadFiles.value.push({
     uid: raw.uid,
     name: raw.name,
-    status: 'uploading',
+    status: 'wait',
     percent: 0,
     uppyId: '',
     speed: 0,
     eta: 0,
     isStart: false,
-    engine: targetEngine, // 记录引擎
+    paused: false,
+    engine: targetEngine,
+    totalMB: raw.size / 1024 / 1024,
+    uploadedMB: 0,
   });
 
-  // 添加到对应的 Uppy 实例
   const targetUppy = isBigFile ? uppyTus : uppyXhr;
 
   targetUppy.addFile({
     data: raw,
     name: raw.name,
     type: raw.type,
-    meta: { uid: raw.uid },
+    meta: {
+      uid: raw.uid,
+      isPrivate: props.isPrivate ? '1' : '0',
+    },
   });
 
   return false;
 }
 
-// 辅助函数：根据文件获取对应的 Uppy 实例
-function getUppyInstance(file: UIFile) {
-  return file.engine === 'tus' ? uppyTus : uppyXhr;
-}
-
 function handleRemove(file: UIFile) {
   if (file.uppyId) {
-    const currentUppy = getUppyInstance(file);
+    const currentUppy = file.engine === 'tus' ? uppyTus : uppyXhr;
     const uppyFile = currentUppy.getFile(file.uppyId);
 
-    // Tus 才需要发送 DELETE 请求，普通上传通常不需要（或者是不同接口）
+    // 发送 DELETE 请求终止任务
     if (file.engine === 'tus' && uppyFile?.uploadURL) {
-      fetch(uppyFile.uploadURL, {
-        method: 'DELETE',
-        headers: { 'Tus-Resumable': '1.0.0' },
-      });
+      fetch(uppyFile.uploadURL, { method: 'DELETE', headers: { 'Tus-Resumable': '1.0.0' } });
     }
-
     currentUppy.removeFile(file.uppyId);
   }
-
   uploadFiles.value = uploadFiles.value.filter((f) => f.uid !== file.uid);
-  return false;
 }
 
 function handleToggleAction(file: UIFile) {
-  const currentUppy = getUppyInstance(file);
+  const currentUppy = file.engine === 'tus' ? uppyTus : uppyXhr;
 
-  if (file.isStart === false) {
-    // ⭐ 8. 只上传指定文件，避免 uppy.upload() 触发所有
-    // 虽然 Uppy 默认行为是 upload() 触发所有，但我们可以通过 fileID 过滤
-    // 但更简单的做法是：因为 autoProceed 是 false，我们可以只针对该文件所在的实例触发
-    // 最好的方式是：uppy.upload() 会上传该实例所有 PENDING 的文件
-    // 如果想要单文件控制，Uppy 官方推荐是全部入队，一次性 upload。
-    // 如果你非要点一个传一个，直接 call upload() 即可，它会处理所有处于“待上传”状态的文件
+  if (!file.isStart) {
     currentUppy.upload();
     file.isStart = true;
   } else if (file.status === 'error') {
     currentUppy.retryUpload(file.uppyId);
+  } else if (file.paused) {
+    currentUppy.resume(file.uppyId);
   } else {
-    // 暂停/继续
-    // 注意：XHR 上传通常不支持“暂停”，它只会 Abort（取消），再点继续相当于重传
-    // Tus 支持真正的暂停
     currentUppy.pauseResume(file.uppyId);
-    const updated = currentUppy.getFile(file.uppyId);
-    file.paused = !!updated?.isPaused;
   }
 }
 
-function handleDownload(file: UIFile) {
-  /* 这里使用fileID来获取上传文件信息 */
-  getTusFileInfo().then((res) => {});
+async function handleDownload(file: UIFile) {
+  if (!file.fileId) return message.warning('无法获取文件 ID');
 
-  if (!file.downloadUrl) return message.warning('文件未上传完成');
-  // 假设后端返回的 path 需要拼接或已经是完整 URL
-  window.open(file.downloadUrl, '_blank');
-}
+  // 如果是 TUS 或者后端没直接返回完整 URL，就调接口拿取真身
+  if (!file.downloadUrl) {
+    try {
+      const res: any = await getTusFileInfo({ fileId: file.fileId });
+      // 假设接口返回结构里有 fullUrl
+      file.downloadUrl = res.data?.fullUrl || res.fullUrl;
+    } catch {
+      return message.error('获取文件下载地址失败');
+    }
+  }
 
-function findUIFile(file: any): UIFile {
-  const f = uploadFiles.value.find((x) => x.uid === file.uid);
-  if (!f) throw new Error(`UIFile not found: ${file.uid}`);
-  return f;
+  if (file.downloadUrl) {
+    window.open(file.downloadUrl, '_blank');
+  }
 }
 </script>
 
@@ -260,46 +259,48 @@ function findUIFile(file: any): UIFile {
   >
     <a-button type="primary">选择文件</a-button>
 
-    <template #itemRender="{ file }">
+    <template #itemRender="{ file: rawFile }">
       <a-list
-        v-if="findUIFile(file)"
         item-layout="horizontal"
-        :data-source="[file]"
+        :data-source="[rawFile as UIFile]"
         class="hover:text-regular mt-2 rounded-md border bg-card transition-all hover:bg-gray-100 dark:bg-gray-800 hover:dark:bg-gray-900"
       >
-        <template #renderItem>
+        <template #renderItem="{ item: file }">
           <a-list-item>
             <template #actions>
-              <a-button v-if="findUIFile(file).isStart === false" type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))"> 上传 </a-button>
-              <a-button v-else-if="findUIFile(file).status === 'error'" type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))"> 重试 </a-button>
-
-              <a-button v-else type="link" size="small" @click.stop="handleToggleAction(findUIFile(file))">
-                {{ findUIFile(file).paused ? '继续' : '暂停' }}
+              <a-button v-if="!file.isStart" type="link" size="small" @click.stop="handleToggleAction(file)"> 上传 </a-button>
+              <a-button v-else-if="file.status === 'error'" type="link" size="small" @click.stop="handleToggleAction(file)"> 重试 </a-button>
+              <a-button v-else-if="file.status !== 'done'" type="link" size="small" @click.stop="handleToggleAction(file)">
+                {{ file.paused ? '继续' : '暂停' }}
               </a-button>
 
-              <a-button type="link" size="small" :disabled="!findUIFile(file).downloadUrl" @click.stop="handleDownload(findUIFile(file))"> 下载 </a-button>
-              <a-button type="link" danger size="small" @click.stop="handleRemove(findUIFile(file))"> 删除 </a-button>
+              <a-button type="link" size="small" :disabled="file.status !== 'done'" @click.stop="handleDownload(file)"> 下载 </a-button>
+              <a-button type="link" danger size="small" @click.stop="handleRemove(file)"> 删除 </a-button>
             </template>
 
             <a-list-item-meta>
               <template #title>
-                {{ findUIFile(file).name }}
-                <a-tag class="ml-2" :color="findUIFile(file).engine === 'tus' ? 'blue' : 'green'">
-                  {{ findUIFile(file).engine === 'tus' ? '大文件加速' : '普通上传' }}
+                {{ file.name }}
+                <a-tag class="ml-2" :color="file.engine === 'tus' ? 'blue' : 'green'">
+                  {{ file.engine === 'tus' ? '大文件加速' : '普通极速' }}
+                </a-tag>
+                <a-tag class="ml-2" :color="props.isPrivate ? 'red' : 'cyan'">
+                  {{ props.isPrivate ? '私密资源' : '公开资源' }}
                 </a-tag>
 
-                <span v-if="findUIFile(file).status === 'uploading'" class="ml-1 text-gray-500">
-                  （{{ findUIFile(file).uploadedMB?.toFixed(2) }} MB / {{ findUIFile(file).totalMB?.toFixed(2) }} MB， {{ findUIFile(file).speed?.toFixed(2) }} MB/s， 剩余
-                  {{ findUIFile(file).eta?.toFixed(1) }}s）
+                <span v-if="['uploading', 'paused'].includes(file.status)" class="ml-1 text-gray-500">
+                  （{{ file.uploadedMB?.toFixed(2) }} MB / {{ file.totalMB?.toFixed(2) }} MB， {{ file.speed?.toFixed(2) }} MB/s， 剩余 {{ file.eta?.toFixed(1) }}s）
                 </span>
               </template>
+
               <template #description>
                 <a-progress
-                  :percent="findUIFile(file).percent"
-                  :status="findUIFile(file).status === 'error' ? 'exception' : findUIFile(file).status === 'done' ? 'success' : undefined"
-                  :stroke-color="findUIFile(file).paused ? '#faad14' : '#1677ff'"
+                  :percent="file.percent"
+                  :status="file.status === 'error' ? 'exception' : file.status === 'done' ? 'success' : 'normal'"
+                  :stroke-color="file.paused ? '#faad14' : '#1677ff'"
                 />
               </template>
+
               <template #avatar>
                 <a-avatar src="https://joeschmoe.io/api/v1/random" />
               </template>

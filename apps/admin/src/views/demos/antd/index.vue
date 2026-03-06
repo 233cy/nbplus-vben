@@ -320,7 +320,7 @@ const handleSuccess = (res: any) => {
     </a-card>
 
     <a-card class="mb-5" title="上传插件">
-      <Upload />
+      <Upload :is-private="true" />
     </a-card>
 
     <a-card class="mb-5" :title="$t('demos.page.title')">
@@ -334,7 +334,7 @@ const handleSuccess = (res: any) => {
     </a-card>
 
     <a-card class="mb-5" title="主题样式示例">
-      <div class="hover:text-regular hover:border-border-strong border-border bg-card text-primary hover:bg-muted rounded-md border p-4 transition-all">
+      <div class="hover:text-regular hover:border-border-strong rounded-md border border-border bg-card p-4 text-primary transition-all hover:bg-muted">
         使用 Vben Admin 内置类的主题示例：包含背景、边框、文字、悬停状态。请参考transitioncss
       </div>
     </a-card>

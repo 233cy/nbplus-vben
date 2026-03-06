@@ -12,9 +12,9 @@ export function getTusUrl() {
 }
 
 export function getUploadUrl() {
-  return `${import.meta.env.VITE_API_URL}/upload/tus`;
+  return `${import.meta.env.VITE_API_URL}/upload/file`;
 }
 
-export function getTusFileInfo(data: uploadApi.getTusFileInfo){
+export function getTusFileInfo(data: uploadApi.getTusFileInfo) {
   return requestClient.get(`${import.meta.env.VITE_API_URL}/upload/tus/getInfo`, { params: data });
 }

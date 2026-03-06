@@ -5,12 +5,7 @@ import type { RequestClientOptions } from '@vben/request';
 
 import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
-import {
-  authenticateResponseInterceptor,
-  defaultResponseInterceptor,
-  errorMessageResponseInterceptor,
-  RequestClient,
-} from '@vben/request';
+import { authenticateResponseInterceptor, defaultResponseInterceptor, errorMessageResponseInterceptor, RequestClient } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
 import { message } from 'ant-design-vue';
@@ -35,10 +30,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     const accessStore = useAccessStore();
     const authStore = useAuthStore();
     accessStore.setAccessToken(null);
-    if (
-      preferences.app.loginExpiredMode === 'modal' &&
-      accessStore.isAccessChecked
-    ) {
+    if (preferences.app.loginExpiredMode === 'modal' && accessStore.isAccessChecked) {
       accessStore.setLoginExpired(true);
     } else {
       await authStore.logout();
