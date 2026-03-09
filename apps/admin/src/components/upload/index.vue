@@ -2,7 +2,7 @@
 import type { TusBody } from '@uppy/tus';
 import type { UploadFile } from 'ant-design-vue';
 
-import { onBeforeUnmount, ref } from 'vue';
+import { markRaw, onBeforeUnmount, ref } from 'vue'; // 🌟 引入了 markRaw
 
 import Uppy from '@uppy/core';
 import Tus from '@uppy/tus';
@@ -13,19 +13,20 @@ import { deleteOssFile, getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/co
 
 const props = withDefaults(
   defineProps<{
-    isPrivate?: boolean;
+    isPrivate?: number;
   }>(),
   {
-    isPrivate: false,
+    isPrivate: 2, // 默认公开资源
   },
 );
 
 const TUS_ENDPOINT = getTusUrl();
 const SIMPLE_ENDPOINT = getUploadUrl();
-const BIG_FILE_THRESHOLD = 5 * 1024 * 1024;
+const BIG_FILE_THRESHOLD = 5 * 1024 * 1024; // 🌟 你的 10MB 限制保留
 
 type Meta = Record<string, unknown>;
 
+// 🌟 扩充 status 状态，增加 queued，并补充延迟注入的变量
 interface UIFile extends Omit<UploadFile, 'status'> {
   downloadUrl?: string;
   engine: 'tus' | 'xhr';
@@ -36,12 +37,14 @@ interface UIFile extends Omit<UploadFile, 'status'> {
   paused: boolean;
   percent: number;
   speed: number;
-  status: 'done' | 'error' | 'paused' | 'uploading' | 'wait';
+  status: 'done' | 'error' | 'paused' | 'queued' | 'uploading' | 'wait';
   totalMB: number;
   uid: string;
   uploadedMB: number;
   uppyId: string;
-  logicalPath?: string; // 🌟 新增：存放 public://xxx.png
+  logicalPath?: string;
+  rawFile?: any; // 🌟 用于暂存未交给 Uppy 的原始文件对象
+  isAddedToUppy?: boolean; // 🌟 标记是否已经正式塞进 Uppy 引擎
 }
 
 const uploadFiles = ref<UIFile[]>([]);
@@ -52,16 +55,17 @@ const uploadFiles = ref<UIFile[]>([]);
 const uppyTus = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-tus' }).use(Tus, {
   endpoint: TUS_ENDPOINT,
   chunkSize: BIG_FILE_THRESHOLD,
-  limit: 1,
+  limit: 1, // 大文件强制排队，单线程稳健上传
   retryDelays: [1000, 3000],
   removeFingerprintOnSuccess: true,
 });
 
 const uppyXhr = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-xhr' }).use(XHRUpload, {
-  endpoint: SIMPLE_ENDPOINT,
+  endpoint: `${SIMPLE_ENDPOINT}${SIMPLE_ENDPOINT.includes('?') ? '&' : '?'}isPrivate=${props.isPrivate}`,
   fieldName: 'file',
   formData: true,
   bundle: false,
+  limit: 5, // 🌟 小文件也强制排队，配合延迟注入实现精准控制
 });
 
 // =============================
@@ -75,16 +79,33 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
     if (target) target.uppyId = file.id;
   });
 
+  // 🌟 【关键修复 1】：监听正式启动瞬间，解决按钮点了没反应（假死）的 Bug
+  instance.on('upload-started' as any, (file: any) => {
+    const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
+    if (target) {
+      target.isStart = true;
+      target.status = 'uploading';
+      target.paused = false;
+    }
+  });
+
   instance.on('upload-progress', (file, progress) => {
     const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
     if (!target || !progress.bytesTotal) return;
+
+    // 突破排队，UI 状态更新
+    if (target.status === 'queued' || target.status === 'wait') {
+      target.status = 'uploading';
+      target.isStart = true;
+      target.paused = false;
+    }
 
     const now = Date.now();
     const pd = progressData.get(file!.id) ?? { lastBytes: progress.bytesUploaded, lastTime: now };
     const deltaBytes = progress.bytesUploaded - pd.lastBytes;
     const deltaTime = (now - pd.lastTime) / 1000;
-
-    const speed = deltaTime > 0 ? deltaBytes / 1024 / 1024 / deltaTime : 0;
+    const safeDeltaTime = deltaTime > 0 ? deltaTime : 0.001;
+    const speed = deltaBytes / 1024 / 1024 / safeDeltaTime;
     const remaining = progress.bytesTotal - progress.bytesUploaded;
 
     target.speed = speed;
@@ -92,8 +113,13 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
     target.percent = Number(((progress.bytesUploaded / progress.bytesTotal) * 100).toFixed(2));
     target.uploadedMB = progress.bytesUploaded / 1024 / 1024;
     target.totalMB = progress.bytesTotal / 1024 / 1024;
-    target.status = 'uploading';
-    target.paused = false;
+
+    const uppyFile = instance.getFile(file!.id);
+    const isReallyPaused = uppyFile?.isPaused || false;
+
+    target.paused = isReallyPaused;
+    target.status = isReallyPaused ? 'paused' : 'uploading';
+    target.isStart = true;
 
     progressData.set(file!.id, { lastBytes: progress.bytesUploaded, lastTime: now });
   });
@@ -109,18 +135,15 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
       const tusUrl = response?.uploadURL || (file as any).uploadURL;
       if (tusUrl) {
         target.fileId = tusUrl.split('/').pop();
-        // 🌟 TUS 转存是异步的，通过获取文件信息接口，拿到转存后的 logicalPath
         getTusFileInfo({ uploadKey: target.fileId }).then((res: any) => {
-          // 根据你后端的实际返回结构取值
           target.logicalPath = res.logicalPath;
           target.downloadUrl = res.fullUrl;
         });
       }
     } else {
-      // 🌟 普通 XHR 上传，后端直接在响应里返回了 logicalPath
       const xhrData = response?.body?.data;
       if (xhrData) {
-        target.fileId = xhrData.uploadKey; // 可能没有 fileId，因为不是 TUS 协议了，但我们可以用 uploadKey 来标识这个文件
+        target.fileId = xhrData.uploadKey;
         target.logicalPath = xhrData.logicalPath;
         target.downloadUrl = xhrData.fullUrl;
       }
@@ -128,9 +151,18 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
     message.success(`上传成功：${file?.name}`);
   });
 
-  instance.on('upload-error', (file) => {
+  instance.on('upload-error', (file, error, response) => {
     const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
-    if (target) target.status = 'error';
+    if (target) {
+      target.status = 'error';
+      if (engineType === 'tus' && !target.fileId) {
+        const url = (file as any)?.tus?.uploadUrl || (file as any)?.response?.uploadURL || (response as any)?.uploadURL;
+        if (url) {
+          target.fileId = url.split('/').pop();
+          console.log('✅ 在报错瞬间成功抢救到 fileId:', target.fileId);
+        }
+      }
+    }
   });
 
   instance.on('upload-pause', (file) => {
@@ -154,39 +186,36 @@ onBeforeUnmount(() => {
 // 交互逻辑
 // =================================
 function handleBeforeUpload(raw: any) {
-  // 🌟 1. 智能重命名逻辑：检测UI列表中是否已有同名文件
   let finalName = raw.name;
   let count = 1;
 
-  // 安全地分离文件名和后缀 (例如: "document.pdf" -> "document" 和 ".pdf")
   const lastDotIndex = finalName.lastIndexOf('.');
   const baseName = lastDotIndex === -1 ? finalName : finalName.slice(0, Math.max(0, lastDotIndex));
   const ext = lastDotIndex === -1 ? '' : finalName.slice(Math.max(0, lastDotIndex));
 
-  // 如果发现重名，就自动累加序号，直到名字唯一
   while (uploadFiles.value.some((f) => f.name === finalName)) {
     finalName = `${baseName}(${count})${ext}`;
     count++;
   }
 
-  // 🌟 2. 伪造全新的 File 对象 (0 内存开销，只是创建了一个新引用指向原硬盘数据)
-  // 这会彻底骗过 Uppy，让它认为这是一个 100% 陌生的新文件！
   const renamedRaw = new File([raw], finalName, {
     type: raw.type,
     lastModified: raw.lastModified,
   }) as any;
-  renamedRaw.uid = raw.uid; // 保留 Ant Design Vue 的原生防重 uid
+  renamedRaw.uid = raw.uid;
 
-  // 3. 后续逻辑全部使用 renamedRaw
   const isBigFile = renamedRaw.size > BIG_FILE_THRESHOLD;
   const targetEngine = isBigFile ? 'tus' : 'xhr';
 
+  const absoluteFileId = `tus-${renamedRaw.name}-${renamedRaw.size}-${renamedRaw.lastModified}`;
+
+  // 🌟 【关键修复 2】：仅仅存入 Vue，绝不触发 addFile，实现延迟精准注入
   uploadFiles.value.push({
     uid: renamedRaw.uid,
-    name: renamedRaw.name, // UI 列表将展示重命名后的名字
+    name: renamedRaw.name,
     status: 'wait',
     percent: 0,
-    uppyId: '',
+    uppyId: absoluteFileId,
     speed: 0,
     eta: 0,
     isStart: false,
@@ -194,40 +223,25 @@ function handleBeforeUpload(raw: any) {
     engine: targetEngine,
     totalMB: renamedRaw.size / 1024 / 1024,
     uploadedMB: 0,
+    rawFile: markRaw(renamedRaw), // 🌟 暂存文件对象
+    isAddedToUppy: false, // 🌟 标记未注入
   });
 
-  const targetUppy = isBigFile ? uppyTus : uppyXhr;
-
-  targetUppy.addFile({
-    data: renamedRaw, // 传入伪造的新文件对象
-    name: renamedRaw.name,
-    type: renamedRaw.type,
-    meta: {
-      uid: renamedRaw.uid,
-      isPrivate: props.isPrivate ? '1' : '0',
-    },
-  });
-
-  return false; // 拦截默认上传
+  return false;
 }
 
 async function handleRemove(file: UIFile) {
-  // 🌟 阶段 A：文件已经成为正式资产 (状态为 done)
   if (file.status === 'done') {
     if (file.logicalPath) {
       try {
-        // 调用我们自己写的后端业务删除接口，传入 public://...
         await deleteOssFile({ logicalPath: file.logicalPath });
         message.success('已彻底抹除服务器上的源文件');
       } catch {
         message.error('文件删除失败，请检查网络或权限');
-        return; // 接口报错时，拦截前端移除 UI
+        return;
       }
     }
-  }
-  // 🌟 阶段 B：文件还是临时碎片 (上传中 / 暂停中 / 算 Hash 中)
-  else if (file.engine === 'tus' && file.fileId) {
-    // 按照 TUS 协议，直接向对应的 fileId 发送 DELETE 请求
+  } else if (file.engine === 'tus' && file.fileId) {
     const tusDeleteUrl = `${TUS_ENDPOINT}/${file.fileId}`;
     fetch(tusDeleteUrl, {
       method: 'DELETE',
@@ -235,8 +249,8 @@ async function handleRemove(file: UIFile) {
     }).catch(() => console.warn('TUS 临时文件清理失败'));
   }
 
-  // 无论哪种情况，清理成功后从 Uppy 队列和 Vue 列表中抹除
-  if (file.uppyId) {
+  // 🌟 只有真正注入过 Uppy 的，才需要去清除它的引擎数据
+  if (file.uppyId && file.isAddedToUppy) {
     const currentUppy = file.engine === 'tus' ? uppyTus : uppyXhr;
     currentUppy.removeFile(file.uppyId);
   }
@@ -247,14 +261,42 @@ function handleToggleAction(file: UIFile) {
   const currentUppy = file.engine === 'tus' ? uppyTus : uppyXhr;
 
   if (!file.isStart) {
-    currentUppy.upload();
+    // 🌟 【关键修复 3】：只有在点击瞬间，才喂给 Uppy，指哪打哪
+    if (!file.isAddedToUppy && file.rawFile) {
+      currentUppy.addFile({
+        id: file.uppyId,
+        data: file.rawFile,
+        name: file.name,
+        type: file.rawFile.type,
+        meta: {
+          uid: file.uid,
+          isPrivate: props.isPrivate,
+        },
+      });
+      file.isAddedToUppy = true;
+    }
+
     file.isStart = true;
+    file.status = 'queued';
+    currentUppy.upload();
   } else if (file.status === 'error') {
+    if (file.engine === 'tus' && file.fileId) {
+      const uppyFile = currentUppy.getFile(file.uppyId);
+      currentUppy.setFileState(file.uppyId, {
+        tus: Object.assign({}, uppyFile.tus, {
+          uploadUrl: `${TUS_ENDPOINT}/${file.fileId}`,
+        }),
+      });
+    }
+    file.status = 'queued';
     currentUppy.retryUpload(file.uppyId);
-  } else if (file.paused) {
-    currentUppy.resume(file.uppyId);
-  } else {
+  } else if (file.status !== 'queued' && file.engine === 'tus') {
     currentUppy.pauseResume(file.uppyId);
+    const uppyFile = currentUppy.getFile(file.uppyId);
+    if (uppyFile) {
+      file.paused = uppyFile.isPaused || false;
+      file.status = file.paused ? 'paused' : 'queued';
+    }
   }
 }
 
@@ -294,9 +336,15 @@ async function handleDownload(file: UIFile) {
             <template #actions>
               <a-button v-if="!file.isStart" type="link" size="small" @click.stop="handleToggleAction(file)"> 上传 </a-button>
               <a-button v-else-if="file.status === 'error'" type="link" size="small" @click.stop="handleToggleAction(file)"> 重试 </a-button>
-              <a-button v-else-if="file.status !== 'done'" type="link" size="small" @click.stop="handleToggleAction(file)">
-                {{ file.paused ? '继续' : '暂停' }}
-              </a-button>
+              <template v-else-if="file.status !== 'done'">
+                <a-button v-if="file.engine === 'tus'" type="link" size="small" :disabled="file.status === 'queued'" @click.stop="handleToggleAction(file)">
+                  {{ file.status === 'queued' ? '等待中...' : file.paused ? '继续' : '暂停' }}
+                </a-button>
+
+                <a-button v-else type="link" size="small" disabled>
+                  {{ file.status === 'queued' ? '等待中...' : '上传中...' }}
+                </a-button>
+              </template>
 
               <a-button type="link" size="small" :disabled="file.status !== 'done'" @click.stop="handleDownload(file)"> 下载 </a-button>
               <a-button type="link" danger size="small" @click.stop="handleRemove(file)"> 删除 </a-button>
@@ -308,20 +356,25 @@ async function handleDownload(file: UIFile) {
                 <a-tag class="ml-2" :color="file.engine === 'tus' ? 'blue' : 'green'">
                   {{ file.engine === 'tus' ? '大文件加速' : '普通极速' }}
                 </a-tag>
-                <a-tag class="ml-2" :color="props.isPrivate ? 'red' : 'cyan'">
-                  {{ props.isPrivate ? '私密资源' : '公开资源' }}
+                <a-tag class="ml-2" :color="props.isPrivate === 1 ? 'red' : props.isPrivate === 2 ? 'cyan' : 'purple'">
+                  <span v-if="props.isPrivate === 1">私密资源</span>
+                  <span v-else-if="props.isPrivate === 2">公开资源</span>
+                  <span v-else-if="props.isPrivate === 3">保护资源</span>
                 </a-tag>
 
-                <span v-if="['uploading', 'paused'].includes(file.status)" class="ml-1 text-gray-500">
-                  （{{ file.uploadedMB?.toFixed(2) }} MB / {{ file.totalMB?.toFixed(2) }} MB， {{ file.speed?.toFixed(2) }} MB/s， 剩余 {{ file.eta?.toFixed(1) }}s）
+                <span v-if="['uploading', 'paused', 'queued'].includes(file.status)" class="ml-1 text-gray-500">
+                  <template v-if="file.status === 'queued'"> （等待资源分配...） </template>
+                  <template v-else>
+                    （{{ file.uploadedMB?.toFixed(2) }} MB / {{ file.totalMB?.toFixed(2) }} MB， {{ file.speed?.toFixed(2) }} MB/s， 剩余 {{ file.eta?.toFixed(1) }}s）
+                  </template>
                 </span>
               </template>
 
               <template #description>
                 <a-progress
                   :percent="file.percent"
-                  :status="file.status === 'error' ? 'exception' : file.status === 'done' ? 'success' : 'normal'"
-                  :stroke-color="file.paused ? '#faad14' : '#1677ff'"
+                  :status="file.status === 'error' ? 'exception' : file.status === 'done' ? 'success' : file.status === 'queued' ? 'normal' : 'active'"
+                  :stroke-color="file.status === 'queued' ? '#d9d9d9' : file.paused ? '#faad14' : '#1677ff'"
                 />
               </template>
 

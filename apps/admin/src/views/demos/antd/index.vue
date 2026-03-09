@@ -320,7 +320,7 @@ const handleSuccess = (res: any) => {
     </a-card>
 
     <a-card class="mb-5" title="上传插件">
-      <Upload :is-private="true" />
+      <Upload :is-private="1" />
     </a-card>
 
     <a-card class="mb-5" :title="$t('demos.page.title')">
