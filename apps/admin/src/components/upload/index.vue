@@ -9,7 +9,7 @@ import Tus from '@uppy/tus';
 import XHRUpload from '@uppy/xhr-upload';
 import { message } from 'ant-design-vue';
 
-import { getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/core/upload';
+import { deleteOssFile, getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/core/upload';
 
 const props = withDefaults(
   defineProps<{
@@ -26,7 +26,6 @@ const BIG_FILE_THRESHOLD = 5 * 1024 * 1024;
 
 type Meta = Record<string, unknown>;
 
-// 为了在模板中类型推导更完善，增加明确的接口定义
 interface UIFile extends Omit<UploadFile, 'status'> {
   downloadUrl?: string;
   engine: 'tus' | 'xhr';
@@ -42,12 +41,13 @@ interface UIFile extends Omit<UploadFile, 'status'> {
   uid: string;
   uploadedMB: number;
   uppyId: string;
+  logicalPath?: string; // 🌟 新增：存放 public://xxx.png
 }
 
 const uploadFiles = ref<UIFile[]>([]);
 
 // =================================
-// 引擎初始化 (保持不变)
+// 引擎初始化
 // =================================
 const uppyTus = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-tus' }).use(Tus, {
   endpoint: TUS_ENDPOINT,
@@ -65,7 +65,7 @@ const uppyXhr = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-xhr' }).
 });
 
 // =============================
-// 统一事件监听 (增强响应式同步)
+// 统一事件监听
 // =============================
 const progressData = new Map<string, { lastBytes: number; lastTime: number }>();
 
@@ -98,29 +98,31 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
     progressData.set(file!.id, { lastBytes: progress.bytesUploaded, lastTime: now });
   });
 
-  // 🌟 核心修复：抹平 TUS 和 XHR 成功后的数据结构差异
   instance.on('upload-success', (file, response: any) => {
     const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
     if (!target) return;
 
     target.status = 'done';
     target.percent = 100;
-    target.speed = 0;
-    target.eta = 0;
 
     if (engineType === 'tus') {
       const tusUrl = response?.uploadURL || (file as any).uploadURL;
       if (tusUrl) {
         target.fileId = tusUrl.split('/').pop();
-        // TUS 上传成功后，最好不要直接用 tusUrl 下载，因为那是临时分片接口
-        // 建议等调完 getTusFileInfo 拿到真实路径后再赋值，这里先不给 downloadUrl
+        // 🌟 TUS 转存是异步的，通过获取文件信息接口，拿到转存后的 logicalPath
+        getTusFileInfo({ uploadKey: target.fileId }).then((res: any) => {
+          // 根据你后端的实际返回结构取值
+          target.logicalPath = res.logicalPath;
+          target.downloadUrl = res.fullUrl;
+        });
       }
     } else {
-      // XHR 解析咱们后端的标准结构：{ code: 200, data: { id, path } }
+      // 🌟 普通 XHR 上传，后端直接在响应里返回了 logicalPath
       const xhrData = response?.body?.data;
       if (xhrData) {
-        target.fileId = xhrData.id;
-        target.downloadUrl = xhrData.fullUrl || xhrData.path;
+        target.fileId = xhrData.uploadKey; // 可能没有 fileId，因为不是 TUS 协议了，但我们可以用 uploadKey 来标识这个文件
+        target.logicalPath = xhrData.logicalPath;
+        target.downloadUrl = xhrData.fullUrl;
       }
     }
     message.success(`上传成功：${file?.name}`);
@@ -131,7 +133,6 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
     if (target) target.status = 'error';
   });
 
-  // 同步真正的暂停状态
   instance.on('upload-pause', (file) => {
     const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
     if (target) {
@@ -153,27 +154,36 @@ onBeforeUnmount(() => {
 // 交互逻辑
 // =================================
 function handleBeforeUpload(raw: any) {
-  // 🌟 1. 核心体验优化：查重拦截！
-  // 检查队列中是否已经存在 [同名] 且 [同大小] 且 [还没传完] 的文件
-  const isDuplicate = uploadFiles.value.some((f) => {
-    // raw.size 是字节，我们要和之前存的 totalMB 换算比对一下，或者直接比对原始大小，为了保险我们通过名字和近似大小判断
-    const isSameFile = f.name === raw.name && Math.abs(f.totalMB - raw.size / 1024 / 1024) < 0.01;
-    const isUnfinished = ['paused', 'uploading', 'wait'].includes(f.status);
-    return isSameFile && isUnfinished;
-  });
+  // 🌟 1. 智能重命名逻辑：检测UI列表中是否已有同名文件
+  let finalName = raw.name;
+  let count = 1;
 
-  if (isDuplicate) {
-    message.warning(`文件 [${raw.name}] 已在上传队列中，请勿重复添加！`);
-    return false; // 直接打回，不让它进 Uppy，也不让它进 UI 列表
+  // 安全地分离文件名和后缀 (例如: "document.pdf" -> "document" 和 ".pdf")
+  const lastDotIndex = finalName.lastIndexOf('.');
+  const baseName = lastDotIndex === -1 ? finalName : finalName.slice(0, Math.max(0, lastDotIndex));
+  const ext = lastDotIndex === -1 ? '' : finalName.slice(Math.max(0, lastDotIndex));
+
+  // 如果发现重名，就自动累加序号，直到名字唯一
+  while (uploadFiles.value.some((f) => f.name === finalName)) {
+    finalName = `${baseName}(${count})${ext}`;
+    count++;
   }
 
-  // 2. 正常走接下来的流程
-  const isBigFile = raw.size > BIG_FILE_THRESHOLD;
+  // 🌟 2. 伪造全新的 File 对象 (0 内存开销，只是创建了一个新引用指向原硬盘数据)
+  // 这会彻底骗过 Uppy，让它认为这是一个 100% 陌生的新文件！
+  const renamedRaw = new File([raw], finalName, {
+    type: raw.type,
+    lastModified: raw.lastModified,
+  }) as any;
+  renamedRaw.uid = raw.uid; // 保留 Ant Design Vue 的原生防重 uid
+
+  // 3. 后续逻辑全部使用 renamedRaw
+  const isBigFile = renamedRaw.size > BIG_FILE_THRESHOLD;
   const targetEngine = isBigFile ? 'tus' : 'xhr';
 
   uploadFiles.value.push({
-    uid: raw.uid,
-    name: raw.name,
+    uid: renamedRaw.uid,
+    name: renamedRaw.name, // UI 列表将展示重命名后的名字
     status: 'wait',
     percent: 0,
     uppyId: '',
@@ -182,34 +192,52 @@ function handleBeforeUpload(raw: any) {
     isStart: false,
     paused: false,
     engine: targetEngine,
-    totalMB: raw.size / 1024 / 1024,
+    totalMB: renamedRaw.size / 1024 / 1024,
     uploadedMB: 0,
   });
 
   const targetUppy = isBigFile ? uppyTus : uppyXhr;
 
   targetUppy.addFile({
-    data: raw,
-    name: raw.name,
-    type: raw.type,
+    data: renamedRaw, // 传入伪造的新文件对象
+    name: renamedRaw.name,
+    type: renamedRaw.type,
     meta: {
-      uid: raw.uid,
+      uid: renamedRaw.uid,
       isPrivate: props.isPrivate ? '1' : '0',
     },
   });
 
-  return false;
+  return false; // 拦截默认上传
 }
 
-function handleRemove(file: UIFile) {
+async function handleRemove(file: UIFile) {
+  // 🌟 阶段 A：文件已经成为正式资产 (状态为 done)
+  if (file.status === 'done') {
+    if (file.logicalPath) {
+      try {
+        // 调用我们自己写的后端业务删除接口，传入 public://...
+        await deleteOssFile({ logicalPath: file.logicalPath });
+        message.success('已彻底抹除服务器上的源文件');
+      } catch {
+        message.error('文件删除失败，请检查网络或权限');
+        return; // 接口报错时，拦截前端移除 UI
+      }
+    }
+  }
+  // 🌟 阶段 B：文件还是临时碎片 (上传中 / 暂停中 / 算 Hash 中)
+  else if (file.engine === 'tus' && file.fileId) {
+    // 按照 TUS 协议，直接向对应的 fileId 发送 DELETE 请求
+    const tusDeleteUrl = `${TUS_ENDPOINT}/${file.fileId}`;
+    fetch(tusDeleteUrl, {
+      method: 'DELETE',
+      headers: { 'Tus-Resumable': '1.0.0' },
+    }).catch(() => console.warn('TUS 临时文件清理失败'));
+  }
+
+  // 无论哪种情况，清理成功后从 Uppy 队列和 Vue 列表中抹除
   if (file.uppyId) {
     const currentUppy = file.engine === 'tus' ? uppyTus : uppyXhr;
-    const uppyFile = currentUppy.getFile(file.uppyId);
-
-    // 发送 DELETE 请求终止任务
-    if (file.engine === 'tus' && uppyFile?.uploadURL) {
-      fetch(uppyFile.uploadURL, { method: 'DELETE', headers: { 'Tus-Resumable': '1.0.0' } });
-    }
     currentUppy.removeFile(file.uppyId);
   }
   uploadFiles.value = uploadFiles.value.filter((f) => f.uid !== file.uid);
@@ -231,13 +259,9 @@ function handleToggleAction(file: UIFile) {
 }
 
 async function handleDownload(file: UIFile) {
-  if (!file.fileId) return message.warning('无法获取文件 ID');
-
-  // 如果是 TUS 或者后端没直接返回完整 URL，就调接口拿取真身
   if (!file.downloadUrl) {
     try {
-      const res: any = await getTusFileInfo({ fileId: file.fileId });
-      // 假设接口返回结构里有 fullUrl
+      const res: any = await getTusFileInfo({ uploadKey: file.fileId });
       file.downloadUrl = res.data?.fullUrl || res.fullUrl;
     } catch {
       return message.error('获取文件下载地址失败');

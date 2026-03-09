@@ -3,7 +3,11 @@ import { requestClient } from '#/api/request';
 export namespace uploadApi {
   /** 获取tus文件 */
   export interface getTusFileInfo {
-    fileId?: string;
+    uploadKey?: string;
+  }
+  /** 删除OSS文件 */
+  export interface deleteOssFile {
+    logicalPath?: string;
   }
 }
 
@@ -16,5 +20,9 @@ export function getUploadUrl() {
 }
 
 export function getTusFileInfo(data: uploadApi.getTusFileInfo) {
-  return requestClient.get(`${import.meta.env.VITE_API_URL}/upload/tus/getInfo`, { params: data });
+  return requestClient.get(`${import.meta.env.VITE_API_URL}/upload/getInfo`, { params: data });
+}
+
+export function deleteOssFile(data: uploadApi.deleteOssFile) {
+  return requestClient.delete(`${import.meta.env.VITE_API_URL}/upload/del`, { params: data });
 }
