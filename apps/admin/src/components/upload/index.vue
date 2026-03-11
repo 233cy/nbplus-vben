@@ -61,7 +61,7 @@ const uppyTus = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-tus' }).
 });
 
 const uppyXhr = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-xhr' }).use(XHRUpload, {
-  endpoint: `${SIMPLE_ENDPOINT}${SIMPLE_ENDPOINT.includes('?') ? '&' : '?'}isPrivate=${props.isPrivate}`,
+  endpoint: `${SIMPLE_ENDPOINT}`,
   fieldName: 'file',
   formData: true,
   bundle: false,

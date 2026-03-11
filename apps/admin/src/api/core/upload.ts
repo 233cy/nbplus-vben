@@ -20,7 +20,7 @@ export function getUploadUrl() {
 }
 
 export function getTusFileInfo(data: uploadApi.getTusFileInfo) {
-  return requestClient.get(`${import.meta.env.VITE_API_URL}/upload/getInfo`, { params: data });
+  return requestClient.get(`${import.meta.env.VITE_API_URL}/upload/tus/${data.uploadKey}`);
 }
 
 export function deleteOssFile(data: uploadApi.deleteOssFile) {

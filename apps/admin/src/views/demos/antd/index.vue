@@ -320,6 +320,7 @@ const handleSuccess = (res: any) => {
     </a-card>
 
     <a-card class="mb-5" title="上传插件">
+      <Upload :is-private="2" />
       <Upload :is-private="1" />
     </a-card>
 
