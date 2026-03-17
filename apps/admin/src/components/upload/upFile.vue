@@ -328,11 +328,7 @@ async function handleDownload(file: UIFile) {
     <a-button type="primary">{{ $t('page.upload.selectFile') }}</a-button>
 
     <template #itemRender="{ file: rawFile }">
-      <a-list
-        item-layout="horizontal"
-        :data-source="[rawFile as UIFile]"
-        class="hover:text-regular mt-2 rounded-md border bg-card transition-all hover:bg-gray-100 dark:bg-gray-800 hover:dark:bg-gray-900"
-      >
+      <a-list item-layout="horizontal" :data-source="[rawFile as UIFile]" class="hover:text-regular mt-2 rounded-md border border-border bg-card transition-all hover:bg-muted">
         <template #renderItem="{ item: file }">
           <a-list-item>
             <template #actions>
