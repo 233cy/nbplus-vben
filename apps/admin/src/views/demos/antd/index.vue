@@ -280,7 +280,7 @@ const [BaseForm] = useVbenForm({
 
 /* 验证器 */
 const verify = ref<any>(null);
-const captchaType = ref('clickWord');
+const captchaType = ref('blockPuzzle');
 
 const onShow = (type: any) => {
   captchaType.value = type;
