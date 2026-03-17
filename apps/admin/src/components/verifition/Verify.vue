@@ -14,6 +14,7 @@ interface Props {
   figure?: number;
   arith?: number;
   mode?: 'fixed' | 'pop'; // 限制 mode 的类型
+  modelValue?: any; // 🌟 新增：接收 Vben 表单传进来的当前值
   space?: number;
   explain?: string;
   imgSize?: { height: string; width: string };
@@ -27,6 +28,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   mode: 'pop',
   figure: undefined,
+  modelValue: undefined,
   arith: undefined,
   space: undefined,
   explain: undefined,
@@ -40,6 +42,7 @@ const props = withDefaults(defineProps<Props>(), {
  */
 const emit = defineEmits<{
   (e: 'success', data: any): void;
+  (e: 'update:modelValue', value: any): void; // 🌟 新增：通知 Vben 表单值变了
   (e: 'error', data: any): void;
   (e: 'ready', instance: any): void;
   (e: 'close'): void;
@@ -111,6 +114,8 @@ const show = () => {
 };
 
 const clearVerifyVal = () => {
+  // 🌟 新增：重置/清空验证码时，把表单里的值也清空
+  emit('update:modelValue', null);
   verifyInstance.value.refresh();
   successData.value = null;
 };
@@ -121,6 +126,8 @@ const clearVerifyVal = () => {
 const successData = ref(null);
 const handleSuccess = (data: any) => {
   successData.value = data;
+  // 🌟 新增：验证成功时，把后端返回的 token/data 赋值给表单
+  emit('update:modelValue', data.captchaVerification ?? undefined);
   emit('success', data);
 };
 const handleError = (data: any) => emit('error', data);
@@ -136,7 +143,7 @@ defineExpose({
 </script>
 
 <template>
-  <div>
+  <div class="w-full">
     <!-- 弹出式触发按钮 -->
     <div
       v-if="mode === 'pop'"

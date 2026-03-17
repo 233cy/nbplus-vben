@@ -1,67 +1,24 @@
 <script lang="ts" setup>
 import type { VbenFormSchema } from '@vben/common-ui';
-import type { BasicOption } from '@vben/types';
 
 import { computed, markRaw } from 'vue';
 
-import { AuthenticationLogin, SliderCaptcha, z } from '@vben/common-ui';
+import { AuthenticationLogin, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import Verify from '#/components/verifition/Verify.vue';
 import { useAuthStore } from '#/store';
 
 defineOptions({ name: 'Login' });
 
 const authStore = useAuthStore();
 
-const MOCK_USER_OPTIONS: BasicOption[] = [
-  {
-    label: 'Super',
-    value: 'vben',
-  },
-  {
-    label: 'Admin',
-    value: 'admin',
-  },
-  {
-    label: 'User',
-    value: 'jack',
-  },
-];
-
 const formSchema = computed((): VbenFormSchema[] => {
   return [
-    {
-      component: 'VbenSelect',
-      componentProps: {
-        options: MOCK_USER_OPTIONS,
-        placeholder: $t('authentication.selectAccount'),
-      },
-      fieldName: 'selectAccount',
-      label: $t('authentication.selectAccount'),
-      rules: z
-        .string()
-        .min(1, { message: $t('authentication.selectAccount') })
-        .optional()
-        .default('vben'),
-    },
     {
       component: 'VbenInput',
       componentProps: {
         placeholder: $t('authentication.usernameTip'),
-      },
-      dependencies: {
-        trigger(values, form) {
-          if (values.selectAccount) {
-            const findUser = MOCK_USER_OPTIONS.find((item) => item.value === values.selectAccount);
-            if (findUser) {
-              form.setValues({
-                password: '123456',
-                username: findUser.value,
-              });
-            }
-          }
-        },
-        triggerFields: ['selectAccount'],
       },
       fieldName: 'username',
       label: $t('authentication.username'),
@@ -77,11 +34,28 @@ const formSchema = computed((): VbenFormSchema[] => {
       rules: z.string().min(1, { message: $t('authentication.passwordTip') }),
     },
     {
-      component: markRaw(SliderCaptcha),
+      component: 'hidden',
+      fieldName: 'captchaType',
+      defaultValue: 'blockPuzzle',
+    },
+    {
+      component: markRaw(Verify),
+      // 2. 🌟 你需要的参数（Props 或事件）统一放到 componentProps 里
+      componentProps: {
+        captchaType: 'blockPuzzle',
+      },
+      label: '验证码',
       fieldName: 'captcha',
-      rules: z.boolean().refine((value) => value, {
-        message: $t('authentication.verifyRequiredTip'),
-      }),
+      rules: z.any().refine(
+        (value) => {
+          // value 就是 handleSuccess 传出来的 data
+          // 只要 value 不是 null/undefined/空，就说明验证通过了
+          return value !== null && value !== undefined && value !== '';
+        },
+        {
+          message: $t('请先完成安全验证'),
+        },
+      ),
     },
   ];
 });
