@@ -5,13 +5,9 @@ import { getElementVisibleRect } from '../dom';
 describe('getElementVisibleRect', () => {
   // 设置浏览器视口尺寸的 mock
   beforeEach(() => {
-    vi.spyOn(document.documentElement, 'clientHeight', 'get').mockReturnValue(
-      800,
-    );
+    vi.spyOn(document.documentElement, 'clientHeight', 'get').mockReturnValue(800);
     vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(800);
-    vi.spyOn(document.documentElement, 'clientWidth', 'get').mockReturnValue(
-      1000,
-    );
+    vi.spyOn(document.documentElement, 'clientWidth', 'get').mockReturnValue(1000);
     vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1000);
   });
 

@@ -42,8 +42,7 @@ function showSlotsPrompt() {
         },
       );
     },
-    content:
-      '此弹窗演示了如何使用自定义插槽，并且可以使用useAlertContext获取到弹窗的上下文。\n在输入框中按下回车键会触发确认操作。',
+    content: '此弹窗演示了如何使用自定义插槽，并且可以使用useAlertContext获取到弹窗的上下文。\n在输入框中按下回车键会触发确认操作。',
     icon: 'question',
     modelPropName: 'value',
   }).then((val) => {

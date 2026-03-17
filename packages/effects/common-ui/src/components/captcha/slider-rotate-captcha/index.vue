@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import type {
-  CaptchaVerifyPassingData,
-  SliderCaptchaActionType,
-  SliderRotateCaptchaProps,
-  SliderRotateVerifyPassingData,
-} from '../types';
+import type { CaptchaVerifyPassingData, SliderCaptchaActionType, SliderRotateCaptchaProps, SliderRotateVerifyPassingData } from '../types';
 
 import { computed, reactive, unref, useTemplateRef, watch } from 'vue';
 
@@ -88,18 +83,14 @@ function handleDragBarMove(data: SliderRotateVerifyPassingData) {
   if (denominator === 0) {
     return;
   }
-  const currentRotate = Math.ceil(
-    (moveX / denominator) * 1.5 * maxDegree! * unref(getFactorRef),
-  );
+  const currentRotate = Math.ceil((moveX / denominator) * 1.5 * maxDegree! * unref(getFactorRef));
   state.currentRotate = currentRotate;
   setImgRotate(state.randomRotate - currentRotate);
 }
 
 function handleImgOnLoad() {
   const { maxDegree, minDegree } = props;
-  const ranRotate = Math.floor(
-    minDegree! + Math.random() * (maxDegree! - minDegree!),
-  ); // 生成随机角度
+  const ranRotate = Math.floor(minDegree! + Math.random() * (maxDegree! - minDegree!)); // 生成随机角度
   state.randomRotate = ranRotate;
   setImgRotate(ranRotate);
 }
@@ -151,11 +142,7 @@ const imgCls = computed(() => {
 });
 
 const verifyTip = computed(() => {
-  return state.isPassing
-    ? $t('ui.captcha.sliderRotateSuccessTip', [
-        ((state.endTime - state.startTime) / 1000).toFixed(1),
-      ])
-    : $t('ui.captcha.sliderRotateFailTip');
+  return state.isPassing ? $t('ui.captcha.sliderRotateSuccessTip', [((state.endTime - state.startTime) / 1000).toFixed(1)]) : $t('ui.captcha.sliderRotateFailTip');
 });
 
 defineExpose({
@@ -165,22 +152,9 @@ defineExpose({
 
 <template>
   <div class="relative flex flex-col items-center">
-    <div
-      :style="getImgWrapStyleRef"
-      class="border-border relative cursor-pointer overflow-hidden rounded-full border shadow-md"
-    >
-      <img
-        :class="imgCls"
-        :src="src"
-        :style="state.imgStyle"
-        alt="verify"
-        class="w-full rounded-full"
-        @click="resume"
-        @load="handleImgOnLoad"
-      />
-      <div
-        class="absolute bottom-3 left-0 z-10 block h-7 w-full text-center text-xs leading-[30px] text-white"
-      >
+    <div :style="getImgWrapStyleRef" class="border-border relative cursor-pointer overflow-hidden rounded-full border shadow-md">
+      <img :class="imgCls" :src="src" :style="state.imgStyle" alt="verify" class="w-full rounded-full" @click="resume" @load="handleImgOnLoad" />
+      <div class="absolute bottom-3 left-0 z-10 block h-7 w-full text-center text-xs leading-[30px] text-white">
         <div
           v-if="state.showTip"
           :class="{
@@ -196,15 +170,7 @@ defineExpose({
       </div>
     </div>
 
-    <SliderCaptcha
-      ref="slideBarRef"
-      v-model="modalValue"
-      class="mt-5"
-      is-slot
-      @end="handleDragEnd"
-      @move="handleDragBarMove"
-      @start="handleStart"
-    >
+    <SliderCaptcha ref="slideBarRef" v-model="modalValue" class="mt-5" is-slot @end="handleDragEnd" @move="handleDragBarMove" @start="handleStart">
       <template v-for="(_, key) in $slots" :key="key" #[key]="slotProps">
         <slot :name="key" v-bind="slotProps"></slot>
       </template>

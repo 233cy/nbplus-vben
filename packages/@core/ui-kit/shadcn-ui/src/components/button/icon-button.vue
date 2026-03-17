@@ -33,30 +33,13 @@ const showTooltip = computed(() => !!slots.tooltip || !!props.tooltip);
 </script>
 
 <template>
-  <VbenButton
-    v-if="!showTooltip"
-    :class="cn('rounded-full', props.class)"
-    :disabled="disabled"
-    :variant="variant"
-    size="icon"
-    @click="onClick"
-  >
+  <VbenButton v-if="!showTooltip" :class="cn('rounded-full', props.class)" :disabled="disabled" :variant="variant" size="icon" @click="onClick">
     <slot></slot>
   </VbenButton>
 
-  <VbenTooltip
-    v-else
-    :delay-duration="tooltipDelayDuration"
-    :side="tooltipSide"
-  >
+  <VbenTooltip v-else :delay-duration="tooltipDelayDuration" :side="tooltipSide">
     <template #trigger>
-      <VbenButton
-        :class="cn('rounded-full', props.class)"
-        :disabled="disabled"
-        :variant="variant"
-        size="icon"
-        @click="onClick"
-      >
+      <VbenButton :class="cn('rounded-full', props.class)" :disabled="disabled" :variant="variant" size="icon" @click="onClick">
         <slot></slot>
       </VbenButton>
     </template>

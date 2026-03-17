@@ -34,10 +34,7 @@ export async function javascript(): Promise<Linter.Config[]> {
       },
       rules: {
         ...js.configs.recommended.rules,
-        'accessor-pairs': [
-          'error',
-          { enforceForClassMembers: true, setWithoutGet: true },
-        ],
+        'accessor-pairs': ['error', { enforceForClassMembers: true, setWithoutGet: true }],
         'array-callback-return': 'error',
         'block-scoped-var': 'error',
         'constructor-super': 'error',
@@ -46,10 +43,7 @@ export async function javascript(): Promise<Linter.Config[]> {
         eqeqeq: ['error', 'always'],
         'keyword-spacing': 'off',
 
-        'new-cap': [
-          'error',
-          { capIsNew: false, newIsCap: true, properties: true },
-        ],
+        'new-cap': ['error', { capIsNew: false, newIsCap: true, properties: true }],
         'no-alert': 'error',
         'no-array-constructor': 'error',
         'no-async-promise-executor': 'error',
@@ -101,16 +95,11 @@ export async function javascript(): Promise<Linter.Config[]> {
         'no-prototype-builtins': 'error',
         'no-redeclare': ['error', { builtinGlobals: false }],
         'no-regex-spaces': 'error',
-        'no-restricted-globals': [
-          'error',
-          { message: 'Use `globalThis` instead.', name: 'global' },
-          { message: 'Use `globalThis` instead.', name: 'self' },
-        ],
+        'no-restricted-globals': ['error', { message: 'Use `globalThis` instead.', name: 'global' }, { message: 'Use `globalThis` instead.', name: 'self' }],
         'no-restricted-properties': [
           'error',
           {
-            message:
-              'Use `Object.getPrototypeOf` or `Object.setPrototypeOf` instead.',
+            message: 'Use `Object.getPrototypeOf` or `Object.setPrototypeOf` instead.',
             property: '__proto__',
           },
           {
@@ -130,14 +119,7 @@ export async function javascript(): Promise<Linter.Config[]> {
             property: '__lookupSetter__',
           },
         ],
-        'no-restricted-syntax': [
-          'error',
-          'DebuggerStatement',
-          'LabeledStatement',
-          'WithStatement',
-          'TSEnumDeclaration[const=true]',
-          'TSExportAssignment',
-        ],
+        'no-restricted-syntax': ['error', 'DebuggerStatement', 'LabeledStatement', 'WithStatement', 'TSEnumDeclaration[const=true]', 'TSExportAssignment'],
         'no-self-assign': ['error', { props: true }],
         'no-self-compare': 'error',
         'no-sequences': 'error',
@@ -172,10 +154,7 @@ export async function javascript(): Promise<Linter.Config[]> {
             vars: 'all',
           },
         ],
-        'no-use-before-define': [
-          'error',
-          { classes: false, functions: false, variables: false },
-        ],
+        'no-use-before-define': ['error', { classes: false, functions: false, variables: false }],
         'no-useless-backreference': 'error',
         'no-useless-call': 'error',
         'no-useless-catch': 'error',
@@ -185,11 +164,7 @@ export async function javascript(): Promise<Linter.Config[]> {
         'no-useless-return': 'error',
         'no-var': 'error',
         'no-with': 'error',
-        'object-shorthand': [
-          'error',
-          'always',
-          { avoidQuotes: true, ignoreConstructors: false },
-        ],
+        'object-shorthand': ['error', 'always', { avoidQuotes: true, ignoreConstructors: false }],
         'one-var': ['error', { initialized: 'never' }],
         'prefer-arrow-callback': [
           'error',
@@ -227,10 +202,7 @@ export async function javascript(): Promise<Linter.Config[]> {
             varsIgnorePattern: '^_',
           },
         ],
-        'use-isnan': [
-          'error',
-          { enforceForIndexOf: true, enforceForSwitchCase: true },
-        ],
+        'use-isnan': ['error', { enforceForIndexOf: true, enforceForSwitchCase: true }],
         'valid-typeof': ['error', { requireStringLiterals: true }],
 
         'vars-on-top': 'error',

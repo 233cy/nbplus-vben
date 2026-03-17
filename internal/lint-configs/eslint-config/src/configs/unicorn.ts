@@ -3,9 +3,7 @@ import type { Linter } from 'eslint';
 import { interopDefault } from '../util';
 
 export async function unicorn(): Promise<Linter.Config[]> {
-  const [pluginUnicorn] = await Promise.all([
-    interopDefault(import('eslint-plugin-unicorn')),
-  ] as const);
+  const [pluginUnicorn] = await Promise.all([interopDefault(import('eslint-plugin-unicorn'))] as const);
 
   return [
     {
@@ -33,10 +31,7 @@ export async function unicorn(): Promise<Linter.Config[]> {
       },
     },
     {
-      files: [
-        'scripts/**/*.?([cm])[jt]s?(x)',
-        'internal/**/*.?([cm])[jt]s?(x)',
-      ],
+      files: ['scripts/**/*.?([cm])[jt]s?(x)', 'internal/**/*.?([cm])[jt]s?(x)'],
       rules: {
         'unicorn/no-process-exit': 'off',
       },

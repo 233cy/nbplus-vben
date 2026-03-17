@@ -1,9 +1,4 @@
-import type {
-  VxeGridListeners,
-  VxeGridPropTypes,
-  VxeGridProps as VxeTableGridProps,
-  VxeUIExport,
-} from 'vxe-table';
+import type { VxeGridListeners, VxeGridPropTypes, VxeGridProps as VxeTableGridProps, VxeUIExport } from 'vxe-table';
 
 import type { Ref } from 'vue';
 
@@ -36,10 +31,7 @@ export interface SeparatorOptions {
   backgroundColor?: string;
 }
 
-export interface VxeGridProps<
-  T extends Record<string, any> = any,
-  D extends BaseFormComponentType = BaseFormComponentType,
-> {
+export interface VxeGridProps<T extends Record<string, any> = any, D extends BaseFormComponentType = BaseFormComponentType> {
   /**
    * 标题
    */
@@ -78,13 +70,8 @@ export interface VxeGridProps<
   separator?: boolean | SeparatorOptions;
 }
 
-export type ExtendedVxeGridApi<
-  D extends Record<string, any> = any,
-  F extends BaseFormComponentType = BaseFormComponentType,
-> = VxeGridApi<D> & {
-  useStore: <T = NoInfer<VxeGridProps<D, F>>>(
-    selector?: (state: NoInfer<VxeGridProps<any, any>>) => T,
-  ) => Readonly<Ref<T>>;
+export type ExtendedVxeGridApi<D extends Record<string, any> = any, F extends BaseFormComponentType = BaseFormComponentType> = VxeGridApi<D> & {
+  useStore: <T = NoInfer<VxeGridProps<D, F>>>(selector?: (state: NoInfer<VxeGridProps<any, any>>) => T) => Readonly<Ref<T>>;
 };
 
 export interface SetupVxeTable {

@@ -25,5 +25,18 @@
     "keyword": "搜索关键词"
   },
   "selectData": "选择数据",
-  "showMore": "显示更多"
+  "showMore": "显示更多",
+  "captcha": {
+    "slide": "请按住滑块，拖动到最右边",
+    "points": "请点击图中所有的 {text}",
+    "clickToVerify": "点击进行验证",
+    "verifySuccess": "验证成功",
+    "pleaseCompleteSecurityVerification": "请完成安全验证",
+    "networkError": "网络错误，请刷新重试",
+    "verifyFailed": "验证失败",
+    "pointClickOrder": "请依次点击【{text}】",
+    "loadFailed": "加载失败，请重试",
+    "pleaseRetry": "请重试",
+    "loading": "加载中"
+  }
 }

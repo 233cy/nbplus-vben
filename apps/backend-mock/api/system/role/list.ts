@@ -24,9 +24,7 @@ function generateMockDataList(count: number) {
       id: faker.string.uuid(),
       name: faker.commerce.product(),
       status: faker.helpers.arrayElement([0, 1]),
-      createTime: formatterCN.format(
-        faker.date.between({ from: '2022-01-01', to: '2025-01-01' }),
-      ),
+      createTime: formatterCN.format(faker.date.between({ from: '2022-01-01', to: '2025-01-01' })),
       permissions: faker.helpers.arrayElements(menuIds),
       remark: faker.lorem.sentence(),
     };
@@ -45,31 +43,16 @@ export default eventHandler(async (event) => {
     return unAuthorizedResponse(event);
   }
 
-  const {
-    page = 1,
-    pageSize = 20,
-    name,
-    id,
-    remark,
-    startTime,
-    endTime,
-    status,
-  } = getQuery(event);
+  const { page = 1, pageSize = 20, name, id, remark, startTime, endTime, status } = getQuery(event);
   let listData = structuredClone(mockData);
   if (name) {
-    listData = listData.filter((item) =>
-      item.name.toLowerCase().includes(String(name).toLowerCase()),
-    );
+    listData = listData.filter((item) => item.name.toLowerCase().includes(String(name).toLowerCase()));
   }
   if (id) {
-    listData = listData.filter((item) =>
-      item.id.toLowerCase().includes(String(id).toLowerCase()),
-    );
+    listData = listData.filter((item) => item.id.toLowerCase().includes(String(id).toLowerCase()));
   }
   if (remark) {
-    listData = listData.filter((item) =>
-      item.remark?.toLowerCase()?.includes(String(remark).toLowerCase()),
-    );
+    listData = listData.filter((item) => item.remark?.toLowerCase()?.includes(String(remark).toLowerCase()));
   }
   if (startTime) {
     listData = listData.filter((item) => item.createTime >= startTime);

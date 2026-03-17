@@ -204,9 +204,7 @@ const [Form, formApi] = useVbenForm({
         .refine(
           async (username) => {
             // 假设这是一个异步函数，模拟检查用户名是否已存在
-            const checkUsernameExists = async (
-              username: string,
-            ): Promise<boolean> => {
+            const checkUsernameExists = async (username: string): Promise<boolean> => {
               await new Promise((resolve) => setTimeout(resolve, 1000));
               return username === 'existingUser';
             };
@@ -235,9 +233,7 @@ function onSubmit(values: Record<string, any>) {
     <Card title="基础组件校验示例">
       <template #extra>
         <Button @click="() => formApi.validate()">校验表单</Button>
-        <Button class="mx-2" @click="() => formApi.resetValidate()">
-          清空校验信息
-        </Button>
+        <Button class="mx-2" @click="() => formApi.resetValidate()"> 清空校验信息 </Button>
       </template>
       <Form />
     </Card>

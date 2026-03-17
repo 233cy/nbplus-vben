@@ -7,11 +7,7 @@ import { computed } from 'vue';
 
 import { InspectionPanel, PanelLeft, PanelRight } from '@vben/icons';
 import { $t } from '@vben/locales';
-import {
-  preferences,
-  updatePreferences,
-  usePreferences,
-} from '@vben/preferences';
+import { preferences, updatePreferences, usePreferences } from '@vben/preferences';
 
 import { VbenDropdownRadioMenu, VbenIconButton } from '@vben-core/shadcn-ui';
 
@@ -50,11 +46,7 @@ function handleUpdate(value: string | undefined) {
 </script>
 
 <template>
-  <VbenDropdownRadioMenu
-    :menus="menus"
-    :model-value="preferences.app.authPageLayout"
-    @update:model-value="handleUpdate"
-  >
+  <VbenDropdownRadioMenu :menus="menus" :model-value="preferences.app.authPageLayout" @update:model-value="handleUpdate">
     <VbenIconButton>
       <PanelRight v-if="authPanelRight" class="size-4" />
       <PanelLeft v-if="authPanelLeft" class="size-4" />

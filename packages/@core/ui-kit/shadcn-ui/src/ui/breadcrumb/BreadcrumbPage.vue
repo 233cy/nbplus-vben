@@ -7,12 +7,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <span
-    :class="cn('font-normal text-foreground', props.class)"
-    aria-current="page"
-    aria-disabled="true"
-    role="link"
-  >
+  <span :class="cn('font-normal text-foreground', props.class)" aria-current="page" aria-disabled="true" role="link">
     <slot></slot>
   </span>
 </template>

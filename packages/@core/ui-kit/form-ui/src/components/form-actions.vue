@@ -132,13 +132,7 @@ defineExpose({
       <!-- 提交按钮前 -->
       <slot name="submit-before"></slot>
 
-      <component
-        :is="COMPONENT_MAP.PrimaryButton"
-        v-if="submitButtonOptions.show"
-        type="button"
-        @click="handleSubmit"
-        v-bind="submitButtonOptions"
-      >
+      <component :is="COMPONENT_MAP.PrimaryButton" v-if="submitButtonOptions.show" type="button" @click="handleSubmit" v-bind="submitButtonOptions">
         {{ submitButtonOptions.content }}
       </component>
     </template>
@@ -146,13 +140,7 @@ defineExpose({
     <!-- 重置按钮前 -->
     <slot name="reset-before"></slot>
 
-    <component
-      :is="COMPONENT_MAP.DefaultButton"
-      v-if="resetButtonOptions.show"
-      type="button"
-      @click="handleReset"
-      v-bind="resetButtonOptions"
-    >
+    <component :is="COMPONENT_MAP.DefaultButton" v-if="resetButtonOptions.show" type="button" @click="handleReset" v-bind="resetButtonOptions">
       {{ resetButtonOptions.content }}
     </component>
 
@@ -160,13 +148,7 @@ defineExpose({
       <!-- 提交按钮前 -->
       <slot name="submit-before"></slot>
 
-      <component
-        :is="COMPONENT_MAP.PrimaryButton"
-        v-if="submitButtonOptions.show"
-        type="button"
-        @click="handleSubmit"
-        v-bind="submitButtonOptions"
-      >
+      <component :is="COMPONENT_MAP.PrimaryButton" v-if="submitButtonOptions.show" type="button" @click="handleSubmit" v-bind="submitButtonOptions">
         {{ submitButtonOptions.content }}
       </component>
     </template>
@@ -174,11 +156,7 @@ defineExpose({
     <!-- 展开按钮前 -->
     <slot name="expand-before"></slot>
 
-    <VbenExpandableArrow
-      class="ml-[-0.3em]"
-      v-if="rootProps.showCollapseButton"
-      v-model:model-value="collapsed"
-    >
+    <VbenExpandableArrow class="ml-[-0.3em]" v-if="rootProps.showCollapseButton" v-model:model-value="collapsed">
       <span>{{ collapsed ? $t('expand') : $t('collapse') }}</span>
     </VbenExpandableArrow>
 

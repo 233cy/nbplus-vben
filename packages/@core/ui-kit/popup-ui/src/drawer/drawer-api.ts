@@ -10,30 +10,13 @@ export class DrawerApi {
   };
   public store: Store<DrawerState>;
 
-  private api: Pick<
-    DrawerApiOptions,
-    | 'onBeforeClose'
-    | 'onCancel'
-    | 'onClosed'
-    | 'onConfirm'
-    | 'onOpenChange'
-    | 'onOpened'
-  >;
+  private api: Pick<DrawerApiOptions, 'onBeforeClose' | 'onCancel' | 'onClosed' | 'onConfirm' | 'onOpenChange' | 'onOpened'>;
 
   // private prevState!: DrawerState;
   private state!: DrawerState;
 
   constructor(options: DrawerApiOptions = {}) {
-    const {
-      connectedComponent: _,
-      onBeforeClose,
-      onCancel,
-      onClosed,
-      onConfirm,
-      onOpenChange,
-      onOpened,
-      ...storeState
-    } = options;
+    const { connectedComponent: _, onBeforeClose, onCancel, onClosed, onConfirm, onOpenChange, onOpened, ...storeState } = options;
 
     const defaultState: DrawerState = {
       class: '',
@@ -160,11 +143,7 @@ export class DrawerApi {
     return this;
   }
 
-  setState(
-    stateOrFn:
-      | ((prev: DrawerState) => Partial<DrawerState>)
-      | Partial<DrawerState>,
-  ) {
+  setState(stateOrFn: ((prev: DrawerState) => Partial<DrawerState>) | Partial<DrawerState>) {
     if (isFunction(stateOrFn)) {
       this.store.setState(stateOrFn);
     } else {

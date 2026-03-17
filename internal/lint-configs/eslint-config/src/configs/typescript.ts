@@ -3,10 +3,7 @@ import type { Linter } from 'eslint';
 import { interopDefault } from '../util';
 
 export async function typescript(): Promise<Linter.Config[]> {
-  const [pluginTs, parserTs] = await Promise.all([
-    interopDefault(import('@typescript-eslint/eslint-plugin')),
-    interopDefault(import('@typescript-eslint/parser')),
-  ] as const);
+  const [pluginTs, parserTs] = await Promise.all([interopDefault(import('@typescript-eslint/eslint-plugin')), interopDefault(import('@typescript-eslint/parser'))] as const);
 
   return [
     {

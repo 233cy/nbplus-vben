@@ -227,8 +227,8 @@ const textLen = computed(() => valueHtml.value.replaceAll(/<[^>]+>/g, '').length
 </script>
 
 <template>
-  <div v-if="props.mode === 'inline'" class="vben-wangeditor border-border rounded-md border">
-    <Toolbar :editor="editorRef" :default-config="props.toolbarConfig" class="vben-wangeditor-toolbar border-border border-b px-2 py-1" />
+  <div v-if="props.mode === 'inline'" class="vben-wangeditor rounded-md border border-border">
+    <Toolbar :editor="editorRef" :default-config="props.toolbarConfig" class="vben-wangeditor-toolbar border-b border-border px-2 py-1" />
     <Editor v-model="valueHtml" :default-config="finalEditorConfig" :style="{ height: `${props.height}px` }" class="vben-wangeditor-editor px-2 py-2" @on-created="handleCreated" />
   </div>
 
@@ -239,11 +239,11 @@ const textLen = computed(() => valueHtml.value.replaceAll(/<[^>]+>/g, '').length
       </template>
       {{ t('page.richTextEditor.editContent') }}
     </a-button>
-    <div v-if="textLen" class="hover:text-regular border-border bg-card text-primary rounded-md border p-1 px-2 transition-all">
+    <div v-if="textLen" class="hover:text-regular rounded-md border border-border bg-card p-1 px-2 text-primary transition-all">
       {{ t('page.richTextEditor.textContent', { len: textLen }) }}
     </div>
     <Modal v-model:open="showModal" :title="t('page.richTextEditor.editContent')" width="1200px" @ok="handleOk">
-      <div class="vben-wangeditor border-border rounded-md border">
+      <div class="vben-wangeditor rounded-md border border-border">
         <Toolbar :editor="editorRef" :default-config="props.toolbarConfig" class="border-b px-2 py-1" />
         <Editor
           v-model="valueHtml"

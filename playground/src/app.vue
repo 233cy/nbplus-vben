@@ -14,9 +14,7 @@ const { isDark } = usePreferences();
 const { tokens } = useAntdDesignTokens();
 
 const tokenTheme = computed(() => {
-  const algorithm = isDark.value
-    ? [theme.darkAlgorithm]
-    : [theme.defaultAlgorithm];
+  const algorithm = isDark.value ? [theme.darkAlgorithm] : [theme.defaultAlgorithm];
 
   // antd 紧凑模式算法
   if (preferences.app.compact) {

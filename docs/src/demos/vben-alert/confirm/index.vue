@@ -27,8 +27,7 @@ function showfooterConfirm() {
   confirm({
     cancelText: '不要虾扯蛋',
     confirmText: '是的，我们都是NPC',
-    content:
-      '刚才发生的事情，为什么我似乎早就经历过一般？\n我甚至能在事情发生过程中潜意识里预知到接下来会发生什么。\n\n听起来挺玄乎的，你有过这种感觉吗？',
+    content: '刚才发生的事情，为什么我似乎早就经历过一般？\n我甚至能在事情发生过程中潜意识里预知到接下来会发生什么。\n\n听起来挺玄乎的，你有过这种感觉吗？',
     footer: () =>
       h(
         Checkbox,

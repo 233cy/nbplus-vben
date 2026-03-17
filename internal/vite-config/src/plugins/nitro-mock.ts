@@ -9,11 +9,7 @@ import { build, createDevServer, createNitro, prepare } from 'nitropack';
 
 const hmrKeyRe = /^runtimeConfig\.|routeRules\./;
 
-export const viteNitroMockPlugin = ({
-  mockServerPackage = '@vben/backend-mock',
-  port = 5320,
-  verbose = true,
-}: NitroMockPluginOptions = {}): PluginOption => {
+export const viteNitroMockPlugin = ({ mockServerPackage = '@vben/backend-mock', port = 5320, verbose = true }: NitroMockPluginOptions = {}): PluginOption => {
   return {
     async configureServer(server) {
       const availablePort = await getPort({ port });
@@ -23,9 +19,7 @@ export const viteNitroMockPlugin = ({
 
       const pkg = await getPackage(mockServerPackage);
       if (!pkg) {
-        consola.log(
-          `Package ${mockServerPackage} not found. Skip mock server.`,
-        );
+        consola.log(`Package ${mockServerPackage} not found. Skip mock server.`);
         return;
       }
 
@@ -35,9 +29,7 @@ export const viteNitroMockPlugin = ({
       server.printUrls = () => {
         _printUrls();
 
-        consola.log(
-          `  ${colors.green('➜')}  ${colors.bold('Nitro Mock Server')}: ${colors.cyan(`http://localhost:${port}/api`)}`,
-        );
+        consola.log(`  ${colors.green('➜')}  ${colors.bold('Nitro Mock Server')}: ${colors.cyan(`http://localhost:${port}/api`)}`);
       };
     },
     enforce: 'pre',
@@ -68,15 +60,8 @@ async function runNitroServer(rootDir: string, port: number, verbose: boolean) {
             if (diff.length === 0) {
               return;
             }
-            verbose &&
-              consola.info(
-                `Nitro config updated:\n${diff
-                  .map((entry) => `  ${entry.toString()}`)
-                  .join('\n')}`,
-              );
-            await (diff.every((e) => hmrKeyRe.test(e.key))
-              ? nitro.updateConfig(newConfig.config)
-              : reload());
+            verbose && consola.info(`Nitro config updated:\n${diff.map((entry) => `  ${entry.toString()}`).join('\n')}`);
+            await (diff.every((e) => hmrKeyRe.test(e.key)) ? nitro.updateConfig(newConfig.config) : reload());
           },
         },
         watch: true,

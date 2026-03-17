@@ -6,12 +6,7 @@ import { useRouter } from 'vue-router';
 import { Bell, CircleCheckBig, CircleX, MailCheck } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import {
-  VbenButton,
-  VbenIconButton,
-  VbenPopover,
-  VbenScrollbar,
-} from '@vben-core/shadcn-ui';
+import { VbenButton, VbenIconButton, VbenPopover, VbenScrollbar } from '@vben-core/shadcn-ui';
 
 import { useToggle } from '@vueuse/core';
 
@@ -68,11 +63,7 @@ function handleClick(item: NotificationItem) {
   }
 }
 
-function navigateTo(
-  link: string,
-  query?: Record<string, any>,
-  state?: Record<string, any>,
-) {
+function navigateTo(link: string, query?: Record<string, any>, state?: Record<string, any>) {
   if (link.startsWith('http://') || link.startsWith('https://')) {
     // 外部链接，在新标签页打开
     window.open(link, '_blank');
@@ -87,17 +78,11 @@ function navigateTo(
 }
 </script>
 <template>
-  <VbenPopover
-    v-model:open="open"
-    content-class="relative right-2 w-[360px] p-0"
-  >
+  <VbenPopover v-model:open="open" content-class="relative right-2 w-[360px] p-0">
     <template #trigger>
       <div class="flex-center mr-2 h-full" @click.stop="toggle()">
         <VbenIconButton class="bell-button text-foreground relative">
-          <span
-            v-if="dot"
-            class="bg-primary absolute right-0.5 top-0.5 h-2 w-2 rounded"
-          ></span>
+          <span v-if="dot" class="bg-primary absolute right-0.5 top-0.5 h-2 w-2 rounded"></span>
           <Bell class="size-4" />
         </VbenIconButton>
       </div>
@@ -106,33 +91,18 @@ function navigateTo(
     <div class="relative">
       <div class="flex items-center justify-between p-4 py-3">
         <div class="text-foreground">{{ $t('ui.widgets.notifications') }}</div>
-        <VbenIconButton
-          :disabled="notifications.length <= 0"
-          :tooltip="$t('ui.widgets.markAllAsRead')"
-          @click="handleMakeAll"
-        >
+        <VbenIconButton :disabled="notifications.length <= 0" :tooltip="$t('ui.widgets.markAllAsRead')" @click="handleMakeAll">
           <MailCheck class="size-4" />
         </VbenIconButton>
       </div>
       <VbenScrollbar v-if="notifications.length > 0">
         <ul class="!flex max-h-[360px] w-full flex-col">
           <template v-for="item in notifications" :key="item.id ?? item.title">
-            <li
-              class="hover:bg-accent border-border relative flex w-full cursor-pointer items-start gap-5 border-t px-3 py-3"
-              @click="handleClick(item)"
-            >
-              <span
-                v-if="!item.isRead"
-                class="bg-primary absolute right-2 top-2 h-2 w-2 rounded"
-              ></span>
+            <li class="hover:bg-accent border-border relative flex w-full cursor-pointer items-start gap-5 border-t px-3 py-3" @click="handleClick(item)">
+              <span v-if="!item.isRead" class="bg-primary absolute right-2 top-2 h-2 w-2 rounded"></span>
 
-              <span
-                class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full"
-              >
-                <img
-                  :src="item.avatar"
-                  class="aspect-square h-full w-full object-cover"
-                />
+              <span class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
+                <img :src="item.avatar" class="aspect-square h-full w-full object-cover" />
               </span>
               <div class="flex flex-col gap-1 leading-none">
                 <p class="font-semibold">{{ item.title }}</p>
@@ -143,27 +113,11 @@ function navigateTo(
                   {{ item.date }}
                 </p>
               </div>
-              <div
-                class="absolute right-3 top-1/2 flex -translate-y-1/2 flex-col gap-2"
-              >
-                <VbenIconButton
-                  v-if="!item.isRead"
-                  size="xs"
-                  variant="ghost"
-                  class="h-6 px-2"
-                  :tooltip="$t('common.confirm')"
-                  @click.stop="emit('read', item)"
-                >
+              <div class="absolute right-3 top-1/2 flex -translate-y-1/2 flex-col gap-2">
+                <VbenIconButton v-if="!item.isRead" size="xs" variant="ghost" class="h-6 px-2" :tooltip="$t('common.confirm')" @click.stop="emit('read', item)">
                   <CircleCheckBig class="size-4" />
                 </VbenIconButton>
-                <VbenIconButton
-                  v-if="item.isRead"
-                  size="xs"
-                  variant="ghost"
-                  class="text-destructive h-6 px-2"
-                  :tooltip="$t('common.delete')"
-                  @click.stop="emit('remove', item)"
-                >
+                <VbenIconButton v-if="item.isRead" size="xs" variant="ghost" class="text-destructive h-6 px-2" :tooltip="$t('common.delete')" @click.stop="emit('remove', item)">
                   <CircleX class="size-4" />
                 </VbenIconButton>
               </div>
@@ -178,15 +132,8 @@ function navigateTo(
         </div>
       </template>
 
-      <div
-        class="border-border flex items-center justify-between border-t px-4 py-3"
-      >
-        <VbenButton
-          :disabled="notifications.length <= 0"
-          size="sm"
-          variant="ghost"
-          @click="handleClear"
-        >
+      <div class="border-border flex items-center justify-between border-t px-4 py-3">
+        <VbenButton :disabled="notifications.length <= 0" size="sm" variant="ghost" @click="handleClear">
           {{ $t('ui.widgets.clearNotifications') }}
         </VbenButton>
         <VbenButton size="sm" @click="handleViewAll">

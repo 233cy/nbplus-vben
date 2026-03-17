@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import type { WorkbenchQuickNavItem } from '../typing';
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  VbenIcon,
-} from '@vben-core/shadcn-ui';
+import { Card, CardContent, CardHeader, CardTitle, VbenIcon } from '@vben-core/shadcn-ui';
 
 interface Props {
   items?: WorkbenchQuickNavItem[];
@@ -43,11 +37,7 @@ defineEmits(['click']);
           class="flex-col-center border-border group w-1/3 cursor-pointer border-r border-t py-8 hover:shadow-xl"
           @click="$emit('click', item)"
         >
-          <VbenIcon
-            :color="item.color"
-            :icon="item.icon"
-            class="size-7 transition-all duration-300 group-hover:scale-125"
-          />
+          <VbenIcon :color="item.color" :icon="item.icon" class="size-7 transition-all duration-300 group-hover:scale-125" />
           <span class="text-md mt-2 truncate">{{ item.title }}</span>
         </div>
       </template>

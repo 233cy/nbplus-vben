@@ -13,17 +13,7 @@ withDefaults(
 );
 </script>
 <template>
-  <div
-    :class="
-      cn(
-        'vben-button-group rounded-md',
-        `size-${size}`,
-        gap ? 'with-gap' : 'no-gap',
-        $attrs.class as string,
-      )
-    "
-    :style="{ gap: gap ? `${gap}px` : '0px' }"
-  >
+  <div :class="cn('vben-button-group rounded-md', `size-${size}`, gap ? 'with-gap' : 'no-gap', $attrs.class as string)" :style="{ gap: gap ? `${gap}px` : '0px' }">
     <slot></slot>
   </div>
 </template>

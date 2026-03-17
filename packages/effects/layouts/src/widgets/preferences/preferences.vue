@@ -38,9 +38,7 @@ const listen = computed(() => {
   for (const [key, value] of Object.entries(preferences)) {
     if (typeof value === 'object') {
       for (const subKey of Object.keys(value)) {
-        result[`update:${key}${capitalizeFirstLetter(subKey)}`] = (
-          val: any,
-        ) => {
+        result[`update:${key}${capitalizeFirstLetter(subKey)}`] = (val: any) => {
           updatePreferences({ [key]: { [subKey]: val } });
           if (key === 'app' && subKey === 'locale') {
             loadLocaleMessages(val);
@@ -60,10 +58,7 @@ const listen = computed(() => {
 
     <div @click="() => drawerApi.open()">
       <slot>
-        <VbenButton
-          :title="$t('preferences.title')"
-          class="bg-primary flex-col-center size-10 cursor-pointer rounded-l-lg rounded-r-none border-none"
-        >
+        <VbenButton :title="$t('preferences.title')" class="bg-primary flex-col-center size-10 cursor-pointer rounded-l-lg rounded-r-none border-none">
           <Settings class="size-5" />
         </VbenButton>
       </slot>

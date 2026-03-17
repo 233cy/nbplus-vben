@@ -54,21 +54,13 @@ async function main(): Promise<void> {
     // Parse arguments
     vsh.parse();
   } catch (error) {
-    consola.error(
-      colors.red('An unexpected error occurred:'),
-      '\n',
-      error instanceof Error ? error.message : error,
-    );
+    consola.error(colors.red('An unexpected error occurred:'), '\n', error instanceof Error ? error.message : error);
     process.exit(1);
   }
 }
 
 // Run the CLI
 main().catch((error) => {
-  consola.error(
-    colors.red('Failed to start CLI:'),
-    '\n',
-    error instanceof Error ? error.message : error,
-  );
+  consola.error(colors.red('Failed to start CLI:'), '\n', error instanceof Error ? error.message : error);
   process.exit(1);
 });

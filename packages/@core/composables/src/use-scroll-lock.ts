@@ -1,10 +1,6 @@
 import { getScrollbarWidth, needsScrollbar } from '@vben-core/shared/utils';
 
-import {
-  useScrollLock as _useScrollLock,
-  tryOnBeforeUnmount,
-  tryOnMounted,
-} from '@vueuse/core';
+import { useScrollLock as _useScrollLock, tryOnBeforeUnmount, tryOnMounted } from '@vueuse/core';
 
 export const SCROLL_FIXED_CLASS = `_scroll__fixed_`;
 
@@ -18,9 +14,7 @@ export function useScrollLock() {
     }
     document.body.style.paddingRight = `${scrollbarWidth}px`;
 
-    const layoutFixedNodes = document.querySelectorAll<HTMLElement>(
-      `.${SCROLL_FIXED_CLASS}`,
-    );
+    const layoutFixedNodes = document.querySelectorAll<HTMLElement>(`.${SCROLL_FIXED_CLASS}`);
     const nodes = [...layoutFixedNodes];
     if (nodes.length > 0) {
       nodes.forEach((node) => {
@@ -37,9 +31,7 @@ export function useScrollLock() {
       return;
     }
     isLocked.value = false;
-    const layoutFixedNodes = document.querySelectorAll<HTMLElement>(
-      `.${SCROLL_FIXED_CLASS}`,
-    );
+    const layoutFixedNodes = document.querySelectorAll<HTMLElement>(`.${SCROLL_FIXED_CLASS}`);
     const nodes = [...layoutFixedNodes];
     if (nodes.length > 0) {
       nodes.forEach((node) => {

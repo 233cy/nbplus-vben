@@ -1,8 +1,8 @@
 /* ===== Iconify 修复（通用 CSS 图标 + 组件 SVG）===== */
 
 /* CSS 图标（icon-[xxx]） */
-[class^="icon-"],
-[class*=" icon-"] {
+[class^='icon-'],
+[class*=' icon-'] {
   display: inline-block;
   line-height: 1;
   vertical-align: -0.15em;

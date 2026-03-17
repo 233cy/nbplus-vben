@@ -50,37 +50,15 @@ async function createWaterMark() {
     <template #description>
       <div class="mt-2 text-foreground/80">
         水印使用了
-        <a
-          class="text-primary"
-          href="https://zhensherlock.github.io/watermark-js-plus/"
-          target="_blank"
-        >
-          watermark-js-plus
-        </a>
+        <a class="text-primary" href="https://zhensherlock.github.io/watermark-js-plus/" target="_blank"> watermark-js-plus </a>
         开源插件，详细配置可见插件配置。
       </div>
     </template>
 
     <Card title="使用">
-      <Button
-        :disabled="!!watermark"
-        class="mr-2"
-        type="primary"
-        @click="recreateWaterMark"
-      >
-        创建水印
-      </Button>
-      <Button
-        :disabled="!watermark"
-        class="mr-2"
-        type="primary"
-        @click="createWaterMark"
-      >
-        更新水印
-      </Button>
-      <Button :disabled="!watermark" danger @click="destroyWatermark">
-        移除水印
-      </Button>
+      <Button :disabled="!!watermark" class="mr-2" type="primary" @click="recreateWaterMark"> 创建水印 </Button>
+      <Button :disabled="!watermark" class="mr-2" type="primary" @click="createWaterMark"> 更新水印 </Button>
+      <Button :disabled="!watermark" danger @click="destroyWatermark"> 移除水印 </Button>
     </Card>
   </Page>
 </template>

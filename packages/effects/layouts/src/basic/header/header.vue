@@ -8,13 +8,7 @@ import { useAccessStore } from '@vben/stores';
 
 import { VbenFullScreen, VbenIconButton } from '@vben-core/shadcn-ui';
 
-import {
-  GlobalSearch,
-  LanguageToggle,
-  PreferencesButton,
-  ThemeToggle,
-  TimezoneButton,
-} from '../../widgets';
+import { GlobalSearch, LanguageToggle, PreferencesButton, ThemeToggle, TimezoneButton } from '../../widgets';
 
 interface Props {
   /**
@@ -120,10 +114,7 @@ function clearPreferencesAndLogout() {
 </script>
 
 <template>
-  <template
-    v-for="slot in leftSlots.filter((item) => item.index < REFERENCE_VALUE)"
-    :key="slot.name"
-  >
+  <template v-for="slot in leftSlots.filter((item) => item.index < REFERENCE_VALUE)" :key="slot.name">
     <slot :name="slot.name">
       <template v-if="slot.name === 'refresh'">
         <VbenIconButton class="my-0 mr-1 rounded-md" @click="refresh">
@@ -135,34 +126,21 @@ function clearPreferencesAndLogout() {
   <div class="flex-center hidden lg:block">
     <slot name="breadcrumb"></slot>
   </div>
-  <template
-    v-for="slot in leftSlots.filter((item) => item.index > REFERENCE_VALUE)"
-    :key="slot.name"
-  >
+  <template v-for="slot in leftSlots.filter((item) => item.index > REFERENCE_VALUE)" :key="slot.name">
     <slot :name="slot.name"></slot>
   </template>
-  <div
-    :class="`menu-align-${preferences.header.menuAlign}`"
-    class="flex h-full min-w-0 flex-1 items-center"
-  >
+  <div :class="`menu-align-${preferences.header.menuAlign}`" class="flex h-full min-w-0 flex-1 items-center">
     <slot name="menu"></slot>
   </div>
   <div class="flex h-full min-w-0 flex-shrink-0 items-center">
     <template v-for="slot in rightSlots" :key="slot.name">
       <slot :name="slot.name">
         <template v-if="slot.name === 'global-search'">
-          <GlobalSearch
-            :enable-shortcut-key="globalSearchShortcutKey"
-            :menus="accessStore.accessMenus"
-            class="mr-1 sm:mr-4"
-          />
+          <GlobalSearch :enable-shortcut-key="globalSearchShortcutKey" :menus="accessStore.accessMenus" class="mr-1 sm:mr-4" />
         </template>
 
         <template v-else-if="slot.name === 'preferences'">
-          <PreferencesButton
-            class="mr-1"
-            @clear-preferences-and-logout="clearPreferencesAndLogout"
-          />
+          <PreferencesButton class="mr-1" @clear-preferences-and-logout="clearPreferencesAndLogout" />
         </template>
         <template v-else-if="slot.name === 'theme-toggle'">
           <ThemeToggle class="mr-1 mt-[2px]" />

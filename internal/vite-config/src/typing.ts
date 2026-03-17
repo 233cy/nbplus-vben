@@ -1,10 +1,5 @@
 import type { PluginVisualizerOptions } from 'rollup-plugin-visualizer';
-import type {
-  ConfigEnv,
-  PluginOption,
-  UserConfig,
-  UserConfigFnPromise,
-} from 'vite';
+import type { ConfigEnv, PluginOption, UserConfig, UserConfigFnPromise } from 'vite';
 import type { PluginOptions } from 'vite-plugin-dts';
 import type { Options as PwaPluginOptions } from 'vite-plugin-pwa';
 

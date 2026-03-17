@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import type { WorkbenchTodoItem } from '../typing';
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  VbenCheckbox,
-} from '@vben-core/shadcn-ui';
+import { Card, CardContent, CardHeader, CardTitle, VbenCheckbox } from '@vben-core/shadcn-ui';
 
 interface Props {
   items?: WorkbenchTodoItem[];
@@ -45,10 +39,7 @@ withDefaults(defineProps<Props>(), {
                 {{ item.title }}
               </p>
               <!-- eslint-disable vue/no-v-html -->
-              <p
-                class="text-foreground/80 *:text-primary mt-1 truncate text-xs leading-5"
-                v-html="item.content"
-              ></p>
+              <p class="text-foreground/80 *:text-primary mt-1 truncate text-xs leading-5" v-html="item.content"></p>
             </div>
           </div>
           <div class="hidden h-full shrink-0 sm:flex sm:flex-col sm:items-end">

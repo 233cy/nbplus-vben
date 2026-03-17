@@ -52,11 +52,7 @@ setupVbenVxeTable({
     vxeUI.renderer.add('CellLink', {
       renderTableDefault(renderOpts) {
         const { props } = renderOpts;
-        return h(
-          ElButton,
-          { size: 'small', link: true },
-          { default: () => props?.text },
-        );
+        return h(ElButton, { size: 'small', link: true }, { default: () => props?.text });
       },
     });
 

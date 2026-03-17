@@ -15,17 +15,11 @@ import { getDefaultsForSchema } from 'zod-defaults';
 
 type ExtendFormProps = VbenFormProps & { formApi?: ExtendedFormApi };
 
-export const [injectFormProps, provideFormProps] =
-  createContext<[ComputedRef<ExtendFormProps> | ExtendFormProps, FormActions]>(
-    'VbenFormProps',
-  );
+export const [injectFormProps, provideFormProps] = createContext<[ComputedRef<ExtendFormProps> | ExtendFormProps, FormActions]>('VbenFormProps');
 
-export const [injectComponentRefMap, provideComponentRefMap] =
-  createContext<Map<string, unknown>>('ComponentRefMap');
+export const [injectComponentRefMap, provideComponentRefMap] = createContext<Map<string, unknown>>('ComponentRefMap');
 
-export function useFormInitial(
-  props: ComputedRef<VbenFormProps> | VbenFormProps,
-) {
+export function useFormInitial(props: ComputedRef<VbenFormProps> | VbenFormProps) {
   const slots = useSlots();
   const initialValues = generateInitialValues();
 
@@ -88,10 +82,7 @@ export function useFormInitial(
       const rightDefaultValue = getCustomDefaultValue(rule._def.right);
 
       // 如果左右两边都能提取默认值，合并它们
-      if (
-        typeof leftDefaultValue === 'object' &&
-        typeof rightDefaultValue === 'object'
-      ) {
+      if (typeof leftDefaultValue === 'object' && typeof rightDefaultValue === 'object') {
         return { ...leftDefaultValue, ...rightDefaultValue };
       }
 

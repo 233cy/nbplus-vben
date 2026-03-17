@@ -64,12 +64,7 @@ interface Props {
    * - 函数：自定义选择逻辑，函数的参数为请求的结果数组，返回值为选择的选项
    * - false：不自动选择(默认)
    */
-  autoSelect?:
-    | 'first'
-    | 'last'
-    | 'one'
-    | ((item: OptionsItem[]) => OptionsItem)
-    | false;
+  autoSelect?: 'first' | 'last' | 'one' | ((item: OptionsItem[]) => OptionsItem) | false;
 }
 
 defineOptions({ name: 'ApiComponent', inheritAttrs: false });
@@ -111,13 +106,7 @@ const isFirstLoaded = ref(false);
 const hasPendingRequest = ref(false);
 
 const getOptions = computed(() => {
-  const {
-    labelField,
-    valueField,
-    disabledField,
-    childrenField,
-    numberToString,
-  } = props;
+  const { labelField, valueField, disabledField, childrenField, numberToString } = props;
 
   const refOptionsData = unref(refOptions);
 
@@ -130,9 +119,7 @@ const getOptions = computed(() => {
         label: get(item, labelField),
         value: numberToString ? `${value}` : value,
         disabled: get(item, disabledField),
-        ...(childrenField && item[childrenField]
-          ? { children: transformData(item[childrenField]) }
-          : {}),
+        ...(childrenField && item[childrenField] ? { children: transformData(item[childrenField]) } : {}),
       };
     });
   }
@@ -237,11 +224,7 @@ watch(
 );
 
 function emitChange() {
-  if (
-    modelValue.value === undefined &&
-    props.autoSelect &&
-    unref(getOptions).length > 0
-  ) {
+  if (modelValue.value === undefined && props.autoSelect && unref(getOptions).length > 0) {
     let firstOption;
     if (isFunction(props.autoSelect)) {
       firstOption = props.autoSelect(unref(getOptions));
@@ -283,12 +266,7 @@ defineExpose({
 });
 </script>
 <template>
-  <component
-    :is="component"
-    v-bind="bindProps"
-    :placeholder="$attrs.placeholder"
-    ref="componentRef"
-  >
+  <component :is="component" v-bind="bindProps" :placeholder="$attrs.placeholder" ref="componentRef">
     <template v-for="item in Object.keys($slots)" #[item]="data">
       <slot :name="item" v-bind="data || {}"></slot>
     </template>

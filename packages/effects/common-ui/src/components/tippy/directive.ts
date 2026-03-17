@@ -5,10 +5,7 @@ import { useTippy } from 'vue-tippy';
 export default function useTippyDirective(isDark: ComputedRef<boolean>) {
   const directive: Directive = {
     mounted(el, binding, vnode) {
-      const opts =
-        typeof binding.value === 'string'
-          ? { content: binding.value }
-          : binding.value || {};
+      const opts = typeof binding.value === 'string' ? { content: binding.value } : binding.value || {};
 
       const modifiers = Object.keys(binding.modifiers || {});
       const placement = modifiers.find((modifier) => modifier !== 'arrow');
@@ -73,12 +70,7 @@ export default function useTippyDirective(isDark: ComputedRef<boolean>) {
 
     updated(el, binding) {
       const opts =
-        typeof binding.value === 'string'
-          ? { content: binding.value, theme: isDark.value ? '' : 'light' }
-          : Object.assign(
-              { theme: isDark.value ? '' : 'light' },
-              binding.value,
-            );
+        typeof binding.value === 'string' ? { content: binding.value, theme: isDark.value ? '' : 'light' } : Object.assign({ theme: isDark.value ? '' : 'light' }, binding.value);
 
       if (el.getAttribute('title') && !opts.content) {
         opts.content = el.getAttribute('title');

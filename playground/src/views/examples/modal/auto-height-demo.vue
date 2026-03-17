@@ -24,10 +24,7 @@ const [Modal, modalApi] = useVbenModal({
 function handleUpdate(len?: number) {
   modalApi.setState({ confirmDisabled: true, loading: true });
   setTimeout(() => {
-    list.value = Array.from(
-      { length: len ?? Math.floor(Math.random() * 10) + 1 },
-      (_v, k) => k + 1,
-    );
+    list.value = Array.from({ length: len ?? Math.floor(Math.random() * 10) + 1 }, (_v, k) => k + 1);
     modalApi.setState({ confirmDisabled: false, loading: false });
   }, 2000);
 }
@@ -35,11 +32,7 @@ function handleUpdate(len?: number) {
 
 <template>
   <Modal title="自动计算高度">
-    <div
-      v-for="item in list"
-      :key="item"
-      class="flex-center h-[220px] w-full bg-muted even:bg-heavy"
-    >
+    <div v-for="item in list" :key="item" class="flex-center h-[220px] w-full bg-muted even:bg-heavy">
       {{ item }}
     </div>
     <template #prepend-footer>

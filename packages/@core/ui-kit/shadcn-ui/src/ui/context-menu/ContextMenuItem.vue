@@ -7,9 +7,7 @@ import { cn } from '@vben-core/shared/utils';
 
 import { ContextMenuItem, useForwardPropsEmits } from 'reka-ui';
 
-const props = defineProps<
-  ContextMenuItemProps & { class?: any; inset?: boolean }
->();
+const props = defineProps<ContextMenuItemProps & { class?: any; inset?: boolean }>();
 const emits = defineEmits<ContextMenuItemEmits>();
 
 const delegatedProps = computed(() => {

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
+import { useThrottleFn } from '@vueuse/core';
+
 import { reqCheck, reqGet } from '#/api/core/captcha';
 
 import { aesEncrypt } from './../utils/ase';
@@ -11,7 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
   type: '1',
   mode: 'pop',
   space: 5,
-  explain: '向右滑动完成验证',
+  explain: '',
   imgSize: () => ({
     width: '310px',
     height: '155px',
@@ -173,20 +177,12 @@ function end() {
     };
 
     reqCheck(data)
-      .then((res) => {
-        if (res.repCode === '0000') {
-          handleSuccess(moveLeftDistance);
-        } else {
-          handleError();
-        }
-        isLoad.value = false;
+      .then(() => {
+        handleSuccess(moveLeftDistance);
       })
-      .catch((error) => {
-        console.error('验证请求失败:', error);
+      .catch(() => {
         handleError();
-        isLoad.value = false;
       });
-
     status.value = false;
   }
 }
@@ -202,7 +198,7 @@ function handleSuccess(moveLeftDistance: number) {
   passFlag.value = true;
 
   const duration = ((endMovetime.value - startMoveTime.value) / 1000).toFixed(2);
-  tipWords.value = `${duration}s验证成功`;
+  tipWords.value = `${duration}s${$t('page.captcha.verifySuccess')}`;
 
   const pointData = { x: moveLeftDistance, y: Y_POSITION };
   const captchaVerification = secretKey.value
@@ -234,7 +230,7 @@ function handleError() {
   iconColor.value = '#fff';
   iconClass.value = 'icon-close';
   passFlag.value = false;
-  tipWords.value = '验证失败';
+  tipWords.value = $t('page.captcha.verifyFailed');
 
   setTimeout(() => {
     refresh();
@@ -273,39 +269,56 @@ const refresh = () => {
   setTimeout(() => {
     transitionWidth.value = '';
     transitionLeft.value = '';
-    text.value = props.explain;
+    text.value = props.explain || $t('page.captcha.slide');
   }, 300);
 };
 
 // 请求背景图片和验证图片
-function getPicture() {
-  isLoad.value = true;
-  const data = {
-    captchaType: props.captchaType || '',
-  };
+// function getPicture() {
+//   isLoad.value = true;
+//   const data = {
+//     captchaType: props.captchaType || '',
+//   };
 
-  reqGet(data)
-    .then((res) => {
-      if (res.repCode === '0000') {
-        backImgBase.value = res.repData.originalImageBase64;
-        blockBackImgBase.value = res.repData.jigsawImageBase64;
-        backToken.value = res.repData.token;
-        secretKey.value = res.repData.secretKey;
-      } else {
-        tipWords.value = res.repMsg || '获取验证码失败';
-      }
-      isLoad.value = false;
-    })
-    .catch((error) => {
-      console.error('获取验证码失败:', error);
-      tipWords.value = '网络错误，请刷新重试';
-      isLoad.value = false;
-    });
-}
+//   reqGet(data)
+//     .then((res) => {
+//       // if (res.repCode === '0000') {
+//       backImgBase.value = res.originalImageBase64;
+//       blockBackImgBase.value = res.jigsawImageBase64;
+//       backToken.value = res.token;
+//       secretKey.value = res.secretKey;
+//       // } else {
+//       //   tipWords.value = res.repMsg || '获取验证码失败';
+//       // }
+//       isLoad.value = false;
+//     })
+//     .catch((error) => {
+//       console.error('获取验证码失败:', error);
+//       tipWords.value = '网络错误，请刷新重试';
+//       isLoad.value = false;
+//     });
+// }
+const getPicture = useThrottleFn(async () => {
+  isLoad.value = true;
+  try {
+    const res = await reqGet({ captchaType: props.captchaType });
+    if (res.code) {
+      tipWords.value = res.msg;
+    } else {
+      backImgBase.value = res.originalImageBase64;
+      blockBackImgBase.value = res.jigsawImageBase64;
+      backToken.value = res.token;
+      secretKey.value = res.secretKey;
+    }
+  } catch {
+    tipWords.value = $t('page.captcha.networkError');
+  }
+  isLoad.value = false;
+}, 1000);
 
 // 初始化
 function init() {
-  text.value = props.explain;
+  text.value = props.explain || $t('page.captcha.slide');
   getPicture();
 
   nextTick(() => {

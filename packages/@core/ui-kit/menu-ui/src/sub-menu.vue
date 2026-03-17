@@ -25,9 +25,7 @@ const props = withDefaults(defineProps<Props>(), {});
  */
 const hasChildren = computed(() => {
   const { menu } = props;
-  return (
-    Reflect.has(menu, 'children') && !!menu.children && menu.children.length > 0
-  );
+  return Reflect.has(menu, 'children') && !!menu.children && menu.children.length > 0;
 });
 </script>
 
@@ -46,20 +44,9 @@ const hasChildren = computed(() => {
       <span>{{ menu.name }}</span>
     </template>
   </MenuItem>
-  <SubMenuComp
-    v-else
-    :key="`${menu.path}_sub`"
-    :active-icon="menu.activeIcon"
-    :icon="menu.icon"
-    :path="menu.path"
-  >
+  <SubMenuComp v-else :key="`${menu.path}_sub`" :active-icon="menu.activeIcon" :icon="menu.icon" :path="menu.path">
     <template #content>
-      <MenuBadge
-        :badge="menu.badge"
-        :badge-type="menu.badgeType"
-        :badge-variants="menu.badgeVariants"
-        class="right-6"
-      />
+      <MenuBadge :badge="menu.badge" :badge-type="menu.badgeType" :badge-variants="menu.badgeVariants" class="right-6" />
     </template>
     <template #title>
       <span>{{ menu.name }}</span>

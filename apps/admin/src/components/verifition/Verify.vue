@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import VerifyPoints from './Verify/VerifyPoints.vue';
 import VerifySlide from './Verify/VerifySlide.vue';
 
@@ -136,15 +138,15 @@ defineExpose({
 <template>
   <div>
     <div>
-      <a-button v-if="successData === null" @click="show()">点击进行验证</a-button>
+      <a-button v-if="successData === null" @click="show()">{{ $t('page.captcha.clickToVerify') }}</a-button>
       <a-config-provider v-else :theme="{ token: { colorPrimary: '#52c41a' } }">
-        <a-button type="primary" icon="CheckOutlined">验证成功</a-button>
+        <a-button type="primary" icon="CheckOutlined">{{ $t('page.captcha.verifySuccess') }}</a-button>
       </a-config-provider>
     </div>
     <div :class="mode === 'pop' ? 'mask' : ''" v-show="showBox">
       <div :class="mode === 'pop' ? 'verifybox' : ''" :style="boxWidthStyle">
         <div class="verifybox-top" v-if="mode === 'pop'">
-          请完成安全验证
+          {{ $t('page.captcha.pleaseCompleteSecurityVerification') }}
           <span class="verifybox-close" @click="closeBox">
             <i class="iconfont icon-close"></i>
           </span>

@@ -10,12 +10,9 @@ import { PaginationNext } from 'reka-ui';
 
 import { Button } from '../button';
 
-const props = withDefaults(
-  defineProps<PaginationNextProps & { class?: any }>(),
-  {
-    asChild: true,
-  },
-);
+const props = withDefaults(defineProps<PaginationNextProps & { class?: any }>(), {
+  asChild: true,
+});
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props;

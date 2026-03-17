@@ -234,9 +234,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
           default: () => ['我已阅读并同意'],
         };
       },
-      rules: z
-        .boolean()
-        .refine((v) => v, { message: '为什么不同意？勾上它！' }),
+      rules: z.boolean().refine((v) => v, { message: '为什么不同意？勾上它！' }),
     },
     {
       component: 'Mentions',
@@ -267,8 +265,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
         class: 'w-auto',
       },
       fieldName: 'switch',
-      help: () =>
-        ['这是一个多行帮助信息', '第二行', '第三行'].map((v) => h('p', v)),
+      help: () => ['这是一个多行帮助信息', '第二行', '第三行'].map((v) => h('p', v)),
       label: '开关',
     },
     {
@@ -402,14 +399,8 @@ function onSubmit(values: Record<string, any>) {
   const doneCrop = cropImage.filter((file) => file.status === 'done');
   const failedCrop = cropImage.filter((file) => file.status !== 'done');
 
-  const msg = [
-    ...doneFiles.map((file) => file.response?.url || file.url),
-    ...failedFiles.map((file) => file.name),
-  ].join(', ');
-  const msgCrop = [
-    ...doneCrop.map((file) => file.response?.url || file.url),
-    ...failedCrop.map((file) => file.name),
-  ].join(', ');
+  const msg = [...doneFiles.map((file) => file.response?.url || file.url), ...failedFiles.map((file) => file.name)].join(', ');
+  const msgCrop = [...doneCrop.map((file) => file.response?.url || file.url), ...failedCrop.map((file) => file.name)].join(', ');
 
   if (failedFiles.length === 0) {
     message.success({
@@ -473,16 +464,10 @@ function handleSetFormValue() {
 </script>
 
 <template>
-  <Page
-    content-class="flex flex-col gap-4"
-    description="表单组件基础示例，请注意，该页面用到的参数代码会添加一些简单注释，方便理解，请仔细查看。"
-    title="表单组件"
-  >
+  <Page content-class="flex flex-col gap-4" description="表单组件基础示例，请注意，该页面用到的参数代码会添加一些简单注释，方便理解，请仔细查看。" title="表单组件">
     <template #description>
       <div class="text-muted-foreground">
-        <p>
-          表单组件基础示例，请注意，该页面用到的参数代码会添加一些简单注释，方便理解，请仔细查看。
-        </p>
+        <p>表单组件基础示例，请注意，该页面用到的参数代码会添加一些简单注释，方便理解，请仔细查看。</p>
       </div>
     </template>
     <template #extra>

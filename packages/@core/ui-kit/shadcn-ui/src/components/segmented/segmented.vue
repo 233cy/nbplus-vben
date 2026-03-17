@@ -43,10 +43,7 @@ function activeClass(tab: string): string[] {
 
 <template>
   <Tabs v-model="activeTab" :default-value="getDefaultValue">
-    <TabsList
-      :style="tabsStyle"
-      class="relative grid w-full bg-accent !outline !outline-2 !outline-heavy"
-    >
+    <TabsList :style="tabsStyle" class="relative grid w-full bg-accent !outline !outline-2 !outline-heavy">
       <TabsIndicator :style="tabsIndicatorStyle" />
       <template v-for="tab in tabs" :key="tab.value">
         <TabsTrigger

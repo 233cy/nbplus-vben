@@ -9,7 +9,6 @@ export default eventHandler(async (event) => {
     return unAuthorizedResponse(event);
   }
 
-  const menus =
-    MOCK_MENUS.find((item) => item.username === userinfo.username)?.menus ?? [];
+  const menus = MOCK_MENUS.find((item) => item.username === userinfo.username)?.menus ?? [];
   return useResponseSuccess(menus);
 });

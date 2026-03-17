@@ -9,348 +9,87 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     y="0px"
   >
-    <filter
-      id="filter-95"
-      filterUnits="objectBoundingBox"
-      height="124.9%"
-      width="114.5%"
-      x="-7.3%"
-      y="-12.5%"
-    >
+    <filter id="filter-95" filterUnits="objectBoundingBox" height="124.9%" width="114.5%" x="-7.3%" y="-12.5%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="4.21434086" />
     </filter>
-    <filter
-      id="filter-79"
-      filterUnits="objectBoundingBox"
-      height="101.4%"
-      width="100.8%"
-      x="-0.4%"
-      y="-0.7%"
-    >
+    <filter id="filter-79" filterUnits="objectBoundingBox" height="101.4%" width="100.8%" x="-0.4%" y="-0.7%">
       <feOffset dx="0" dy="-1" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0" />
     </filter>
-    <filter
-      id="filter-71"
-      filterUnits="objectBoundingBox"
-      height="142.5%"
-      width="120.1%"
-      x="-10.1%"
-      y="-21.3%"
-    >
+    <filter id="filter-71" filterUnits="objectBoundingBox" height="142.5%" width="120.1%" x="-10.1%" y="-21.3%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="4.21434086" />
     </filter>
-    <filter
-      id="filter-59"
-      filterUnits="objectBoundingBox"
-      height="181.0%"
-      width="133.4%"
-      x="-16.7%"
-      y="-40.5%"
-    >
+    <filter id="filter-59" filterUnits="objectBoundingBox" height="181.0%" width="133.4%" x="-16.7%" y="-40.5%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="4.85695311" />
     </filter>
-    <filter
-      id="filter-56"
-      filterUnits="objectBoundingBox"
-      height="181.0%"
-      width="133.4%"
-      x="-16.7%"
-      y="-40.5%"
-    >
+    <filter id="filter-56" filterUnits="objectBoundingBox" height="181.0%" width="133.4%" x="-16.7%" y="-40.5%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="2.91417187" />
     </filter>
-    <filter
-      id="filter-53"
-      filterUnits="objectBoundingBox"
-      height="100.9%"
-      width="100.5%"
-      x="-0.2%"
-      y="-0.4%"
-    >
+    <filter id="filter-53" filterUnits="objectBoundingBox" height="100.9%" width="100.5%" x="-0.2%" y="-0.4%">
       <feOffset dx="0" dy="-1" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0" />
     </filter>
-    <filter
-      id="filter-50"
-      filterUnits="objectBoundingBox"
-      height="241.5%"
-      width="643.8%"
-      x="-271.9%"
-      y="-70.7%"
-    >
+    <filter id="filter-50" filterUnits="objectBoundingBox" height="241.5%" width="643.8%" x="-271.9%" y="-70.7%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="16.2954513" />
     </filter>
-    <filter
-      id="filter-5"
-      filterUnits="objectBoundingBox"
-      height="100.8%"
-      width="100.4%"
-      x="-0.2%"
-      y="-0.4%"
-    >
+    <filter id="filter-5" filterUnits="objectBoundingBox" height="100.8%" width="100.4%" x="-0.2%" y="-0.4%">
       <feOffset dx="0" dy="-3" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0" />
     </filter>
-    <filter
-      id="filter-46"
-      filterUnits="objectBoundingBox"
-      height="100.7%"
-      width="100.4%"
-      x="-0.2%"
-      y="-0.3%"
-    >
+    <filter id="filter-46" filterUnits="objectBoundingBox" height="100.7%" width="100.4%" x="-0.2%" y="-0.3%">
       <feOffset dx="0" dy="-1" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0" />
     </filter>
-    <filter
-      id="filter-43"
-      filterUnits="objectBoundingBox"
-      height="241.5%"
-      width="643.8%"
-      x="-271.9%"
-      y="-70.7%"
-    >
+    <filter id="filter-43" filterUnits="objectBoundingBox" height="241.5%" width="643.8%" x="-271.9%" y="-70.7%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="20.3693141" />
     </filter>
-    <filter
-      id="filter-39"
-      filterUnits="objectBoundingBox"
-      height="113.3%"
-      width="107.0%"
-      x="-3.5%"
-      y="-6.7%"
-    >
+    <filter id="filter-39" filterUnits="objectBoundingBox" height="113.3%" width="107.0%" x="-3.5%" y="-6.7%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="3.51195071" />
     </filter>
-    <filter
-      id="filter-34"
-      filterUnits="objectBoundingBox"
-      height="103.6%"
-      width="102.1%"
-      x="-1.1%"
-      y="-1.8%"
-    >
+    <filter id="filter-34" filterUnits="objectBoundingBox" height="103.6%" width="102.1%" x="-1.1%" y="-1.8%">
       <feOffset dx="0" dy="-1" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.833806818 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.833806818 0" />
     </filter>
-    <filter
-      id="filter-29"
-      filterUnits="objectBoundingBox"
-      height="103.6%"
-      width="102.1%"
-      x="-1.1%"
-      y="-1.8%"
-    >
+    <filter id="filter-29" filterUnits="objectBoundingBox" height="103.6%" width="102.1%" x="-1.1%" y="-1.8%">
       <feOffset dx="0" dy="-1" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.833806818 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.833806818 0" />
     </filter>
-    <filter
-      id="filter-24"
-      filterUnits="objectBoundingBox"
-      height="103.6%"
-      width="102.1%"
-      x="-1.1%"
-      y="-1.8%"
-    >
+    <filter id="filter-24" filterUnits="objectBoundingBox" height="103.6%" width="102.1%" x="-1.1%" y="-1.8%">
       <feOffset dx="0" dy="-1" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.833806818 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.833806818 0" />
     </filter>
-    <filter
-      id="filter-20"
-      filterUnits="objectBoundingBox"
-      height="102.3%"
-      width="101.3%"
-      x="-0.7%"
-      y="-1.1%"
-    >
+    <filter id="filter-20" filterUnits="objectBoundingBox" height="102.3%" width="101.3%" x="-0.7%" y="-1.1%">
       <feOffset dx="0" dy="-3" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0" />
     </filter>
-    <filter
-      id="filter-14"
-      filterUnits="objectBoundingBox"
-      height="103.6%"
-      width="102.1%"
-      x="-1.0%"
-      y="-1.8%"
-    >
+    <filter id="filter-14" filterUnits="objectBoundingBox" height="103.6%" width="102.1%" x="-1.0%" y="-1.8%">
       <feOffset dx="0" dy="-1" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.833806818 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.833806818 0" />
     </filter>
-    <filter
-      id="filter-109"
-      filterUnits="objectBoundingBox"
-      height="102.5%"
-      width="101.4%"
-      x="-0.7%"
-      y="-1.2%"
-    >
+    <filter id="filter-109" filterUnits="objectBoundingBox" height="102.5%" width="101.4%" x="-0.7%" y="-1.2%">
       <feOffset dx="0" dy="-1" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.833806818 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.833806818 0" />
     </filter>
-    <filter
-      id="filter-106"
-      filterUnits="objectBoundingBox"
-      height="149.1%"
-      width="128.6%"
-      x="-14.3%"
-      y="-24.5%"
-    >
+    <filter id="filter-106" filterUnits="objectBoundingBox" height="149.1%" width="128.6%" x="-14.3%" y="-24.5%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="4.71559623" />
     </filter>
-    <filter
-      id="filter-100"
-      filterUnits="objectBoundingBox"
-      height="133.5%"
-      width="119.4%"
-      x="-9.7%"
-      y="-16.8%"
-    >
+    <filter id="filter-100" filterUnits="objectBoundingBox" height="133.5%" width="119.4%" x="-9.7%" y="-16.8%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="4.21434086" />
     </filter>
-    <filter
-      id="filter-10"
-      filterUnits="objectBoundingBox"
-      height="100.7%"
-      width="100.4%"
-      x="-0.2%"
-      y="-0.3%"
-    >
+    <filter id="filter-10" filterUnits="objectBoundingBox" height="100.7%" width="100.4%" x="-0.2%" y="-0.3%">
       <feOffset dx="0" dy="-3" in="SourceAlpha" result="shadowOffsetInner1" />
-      <feComposite
-        in="shadowOffsetInner1"
-        in2="SourceAlpha"
-        k2="-1"
-        k3="1"
-        operator="arithmetic"
-        result="shadowInnerInner1"
-      />
-      <feColorMatrix
-        in="shadowInnerInner1"
-        type="matrix"
-        values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0"
-      />
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1" />
+      <feColorMatrix in="shadowInnerInner1" type="matrix" values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.498880026 0" />
     </filter>
     <title>87667-SVG8</title>
     <g>
@@ -545,14 +284,8 @@
                 y1="1149.4111"
                 y2="1150.4294"
               >
-                <stop
-                  offset="0"
-                  style="stop-color: #8fa0ff; stop-opacity: 0.467"
-                />
-                <stop
-                  offset="1"
-                  style="stop-color: #0f0f0f; stop-opacity: 0.06"
-                />
+                <stop offset="0" style="stop-color: #8fa0ff; stop-opacity: 0.467" />
+                <stop offset="1" style="stop-color: #0f0f0f; stop-opacity: 0.06" />
                 <stop offset="1" style="stop-color: #2f59e1; stop-opacity: 0" />
               </linearGradient>
               <polygon
@@ -564,11 +297,7 @@
               />
             </g>
             <g filter="url(#filter-14)">
-              <polygon
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-                points="0.1,13.9 24.1,27.8 48.1,13.9 24.1,0.1 					"
-              />
+              <polygon clip-rule="evenodd" fill-rule="evenodd" points="0.1,13.9 24.1,27.8 48.1,13.9 24.1,0.1 					" />
             </g>
           </g>
 
@@ -708,18 +437,9 @@
                   y1="1526.6367"
                   y2="1527.655"
                 >
-                  <stop
-                    offset="0"
-                    style="stop-color: #8fa0ff; stop-opacity: 0.467"
-                  />
-                  <stop
-                    offset="1"
-                    style="stop-color: #0f0f0f; stop-opacity: 0.06"
-                  />
-                  <stop
-                    offset="1"
-                    style="stop-color: #2f59e1; stop-opacity: 0"
-                  />
+                  <stop offset="0" style="stop-color: #8fa0ff; stop-opacity: 0.467" />
+                  <stop offset="1" style="stop-color: #0f0f0f; stop-opacity: 0.06" />
+                  <stop offset="1" style="stop-color: #2f59e1; stop-opacity: 0" />
                 </linearGradient>
                 <polygon
                   clip-rule="evenodd"
@@ -730,11 +450,7 @@
                 />
               </g>
               <g filter="url(#filter-24)">
-                <polygon
-                  clip-rule="evenodd"
-                  fill-rule="evenodd"
-                  points="0.1,13.8 23.9,27.6 47.7,13.8 23.9,0.1 						"
-                />
+                <polygon clip-rule="evenodd" fill-rule="evenodd" points="0.1,13.8 23.9,27.6 47.7,13.8 23.9,0.1 						" />
               </g>
             </g>
 
@@ -812,18 +528,9 @@
                   y1="1446.1069"
                   y2="1447.1252"
                 >
-                  <stop
-                    offset="0"
-                    style="stop-color: #8fa0ff; stop-opacity: 0.467"
-                  />
-                  <stop
-                    offset="1"
-                    style="stop-color: #0f0f0f; stop-opacity: 0.06"
-                  />
-                  <stop
-                    offset="1"
-                    style="stop-color: #2f59e1; stop-opacity: 0"
-                  />
+                  <stop offset="0" style="stop-color: #8fa0ff; stop-opacity: 0.467" />
+                  <stop offset="1" style="stop-color: #0f0f0f; stop-opacity: 0.06" />
+                  <stop offset="1" style="stop-color: #2f59e1; stop-opacity: 0" />
                 </linearGradient>
                 <polygon
                   clip-rule="evenodd"
@@ -834,11 +541,7 @@
                 />
               </g>
               <g filter="url(#filter-29)">
-                <polygon
-                  clip-rule="evenodd"
-                  fill-rule="evenodd"
-                  points="0.1,13.8 23.9,27.6 47.7,13.8 23.9,0.1 						"
-                />
+                <polygon clip-rule="evenodd" fill-rule="evenodd" points="0.1,13.8 23.9,27.6 47.7,13.8 23.9,0.1 						" />
               </g>
             </g>
 
@@ -916,18 +619,9 @@
                   y1="1580.3652"
                   y2="1581.3835"
                 >
-                  <stop
-                    offset="0"
-                    style="stop-color: #8fa0ff; stop-opacity: 0.467"
-                  />
-                  <stop
-                    offset="1"
-                    style="stop-color: #0f0f0f; stop-opacity: 0.06"
-                  />
-                  <stop
-                    offset="1"
-                    style="stop-color: #2f59e1; stop-opacity: 0"
-                  />
+                  <stop offset="0" style="stop-color: #8fa0ff; stop-opacity: 0.467" />
+                  <stop offset="1" style="stop-color: #0f0f0f; stop-opacity: 0.06" />
+                  <stop offset="1" style="stop-color: #2f59e1; stop-opacity: 0" />
                 </linearGradient>
                 <polygon
                   clip-rule="evenodd"
@@ -938,11 +632,7 @@
                 />
               </g>
               <g filter="url(#filter-34)">
-                <polygon
-                  clip-rule="evenodd"
-                  fill-rule="evenodd"
-                  points="0.1,196.8 23.9,210.6 47.7,196.8 23.9,183.1 						"
-                />
+                <polygon clip-rule="evenodd" fill-rule="evenodd" points="0.1,196.8 23.9,210.6 47.7,196.8 23.9,183.1 						" />
               </g>
             </g>
 
@@ -1105,28 +795,11 @@
               />
             </g>
             <defs>
-              <filter
-                id="Adobe_OpacityMaskFilter"
-                filterUnits="userSpaceOnUse"
-                height="86.4"
-                width="22.5"
-                x="18.3"
-                y="59.7"
-              >
-                <feColorMatrix
-                  type="matrix"
-                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                />
+              <filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" height="86.4" width="22.5" x="18.3" y="59.7">
+                <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
               </filter>
             </defs>
-            <mask
-              id="mask-42_1_"
-              height="86.4"
-              maskUnits="userSpaceOnUse"
-              width="22.5"
-              x="18.3"
-              y="59.7"
-            >
+            <mask id="mask-42_1_" height="86.4" maskUnits="userSpaceOnUse" width="22.5" x="18.3" y="59.7">
               <g filter="url(#Adobe_OpacityMaskFilter)">
                 <path
                   id="path-41_1_"
@@ -1140,15 +813,7 @@
               </g>
             </mask>
             <g filter="url(#filter-43)" mask="url(#mask-42_1_)">
-              <rect
-                clip-rule="evenodd"
-                fill="#FFFFFF"
-                fill-rule="evenodd"
-                height="86.4"
-                width="22.5"
-                x="18.3"
-                y="59.7"
-              />
+              <rect clip-rule="evenodd" fill="#FFFFFF" fill-rule="evenodd" height="86.4" width="22.5" x="18.3" y="59.7" />
             </g>
           </g>
           <g id="Stroke-1备份">
@@ -1211,28 +876,11 @@
               />
             </g>
             <defs>
-              <filter
-                id="Adobe_OpacityMaskFilter_1_"
-                filterUnits="userSpaceOnUse"
-                height="69.1"
-                width="18"
-                x="14.6"
-                y="47.8"
-              >
-                <feColorMatrix
-                  type="matrix"
-                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                />
+              <filter id="Adobe_OpacityMaskFilter_1_" filterUnits="userSpaceOnUse" height="69.1" width="18" x="14.6" y="47.8">
+                <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
               </filter>
             </defs>
-            <mask
-              id="mask-49_1_"
-              height="69.1"
-              maskUnits="userSpaceOnUse"
-              width="18"
-              x="14.6"
-              y="47.8"
-            >
+            <mask id="mask-49_1_" height="69.1" maskUnits="userSpaceOnUse" width="18" x="14.6" y="47.8">
               <g filter="url(#Adobe_OpacityMaskFilter_1_)">
                 <path
                   id="path-48_1_"
@@ -1246,15 +894,7 @@
               </g>
             </mask>
             <g filter="url(#filter-50)" mask="url(#mask-49_1_)">
-              <rect
-                clip-rule="evenodd"
-                fill="#FFFFFF"
-                fill-rule="evenodd"
-                height="69.1"
-                width="18"
-                x="14.6"
-                y="47.8"
-              />
+              <rect clip-rule="evenodd" fill="#FFFFFF" fill-rule="evenodd" height="69.1" width="18" x="14.6" y="47.8" />
             </g>
           </g>
           <g>
@@ -1328,15 +968,7 @@
               <stop offset="0" style="stop-color: #1b0f9c; stop-opacity: 0" />
               <stop offset="1" style="stop-color: #060071" />
             </linearGradient>
-            <ellipse
-              clip-rule="evenodd"
-              cx="41.9"
-              cy="39.8"
-              fill="url(#SVGID_19_)"
-              fill-rule="evenodd"
-              rx="26.1"
-              ry="10.8"
-            />
+            <ellipse clip-rule="evenodd" cx="41.9" cy="39.8" fill="url(#SVGID_19_)" fill-rule="evenodd" rx="26.1" ry="10.8" />
           </g>
 
           <radialGradient
@@ -1351,14 +983,7 @@
             <stop offset="0.3987" style="stop-color: #4165fc" />
             <stop offset="1" style="stop-color: #0a00c2" />
           </radialGradient>
-          <circle
-            clip-rule="evenodd"
-            cx="24.5"
-            cy="24.5"
-            fill="url(#SVGID_20_)"
-            fill-rule="evenodd"
-            r="24.5"
-          />
+          <circle clip-rule="evenodd" cx="24.5" cy="24.5" fill="url(#SVGID_20_)" fill-rule="evenodd" r="24.5" />
         </g>
         <g id="编组-6" transform="translate(23.510638, 0.000000)">
           <g filter="url(#filter-59)">
@@ -1374,15 +999,7 @@
               <stop offset="0" style="stop-color: #1b0f9c; stop-opacity: 0" />
               <stop offset="1" style="stop-color: #060071" />
             </linearGradient>
-            <ellipse
-              clip-rule="evenodd"
-              cx="69.8"
-              cy="66.4"
-              fill="url(#SVGID_21_)"
-              fill-rule="evenodd"
-              rx="43.6"
-              ry="18"
-            />
+            <ellipse clip-rule="evenodd" cx="69.8" cy="66.4" fill="url(#SVGID_21_)" fill-rule="evenodd" rx="43.6" ry="18" />
           </g>
 
           <radialGradient
@@ -1397,22 +1014,11 @@
             <stop offset="0.3987" style="stop-color: #4165fc" />
             <stop offset="1" style="stop-color: #0a00c2" />
           </radialGradient>
-          <circle
-            clip-rule="evenodd"
-            cx="40.8"
-            cy="40.8"
-            fill="url(#SVGID_22_)"
-            fill-rule="evenodd"
-            r="40.8"
-          />
+          <circle clip-rule="evenodd" cx="40.8" cy="40.8" fill="url(#SVGID_22_)" fill-rule="evenodd" r="40.8" />
         </g>
       </g>
 
-      <g
-        id="编组备份-9"
-        opacity="0.5"
-        transform="translate(488.000000, 172.000000) scale(-1, 1) translate(-488.000000, -172.000000) translate(449.000000, 122.000000)"
-      >
+      <g id="编组备份-9" opacity="0.5" transform="translate(488.000000, 172.000000) scale(-1, 1) translate(-488.000000, -172.000000) translate(449.000000, 122.000000)">
         <linearGradient
           id="SVGID_23_"
           gradientTransform="matrix(-75.8604 0 0 -99.5101 32139.0957 167716.875)"
@@ -1449,11 +1055,7 @@
 			c-1.2,0.7-2.3,2.7-2.3,4.3L4,97.5C4,99.2,5,100,6.3,99.2z"
           fill="url(#SVGID_24_)"
         />
-        <g
-          id="XMLID_902_"
-          opacity="0.3"
-          transform="translate(51.463000, 21.500000)"
-        >
+        <g id="XMLID_902_" opacity="0.3" transform="translate(51.463000, 21.500000)">
           <path
             id="XMLID_905_"
             d="M17.9,4.7L1.7,14.1c-0.5,0.3-1.2,0.1-1.5-0.4C0.1,13.5,0,13.3,0,13.1
@@ -1492,12 +1094,7 @@
           <stop offset="0" style="stop-color: #fff" />
           <stop offset="1" style="stop-color: #fff; stop-opacity: 0" />
         </linearGradient>
-        <polygon
-          enable-background="new    "
-          fill="url(#SVGID_25_)"
-          opacity="0.4"
-          points="50,16.6 28.7,86.3 51,73.4 72.6,3.2 		"
-        />
+        <polygon enable-background="new    " fill="url(#SVGID_25_)" opacity="0.4" points="50,16.6 28.7,86.3 51,73.4 72.6,3.2 		" />
 
         <linearGradient
           id="XMLID_22_"
@@ -1642,12 +1239,7 @@
           fill="url(#SVGID_26_)"
           fill-rule="evenodd"
         />
-        <g
-          id="Oval"
-          enable-background="new    "
-          filter="url(#filter-71)"
-          opacity="0.5267"
-        >
+        <g id="Oval" enable-background="new    " filter="url(#filter-71)" opacity="0.5267">
           <linearGradient
             id="SVGID_27_"
             gradientTransform="matrix(125.5104 0 0 -59.4816 33000.125 99355.7422)"
@@ -1660,15 +1252,7 @@
             <stop offset="0" style="stop-color: #1b0f9c; stop-opacity: 0" />
             <stop offset="1" style="stop-color: #060071" />
           </linearGradient>
-          <ellipse
-            clip-rule="evenodd"
-            cx="77.2"
-            cy="256.5"
-            fill="url(#SVGID_27_)"
-            fill-rule="evenodd"
-            rx="62.8"
-            ry="29.7"
-          />
+          <ellipse clip-rule="evenodd" cx="77.2" cy="256.5" fill="url(#SVGID_27_)" fill-rule="evenodd" rx="62.8" ry="29.7" />
         </g>
 
         <linearGradient
@@ -1933,10 +1517,7 @@
         />
       </g>
 
-      <g
-        id="编组-15备份"
-        transform="translate(524.500000, 179.500000) scale(-1, 1) translate(-524.500000, -179.500000) translate(482.000000, 114.000000)"
-      >
+      <g id="编组-15备份" transform="translate(524.500000, 179.500000) scale(-1, 1) translate(-524.500000, -179.500000) translate(482.000000, 114.000000)">
         <linearGradient
           id="SVGID_37_"
           gradientTransform="matrix(-84.647 0 0 -130.0737 39258.8555 220582.5)"
@@ -2170,10 +1751,7 @@
         />
       </g>
 
-      <g
-        id="编组备份"
-        transform="translate(316.500000, 268.500000) scale(-1, 1) translate(-316.500000, -268.500000) translate(269.000000, 180.000000)"
-      >
+      <g id="编组备份" transform="translate(316.500000, 268.500000) scale(-1, 1) translate(-316.500000, -268.500000) translate(269.000000, 180.000000)">
         <linearGradient
           id="SVGID_46_"
           gradientTransform="matrix(-94.2244 0 0 -135.8154 24584.7852 221441.5469)"
@@ -2345,12 +1923,7 @@
             />
           </g>
           <g id="编组-2备份" transform="translate(8.400000, 103.200000)">
-            <g
-              id="Path备份-3"
-              enable-background="new    "
-              filter="url(#filter-100)"
-              opacity="0.6817"
-            >
+            <g id="Path备份-3" enable-background="new    " filter="url(#filter-100)" opacity="0.6817">
               <linearGradient
                 id="SVGID_52_"
                 gradientTransform="matrix(130.5022 0 0 -75.4716 62201.1797 105298.6953)"
@@ -2477,42 +2050,15 @@
             y2="1506.2531"
           >
             <stop offset="0" style="stop-color: #00dcf3" />
-            <stop
-              offset="1.000000e-02"
-              style="stop-color: #00dbf3; stop-opacity: 0.97"
-            />
-            <stop
-              offset="8.000000e-02"
-              style="stop-color: #00d0ef; stop-opacity: 0.77"
-            />
-            <stop
-              offset="0.16"
-              style="stop-color: #00c7ec; stop-opacity: 0.59"
-            />
-            <stop
-              offset="0.24"
-              style="stop-color: #00beea; stop-opacity: 0.43"
-            />
-            <stop
-              offset="0.32"
-              style="stop-color: #00b7e8; stop-opacity: 0.3"
-            />
-            <stop
-              offset="0.42"
-              style="stop-color: #00b2e6; stop-opacity: 0.19"
-            />
-            <stop
-              offset="0.52"
-              style="stop-color: #00ade5; stop-opacity: 0.1"
-            />
-            <stop
-              offset="0.63"
-              style="stop-color: #00aae4; stop-opacity: 4e-2"
-            />
-            <stop
-              offset="0.77"
-              style="stop-color: #00a9e3; stop-opacity: 1e-2"
-            />
+            <stop offset="1.000000e-02" style="stop-color: #00dbf3; stop-opacity: 0.97" />
+            <stop offset="8.000000e-02" style="stop-color: #00d0ef; stop-opacity: 0.77" />
+            <stop offset="0.16" style="stop-color: #00c7ec; stop-opacity: 0.59" />
+            <stop offset="0.24" style="stop-color: #00beea; stop-opacity: 0.43" />
+            <stop offset="0.32" style="stop-color: #00b7e8; stop-opacity: 0.3" />
+            <stop offset="0.42" style="stop-color: #00b2e6; stop-opacity: 0.19" />
+            <stop offset="0.52" style="stop-color: #00ade5; stop-opacity: 0.1" />
+            <stop offset="0.63" style="stop-color: #00aae4; stop-opacity: 4e-2" />
+            <stop offset="0.77" style="stop-color: #00a9e3; stop-opacity: 1e-2" />
             <stop offset="1" style="stop-color: #00a8e3; stop-opacity: 0" />
           </linearGradient>
           <path
@@ -2524,11 +2070,7 @@
           />
         </g>
         <g id="编组备份-8" transform="translate(47.447727, 63.600000)">
-          <g
-            enable-background="new    "
-            filter="url(#filter-106)"
-            opacity="0.3003"
-          >
+          <g enable-background="new    " filter="url(#filter-106)" opacity="0.3003">
             <linearGradient
               id="SVGID_57_"
               gradientTransform="matrix(99.0186 0 0 -57.6674 49956.1875 82510.0469)"
@@ -2573,11 +2115,7 @@
               />
             </g>
             <g filter="url(#filter-109)">
-              <polygon
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-                points="0.2,20.4 35.3,40.6 70.4,20.4 35.3,0.1 					"
-              />
+              <polygon clip-rule="evenodd" fill-rule="evenodd" points="0.2,20.4 35.3,40.6 70.4,20.4 35.3,0.1 					" />
             </g>
           </g>
 
@@ -2593,12 +2131,7 @@
             <stop offset="0" style="stop-color: #7bedff" />
             <stop offset="1" style="stop-color: #060071" />
           </linearGradient>
-          <polygon
-            clip-rule="evenodd"
-            fill="url(#SVGID_58_)"
-            fill-rule="evenodd"
-            points="35.2,81.1 35.2,40.6 0.1,20.4 0.1,60.9 			"
-          />
+          <polygon clip-rule="evenodd" fill="url(#SVGID_58_)" fill-rule="evenodd" points="35.2,81.1 35.2,40.6 0.1,20.4 0.1,60.9 			" />
           <g id="编组-10" transform="translate(4.431004, 28.063025)">
             <g id="编组-8">
               <g id="Shape备份-3" transform="translate(0.000000, -0.000000)">
@@ -2618,34 +2151,14 @@
                     <stop offset="0.8302" style="stop-color: #ffc6a0" />
                     <stop offset="1" style="stop-color: #ffd1a3" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_59_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_59_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_2_"
-                    filterUnits="userSpaceOnUse"
-                    height="10.9"
-                    width="6.3"
-                    x="0"
-                    y="3.6"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_2_" filterUnits="userSpaceOnUse" height="10.9" width="6.3" x="0" y="3.6">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
-                <mask
-                  id="mask-113_1_"
-                  height="10.9"
-                  maskUnits="userSpaceOnUse"
-                  width="6.3"
-                  x="0"
-                  y="3.6"
-                >
+                <mask id="mask-113_1_" height="10.9" maskUnits="userSpaceOnUse" width="6.3" x="0" y="3.6">
                   <g filter="url(#Adobe_OpacityMaskFilter_2_)">
                     <polygon
                       id="path-112_1_"
@@ -2670,11 +2183,7 @@
                   <stop offset="0" style="stop-color: #fb6583" />
                   <stop offset="1" style="stop-color: #ffd1a3" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_60_)"
-                  mask="url(#mask-113_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_60_)" mask="url(#mask-113_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g id="Shape备份-4" transform="translate(9.630049, 5.468450)">
                 <g>
@@ -2694,34 +2203,14 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_61_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_61_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_3_"
-                    filterUnits="userSpaceOnUse"
-                    height="10.9"
-                    width="6.3"
-                    x="0"
-                    y="3.6"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_3_" filterUnits="userSpaceOnUse" height="10.9" width="6.3" x="0" y="3.6">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
-                <mask
-                  id="mask-117_1_"
-                  height="10.9"
-                  maskUnits="userSpaceOnUse"
-                  width="6.3"
-                  x="0"
-                  y="3.6"
-                >
+                <mask id="mask-117_1_" height="10.9" maskUnits="userSpaceOnUse" width="6.3" x="0" y="3.6">
                   <g filter="url(#Adobe_OpacityMaskFilter_3_)">
                     <polygon
                       id="path-116_1_"
@@ -2746,11 +2235,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_62_)"
-                  mask="url(#mask-117_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_62_)" mask="url(#mask-117_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g id="Shape备份-5" transform="translate(19.201017, 11.077510)">
                 <g>
@@ -2770,34 +2255,14 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_63_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_63_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_4_"
-                    filterUnits="userSpaceOnUse"
-                    height="10.9"
-                    width="6.3"
-                    x="0"
-                    y="3.6"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_4_" filterUnits="userSpaceOnUse" height="10.9" width="6.3" x="0" y="3.6">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
-                <mask
-                  id="mask-120_1_"
-                  height="10.9"
-                  maskUnits="userSpaceOnUse"
-                  width="6.3"
-                  x="0"
-                  y="3.6"
-                >
+                <mask id="mask-120_1_" height="10.9" maskUnits="userSpaceOnUse" width="6.3" x="0" y="3.6">
                   <g filter="url(#Adobe_OpacityMaskFilter_4_)">
                     <polygon
                       id="path-119_1_"
@@ -2822,11 +2287,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_64_)"
-                  mask="url(#mask-120_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_64_)" mask="url(#mask-120_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
             </g>
             <g id="编组-8备份" transform="translate(0.000000, 11.077510)">
@@ -2847,34 +2308,14 @@
                     <stop offset="0.8302" style="stop-color: #ffc6a0" />
                     <stop offset="1" style="stop-color: #ffd1a3" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_65_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_65_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_5_"
-                    filterUnits="userSpaceOnUse"
-                    height="10.9"
-                    width="6.3"
-                    x="0"
-                    y="3.6"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_5_" filterUnits="userSpaceOnUse" height="10.9" width="6.3" x="0" y="3.6">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
-                <mask
-                  id="mask-122_1_"
-                  height="10.9"
-                  maskUnits="userSpaceOnUse"
-                  width="6.3"
-                  x="0"
-                  y="3.6"
-                >
+                <mask id="mask-122_1_" height="10.9" maskUnits="userSpaceOnUse" width="6.3" x="0" y="3.6">
                   <g filter="url(#Adobe_OpacityMaskFilter_5_)">
                     <polygon
                       id="path-121_1_"
@@ -2899,11 +2340,7 @@
                   <stop offset="0" style="stop-color: #fb6583" />
                   <stop offset="1" style="stop-color: #ffd1a3" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_66_)"
-                  mask="url(#mask-122_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_66_)" mask="url(#mask-122_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g transform="translate(9.630049, 5.468450)">
                 <g>
@@ -2923,34 +2360,14 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_67_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_67_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_6_"
-                    filterUnits="userSpaceOnUse"
-                    height="10.9"
-                    width="6.3"
-                    x="0"
-                    y="3.6"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_6_" filterUnits="userSpaceOnUse" height="10.9" width="6.3" x="0" y="3.6">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
-                <mask
-                  id="mask-124_1_"
-                  height="10.9"
-                  maskUnits="userSpaceOnUse"
-                  width="6.3"
-                  x="0"
-                  y="3.6"
-                >
+                <mask id="mask-124_1_" height="10.9" maskUnits="userSpaceOnUse" width="6.3" x="0" y="3.6">
                   <g filter="url(#Adobe_OpacityMaskFilter_6_)">
                     <polygon
                       id="path-123_1_"
@@ -2975,11 +2392,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_68_)"
-                  mask="url(#mask-124_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_68_)" mask="url(#mask-124_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g transform="translate(19.201017, 11.077510)">
                 <g>
@@ -2999,34 +2412,14 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_69_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_69_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_7_"
-                    filterUnits="userSpaceOnUse"
-                    height="10.9"
-                    width="6.3"
-                    x="0"
-                    y="3.6"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_7_" filterUnits="userSpaceOnUse" height="10.9" width="6.3" x="0" y="3.6">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
-                <mask
-                  id="mask-126_1_"
-                  height="10.9"
-                  maskUnits="userSpaceOnUse"
-                  width="6.3"
-                  x="0"
-                  y="3.6"
-                >
+                <mask id="mask-126_1_" height="10.9" maskUnits="userSpaceOnUse" width="6.3" x="0" y="3.6">
                   <g filter="url(#Adobe_OpacityMaskFilter_7_)">
                     <polygon
                       id="path-125_1_"
@@ -3051,11 +2444,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_70_)"
-                  mask="url(#mask-126_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_70_)" mask="url(#mask-126_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
             </g>
             <g id="编组-8备份-2" transform="translate(0.000000, 22.155020)">
@@ -3076,34 +2465,14 @@
                     <stop offset="0.8302" style="stop-color: #ffc6a0" />
                     <stop offset="1" style="stop-color: #ffd1a3" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_71_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_71_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_8_"
-                    filterUnits="userSpaceOnUse"
-                    height="10.9"
-                    width="6.3"
-                    x="0"
-                    y="3.6"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_8_" filterUnits="userSpaceOnUse" height="10.9" width="6.3" x="0" y="3.6">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
-                <mask
-                  id="mask-128_1_"
-                  height="10.9"
-                  maskUnits="userSpaceOnUse"
-                  width="6.3"
-                  x="0"
-                  y="3.6"
-                >
+                <mask id="mask-128_1_" height="10.9" maskUnits="userSpaceOnUse" width="6.3" x="0" y="3.6">
                   <g filter="url(#Adobe_OpacityMaskFilter_8_)">
                     <polygon
                       id="path-127_1_"
@@ -3128,11 +2497,7 @@
                   <stop offset="0" style="stop-color: #fb6583" />
                   <stop offset="1" style="stop-color: #ffd1a3" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_72_)"
-                  mask="url(#mask-128_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_72_)" mask="url(#mask-128_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g transform="translate(9.630049, 5.468450)">
                 <g>
@@ -3152,34 +2517,14 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_73_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_73_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_9_"
-                    filterUnits="userSpaceOnUse"
-                    height="10.9"
-                    width="6.3"
-                    x="0"
-                    y="3.6"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_9_" filterUnits="userSpaceOnUse" height="10.9" width="6.3" x="0" y="3.6">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
-                <mask
-                  id="mask-130_1_"
-                  height="10.9"
-                  maskUnits="userSpaceOnUse"
-                  width="6.3"
-                  x="0"
-                  y="3.6"
-                >
+                <mask id="mask-130_1_" height="10.9" maskUnits="userSpaceOnUse" width="6.3" x="0" y="3.6">
                   <g filter="url(#Adobe_OpacityMaskFilter_9_)">
                     <polygon
                       id="path-129_1_"
@@ -3204,11 +2549,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_74_)"
-                  mask="url(#mask-130_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_74_)" mask="url(#mask-130_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g transform="translate(19.201017, 11.077510)">
                 <g>
@@ -3228,34 +2569,14 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_75_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_75_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_10_"
-                    filterUnits="userSpaceOnUse"
-                    height="10.9"
-                    width="6.3"
-                    x="0"
-                    y="3.6"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_10_" filterUnits="userSpaceOnUse" height="10.9" width="6.3" x="0" y="3.6">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
-                <mask
-                  id="mask-132_1_"
-                  height="10.9"
-                  maskUnits="userSpaceOnUse"
-                  width="6.3"
-                  x="0"
-                  y="3.6"
-                >
+                <mask id="mask-132_1_" height="10.9" maskUnits="userSpaceOnUse" width="6.3" x="0" y="3.6">
                   <g filter="url(#Adobe_OpacityMaskFilter_10_)">
                     <polygon
                       id="path-131_1_"
@@ -3280,11 +2601,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_76_)"
-                  mask="url(#mask-132_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_76_)" mask="url(#mask-132_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
             </g>
           </g>
@@ -3309,10 +2626,7 @@
 				"
           />
 
-          <g
-            id="编组-10备份-4"
-            transform="translate(53.703560, 51.063025) scale(-1, 1) translate(-53.703560, -51.063025) translate(40.203560, 28.063025)"
-          >
+          <g id="编组-10备份-4" transform="translate(53.703560, 51.063025) scale(-1, 1) translate(-53.703560, -51.063025) translate(40.203560, 28.063025)">
             <g>
               <g transform="translate(0.000000, -0.000000)">
                 <g>
@@ -3331,20 +2645,11 @@
                     <stop offset="0.8302" style="stop-color: #ffc6a0" />
                     <stop offset="1" style="stop-color: #ffd1a3" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_78_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_78_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_11_"
-                    filterUnits="userSpaceOnUse"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_11_" filterUnits="userSpaceOnUse">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
                 <mask id="mask-135_1_" maskUnits="userSpaceOnUse">
@@ -3372,11 +2677,7 @@
                   <stop offset="0" style="stop-color: #fb6583" />
                   <stop offset="1" style="stop-color: #ffd1a3" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_79_)"
-                  mask="url(#mask-135_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_79_)" mask="url(#mask-135_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g transform="translate(9.630049, 5.468450)">
                 <g>
@@ -3396,20 +2697,11 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_80_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_80_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_12_"
-                    filterUnits="userSpaceOnUse"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_12_" filterUnits="userSpaceOnUse">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
                 <mask id="mask-137_1_" maskUnits="userSpaceOnUse">
@@ -3437,11 +2729,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_81_)"
-                  mask="url(#mask-137_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_81_)" mask="url(#mask-137_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g transform="translate(19.201017, 11.077510)">
                 <g>
@@ -3461,20 +2749,11 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_82_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_82_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_13_"
-                    filterUnits="userSpaceOnUse"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_13_" filterUnits="userSpaceOnUse">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
                 <mask id="mask-139_1_" maskUnits="userSpaceOnUse">
@@ -3502,11 +2781,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_83_)"
-                  mask="url(#mask-139_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_83_)" mask="url(#mask-139_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
             </g>
             <g transform="translate(0.000000, 11.077510)">
@@ -3527,20 +2802,11 @@
                     <stop offset="0.8302" style="stop-color: #ffc6a0" />
                     <stop offset="1" style="stop-color: #ffd1a3" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_84_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_84_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_14_"
-                    filterUnits="userSpaceOnUse"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_14_" filterUnits="userSpaceOnUse">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
                 <mask id="mask-141_1_" maskUnits="userSpaceOnUse">
@@ -3568,11 +2834,7 @@
                   <stop offset="0" style="stop-color: #fb6583" />
                   <stop offset="1" style="stop-color: #ffd1a3" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_85_)"
-                  mask="url(#mask-141_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_85_)" mask="url(#mask-141_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g transform="translate(9.630049, 5.468450)">
                 <g>
@@ -3592,20 +2854,11 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_86_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_86_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_15_"
-                    filterUnits="userSpaceOnUse"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_15_" filterUnits="userSpaceOnUse">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
                 <mask id="mask-143_1_" maskUnits="userSpaceOnUse">
@@ -3633,11 +2886,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_87_)"
-                  mask="url(#mask-143_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_87_)" mask="url(#mask-143_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g transform="translate(19.201017, 11.077510)">
                 <g>
@@ -3657,20 +2906,11 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_88_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_88_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_16_"
-                    filterUnits="userSpaceOnUse"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_16_" filterUnits="userSpaceOnUse">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
                 <mask id="mask-145_1_" maskUnits="userSpaceOnUse">
@@ -3698,11 +2938,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_89_)"
-                  mask="url(#mask-145_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_89_)" mask="url(#mask-145_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
             </g>
             <g transform="translate(0.000000, 22.155020)">
@@ -3723,20 +2959,11 @@
                     <stop offset="0.8302" style="stop-color: #ffc6a0" />
                     <stop offset="1" style="stop-color: #ffd1a3" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_90_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_90_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_17_"
-                    filterUnits="userSpaceOnUse"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_17_" filterUnits="userSpaceOnUse">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
                 <mask id="mask-147_1_" maskUnits="userSpaceOnUse">
@@ -3764,11 +2991,7 @@
                   <stop offset="0" style="stop-color: #fb6583" />
                   <stop offset="1" style="stop-color: #ffd1a3" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_91_)"
-                  mask="url(#mask-147_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_91_)" mask="url(#mask-147_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g transform="translate(9.630049, 5.468450)">
                 <g>
@@ -3788,20 +3011,11 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_92_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_92_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_18_"
-                    filterUnits="userSpaceOnUse"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_18_" filterUnits="userSpaceOnUse">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
                 <mask id="mask-149_1_" maskUnits="userSpaceOnUse">
@@ -3829,11 +3043,7 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_93_)"
-                  mask="url(#mask-149_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_93_)" mask="url(#mask-149_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
               <g transform="translate(19.201017, 11.077510)">
                 <g>
@@ -3853,20 +3063,11 @@
                     <stop offset="0.9102" style="stop-color: #4ff4f3" />
                     <stop offset="1" style="stop-color: #52fff6" />
                   </linearGradient>
-                  <polygon
-                    fill="url(#SVGID_94_)"
-                    points="0,7.3 6.3,10.9 6.3,3.7 0,0 							"
-                  />
+                  <polygon fill="url(#SVGID_94_)" points="0,7.3 6.3,10.9 6.3,3.7 0,0 							" />
                 </g>
                 <defs>
-                  <filter
-                    id="Adobe_OpacityMaskFilter_19_"
-                    filterUnits="userSpaceOnUse"
-                  >
-                    <feColorMatrix
-                      type="matrix"
-                      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                    />
+                  <filter id="Adobe_OpacityMaskFilter_19_" filterUnits="userSpaceOnUse">
+                    <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
                   </filter>
                 </defs>
                 <mask id="mask-151_1_" maskUnits="userSpaceOnUse">
@@ -3894,20 +3095,13 @@
                   <stop offset="0" style="stop-color: #00c4ba" />
                   <stop offset="1" style="stop-color: #52fff6" />
                 </linearGradient>
-                <polygon
-                  fill="url(#SVGID_95_)"
-                  mask="url(#mask-151_1_)"
-                  points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						"
-                />
+                <polygon fill="url(#SVGID_95_)" mask="url(#mask-151_1_)" points="6.3,10.9 0,14.6 0,7.3 6.3,3.6 						" />
               </g>
             </g>
           </g>
         </g>
 
-        <g
-          id="椭圆"
-          transform="translate(83.218192, 86.783330) rotate(5.000000) translate(-83.218192, -86.783330) translate(7.218192, 10.783330)"
-        >
+        <g id="椭圆" transform="translate(83.218192, 86.783330) rotate(5.000000) translate(-83.218192, -86.783330) translate(7.218192, 10.783330)">
           <g id="编组-5" transform="translate(8.161827, 36.521835)">
             <linearGradient
               id="SVGID_96_"
@@ -3918,10 +3112,7 @@
               y1="1473.182"
               y2="1472.182"
             >
-              <stop
-                offset="0"
-                style="stop-color: #5cd7e8; stop-opacity: 0.1893"
-              />
+              <stop offset="0" style="stop-color: #5cd7e8; stop-opacity: 0.1893" />
               <stop offset="1" style="stop-color: #fff" />
             </linearGradient>
 
@@ -3962,9 +3153,7 @@
             />
           </g>
 
-          <g
-            transform="translate(76.180160, 76.074544) rotate(-45.000000) translate(-76.180160, -76.074544) translate(8.680160, 37.074544)"
-          >
+          <g transform="translate(76.180160, 76.074544) rotate(-45.000000) translate(-76.180160, -76.074544) translate(8.680160, 37.074544)">
             <linearGradient
               id="SVGID_97_"
               gradientTransform="matrix(87.4224 55.5937 87.656 11.2551 42330.7227 60598.5664)"
@@ -3974,10 +3163,7 @@
               y1="757.5463"
               y2="756.5463"
             >
-              <stop
-                offset="0"
-                style="stop-color: #5cd7e8; stop-opacity: 0.1893"
-              />
+              <stop offset="0" style="stop-color: #5cd7e8; stop-opacity: 0.1893" />
               <stop offset="1" style="stop-color: #fff" />
             </linearGradient>
 
@@ -4019,10 +3205,7 @@
         </g>
       </g>
 
-      <g
-        id="编组备份-11"
-        transform="translate(694.000000, 158.500000) scale(-1, 1) translate(-694.000000, -158.500000) translate(622.000000, 65.000000)"
-      >
+      <g id="编组备份-11" transform="translate(694.000000, 158.500000) scale(-1, 1) translate(-694.000000, -158.500000) translate(622.000000, 65.000000)">
         <linearGradient
           id="SVGID_98_"
           gradientTransform="matrix(-142.0107 0 0 -186.2829 94193.1797 325470.9375)"
@@ -4107,12 +3290,7 @@
           <stop offset="0" style="stop-color: #fff" />
           <stop offset="1" style="stop-color: #fff; stop-opacity: 0" />
         </linearGradient>
-        <polygon
-          enable-background="new    "
-          fill="url(#SVGID_100_)"
-          opacity="0.4"
-          points="93,31 53,161.5 94.8,137.4 135.2,6 		"
-        />
+        <polygon enable-background="new    " fill="url(#SVGID_100_)" opacity="0.4" points="93,31 53,161.5 94.8,137.4 135.2,6 		" />
 
         <linearGradient
           id="SVGID_101_"
@@ -4154,9 +3332,7 @@
           stroke-width="0.5"
         />
 
-        <g
-          transform="translate(72.980000, 101.800000) scale(-1, 1) translate(-72.980000, -101.800000) translate(13.480000, 28.800000)"
-        >
+        <g transform="translate(72.980000, 101.800000) scale(-1, 1) translate(-72.980000, -101.800000) translate(13.480000, 28.800000)">
           <linearGradient
             id="SVGID_103_"
             gradientTransform="matrix(116.289 0 0 -102.7515 61913.2812 176111.3281)"
@@ -4356,28 +3532,11 @@
               />
             </g>
             <defs>
-              <filter
-                id="Adobe_OpacityMaskFilter_20_"
-                filterUnits="userSpaceOnUse"
-                height="67.1"
-                width="76.3"
-                x="58.3"
-                y="-13.8"
-              >
-                <feColorMatrix
-                  type="matrix"
-                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                />
+              <filter id="Adobe_OpacityMaskFilter_20_" filterUnits="userSpaceOnUse" height="67.1" width="76.3" x="58.3" y="-13.8">
+                <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
               </filter>
             </defs>
-            <mask
-              id="mask-168_1_"
-              height="67.1"
-              maskUnits="userSpaceOnUse"
-              width="76.3"
-              x="58.3"
-              y="-13.8"
-            >
+            <mask id="mask-168_1_" height="67.1" maskUnits="userSpaceOnUse" width="76.3" x="58.3" y="-13.8">
               <g filter="url(#Adobe_OpacityMaskFilter_20_)">
                 <path
                   id="path-167_1_"
@@ -4418,28 +3577,11 @@
               mask="url(#mask-168_1_)"
             />
             <defs>
-              <filter
-                id="Adobe_OpacityMaskFilter_21_"
-                filterUnits="userSpaceOnUse"
-                height="67.1"
-                width="76.3"
-                x="0"
-                y="-13.8"
-              >
-                <feColorMatrix
-                  type="matrix"
-                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                />
+              <filter id="Adobe_OpacityMaskFilter_21_" filterUnits="userSpaceOnUse" height="67.1" width="76.3" x="0" y="-13.8">
+                <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
               </filter>
             </defs>
-            <mask
-              id="mask-168_2_"
-              height="67.1"
-              maskUnits="userSpaceOnUse"
-              width="76.3"
-              x="0"
-              y="-13.8"
-            >
+            <mask id="mask-168_2_" height="67.1" maskUnits="userSpaceOnUse" width="76.3" x="0" y="-13.8">
               <g filter="url(#Adobe_OpacityMaskFilter_21_)">
                 <path
                   id="path-167_2_"
@@ -4479,28 +3621,11 @@
               mask="url(#mask-168_2_)"
             />
             <defs>
-              <filter
-                id="Adobe_OpacityMaskFilter_22_"
-                filterUnits="userSpaceOnUse"
-                height="67.1"
-                width="76.3"
-                x="-12.7"
-                y="35.5"
-              >
-                <feColorMatrix
-                  type="matrix"
-                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-                />
+              <filter id="Adobe_OpacityMaskFilter_22_" filterUnits="userSpaceOnUse" height="67.1" width="76.3" x="-12.7" y="35.5">
+                <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
               </filter>
             </defs>
-            <mask
-              id="mask-168_3_"
-              height="67.1"
-              maskUnits="userSpaceOnUse"
-              width="76.3"
-              x="-12.7"
-              y="35.5"
-            >
+            <mask id="mask-168_3_" height="67.1" maskUnits="userSpaceOnUse" width="76.3" x="-12.7" y="35.5">
               <g filter="url(#Adobe_OpacityMaskFilter_22_)">
                 <path
                   id="path-167_3_"

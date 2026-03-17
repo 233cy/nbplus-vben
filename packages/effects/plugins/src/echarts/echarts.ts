@@ -29,14 +29,7 @@ import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 
 // 通过 ComposeOption 来组合出一个只有必须组件和图表的 Option 类型
-export type ECOption = ComposeOption<
-  | BarSeriesOption
-  | DatasetComponentOption
-  | GridComponentOption
-  | LineSeriesOption
-  | TitleComponentOption
-  | TooltipComponentOption
->;
+export type ECOption = ComposeOption<BarSeriesOption | DatasetComponentOption | GridComponentOption | LineSeriesOption | TitleComponentOption | TooltipComponentOption>;
 
 // 注册必须的组件
 echarts.use([

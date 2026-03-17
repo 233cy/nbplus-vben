@@ -89,12 +89,5 @@ function fetchApi(): Promise<Record<string, any>> {
 }
 </script>
 <template>
-  <ApiComponent
-    :api="fetchApi"
-    :component="Cascader"
-    :immediate="false"
-    children-field="children"
-    loading-slot="suffixIcon"
-    visible-event="onDropdownVisibleChange"
-  />
+  <ApiComponent :api="fetchApi" :component="Cascader" :immediate="false" children-field="children" loading-slot="suffixIcon" visible-event="onDropdownVisibleChange" />
 </template>

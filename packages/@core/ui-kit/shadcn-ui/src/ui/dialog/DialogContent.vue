@@ -34,29 +34,16 @@ const props = withDefaults(
     showClose: true,
   },
 );
-const emits = defineEmits<
-  DialogContentEmits & { close: []; closed: []; opened: [] }
->();
+const emits = defineEmits<DialogContentEmits & { close: []; closed: []; opened: [] }>();
 
 const delegatedProps = computed(() => {
-  const {
-    class: _,
-    modal: _modal,
-    open: _open,
-    showClose: __,
-    animationType: ___,
-    ...delegated
-  } = props;
+  const { class: _, modal: _modal, open: _open, showClose: __, animationType: ___, ...delegated } = props;
 
   return delegated;
 });
 
 function isAppendToBody() {
-  return (
-    props.appendTo === 'body' ||
-    props.appendTo === document.body ||
-    !props.appendTo
-  );
+  return props.appendTo === 'body' || props.appendTo === document.body || !props.appendTo;
 }
 
 const position = computed(() => {
@@ -89,8 +76,7 @@ defineExpose({
         :style="{
           ...(zIndex ? { zIndex } : {}),
           position,
-          backdropFilter:
-            overlayBlur && overlayBlur > 0 ? `blur(${overlayBlur}px)` : 'none',
+          backdropFilter: overlayBlur && overlayBlur > 0 ? `blur(${overlayBlur}px)` : 'none',
         }"
         @click="() => emits('close')"
       />
@@ -104,8 +90,7 @@ defineExpose({
         cn(
           'z-popup w-full bg-background p-6 shadow-lg outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-xl',
           {
-            'data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-top-[48%]':
-              animationType === 'slide',
+            'data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-top-[48%]': animationType === 'slide',
           },
           props.class,
         )

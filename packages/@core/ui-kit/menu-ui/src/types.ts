@@ -134,12 +134,4 @@ interface SubMenuProvider {
   removeSubMenu: (item: MenuItemRegistered) => void;
 }
 
-export type {
-  MenuItemClicked,
-  MenuItemProps,
-  MenuItemRegistered,
-  MenuProps,
-  MenuProvider,
-  SubMenuProps,
-  SubMenuProvider,
-};
+export type { MenuItemClicked, MenuItemProps, MenuItemRegistered, MenuProps, MenuProvider, SubMenuProps, SubMenuProvider };

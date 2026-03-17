@@ -5,106 +5,53 @@
 
 /* eslint-disable vue/one-component-per-file */
 
-import type {
-  UploadChangeParam,
-  UploadFile,
-  UploadProps,
-} from 'ant-design-vue';
+import type { UploadChangeParam, UploadFile, UploadProps } from 'ant-design-vue';
 
 import type { Component, Ref } from 'vue';
 
 import type { BaseFormComponentType } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
-import {
-  computed,
-  defineAsyncComponent,
-  defineComponent,
-  h,
-  ref,
-  render,
-  unref,
-  watch,
-} from 'vue';
+import { computed, defineAsyncComponent, defineComponent, h, ref, render, unref, watch } from 'vue';
 
-import {
-  ApiComponent,
-  globalShareState,
-  IconPicker,
-  VCropper,
-} from '@vben/common-ui';
+import { ApiComponent, globalShareState, IconPicker, VCropper } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { isEmpty } from '@vben/utils';
 
 import { message, Modal, notification } from 'ant-design-vue';
 
-const AutoComplete = defineAsyncComponent(
-  () => import('ant-design-vue/es/auto-complete'),
-);
+const AutoComplete = defineAsyncComponent(() => import('ant-design-vue/es/auto-complete'));
 const Button = defineAsyncComponent(() => import('ant-design-vue/es/button'));
-const Checkbox = defineAsyncComponent(
-  () => import('ant-design-vue/es/checkbox'),
-);
-const CheckboxGroup = defineAsyncComponent(() =>
-  import('ant-design-vue/es/checkbox').then((res) => res.CheckboxGroup),
-);
-const DatePicker = defineAsyncComponent(
-  () => import('ant-design-vue/es/date-picker'),
-);
+const Checkbox = defineAsyncComponent(() => import('ant-design-vue/es/checkbox'));
+const CheckboxGroup = defineAsyncComponent(() => import('ant-design-vue/es/checkbox').then((res) => res.CheckboxGroup));
+const DatePicker = defineAsyncComponent(() => import('ant-design-vue/es/date-picker'));
 const Divider = defineAsyncComponent(() => import('ant-design-vue/es/divider'));
 const Input = defineAsyncComponent(() => import('ant-design-vue/es/input'));
-const InputNumber = defineAsyncComponent(
-  () => import('ant-design-vue/es/input-number'),
-);
-const InputPassword = defineAsyncComponent(() =>
-  import('ant-design-vue/es/input').then((res) => res.InputPassword),
-);
-const Mentions = defineAsyncComponent(
-  () => import('ant-design-vue/es/mentions'),
-);
+const InputNumber = defineAsyncComponent(() => import('ant-design-vue/es/input-number'));
+const InputPassword = defineAsyncComponent(() => import('ant-design-vue/es/input').then((res) => res.InputPassword));
+const Mentions = defineAsyncComponent(() => import('ant-design-vue/es/mentions'));
 const Radio = defineAsyncComponent(() => import('ant-design-vue/es/radio'));
-const RadioGroup = defineAsyncComponent(() =>
-  import('ant-design-vue/es/radio').then((res) => res.RadioGroup),
-);
-const RangePicker = defineAsyncComponent(() =>
-  import('ant-design-vue/es/date-picker').then((res) => res.RangePicker),
-);
+const RadioGroup = defineAsyncComponent(() => import('ant-design-vue/es/radio').then((res) => res.RadioGroup));
+const RangePicker = defineAsyncComponent(() => import('ant-design-vue/es/date-picker').then((res) => res.RangePicker));
 const Rate = defineAsyncComponent(() => import('ant-design-vue/es/rate'));
 const Select = defineAsyncComponent(() => import('ant-design-vue/es/select'));
 const Space = defineAsyncComponent(() => import('ant-design-vue/es/space'));
 const Switch = defineAsyncComponent(() => import('ant-design-vue/es/switch'));
-const Textarea = defineAsyncComponent(() =>
-  import('ant-design-vue/es/input').then((res) => res.Textarea),
-);
-const TimePicker = defineAsyncComponent(
-  () => import('ant-design-vue/es/time-picker'),
-);
-const TreeSelect = defineAsyncComponent(
-  () => import('ant-design-vue/es/tree-select'),
-);
-const Cascader = defineAsyncComponent(
-  () => import('ant-design-vue/es/cascader'),
-);
+const Textarea = defineAsyncComponent(() => import('ant-design-vue/es/input').then((res) => res.Textarea));
+const TimePicker = defineAsyncComponent(() => import('ant-design-vue/es/time-picker'));
+const TreeSelect = defineAsyncComponent(() => import('ant-design-vue/es/tree-select'));
+const Cascader = defineAsyncComponent(() => import('ant-design-vue/es/cascader'));
 const Upload = defineAsyncComponent(() => import('ant-design-vue/es/upload'));
 const Image = defineAsyncComponent(() => import('ant-design-vue/es/image'));
-const PreviewGroup = defineAsyncComponent(() =>
-  import('ant-design-vue/es/image').then((res) => res.ImagePreviewGroup),
-);
+const PreviewGroup = defineAsyncComponent(() => import('ant-design-vue/es/image').then((res) => res.ImagePreviewGroup));
 
-const withDefaultPlaceholder = <T extends Component>(
-  component: T,
-  type: 'input' | 'select',
-  componentProps: Recordable<any> = {},
-) => {
+const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select', componentProps: Recordable<any> = {}) => {
   return defineComponent({
     name: component.name,
     inheritAttrs: false,
     setup: (props: any, { attrs, expose, slots }) => {
-      const placeholder =
-        props?.placeholder ||
-        attrs?.placeholder ||
-        $t(`ui.placeholder.${type}`);
+      const placeholder = props?.placeholder || attrs?.placeholder || $t(`ui.placeholder.${type}`);
       // 透传组件暴露的方法
       const innerRef = ref();
       expose(
@@ -116,12 +63,7 @@ const withDefaultPlaceholder = <T extends Component>(
           },
         ),
       );
-      return () =>
-        h(
-          component,
-          { ...componentProps, placeholder, ...props, ...attrs, ref: innerRef },
-          slots,
-        );
+      return () => h(component, { ...componentProps, placeholder, ...props, ...attrs, ref: innerRef }, slots);
     },
   });
 };
@@ -129,15 +71,7 @@ const withDefaultPlaceholder = <T extends Component>(
 const withPreviewUpload = () => {
   // 检查是否为图片文件的辅助函数
   const isImageFile = (file: UploadFile): boolean => {
-    const imageExtensions = new Set([
-      'bmp',
-      'gif',
-      'jpeg',
-      'jpg',
-      'png',
-      'svg',
-      'webp',
-    ]);
+    const imageExtensions = new Set(['bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg', 'webp']);
     if (file.url) {
       try {
         const pathname = new URL(file.url, 'http://localhost').pathname;
@@ -155,10 +89,7 @@ const withPreviewUpload = () => {
     return file.type.startsWith('image/');
   };
   // 创建默认的上传按钮插槽
-  const createDefaultSlotsWithUpload = (
-    listType: string,
-    placeholder: string,
-  ) => {
+  const createDefaultSlotsWithUpload = (listType: string, placeholder: string) => {
     switch (listType) {
       case 'picture-card': {
         return {
@@ -183,11 +114,7 @@ const withPreviewUpload = () => {
     }
   };
   // 构建预览图片组
-  const previewImage = async (
-    file: UploadFile,
-    visible: Ref<boolean>,
-    fileList: Ref<UploadProps['fileList']>,
-  ) => {
+  const previewImage = async (file: UploadFile, visible: Ref<boolean>, fileList: Ref<UploadProps['fileList']>) => {
     // 如果当前文件不是图片，直接打开
     if (!isImageFile(file)) {
       if (file.url) {
@@ -201,10 +128,7 @@ const withPreviewUpload = () => {
     }
 
     // 对于图片文件，继续使用预览组
-    const [ImageComponent, PreviewGroupComponent] = await Promise.all([
-      Image,
-      PreviewGroup,
-    ]);
+    const [ImageComponent, PreviewGroupComponent] = await Promise.all([Image, PreviewGroup]);
 
     const getBase64 = (file: File) => {
       return new Promise((resolve, reject) => {
@@ -215,9 +139,7 @@ const withPreviewUpload = () => {
       });
     };
     // 从fileList中过滤出所有图片文件
-    const imageFiles = (unref(fileList) || []).filter((element) =>
-      isImageFile(element),
-    );
+    const imageFiles = (unref(fileList) || []).filter((element) => isImageFile(element));
 
     // 为所有没有预览地址的图片生成预览
     for (const imgFile of imageFiles) {
@@ -370,41 +292,26 @@ const withPreviewUpload = () => {
   return defineComponent({
     name: Upload.name,
     emits: ['update:modelValue'],
-    setup: (
-      props: any,
-      { attrs, slots, emit }: { attrs: any; emit: any; slots: any },
-    ) => {
+    setup: (props: any, { attrs, slots, emit }: { attrs: any; emit: any; slots: any }) => {
       const previewVisible = ref<boolean>(false);
 
       const placeholder = attrs?.placeholder || $t(`ui.placeholder.upload`);
 
       const listType = attrs?.listType || attrs?.['list-type'] || 'text';
 
-      const fileList = ref<UploadProps['fileList']>(
-        attrs?.fileList || attrs?.['file-list'] || [],
-      );
+      const fileList = ref<UploadProps['fileList']>(attrs?.fileList || attrs?.['file-list'] || []);
 
       const maxSize = computed(() => attrs?.maxSize ?? attrs?.['max-size']);
-      const aspectRatio = computed(
-        () => attrs?.aspectRatio ?? attrs?.['aspect-ratio'],
-      );
+      const aspectRatio = computed(() => attrs?.aspectRatio ?? attrs?.['aspect-ratio']);
 
-      const handleBeforeUpload = async (
-        file: UploadFile,
-        originFileList: Array<File>,
-      ) => {
+      const handleBeforeUpload = async (file: UploadFile, originFileList: Array<File>) => {
         if (maxSize.value && (file.size || 0) / 1024 / 1024 > maxSize.value) {
           message.error($t('ui.formRules.sizeLimit', [maxSize.value]));
           file.status = 'removed';
           return false;
         }
         // 多选或者非图片不唤起裁剪框
-        if (
-          attrs.crop &&
-          !attrs.multiple &&
-          originFileList[0] &&
-          isImageFile(file)
-        ) {
+        if (attrs.crop && !attrs.multiple && originFileList[0] && isImageFile(file)) {
           file.status = 'removed';
           // antd Upload组件问题 file参数获取的是UploadFile类型对象无法取到File类型 所以通过originFileList[0]获取
           const blob = await cropImage(originFileList[0], aspectRatio.value);
@@ -429,13 +336,8 @@ const withPreviewUpload = () => {
           // Avoid breaking internal v-model sync on user handler errors
           console.error(error);
         }
-        fileList.value = event.fileList.filter(
-          (file) => file.status !== 'removed',
-        );
-        emit(
-          'update:modelValue',
-          event.fileList?.length ? fileList.value : undefined,
-        );
+        fileList.value = event.fileList.filter((file) => file.status !== 'removed');
+        emit('update:modelValue', event.fileList?.length ? fileList.value : undefined);
       };
 
       const handlePreview = async (file: UploadFile) => {
@@ -452,9 +354,7 @@ const withPreviewUpload = () => {
         }
 
         // 否则渲染默认上传按钮
-        return isEmpty(slots)
-          ? createDefaultSlotsWithUpload(listType, placeholder)
-          : slots;
+        return isEmpty(slots) ? createDefaultSlotsWithUpload(listType, placeholder) : slots;
       };
 
       // 可以监听到表单API设置的值

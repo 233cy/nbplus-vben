@@ -3,21 +3,12 @@ import type { HeadConfig } from 'vitepress';
 
 import { resolve } from 'node:path';
 
-import {
-  viteArchiverPlugin,
-  viteVxeTableImportsPlugin,
-} from '@vben/vite-config';
+import { viteArchiverPlugin, viteVxeTableImportsPlugin } from '@vben/vite-config';
 
-import {
-  GitChangelog,
-  GitChangelogMarkdownSection,
-} from '@nolebase/vitepress-plugin-git-changelog/vite';
+import { GitChangelog, GitChangelogMarkdownSection } from '@nolebase/vitepress-plugin-git-changelog/vite';
 import tailwind from 'tailwindcss';
 import { defineConfig, postcssIsolateStyles } from 'vitepress';
-import {
-  groupIconMdPlugin,
-  groupIconVitePlugin,
-} from 'vitepress-plugin-group-icons';
+import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons';
 
 import { demoPreviewPlugin } from './plugins/demo-preview';
 import { search as zhSearch } from './zh.mts';
@@ -45,9 +36,7 @@ export const shared = defineConfig({
       provider: 'local',
     },
     siteTitle: 'Vben Admin',
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/vbenjs/vue-vben-admin' },
-    ],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/vbenjs/vue-vben-admin' }],
   },
   title: 'Vben Admin',
   vite: {
@@ -57,10 +46,7 @@ export const shared = defineConfig({
     },
     css: {
       postcss: {
-        plugins: [
-          tailwind(),
-          postcssIsolateStyles({ includeFiles: [/vp-doc\.css/] }),
-        ],
+        plugins: [tailwind(), postcssIsolateStyles({ includeFiles: [/vp-doc\.css/] })],
       },
       preprocessorOptions: {
         scss: {
@@ -123,8 +109,7 @@ function head(): HeadConfig[] {
     [
       'meta',
       {
-        content:
-          'width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no',
+        content: 'width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no',
         name: 'viewport',
       },
     ],
@@ -143,8 +128,7 @@ function pwa(): PwaOptions {
   return {
     includeManifestIcons: false,
     manifest: {
-      description:
-        'Vben Admin is a modern admin dashboard template based on Vue 3. ',
+      description: 'Vben Admin is a modern admin dashboard template based on Vue 3. ',
       icons: [
         {
           sizes: '192x192',

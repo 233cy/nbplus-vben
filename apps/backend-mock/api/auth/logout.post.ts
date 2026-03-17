@@ -1,8 +1,5 @@
 import { defineEventHandler } from 'h3';
-import {
-  clearRefreshTokenCookie,
-  getRefreshTokenFromCookie,
-} from '~/utils/cookie-utils';
+import { clearRefreshTokenCookie, getRefreshTokenFromCookie } from '~/utils/cookie-utils';
 import { useResponseSuccess } from '~/utils/response';
 
 export default defineEventHandler(async (event) => {

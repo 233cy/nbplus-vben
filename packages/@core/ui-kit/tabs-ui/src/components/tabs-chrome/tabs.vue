@@ -59,13 +59,7 @@ const tabsView = computed(() => {
 });
 
 function onMouseDown(e: MouseEvent, tab: TabConfig) {
-  if (
-    e.button === 1 &&
-    tab.closable &&
-    !tab.affixTab &&
-    tabsView.value.length > 1 &&
-    props.middleClickToClose
-  ) {
+  if (e.button === 1 && tab.closable && !tab.affixTab && tabsView.value.length > 1 && props.middleClickToClose) {
     e.preventDefault();
     e.stopPropagation();
     emit('close', tab.key);
@@ -74,12 +68,7 @@ function onMouseDown(e: MouseEvent, tab: TabConfig) {
 </script>
 
 <template>
-  <div
-    ref="contentRef"
-    :class="contentClass"
-    :style="style"
-    class="tabs-chrome !flex h-full w-max overflow-y-hidden pr-6"
-  >
+  <div ref="contentRef" :class="contentClass" :style="style" class="tabs-chrome !flex h-full w-max overflow-y-hidden pr-6">
     <TransitionGroup name="slide-left">
       <div
         v-for="(tab, i) in tabsView"
@@ -99,12 +88,7 @@ function onMouseDown(e: MouseEvent, tab: TabConfig) {
         @click="active = tab.key"
         @mousedown="onMouseDown($event, tab)"
       >
-        <VbenContextMenu
-          :handler-data="tab"
-          :menus="contextMenus"
-          :modal="false"
-          item-class="pr-6"
-        >
+        <VbenContextMenu :handler-data="tab" :menus="contextMenus" :modal="false" item-class="pr-6">
           <div class="relative size-full px-1">
             <!-- divider -->
             <div
@@ -112,9 +96,7 @@ function onMouseDown(e: MouseEvent, tab: TabConfig) {
               class="tabs-chrome__divider absolute left-[var(--gap)] top-1/2 z-0 h-4 w-[1px] translate-y-[-50%] bg-border transition-all"
             ></div>
             <!-- background -->
-            <div
-              class="tabs-chrome__background absolute z-[-1] size-full px-[calc(var(--gap)-1px)] py-0 transition-opacity duration-150"
-            >
+            <div class="tabs-chrome__background absolute z-[-1] size-full px-[calc(var(--gap)-1px)] py-0 transition-opacity duration-150">
               <div
                 class="tabs-chrome__background-content h-full rounded-tl-[var(--gap)] rounded-tr-[var(--gap)] duration-150 group-[.is-active]:bg-primary/15 dark:group-[.is-active]:bg-accent"
               ></div>
@@ -135,9 +117,7 @@ function onMouseDown(e: MouseEvent, tab: TabConfig) {
             </div>
 
             <!-- extra -->
-            <div
-              class="tabs-chrome__extra absolute right-[var(--gap)] top-1/2 z-[3] size-4 translate-y-[-50%]"
-            >
+            <div class="tabs-chrome__extra absolute right-[var(--gap)] top-1/2 z-[3] size-4 translate-y-[-50%]">
               <!-- close-icon -->
               <X
                 v-show="!tab.affixTab && tabsView.length > 1 && tab.closable"
@@ -155,11 +135,7 @@ function onMouseDown(e: MouseEvent, tab: TabConfig) {
             <div
               class="tabs-chrome__item-main z-[2] mx-[calc(var(--gap)*2)] my-0 flex h-full items-center overflow-hidden rounded-tl-[5px] rounded-tr-[5px] pl-2 pr-4 text-accent-foreground duration-150 group-[.is-active]:text-primary dark:group-[.is-active]:text-accent-foreground"
             >
-              <VbenIcon
-                v-if="showIcon"
-                :icon="tab.icon"
-                class="mr-1 flex size-4 items-center overflow-hidden"
-              />
+              <VbenIcon v-if="showIcon" :icon="tab.icon" class="mr-1 flex size-4 items-center overflow-hidden" />
 
               <span class="flex-1 overflow-hidden whitespace-nowrap text-sm">
                 {{ tab.title }}

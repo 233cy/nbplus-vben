@@ -13,13 +13,9 @@ const themeProviderProps = computed(() => ({
   theme: preferences.theme.mode === 'light' ? lightTheme : darkTheme,
 }));
 
-export const { dialog, loadingBar, message, modal, notification } =
-  createDiscreteApi(
-    ['message', 'dialog', 'notification', 'loadingBar', 'modal'],
-    {
-      configProviderProps: themeProviderProps,
-      loadingBarProviderProps: themeOverridesProviderProps,
-      messageProviderProps: themeOverridesProviderProps,
-      notificationProviderProps: themeOverridesProviderProps,
-    },
-  );
+export const { dialog, loadingBar, message, modal, notification } = createDiscreteApi(['message', 'dialog', 'notification', 'loadingBar', 'modal'], {
+  configProviderProps: themeProviderProps,
+  loadingBarProviderProps: themeOverridesProviderProps,
+  messageProviderProps: themeOverridesProviderProps,
+  notificationProviderProps: themeOverridesProviderProps,
+});

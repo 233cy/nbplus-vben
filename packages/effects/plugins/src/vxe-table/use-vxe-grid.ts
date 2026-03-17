@@ -14,15 +14,10 @@ import { VxeGridApi } from './api';
 import VxeGrid from './use-vxe-grid.vue';
 
 type FilteredSlots<T> = {
-  [K in keyof VxeGridSlots<T> as K extends 'form'
-    ? never
-    : K]: VxeGridSlots<T>[K];
+  [K in keyof VxeGridSlots<T> as K extends 'form' ? never : K]: VxeGridSlots<T>[K];
 };
 
-export function useVbenVxeGrid<
-  T extends Record<string, any> = any,
-  D extends BaseFormComponentType = BaseFormComponentType,
->(options: VxeGridProps<T, D>) {
+export function useVbenVxeGrid<T extends Record<string, any> = any, D extends BaseFormComponentType = BaseFormComponentType>(options: VxeGridProps<T, D>) {
   // const IS_REACTIVE = isReactive(options);
   const api = new VxeGridApi(options);
   const extendedApi: ExtendedVxeGridApi<T, D> = api as ExtendedVxeGridApi<T, D>;

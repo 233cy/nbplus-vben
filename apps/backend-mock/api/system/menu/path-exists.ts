@@ -22,8 +22,5 @@ export default eventHandler(async (event) => {
   }
   const { id, path } = getQuery(event);
 
-  return (path as string) in pathMap &&
-    (!id || pathMap[path as string] !== String(id))
-    ? useResponseSuccess(true)
-    : useResponseSuccess(false);
+  return (path as string) in pathMap && (!id || pathMap[path as string] !== String(id)) ? useResponseSuccess(true) : useResponseSuccess(false);
 });

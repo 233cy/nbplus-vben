@@ -2,13 +2,9 @@
  * 更新 CSS 变量的函数
  * @param variables 要更新的 CSS 变量与其新值的映射
  */
-function updateCSSVariables(
-  variables: { [key: string]: string },
-  id = '__vben-styles__',
-): void {
+function updateCSSVariables(variables: { [key: string]: string }, id = '__vben-styles__'): void {
   // 获取或创建内联样式表元素
-  const styleElement =
-    document.querySelector(`#${id}`) || document.createElement('style');
+  const styleElement = document.querySelector(`#${id}`) || document.createElement('style');
 
   styleElement.id = id;
 

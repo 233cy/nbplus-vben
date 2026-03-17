@@ -273,7 +273,7 @@ onMounted(async () => {
 
     <div
       v-else
-      class="hover:text-regular hover:border-border-strong border-border bg-card text-primary rounded-md border px-3 py-2 transition-all hover:bg-gray-100 dark:bg-gray-800 hover:dark:bg-gray-900"
+      class="hover:text-regular hover:border-border-strong rounded-md border border-border bg-card px-3 py-2 text-primary transition-all hover:bg-gray-100 dark:bg-gray-800 hover:dark:bg-gray-900"
     >
       <!-- 已选项展示 -->
       <div v-if="selectedMap.size > 0">
@@ -307,7 +307,7 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div v-else class="text-primary text-sm dark:text-gray-400">
+      <div v-else class="text-sm text-primary dark:text-gray-400">
         {{ $t('page.noSelectData') }}
       </div>
     </div>
@@ -337,7 +337,7 @@ onMounted(async () => {
       <!-- 弹窗内部 Tags -->
       <div
         v-if="tempSelectedMap.size > 0"
-        class="hover:text-regular hover:border-border-strong border-border bg-card text-primary rounded-md border px-3 py-1 transition-all hover:bg-gray-100 dark:bg-gray-800 hover:dark:bg-gray-900"
+        class="hover:text-regular hover:border-border-strong rounded-md border border-border bg-card px-3 py-1 text-primary transition-all hover:bg-gray-100 dark:bg-gray-800 hover:dark:bg-gray-900"
       >
         <div class="mb-1 mt-2 text-sm text-gray-500 dark:text-gray-400">
           {{ $t('page.itemsSelect', { count: tempSelectedMap.size }) }}

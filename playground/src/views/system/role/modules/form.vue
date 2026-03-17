@@ -83,9 +83,7 @@ async function loadPermissions() {
 }
 
 const getDrawerTitle = computed(() => {
-  return formData.value?.id
-    ? $t('common.edit', $t('system.role.name'))
-    : $t('common.create', $t('system.role.name'));
+  return formData.value?.id ? $t('common.edit', $t('system.role.name')) : $t('common.create', $t('system.role.name'));
 });
 
 function getNodeClass(node: Recordable<any>) {

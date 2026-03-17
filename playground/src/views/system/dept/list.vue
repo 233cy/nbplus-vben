@@ -1,8 +1,5 @@
 <script lang="ts" setup>
-import type {
-  OnActionClickParams,
-  VxeTableGridOptions,
-} from '#/adapter/vxe-table';
+import type { OnActionClickParams, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemDeptApi } from '#/api/system/dept';
 
 import { Page, useVbenModal } from '@vben/common-ui';
@@ -71,10 +68,7 @@ function onDelete(row: SystemDeptApi.SystemDept) {
 /**
  * 表格操作按钮的回调函数
  */
-function onActionClick({
-  code,
-  row,
-}: OnActionClickParams<SystemDeptApi.SystemDept>) {
+function onActionClick({ code, row }: OnActionClickParams<SystemDeptApi.SystemDept>) {
   switch (code) {
     case 'append': {
       onAppend(row);

@@ -138,9 +138,7 @@ describe('preferences', () => {
       navigation: { styleType: 'flat' },
     } as any);
 
-    expect(preferenceManager.getPreferences().navigation.styleType).toBe(
-      'flat',
-    );
+    expect(preferenceManager.getPreferences().navigation.styleType).toBe('flat');
   });
 
   it('resets preferences to default correctly', () => {
@@ -246,8 +244,6 @@ describe('isDarkTheme', () => {
     }));
 
     expect(isDarkTheme('auto')).toBe(true);
-    expect(window.matchMedia).toHaveBeenCalledWith(
-      '(prefers-color-scheme: dark)',
-    );
+    expect(window.matchMedia).toHaveBeenCalledWith('(prefers-color-scheme: dark)');
   });
 });

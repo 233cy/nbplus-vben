@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import type {
-  DropdownMenuCheckboxItemEmits,
-  DropdownMenuCheckboxItemProps,
-} from 'reka-ui';
+import type { DropdownMenuCheckboxItemEmits, DropdownMenuCheckboxItemProps } from 'reka-ui';
 
 import { computed } from 'vue';
 
 import { cn } from '@vben-core/shared/utils';
 
 import { Check } from 'lucide-vue-next';
-import {
-  DropdownMenuCheckboxItem,
-  DropdownMenuItemIndicator,
-  useForwardPropsEmits,
-} from 'reka-ui';
+import { DropdownMenuCheckboxItem, DropdownMenuItemIndicator, useForwardPropsEmits } from 'reka-ui';
 
 const props = defineProps<DropdownMenuCheckboxItemProps & { class?: any }>();
 const emits = defineEmits<DropdownMenuCheckboxItemEmits>();

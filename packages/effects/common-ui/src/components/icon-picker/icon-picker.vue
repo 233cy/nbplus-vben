@@ -88,11 +88,7 @@ watchDebounced(
 const currentList = computed(() => {
   try {
     if (props.prefix) {
-      if (
-        props.prefix !== 'svg' &&
-        props.autoFetchApi &&
-        props.icons.length === 0
-      ) {
+      if (props.prefix !== 'svg' && props.autoFetchApi && props.icons.length === 0) {
         return innerIcons.value;
       }
       const icons = listIcons('', props.prefix);
@@ -110,15 +106,10 @@ const currentList = computed(() => {
 });
 
 const showList = computed(() => {
-  return currentList.value.filter((item) =>
-    item.includes(keywordDebounce.value),
-  );
+  return currentList.value.filter((item) => item.includes(keywordDebounce.value));
 });
 
-const { paginationList, total, setCurrentPage, currentPage } = usePagination(
-  showList,
-  props.pageSize,
-);
+const { paginationList, total, setCurrentPage, currentPage } = usePagination(showList, props.pageSize);
 
 watchEffect(() => {
   currentSelect.value = modelValue.value;
@@ -180,12 +171,7 @@ const getBindAttrs = computed(() => {
 defineExpose({ toggleOpenState, open, close });
 </script>
 <template>
-  <VbenPopover
-    v-model:open="visible"
-    :content-props="{ align: 'end', alignOffset: -11, sideOffset: 8 }"
-    content-class="p-0 pt-3 w-full"
-    trigger-class="w-full"
-  >
+  <VbenPopover v-model:open="visible" :content-props="{ align: 'end', alignOffset: -11, sideOffset: 8 }" content-class="p-0 pt-3 w-full" trigger-class="w-full">
     <template #trigger>
       <template v-if="props.type === 'input'">
         <component
@@ -200,11 +186,7 @@ defineExpose({ toggleOpenState, open, close });
           v-bind="getBindAttrs"
         >
           <template #[iconSlot]>
-            <VbenIcon
-              :icon="currentSelect || Grip"
-              class="size-4"
-              aria-hidden="true"
-            />
+            <VbenIcon :icon="currentSelect || Grip" class="size-4" aria-hidden="true" />
           </template>
         </component>
         <div class="relative w-full" v-else>
@@ -217,43 +199,19 @@ defineExpose({ toggleOpenState, open, close });
             :aria-label="$t('ui.iconPicker.placeholder')"
             aria-expanded="visible"
           />
-          <VbenIcon
-            :icon="currentSelect || Grip"
-            class="absolute right-1 top-1 size-6"
-            aria-hidden="true"
-          />
+          <VbenIcon :icon="currentSelect || Grip" class="absolute right-1 top-1 size-6" aria-hidden="true" />
         </div>
       </template>
-      <VbenIcon
-        :icon="currentSelect || Grip"
-        v-else
-        class="size-4"
-        v-bind="$attrs"
-      />
+      <VbenIcon :icon="currentSelect || Grip" v-else class="size-4" v-bind="$attrs" />
     </template>
     <div class="mb-2 flex w-full">
-      <component
-        v-if="inputComponent"
-        :is="inputComponent"
-        v-bind="searchInputProps"
-      />
-      <Input
-        v-else
-        class="mx-2 h-8 w-full"
-        :placeholder="$t('ui.iconPicker.search')"
-        v-model="keyword"
-      />
+      <component v-if="inputComponent" :is="inputComponent" v-bind="searchInputProps" />
+      <Input v-else class="mx-2 h-8 w-full" :placeholder="$t('ui.iconPicker.search')" v-model="keyword" />
     </div>
 
     <template v-if="paginationList.length > 0">
       <div class="grid max-h-[360px] w-full grid-cols-6 justify-items-center">
-        <VbenIconButton
-          v-for="(item, index) in paginationList"
-          :key="index"
-          :tooltip="item"
-          tooltip-side="top"
-          @click="handleClick(item)"
-        >
+        <VbenIconButton v-for="(item, index) in paginationList" :key="index" :tooltip="item" tooltip-side="top" @click="handleClick(item)">
           <VbenIcon
             :class="{
               'text-primary transition-all': currentSelect === item,
@@ -262,44 +220,18 @@ defineExpose({ toggleOpenState, open, close });
           />
         </VbenIconButton>
       </div>
-      <div
-        v-if="total >= pageSize"
-        class="flex-center flex justify-end overflow-hidden border-t py-2 pr-3"
-      >
-        <Pagination
-          :items-per-page="36"
-          :sibling-count="1"
-          :total="total"
-          show-edges
-          size="small"
-          @update:page="handlePageChange"
-        >
-          <PaginationList
-            v-slot="{ items }"
-            class="flex w-full items-center gap-1"
-          >
+      <div v-if="total >= pageSize" class="flex-center flex justify-end overflow-hidden border-t py-2 pr-3">
+        <Pagination :items-per-page="36" :sibling-count="1" :total="total" show-edges size="small" @update:page="handlePageChange">
+          <PaginationList v-slot="{ items }" class="flex w-full items-center gap-1">
             <PaginationFirst class="size-5" />
             <PaginationPrev class="size-5" />
             <template v-for="(item, index) in items">
-              <PaginationListItem
-                v-if="item.type === 'page'"
-                :key="index"
-                :value="item.value"
-                as-child
-              >
-                <Button
-                  :variant="item.value === currentPage ? 'default' : 'outline'"
-                  class="size-5 p-0 text-sm"
-                >
+              <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
+                <Button :variant="item.value === currentPage ? 'default' : 'outline'" class="size-5 p-0 text-sm">
                   {{ item.value }}
                 </Button>
               </PaginationListItem>
-              <PaginationEllipsis
-                v-else
-                :key="item.type"
-                :index="index"
-                class="size-5"
-              />
+              <PaginationEllipsis v-else :key="item.type" :index="index" class="size-5" />
             </template>
             <PaginationNext class="size-5" />
             <PaginationLast class="size-5" />

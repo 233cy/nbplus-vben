@@ -3,11 +3,7 @@ import type { AboutProps, DescriptionItem } from './about';
 
 import { h } from 'vue';
 
-import {
-  VBEN_DOC_URL,
-  VBEN_GITHUB_URL,
-  VBEN_PREVIEW_URL,
-} from '@vben/constants';
+import { VBEN_DOC_URL, VBEN_GITHUB_URL, VBEN_PREVIEW_URL } from '@vben/constants';
 
 import { VbenRenderContent } from '@vben-core/shadcn-ui';
 
@@ -42,12 +38,7 @@ declare global {
   };
 }
 
-const renderLink = (href: string, text: string) =>
-  h(
-    'a',
-    { href, target: '_blank', class: 'vben-link' },
-    { default: () => text },
-  );
+const renderLink = (href: string, text: string) => h('a', { href, target: '_blank', class: 'vben-link' }, { default: () => text });
 
 const {
   authorEmail,
@@ -92,10 +83,7 @@ const vbenDescriptionItems: DescriptionItem[] = [
     title: 'Github',
   },
   {
-    content: h('div', [
-      renderLink(authorUrl, `${authorName}  `),
-      renderLink(`mailto:${authorEmail}`, authorEmail),
-    ]),
+    content: h('div', [renderLink(authorUrl, `${authorName}  `), renderLink(`mailto:${authorEmail}`, authorEmail)]),
     title: '作者',
   },
 ];

@@ -17,10 +17,7 @@ export namespace SystemRoleApi {
  * 获取角色列表数据
  */
 async function getRoleList(params: Recordable<any>) {
-  return requestClient.get<Array<SystemRoleApi.SystemRole>>(
-    '/system/role/list',
-    { params },
-  );
+  return requestClient.get<Array<SystemRoleApi.SystemRole>>('/system/role/list', { params });
 }
 
 /**
@@ -37,10 +34,7 @@ async function createRole(data: Omit<SystemRoleApi.SystemRole, 'id'>) {
  * @param id 角色 ID
  * @param data 角色数据
  */
-async function updateRole(
-  id: string,
-  data: Omit<SystemRoleApi.SystemRole, 'id'>,
-) {
+async function updateRole(id: string, data: Omit<SystemRoleApi.SystemRole, 'id'>) {
   return requestClient.put(`/system/role/${id}`, data);
 }
 

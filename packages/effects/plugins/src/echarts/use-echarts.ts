@@ -10,13 +10,7 @@ import { computed, nextTick, watch } from 'vue';
 
 import { usePreferences } from '@vben/preferences';
 
-import {
-  tryOnUnmounted,
-  useDebounceFn,
-  useResizeObserver,
-  useTimeoutFn,
-  useWindowSize,
-} from '@vueuse/core';
+import { tryOnUnmounted, useDebounceFn, useResizeObserver, useTimeoutFn, useWindowSize } from '@vueuse/core';
 
 import echarts from './echarts';
 
@@ -67,10 +61,7 @@ function useEcharts(chartRef: Ref<EchartsUIType>) {
     return chartInstance;
   };
 
-  const renderEcharts = (
-    options: EChartsOption,
-    clear = true,
-  ): Promise<Nullable<echarts.ECharts>> => {
+  const renderEcharts = (options: EChartsOption, clear = true): Promise<Nullable<echarts.ECharts>> => {
     cacheOptions = options;
     const currentOptions = {
       ...options,

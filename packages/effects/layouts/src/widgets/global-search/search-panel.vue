@@ -17,20 +17,14 @@ defineOptions({
   name: 'SearchPanel',
 });
 
-const props = withDefaults(
-  defineProps<{ keyword?: string; menus?: MenuRecordRaw[] }>(),
-  {
-    keyword: '',
-    menus: () => [],
-  },
-);
+const props = withDefaults(defineProps<{ keyword?: string; menus?: MenuRecordRaw[] }>(), {
+  keyword: '',
+  menus: () => [],
+});
 const emit = defineEmits<{ close: [] }>();
 
 const router = useRouter();
-const searchHistory = useLocalStorage<MenuRecordRaw[]>(
-  `__search-history-${location.hostname}__`,
-  [],
-);
+const searchHistory = useLocalStorage<MenuRecordRaw[]>(`__search-history-${location.hostname}__`, []);
 const activeIndex = ref(-1);
 const searchItems = shallowRef<MenuRecordRaw[]>([]);
 const searchResults = ref<MenuRecordRaw[]>([]);
@@ -77,9 +71,7 @@ function search(searchKey: string) {
 // When the keyboard up and down keys move to an invisible place
 // the scroll bar needs to scroll automatically
 function scrollIntoView() {
-  const element = document.querySelector(
-    `[data-search-item="${activeIndex.value}"]`,
-  );
+  const element = document.querySelector(`[data-search-item="${activeIndex.value}"]`);
 
   if (element) {
     element.scrollIntoView({ block: 'nearest' });
@@ -156,22 +148,7 @@ function removeItem(index: number) {
 }
 
 // 存储所有需要转义的特殊字符
-const code = new Set([
-  '$',
-  '(',
-  ')',
-  '*',
-  '+',
-  '.',
-  '?',
-  '[',
-  '\\',
-  ']',
-  '^',
-  '{',
-  '|',
-  '}',
-]);
+const code = new Set(['$', '(', ')', '*', '+', '.', '?', '[', '\\', ']', '^', '{', '|', '}']);
 
 // 转换函数，用于转义特殊字符
 function transform(c: string) {
@@ -225,60 +202,38 @@ onMounted(() => {
   <VbenScrollbar>
     <div class="!flex h-full justify-center px-2 sm:max-h-[450px]">
       <!-- 无搜索结果 -->
-      <div
-        v-if="keyword && searchResults.length === 0"
-        class="text-muted-foreground text-center"
-      >
+      <div v-if="keyword && searchResults.length === 0" class="text-muted-foreground text-center">
         <SearchX class="mx-auto mt-4 size-12" />
         <p class="mb-10 mt-6 text-xs">
           {{ $t('ui.widgets.search.noResults') }}
-          <span class="text-foreground text-sm font-medium">
-            "{{ keyword }}"
-          </span>
+          <span class="text-foreground text-sm font-medium"> "{{ keyword }}" </span>
         </p>
       </div>
       <!-- 历史搜索记录 & 没有搜索结果 -->
-      <div
-        v-if="!keyword && searchResults.length === 0"
-        class="text-muted-foreground text-center"
-      >
+      <div v-if="!keyword && searchResults.length === 0" class="text-muted-foreground text-center">
         <p class="my-10 text-xs">
           {{ $t('ui.widgets.search.noRecent') }}
         </p>
       </div>
 
       <ul v-show="searchResults.length > 0" class="w-full">
-        <li
-          v-if="searchHistory.length > 0 && !keyword"
-          class="text-muted-foreground mb-2 text-xs"
-        >
+        <li v-if="searchHistory.length > 0 && !keyword" class="text-muted-foreground mb-2 text-xs">
           {{ $t('ui.widgets.search.recent') }}
         </li>
         <li
           v-for="(item, index) in uniqueByField(searchResults, 'path')"
           :key="item.path"
-          :class="
-            activeIndex === index
-              ? 'active bg-primary text-primary-foreground'
-              : ''
-          "
+          :class="activeIndex === index ? 'active bg-primary text-primary-foreground' : ''"
           :data-index="index"
           :data-search-item="index"
           class="bg-accent flex-center group mb-3 w-full cursor-pointer rounded-lg px-4 py-4"
           @click="handleEnter"
           @mouseenter="handleMouseenter"
         >
-          <VbenIcon
-            :icon="item.icon"
-            class="mr-2 size-5 flex-shrink-0"
-            fallback
-          />
+          <VbenIcon :icon="item.icon" class="mr-2 size-5 flex-shrink-0" fallback />
 
           <span class="flex-1">{{ item.name }}</span>
-          <div
-            class="flex-center dark:hover:bg-accent hover:text-primary-foreground rounded-full p-1 hover:scale-110"
-            @click.stop="removeItem(index)"
-          >
+          <div class="flex-center dark:hover:bg-accent hover:text-primary-foreground rounded-full p-1 hover:scale-110" @click.stop="removeItem(index)">
             <X class="size-4" />
           </div>
         </li>

@@ -33,8 +33,7 @@ const breadcrumbs = computed((): IBreadcrumb[] => {
 
   for (const match of matched) {
     const { meta, path } = match;
-    const { hideChildrenInMenu, hideInBreadcrumb, icon, name, title } =
-      meta || {};
+    const { hideChildrenInMenu, hideInBreadcrumb, icon, name, title } = meta || {};
     if (hideInBreadcrumb || hideChildrenInMenu || !path) {
       continue;
     }
@@ -64,11 +63,5 @@ function handleSelect(path: string) {
 }
 </script>
 <template>
-  <VbenBreadcrumbView
-    :breadcrumbs="breadcrumbs"
-    :show-icon="showIcon"
-    :style-type="type"
-    class="ml-2"
-    @select="handleSelect"
-  />
+  <VbenBreadcrumbView :breadcrumbs="breadcrumbs" :show-icon="showIcon" :style-type="type" class="ml-2" @select="handleSelect" />
 </template>

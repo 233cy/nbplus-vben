@@ -16,14 +16,7 @@ defineProps<{ triggerClass?: string }>();
   <Tooltip :delay-duration="300" side="right">
     <template #trigger>
       <slot name="trigger">
-        <CircleHelp
-          :class="
-            cn(
-              'inline-flex size-5 cursor-pointer text-foreground/80 hover:text-foreground',
-              triggerClass,
-            )
-          "
-        />
+        <CircleHelp :class="cn('inline-flex size-5 cursor-pointer text-foreground/80 hover:text-foreground', triggerClass)" />
       </slot>
     </template>
     <slot></slot>

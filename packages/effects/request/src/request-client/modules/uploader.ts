@@ -10,11 +10,7 @@ class FileUploader {
     this.client = client;
   }
 
-  public async upload<T = any>(
-    url: string,
-    data: Record<string, any> & { file: Blob | File },
-    config?: RequestClientConfig,
-  ): Promise<T> {
+  public async upload<T = any>(url: string, data: Record<string, any> & { file: Blob | File }, config?: RequestClientConfig): Promise<T> {
     const formData = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {

@@ -8,9 +8,7 @@ import { Card, Radio, RadioGroup } from 'ant-design-vue';
 import { getParamsData } from '#/api/examples/params';
 
 const params = { ids: [2512, 3241, 4255] };
-const paramsSerializer = ref<'brackets' | 'comma' | 'indices' | 'repeat'>(
-  'brackets',
-);
+const paramsSerializer = ref<'brackets' | 'comma' | 'indices' | 'repeat'>('brackets');
 const response = ref('');
 const paramsStr = computed(() => {
   // 写一段代码，从完整的URL中提取参数部分
@@ -25,10 +23,7 @@ watchEffect(() => {
 });
 </script>
 <template>
-  <Page
-    title="请求参数序列化"
-    description="不同的后台接口可能对数组类型的GET参数的解析方式不同，我们预置了几种数组序列化方式，通过配置 paramsSerializer 来实现不同的序列化方式"
-  >
+  <Page title="请求参数序列化" description="不同的后台接口可能对数组类型的GET参数的解析方式不同，我们预置了几种数组序列化方式，通过配置 paramsSerializer 来实现不同的序列化方式">
     <Card>
       <RadioGroup v-model:value="paramsSerializer" name="paramsSerializer">
         <Radio value="brackets">brackets</Radio>

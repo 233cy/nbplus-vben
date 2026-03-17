@@ -34,11 +34,7 @@ const appEnableCheckUpdates = defineModel<boolean>('appEnableCheckUpdates');
   >
     {{ $t('preferences.watermark') }}
   </SwitchItem>
-  <InputItem
-    v-if="appWatermark"
-    v-model="appWatermarkContent"
-    :placeholder="$t('preferences.watermarkContent')"
-  >
+  <InputItem v-if="appWatermark" v-model="appWatermarkContent" :placeholder="$t('preferences.watermarkContent')">
     {{ $t('preferences.watermarkContent') }}
   </InputItem>
   <SwitchItem v-model="appEnableCheckUpdates">

@@ -1,13 +1,6 @@
 export default {
   extends: ['stylelint-config-standard', 'stylelint-config-recess-order'],
-  ignoreFiles: [
-    '**/*.js',
-    '**/*.jsx',
-    '**/*.tsx',
-    '**/*.ts',
-    '**/*.json',
-    '**/*.md',
-  ],
+  ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts', '**/*.json', '**/*.md'],
   overrides: [
     {
       customSyntax: 'postcss-html',
@@ -29,19 +22,11 @@ export default {
     },
     {
       customSyntax: 'postcss-scss',
-      extends: [
-        'stylelint-config-recommended-scss',
-        'stylelint-config-recommended-vue/scss',
-      ],
+      extends: ['stylelint-config-recommended-scss', 'stylelint-config-recommended-vue/scss'],
       files: ['*.scss', '**/*.scss'],
     },
   ],
-  plugins: [
-    'stylelint-order',
-    '@stylistic/stylelint-plugin',
-    'stylelint-prettier',
-    'stylelint-scss',
-  ],
+  plugins: ['stylelint-order', '@stylistic/stylelint-plugin', 'stylelint-prettier', 'stylelint-scss'],
   rules: {
     'at-rule-no-deprecated': null,
     'at-rule-no-unknown': [

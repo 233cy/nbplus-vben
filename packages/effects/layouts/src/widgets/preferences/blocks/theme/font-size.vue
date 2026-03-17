@@ -3,13 +3,7 @@ import { watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import {
-  NumberField,
-  NumberFieldContent,
-  NumberFieldDecrement,
-  NumberFieldIncrement,
-  NumberFieldInput,
-} from '@vben-core/shadcn-ui';
+import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@vben-core/shadcn-ui';
 
 defineOptions({
   name: 'PreferenceFontSize',
@@ -40,13 +34,7 @@ watch(
 <template>
   <div class="flex w-full flex-col gap-4">
     <div class="flex items-center gap-2">
-      <NumberField
-        v-model="modelValue"
-        :max="max"
-        :min="min"
-        :step="step"
-        class="w-full"
-      >
+      <NumberField v-model="modelValue" :max="max" :min="min" :step="step" class="w-full">
         <NumberFieldContent>
           <NumberFieldDecrement />
           <NumberFieldInput />

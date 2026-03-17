@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { getCurrentInstance, nextTick, onMounted, reactive, ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
+import { useThrottleFn } from '@vueuse/core';
+
 import { reqCheck, reqGet } from '#/api/core/captcha';
 
 import { aesEncrypt } from './../utils/ase';
@@ -102,25 +106,21 @@ const init = () => {
 /**
  * 获取图片验证码
  */
-const getPicture = async () => {
+const getPicture = useThrottleFn(async () => {
   isLoad.value = true;
   try {
     const res = await reqGet({ captchaType: props.captchaType });
-    if (res.repCode === '0000') {
-      pointBackImgBase.value = res.repData.originalImageBase64;
-      backToken.value = res.repData.token;
-      secretKey.value = res.repData.secretKey;
-      poinTextList.value = res.repData.wordList;
-      text.value = `请依次点击【${poinTextList.value.join(',')}】`;
-    } else {
-      text.value = res.repMsg;
-    }
+    pointBackImgBase.value = res.originalImageBase64;
+    backToken.value = res.token;
+    secretKey.value = res.secretKey;
+    poinTextList.value = res.wordList;
+    text.value = $t('page.captcha.pointClickOrder', { text: poinTextList.value.join(',') });
   } catch {
-    text.value = '加载失败，请重试';
+    text.value = $t('page.captcha.loadFailed');
   } finally {
     isLoad.value = false;
   }
-};
+}, 1000);
 
 /**
  * 点击 Canvas 处理
@@ -153,6 +153,7 @@ const getMousePos = (e: MouseEvent): Point => {
  * 验证逻辑
  */
 const verify = () => {
+  isLoad.value = true;
   // 转换坐标比例
   const points = pointTransform(checkPosArr.value, setSize);
   checkPosArr.value = points; // 更新为转换后的坐标
@@ -169,13 +170,13 @@ const verify = () => {
       token: backToken.value,
     };
 
-    reqCheck(data).then((res) => {
-      if (res.repCode === '0000') {
+    reqCheck(data)
+      .then(() => {
         handleSuccess(captchaVerification);
-      } else {
+      })
+      .catch(() => {
         handleError();
-      }
-    });
+      });
   }, 400);
 };
 
@@ -185,7 +186,7 @@ const verify = () => {
 const handleSuccess = (captchaVerification: string) => {
   barAreaColor.value = '#4cae4c';
   barAreaBorderColor.value = '#5cb85c';
-  text.value = '验证成功';
+  text.value = $t('page.captcha.verifySuccess');
   bindingClick.value = false;
   showRefresh.value = false;
 
@@ -205,7 +206,7 @@ const handleError = () => {
   emit('error', proxy);
   barAreaColor.value = '#d9534f';
   barAreaBorderColor.value = '#d9534f';
-  text.value = '验证失败';
+  text.value = $t('page.captcha.verifyFailed');
 
   setTimeout(() => {
     refresh();
@@ -222,7 +223,7 @@ const refresh = () => {
   barAreaBorderColor.value = '#ddd';
   bindingClick.value = true;
   showRefresh.value = true;
-  text.value = '请重试';
+  text.value = $t('page.captcha.pleaseRetry');
   getPicture();
 };
 
@@ -317,7 +318,7 @@ defineExpose({
         }"
       >
         <span v-if="text" class="verify-msg">{{ text }}</span>
-        <span v-else class="verify-msg">加载中</span>
+        <span v-else class="verify-msg">{{ $t('page.captcha.loading') }}</span>
       </div>
     </a-spin>
   </div>

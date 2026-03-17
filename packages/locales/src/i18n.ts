@@ -1,12 +1,7 @@
 import type { App } from 'vue';
 import type { Locale } from 'vue-i18n';
 
-import type {
-  ImportLocaleFn,
-  LoadMessageFn,
-  LocaleSetupOptions,
-  SupportedLanguagesType,
-} from './typing';
+import type { ImportLocaleFn, LoadMessageFn, LocaleSetupOptions, SupportedLanguagesType } from './typing';
 
 import { unref } from 'vue';
 import { createI18n } from 'vue-i18n';
@@ -24,10 +19,7 @@ const modules = import.meta.glob('./langs/**/*.json');
 
 const { setSimpleLocale } = useSimpleLocale();
 
-const localesMap = loadLocalesMapFromDir(
-  /\.\/langs\/([^/]+)\/(.*)\.json$/,
-  modules,
-);
+const localesMap = loadLocalesMapFromDir(/\.\/langs\/([^/]+)\/(.*)\.json$/, modules);
 let loadMessages: LoadMessageFn;
 
 /**
@@ -52,10 +44,7 @@ function loadLocalesMap(modules: Record<string, () => Promise<unknown>>) {
  * @param modules - The modules object containing paths and import functions
  * @returns A map of locales to their corresponding import functions
  */
-function loadLocalesMapFromDir(
-  regexp: RegExp,
-  modules: Record<string, () => Promise<unknown>>,
-): Record<Locale, ImportLocaleFn> {
+function loadLocalesMapFromDir(regexp: RegExp, modules: Record<string, () => Promise<unknown>>): Record<Locale, ImportLocaleFn> {
   const localesRaw: Record<Locale, Record<string, () => Promise<unknown>>> = {};
   const localesMap: Record<Locale, ImportLocaleFn> = {};
 
@@ -109,9 +98,7 @@ async function setupI18n(app: App, options: LocaleSetupOptions = {}) {
   // 在控制台打印警告
   i18n.global.setMissingHandler((locale, key) => {
     if (options.missingWarn && key.includes('.')) {
-      console.warn(
-        `[intlify] Not found '${key}' key in '${locale}' locale messages.`,
-      );
+      console.warn(`[intlify] Not found '${key}' key in '${locale}' locale messages.`);
     }
   });
 }
@@ -138,10 +125,4 @@ async function loadLocaleMessages(lang: SupportedLanguagesType) {
   return setI18nLanguage(lang);
 }
 
-export {
-  i18n,
-  loadLocaleMessages,
-  loadLocalesMap,
-  loadLocalesMapFromDir,
-  setupI18n,
-};
+export { i18n, loadLocaleMessages, loadLocalesMap, loadLocalesMapFromDir, setupI18n };

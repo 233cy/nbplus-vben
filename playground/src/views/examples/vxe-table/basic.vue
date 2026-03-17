@@ -97,15 +97,9 @@ function changeLoading() {
         <Button class="mr-2" type="primary">左侧插槽</Button>
       </template> -->
       <template #toolbar-tools>
-        <Button class="mr-2" type="primary" @click="changeBorder">
-          {{ showBorder ? '隐藏' : '显示' }}边框
-        </Button>
-        <Button class="mr-2" type="primary" @click="changeLoading">
-          显示loading
-        </Button>
-        <Button type="primary" @click="changeStripe">
-          {{ showStripe ? '隐藏' : '显示' }}斑马纹
-        </Button>
+        <Button class="mr-2" type="primary" @click="changeBorder"> {{ showBorder ? '隐藏' : '显示' }}边框 </Button>
+        <Button class="mr-2" type="primary" @click="changeLoading"> 显示loading </Button>
+        <Button type="primary" @click="changeStripe"> {{ showStripe ? '隐藏' : '显示' }}斑马纹 </Button>
       </template>
     </Grid>
   </Page>

@@ -10,8 +10,7 @@ export default eventHandler(async (event) => {
     return unAuthorizedResponse(event);
   }
   const body = await readBody<{ timezone?: unknown }>(event);
-  const timezone =
-    typeof body?.timezone === 'string' ? body.timezone : undefined;
+  const timezone = typeof body?.timezone === 'string' ? body.timezone : undefined;
   const allowed = TIME_ZONE_OPTIONS.some((o) => o.timezone === timezone);
   if (!timezone || !allowed) {
     setResponseStatus(event, 400);

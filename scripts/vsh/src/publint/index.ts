@@ -3,27 +3,12 @@ import type { Result } from 'publint';
 
 import { basename, dirname, join } from 'node:path';
 
-import {
-  colors,
-  consola,
-  ensureFile,
-  findMonorepoRoot,
-  generatorContentHash,
-  getPackages,
-  outputJSON,
-  readJSON,
-  UNICODE,
-} from '@vben/node-utils';
+import { colors, consola, ensureFile, findMonorepoRoot, generatorContentHash, getPackages, outputJSON, readJSON, UNICODE } from '@vben/node-utils';
 
 import { publint } from 'publint';
 import { formatMessage } from 'publint/utils';
 
-const CACHE_FILE = join(
-  'node_modules',
-  '.cache',
-  'publint',
-  '.pkglintcache.json',
-);
+const CACHE_FILE = join('node_modules', '.cache', 'publint', '.pkglintcache.json');
 
 interface PubLintCommandOptions {
   /**
@@ -155,19 +140,13 @@ function printResult(
         // No default
       }
       const ruleUrl = `https://publint.dev/rules#${message.code.toLocaleLowerCase()}`;
-      consola.log(
-        `  ${formatMessage(message, pkgJson)}${colors.dim(` ${ruleUrl}`)}`,
-      );
+      consola.log(`  ${formatMessage(message, pkgJson)}${colors.dim(` ${ruleUrl}`)}`);
     }
   }
 
   const totalCount = warningCount + errorCount + suggestionsCount;
   if (totalCount > 0) {
-    consola.error(
-      colors.red(
-        `${UNICODE.FAILURE} ${totalCount} problem (${errorCount} errors, ${warningCount} warnings, ${suggestionsCount} suggestions)`,
-      ),
-    );
+    consola.error(colors.red(`${UNICODE.FAILURE} ${totalCount} problem (${errorCount} errors, ${warningCount} warnings, ${suggestionsCount} suggestions)`));
     !check && process.exit(1);
   } else {
     consola.log(colors.green(`${UNICODE.SUCCESS} No problem`));

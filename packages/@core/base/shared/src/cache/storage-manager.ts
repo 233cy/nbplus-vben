@@ -14,15 +14,9 @@ class StorageManager {
   private prefix: string;
   private storage: Storage;
 
-  constructor({
-    prefix = '',
-    storageType = 'localStorage',
-  }: StorageManagerOptions = {}) {
+  constructor({ prefix = '', storageType = 'localStorage' }: StorageManagerOptions = {}) {
     this.prefix = prefix;
-    this.storage =
-      storageType === 'localStorage'
-        ? window.localStorage
-        : window.sessionStorage;
+    this.storage = storageType === 'localStorage' ? window.localStorage : window.sessionStorage;
   }
 
   /**

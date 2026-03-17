@@ -177,8 +177,7 @@ export const MOCK_API_DATA = [
     category: 'Computers',
     color: 'purple',
     currency: 'NAD',
-    description:
-      'Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support',
+    description: 'Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-day comfort and support',
     id: '45a613df-227a-4907-a89f-4a7f1252ca0c',
     imageUrl: 'https://avatars.githubusercontent.com/u/62715097',
     imageUrl2: 'https://avatars.githubusercontent.com/u/75395683',
@@ -198,8 +197,7 @@ export const MOCK_API_DATA = [
     category: 'Toys',
     color: 'green',
     currency: 'CZK',
-    description:
-      'The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J',
+    description: 'The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J',
     id: 'd02e5ee9-bc98-4de2-98fa-25a6567ecc19',
     imageUrl: 'https://avatars.githubusercontent.com/u/51512330',
     imageUrl2: 'https://avatars.githubusercontent.com/u/58698113',
@@ -219,8 +217,7 @@ export const MOCK_API_DATA = [
     category: 'Beauty',
     color: 'teal',
     currency: 'OMR',
-    description:
-      'The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design',
+    description: 'The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design',
     id: '2b72521c-225c-4e64-8030-611b76b10b37',
     imageUrl: 'https://avatars.githubusercontent.com/u/50300075',
     imageUrl2: 'https://avatars.githubusercontent.com/u/36541691',
@@ -240,8 +237,7 @@ export const MOCK_API_DATA = [
     category: 'Games',
     color: 'silver',
     currency: 'SOS',
-    description:
-      'Carbonite web goalkeeper gloves are ergonomically designed to give easy fit',
+    description: 'Carbonite web goalkeeper gloves are ergonomically designed to give easy fit',
     id: 'bafab694-3801-452c-b102-9eb519bd1143',
     imageUrl: 'https://avatars.githubusercontent.com/u/89827115',
     imageUrl2: 'https://avatars.githubusercontent.com/u/55952747',
@@ -261,8 +257,7 @@ export const MOCK_API_DATA = [
     category: 'Toys',
     color: 'indigo',
     currency: 'BIF',
-    description:
-      'Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals',
+    description: 'Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of shoes & sandals',
     id: 'bf6dea6b-2a55-441d-8773-937e03d99389',
     imageUrl: 'https://avatars.githubusercontent.com/u/21431092',
     imageUrl2: 'https://avatars.githubusercontent.com/u/3771350',
@@ -282,8 +277,7 @@ export const MOCK_API_DATA = [
     category: 'Tools',
     color: 'violet',
     currency: 'TZS',
-    description:
-      'New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016',
+    description: 'New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016',
     id: '135ba6ab-32ee-4989-8189-5cfa658ef970',
     imageUrl: 'https://avatars.githubusercontent.com/u/29946092',
     imageUrl2: 'https://avatars.githubusercontent.com/u/23842994',
@@ -323,8 +317,7 @@ export const MOCK_API_DATA = [
     category: 'Garden',
     color: 'plum',
     currency: 'LRD',
-    description:
-      'The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality',
+    description: 'The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED Back-lighting for smart functionality',
     id: '3ea24798-6589-40cc-85f0-ab78752244a0',
     imageUrl: 'https://avatars.githubusercontent.com/u/23165285',
     imageUrl2: 'https://avatars.githubusercontent.com/u/14595665',
@@ -344,8 +337,7 @@ export const MOCK_API_DATA = [
     category: 'Industrial',
     color: 'salmon',
     currency: 'AUD',
-    description:
-      'The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design',
+    description: 'The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design',
     id: '997113dd-f6e4-4acc-9790-ef554c7498d1',
     imageUrl: 'https://avatars.githubusercontent.com/u/49021914',
     imageUrl2: 'https://avatars.githubusercontent.com/u/4690621',
@@ -365,8 +357,7 @@ export const MOCK_API_DATA = [
     category: 'Tools',
     color: 'sky blue',
     currency: 'NOK',
-    description:
-      'The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J',
+    description: 'The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started with the 1984 ABC800J',
     id: 'f697a250-6cb2-46c8-b0f7-871ab1f2fa8d',
     imageUrl: 'https://avatars.githubusercontent.com/u/95928385',
     imageUrl2: 'https://avatars.githubusercontent.com/u/47588244',

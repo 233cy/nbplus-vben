@@ -44,11 +44,7 @@ const cropImage = async () => {
   if (!cropperRef.value) return;
   cropLoading.value = true;
   try {
-    cropperImg.value = await cropperRef.value.getCropImage(
-      'image/jpeg',
-      0.92,
-      'base64',
-    );
+    cropperImg.value = await cropperRef.value.getCropImage('image/jpeg', 0.92, 'base64');
   } catch (error) {
     console.error('图片裁剪失败:', error);
   } finally {
@@ -69,55 +65,28 @@ const downloadImage = () => {
 };
 </script>
 <template>
-  <Page
-    title="VCropper 图片裁剪"
-    description="VCropper是一个图片裁剪组件，提供基础的图片裁剪功能。"
-  >
+  <Page title="VCropper 图片裁剪" description="VCropper是一个图片裁剪组件，提供基础的图片裁剪功能。">
     <Card>
       <div class="image-cropper-container">
         <div class="cropper-ratio-display">
           <label class="ratio-label">当前裁剪比例：</label>
-          <Select
-            class="w-24"
-            v-model:value="validAspectRatio"
-            :options="options"
-          />
-          <Upload
-            :max-count="1"
-            :show-upload-list="false"
-            :before-upload="() => false"
-            @change="selectImgFile"
-          >
+          <Select class="w-24" v-model:value="validAspectRatio" :options="options" />
+          <Upload :max-count="1" :show-upload-list="false" :before-upload="() => false" @change="selectImgFile">
             <Button>上传图片</Button>
           </Upload>
         </div>
 
         <div v-if="imgUrl" class="cropper-main-wrapper">
-          <VCropper
-            ref="cropperRef"
-            :img="imgUrl"
-            :aspect-ratio="validAspectRatio"
-            :width="600"
-            :height="600"
-          />
+          <VCropper ref="cropperRef" :img="imgUrl" :aspect-ratio="validAspectRatio" :width="600" :height="600" />
 
           <!-- 操作按钮组 -->
           <div class="cropper-btn-group">
-            <Button :loading="cropLoading" @click="cropImage" type="primary">
-              裁剪
-            </Button>
-            <Button v-if="cropperImg" @click="downloadImage" danger>
-              下载图片
-            </Button>
+            <Button :loading="cropLoading" @click="cropImage" type="primary"> 裁剪 </Button>
+            <Button v-if="cropperImg" @click="downloadImage" danger> 下载图片 </Button>
           </div>
 
           <!-- 裁剪预览 -->
-          <img
-            v-if="cropperImg"
-            class="h-full w-80"
-            :src="cropperImg"
-            alt="裁剪预览"
-          />
+          <img v-if="cropperImg" class="h-full w-80" :src="cropperImg" alt="裁剪预览" />
         </div>
       </div>
     </Card>

@@ -75,9 +75,7 @@ export function useModalDraggable(
 
       if (targetRef.value) {
         const isCentered = centered?.value;
-        targetRef.value.style.transform = isCentered
-          ? `translate(${moveX}px, calc(-50% + ${moveY}px))`
-          : `translate(${moveX}px, ${moveY}px)`;
+        targetRef.value.style.transform = isCentered ? `translate(${moveX}px, calc(-50% + ${moveY}px))` : `translate(${moveX}px, ${moveY}px)`;
         dragging.value = true;
       }
     };

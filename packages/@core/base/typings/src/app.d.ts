@@ -1,11 +1,4 @@
-type LayoutType =
-  | 'full-content'
-  | 'header-mixed-nav'
-  | 'header-nav'
-  | 'header-sidebar-nav'
-  | 'mixed-nav'
-  | 'sidebar-mixed-nav'
-  | 'sidebar-nav';
+type LayoutType = 'full-content' | 'header-mixed-nav' | 'header-nav' | 'header-sidebar-nav' | 'mixed-nav' | 'sidebar-mixed-nav' | 'sidebar-nav';
 
 type ThemeModeType = 'auto' | 'dark' | 'light';
 

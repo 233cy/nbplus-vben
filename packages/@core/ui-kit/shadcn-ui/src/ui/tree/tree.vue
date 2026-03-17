@@ -52,10 +52,7 @@ function flatten<T = Recordable<any>, P = number | string>(
       value: item,
     };
     result.push(val);
-    if (val.hasChildren)
-      result.push(
-        ...flatten(children, childrenField, level + 1, id, [...parents, id]),
-      );
+    if (val.hasChildren) result.push(...flatten(children, childrenField, level + 1, id, [...parents, id]));
   });
   return result;
 }
@@ -76,10 +73,7 @@ onMounted(() => {
     const currentTreeData = JSON.stringify(props.treeData);
     if (lastTreeData !== currentTreeData) {
       lastTreeData = currentTreeData;
-      if (
-        props.defaultExpandedLevel !== undefined &&
-        props.defaultExpandedLevel > 0
-      ) {
+      if (props.defaultExpandedLevel !== undefined && props.defaultExpandedLevel > 0) {
         expandToLevel(props.defaultExpandedLevel);
       }
     }
@@ -87,9 +81,7 @@ onMounted(() => {
 });
 
 function getItemByValue(value: number | string) {
-  return flattenData.value.find(
-    (item) => get(item.value, props.valueField) === value,
-  )?.value;
+  return flattenData.value.find((item) => get(item.value, props.valueField) === value)?.value;
 }
 
 function updateTreeValue() {
@@ -159,9 +151,7 @@ function expandNodes(value: Arrayable<number | string>) {
 }
 
 function expandAll() {
-  expanded.value = flattenData.value
-    .filter((item) => item.hasChildren)
-    .map((item) => get(item.value, props.valueField));
+  expanded.value = flattenData.value.filter((item) => item.hasChildren).map((item) => get(item.value, props.valueField));
 }
 
 function collapseAll() {
@@ -170,13 +160,7 @@ function collapseAll() {
 
 function checkAll() {
   if (!props.multiple) return;
-  modelValue.value = [
-    ...new Set(
-      flattenData.value
-        .filter((item) => !get(item.value, props.disabledField))
-        .map((item) => get(item.value, props.valueField)),
-    ),
-  ];
+  modelValue.value = [...new Set(flattenData.value.filter((item) => !get(item.value, props.disabledField)).map((item) => get(item.value, props.valueField)))];
   updateTreeValue();
 }
 
@@ -198,17 +182,10 @@ function onSelect(item: FlattenedItem<Recordable<any>>, isSelected: boolean) {
     return;
   }
 
-  if (
-    !props.checkStrictly &&
-    props.multiple &&
-    props.autoCheckParent &&
-    isSelected
-  ) {
+  if (!props.checkStrictly && props.multiple && props.autoCheckParent && isSelected) {
     flattenData.value
       .find((i) => {
-        return (
-          get(i.value, props.valueField) === get(item.value, props.valueField)
-        );
+        return get(i.value, props.valueField) === get(item.value, props.valueField);
       })
       ?.parents?.filter((item) => !get(item, props.disabledField))
       ?.forEach((p) => {
@@ -217,35 +194,19 @@ function onSelect(item: FlattenedItem<Recordable<any>>, isSelected: boolean) {
         }
       });
   }
-  if (
-    !props.checkStrictly &&
-    props.multiple &&
-    props.autoCheckParent &&
-    !isSelected
-  ) {
+  if (!props.checkStrictly && props.multiple && props.autoCheckParent && !isSelected) {
     flattenData.value
       .find((i) => {
-        return (
-          get(i.value, props.valueField) === get(item.value, props.valueField)
-        );
+        return get(i.value, props.valueField) === get(item.value, props.valueField);
       })
       ?.parents?.filter((item) => !get(item, props.disabledField))
       ?.toReversed()
       .forEach((p) => {
         const children = flattenData.value.filter((i) => {
-          return (
-            i.parents.length > 0 &&
-            i.parents.includes(p) &&
-            i.id !== item._id &&
-            i.parentId === p
-          );
+          return i.parents.length > 0 && i.parents.includes(p) && i.id !== item._id && i.parentId === p;
         });
         if (Array.isArray(modelValue.value)) {
-          const hasSelectedChild = children.some((child) =>
-            (modelValue.value as unknown[]).includes(
-              get(child.value, props.valueField),
-            ),
-          );
+          const hasSelectedChild = children.some((child) => (modelValue.value as unknown[]).includes(get(child.value, props.valueField)));
           if (!hasSelectedChild) {
             const index = modelValue.value.indexOf(p);
             if (index !== -1) {
@@ -284,56 +245,21 @@ defineExpose({
     :selection-behavior="allowClear || multiple ? 'toggle' : 'replace'"
     @update:model-value="updateModelValue"
     v-slot="{ flattenItems }"
-    :class="
-      cn(
-        'text-blackA11 container select-none list-none rounded-lg text-sm font-medium',
-        $attrs.class as unknown as ClassType,
-        bordered ? 'border' : '',
-      )
-    "
+    :class="cn('text-blackA11 container select-none list-none rounded-lg text-sm font-medium', $attrs.class as unknown as ClassType, bordered ? 'border' : '')"
   >
-    <div
-      :class="
-        cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-b' : '')
-      "
-      v-if="$slots.header"
-    >
+    <div :class="cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-b' : '')" v-if="$slots.header">
       <slot name="header"> </slot>
     </div>
-    <div
-      :class="
-        cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-b' : '')
-      "
-      v-if="treeData.length > 0"
-    >
-      <div
-        class="flex size-5 flex-1 cursor-pointer items-center"
-        @click="() => (expanded?.length > 0 ? collapseAll() : expandAll())"
-      >
-        <ChevronRight
-          :class="{ 'rotate-90': expanded?.length > 0 }"
-          class="size-4 cursor-pointer text-foreground/80 transition hover:text-foreground"
-        />
-        <Checkbox
-          v-if="multiple"
-          @click.stop
-          @update:model-value="
-            (checked: boolean | 'indeterminate') =>
-              checked === true ? checkAll() : unCheckAll()
-          "
-        />
+    <div :class="cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-b' : '')" v-if="treeData.length > 0">
+      <div class="flex size-5 flex-1 cursor-pointer items-center" @click="() => (expanded?.length > 0 ? collapseAll() : expandAll())">
+        <ChevronRight :class="{ 'rotate-90': expanded?.length > 0 }" class="size-4 cursor-pointer text-foreground/80 transition hover:text-foreground" />
+        <Checkbox v-if="multiple" @click.stop @update:model-value="(checked: boolean | 'indeterminate') => (checked === true ? checkAll() : unCheckAll())" />
       </div>
     </div>
     <TransitionGroup :name="transition ? 'fade' : ''">
       <TreeItem
         v-for="item in flattenItems"
-        v-slot="{
-          isExpanded,
-          isSelected,
-          isIndeterminate,
-          handleSelect,
-          handleToggle,
-        }"
+        v-slot="{ isExpanded, isSelected, isIndeterminate, handleSelect, handleToggle }"
         :key="item._id"
         :style="{ 'margin-left': `${item.level - 1}rem` }"
         :class="
@@ -372,11 +298,7 @@ defineExpose({
         class="tree-node focus:ring-grass8 my-0.5 flex items-center rounded p-1 outline-none focus:ring-2"
       >
         <ChevronRight
-          v-if="
-            item.hasChildren &&
-            Array.isArray(item.value[childrenField]) &&
-            item.value[childrenField].length > 0
-          "
+          v-if="item.hasChildren && Array.isArray(item.value[childrenField]) && item.value[childrenField].length > 0"
           class="size-4 cursor-pointer text-foreground/80 transition hover:text-foreground"
           :class="{ 'rotate-90': isExpanded }"
           @click.stop="
@@ -418,11 +340,7 @@ defineExpose({
             "
           >
             <slot name="node" v-bind="item">
-              <IconifyIcon
-                class="size-4"
-                v-if="showIcon && get(item.value, iconField)"
-                :icon="get(item.value, iconField)"
-              />
+              <IconifyIcon class="size-4" v-if="showIcon && get(item.value, iconField)" :icon="get(item.value, iconField)" />
               {{ get(item.value, labelField) }}
             </slot>
           </div>
@@ -430,12 +348,7 @@ defineExpose({
         <div class="h-4 w-4"></div>
       </TreeItem>
     </TransitionGroup>
-    <div
-      :class="
-        cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-t' : '')
-      "
-      v-if="$slots.footer"
-    >
+    <div :class="cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-t' : '')" v-if="$slots.footer">
       <slot name="footer"> </slot>
     </div>
   </TreeRoot>

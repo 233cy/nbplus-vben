@@ -125,10 +125,7 @@ async function fillPartialData() {
 </script>
 
 <template>
-  <Page
-    description="测试表单验证失败时自动滚动到错误字段的功能"
-    title="滚动到错误字段测试"
-  >
+  <Page description="测试表单验证失败时自动滚动到错误字段的功能" title="滚动到错误字段测试">
     <Card title="功能测试">
       <template #extra>
         <div class="flex items-center gap-2">
@@ -149,9 +146,7 @@ async function fillPartialData() {
         <div class="rounded border p-4">
           <h4 class="mb-3 font-medium">验证方法测试：</h4>
           <div class="flex flex-wrap gap-2">
-            <Button type="primary" @click="testValidateAndSubmit">
-              测试 validateAndSubmitForm()
-            </Button>
+            <Button type="primary" @click="testValidateAndSubmit"> 测试 validateAndSubmitForm() </Button>
             <Button @click="testValidate"> 测试 validate() </Button>
             <Button @click="testValidateField"> 测试 validateField() </Button>
           </div>

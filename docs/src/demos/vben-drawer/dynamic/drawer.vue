@@ -18,9 +18,7 @@ function handleUpdateTitle() {
 <template>
   <Drawer>
     <div class="flex-col-center">
-      <VbenButton class="mb-3" type="primary" @click="handleUpdateTitle()">
-        内部动态修改标题
-      </VbenButton>
+      <VbenButton class="mb-3" type="primary" @click="handleUpdateTitle()"> 内部动态修改标题 </VbenButton>
     </div>
   </Drawer>
 </template>

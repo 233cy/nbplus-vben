@@ -30,9 +30,7 @@ function handleToggleFullscreen() {
 <template>
   <Modal>
     <div class="flex-col-center">
-      <Button class="mb-3" type="primary" @click="handleUpdateTitle()">
-        内部动态修改标题
-      </Button>
+      <Button class="mb-3" type="primary" @click="handleUpdateTitle()"> 内部动态修改标题 </Button>
       <Button class="mb-3" type="primary" @click="handleToggleFullscreen()">
         {{ state.fullscreen ? '退出全屏' : '打开全屏' }}
       </Button>

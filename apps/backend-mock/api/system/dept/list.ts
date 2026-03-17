@@ -22,25 +22,18 @@ function generateMockDataList(count: number) {
       pid: 0,
       name: faker.commerce.department(),
       status: faker.helpers.arrayElement([0, 1]),
-      createTime: formatterCN.format(
-        faker.date.between({ from: '2021-01-01', to: '2022-12-31' }),
-      ),
+      createTime: formatterCN.format(faker.date.between({ from: '2021-01-01', to: '2022-12-31' })),
       remark: faker.lorem.sentence(),
     };
     if (faker.datatype.boolean()) {
-      dataItem.children = Array.from(
-        { length: faker.number.int({ min: 1, max: 5 }) },
-        () => ({
-          id: faker.string.uuid(),
-          pid: dataItem.id,
-          name: faker.commerce.department(),
-          status: faker.helpers.arrayElement([0, 1]),
-          createTime: formatterCN.format(
-            faker.date.between({ from: '2023-01-01', to: '2023-12-31' }),
-          ),
-          remark: faker.lorem.sentence(),
-        }),
-      );
+      dataItem.children = Array.from({ length: faker.number.int({ min: 1, max: 5 }) }, () => ({
+        id: faker.string.uuid(),
+        pid: dataItem.id,
+        name: faker.commerce.department(),
+        status: faker.helpers.arrayElement([0, 1]),
+        createTime: formatterCN.format(faker.date.between({ from: '2023-01-01', to: '2023-12-31' })),
+        remark: faker.lorem.sentence(),
+      }));
     }
     dataList.push(dataItem);
   }

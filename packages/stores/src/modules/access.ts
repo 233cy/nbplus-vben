@@ -51,10 +51,7 @@ interface AccessState {
 export const useAccessStore = defineStore('core-access', {
   actions: {
     getMenuByPath(path: string) {
-      function findMenu(
-        menus: MenuRecordRaw[],
-        path: string,
-      ): MenuRecordRaw | undefined {
+      function findMenu(menus: MenuRecordRaw[], path: string): MenuRecordRaw | undefined {
         for (const menu of menus) {
           if (menu.path === path) {
             return menu;
@@ -101,13 +98,7 @@ export const useAccessStore = defineStore('core-access', {
   },
   persist: {
     // 持久化
-    pick: [
-      'accessToken',
-      'refreshToken',
-      'accessCodes',
-      'isLockScreen',
-      'lockScreenPassword',
-    ],
+    pick: ['accessToken', 'refreshToken', 'accessCodes', 'isLockScreen', 'lockScreenPassword'],
   },
   state: (): AccessState => ({
     accessCodes: [],

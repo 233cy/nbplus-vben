@@ -22,9 +22,7 @@ it('updateCSSVariables should update CSS variables in :root selector', () => {
   const updatedStyleContent = styleElement ? styleElement.textContent : '';
 
   // 检查更新后的样式内容是否包含正确的更新值
-  expect(
-    updatedStyleContent?.includes('primaryColor: blue;') &&
-      updatedStyleContent?.includes('secondaryColor: green;') &&
-      updatedStyleContent?.includes('fontSize: 16px;'),
-  ).toBe(true);
+  expect(updatedStyleContent?.includes('primaryColor: blue;') && updatedStyleContent?.includes('secondaryColor: green;') && updatedStyleContent?.includes('fontSize: 16px;')).toBe(
+    true,
+  );
 });

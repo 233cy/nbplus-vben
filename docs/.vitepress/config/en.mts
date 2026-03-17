@@ -15,8 +15,7 @@ export const en = defineConfig({
       prev: 'Previous Page',
     },
     editLink: {
-      pattern:
-        'https://github.com/vbenjs/vue-vben-admin/edit/main/docs/src/:path',
+      pattern: 'https://github.com/vbenjs/vue-vben-admin/edit/main/docs/src/:path',
       text: 'Edit this page on GitHub',
     },
     footer: {

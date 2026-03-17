@@ -10,30 +10,13 @@ export class ModalApi {
   };
   public store: Store<ModalState>;
 
-  private api: Pick<
-    ModalApiOptions,
-    | 'onBeforeClose'
-    | 'onCancel'
-    | 'onClosed'
-    | 'onConfirm'
-    | 'onOpenChange'
-    | 'onOpened'
-  >;
+  private api: Pick<ModalApiOptions, 'onBeforeClose' | 'onCancel' | 'onClosed' | 'onConfirm' | 'onOpenChange' | 'onOpened'>;
 
   // private prevState!: ModalState;
   private state!: ModalState;
 
   constructor(options: ModalApiOptions = {}) {
-    const {
-      connectedComponent: _,
-      onBeforeClose,
-      onCancel,
-      onClosed,
-      onConfirm,
-      onOpenChange,
-      onOpened,
-      ...storeState
-    } = options;
+    const { connectedComponent: _, onBeforeClose, onCancel, onClosed, onConfirm, onOpenChange, onOpened, ...storeState } = options;
 
     const defaultState: ModalState = {
       bordered: true,
@@ -173,11 +156,7 @@ export class ModalApi {
     return this;
   }
 
-  setState(
-    stateOrFn:
-      | ((prev: ModalState) => Partial<ModalState>)
-      | Partial<ModalState>,
-  ) {
+  setState(stateOrFn: ((prev: ModalState) => Partial<ModalState>) | Partial<ModalState>) {
     if (isFunction(stateOrFn)) {
       this.store.setState(stateOrFn);
     } else {

@@ -1,18 +1,6 @@
-import type {
-  DrawerApiOptions,
-  DrawerProps,
-  ExtendedDrawerApi,
-} from './drawer';
+import type { DrawerApiOptions, DrawerProps, ExtendedDrawerApi } from './drawer';
 
-import {
-  defineComponent,
-  h,
-  inject,
-  nextTick,
-  provide,
-  reactive,
-  ref,
-} from 'vue';
+import { defineComponent, h, inject, nextTick, provide, reactive, ref } from 'vue';
 
 import { useStore } from '@vben-core/shared/store';
 
@@ -27,9 +15,7 @@ export function setDefaultDrawerProps(props: Partial<DrawerProps>) {
   Object.assign(DEFAULT_DRAWER_PROPS, props);
 }
 
-export function useVbenDrawer<
-  TParentDrawerProps extends DrawerProps = DrawerProps,
->(options: DrawerApiOptions = {}) {
+export function useVbenDrawer<TParentDrawerProps extends DrawerProps = DrawerProps>(options: DrawerApiOptions = {}) {
   // Drawer一般会抽离出来，所以如果有传入 connectedComponent，则表示为外部调用，与内部组件进行连接
   // 外部的Drawer通过provide/inject传递api
 
@@ -57,12 +43,7 @@ export function useVbenDrawer<
           ...attrs,
           ...slots,
         });
-        return () =>
-          h(
-            isDrawerReady.value ? connectedComponent : 'div',
-            { ...props, ...attrs },
-            slots,
-          );
+        return () => h(isDrawerReady.value ? connectedComponent : 'div', { ...props, ...attrs }, slots);
       },
       // eslint-disable-next-line vue/one-component-per-file
       {
@@ -104,8 +85,7 @@ export function useVbenDrawer<
 
   const Drawer = defineComponent(
     (props: DrawerProps, { attrs, slots }) => {
-      return () =>
-        h(VbenDrawer, { ...props, ...attrs, drawerApi: extendedApi }, slots);
+      return () => h(VbenDrawer, { ...props, ...attrs, drawerApi: extendedApi }, slots);
     },
     // eslint-disable-next-line vue/one-component-per-file
     {

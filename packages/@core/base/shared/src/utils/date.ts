@@ -7,17 +7,7 @@ dayjs.extend(timezone);
 
 type FormatDate = Date | dayjs.Dayjs | number | string;
 
-type Format =
-  | 'HH'
-  | 'HH:mm'
-  | 'HH:mm:ss'
-  | 'YYYY'
-  | 'YYYY-MM'
-  | 'YYYY-MM-DD'
-  | 'YYYY-MM-DD HH'
-  | 'YYYY-MM-DD HH:mm'
-  | 'YYYY-MM-DD HH:mm:ss'
-  | (string & {});
+type Format = 'HH' | 'HH:mm' | 'HH:mm:ss' | 'YYYY' | 'YYYY-MM' | 'YYYY-MM-DD' | 'YYYY-MM-DD HH' | 'YYYY-MM-DD HH:mm' | 'YYYY-MM-DD HH:mm:ss' | (string & {});
 
 export function formatDate(time?: FormatDate, format: Format = 'YYYY-MM-DD') {
   try {

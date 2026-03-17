@@ -10,11 +10,7 @@ interface TreeConfigOptions {
  * @param options 作为子节点数组的可选属性名称。
  * @returns 所有节点中指定的值的数组
  */
-function traverseTreeValues<T, V>(
-  tree: T[],
-  getValue: (node: T) => V,
-  options?: TreeConfigOptions,
-): V[] {
+function traverseTreeValues<T, V>(tree: T[], getValue: (node: T) => V, options?: TreeConfigOptions): V[] {
   const result: V[] = [];
   const { childProps } = options || {
     childProps: 'children',
@@ -47,11 +43,7 @@ function traverseTreeValues<T, V>(
  * @param options 作为子节点数组的可选属性名称。
  * @returns 包含所有匹配节点的数组。
  */
-function filterTree<T extends Record<string, any>>(
-  tree: T[],
-  filter: (node: T) => boolean,
-  options?: TreeConfigOptions,
-): T[] {
+function filterTree<T extends Record<string, any>>(tree: T[], filter: (node: T) => boolean, options?: TreeConfigOptions): T[] {
   const { childProps } = options || {
     childProps: 'children',
   };
@@ -77,11 +69,7 @@ function filterTree<T extends Record<string, any>>(
  * @param mapper 用于map每个节点的条件。
  * @param options 作为子节点数组的可选属性名称。
  */
-function mapTree<T, V extends Record<string, any>>(
-  tree: T[],
-  mapper: (node: T) => V,
-  options?: TreeConfigOptions,
-): V[] {
+function mapTree<T, V extends Record<string, any>>(tree: T[], mapper: (node: T) => V, options?: TreeConfigOptions): V[] {
   const { childProps } = options || {
     childProps: 'children',
   };
@@ -101,11 +89,7 @@ function mapTree<T, V extends Record<string, any>>(
  * @param options - 配置选项，包括子节点属性名
  * @returns 排序后的树形数据
  */
-function sortTree<T extends Record<string, any>>(
-  treeData: T[],
-  sortFunction: (a: T, b: T) => number,
-  options?: TreeConfigOptions,
-): T[] {
+function sortTree<T extends Record<string, any>>(treeData: T[], sortFunction: (a: T, b: T) => number, options?: TreeConfigOptions): T[] {
   const { childProps } = options || {
     childProps: 'children',
   };

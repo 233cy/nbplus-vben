@@ -13,10 +13,7 @@ const text = ref(longText);
 </script>
 
 <template>
-  <Page
-    description="用于多行文本省略，支持点击展开和自定义内容。"
-    title="文本省略组件示例"
-  >
+  <Page description="用于多行文本省略，支持点击展开和自定义内容。" title="文本省略组件示例">
     <template #extra>
       <DocButton class="mb-2" path="/components/common-ui/vben-ellipsis-text" />
     </template>
@@ -35,10 +32,7 @@ const text = ref(longText);
       <EllipsisText :max-width="240">
         住在我心里孤独的 孤独的海怪 痛苦之王 开始厌倦 深海的光 停滞的海浪
         <template #tooltip>
-          <div style="text-align: center">
-            《秦皇岛》<br />住在我心里孤独的<br />孤独的海怪 痛苦之王<br />开始厌倦
-            深海的光 停滞的海浪
-          </div>
+          <div style="text-align: center">《秦皇岛》<br />住在我心里孤独的<br />孤独的海怪 痛苦之王<br />开始厌倦 深海的光 停滞的海浪</div>
         </template>
       </EllipsisText>
     </Card>

@@ -22,8 +22,6 @@ function handleUpdateTitle() {
     <Drawer />
 
     <VbenButton @click="open">Open</VbenButton>
-    <VbenButton class="ml-2" type="primary" @click="handleUpdateTitle">
-      从外部修改标题并打开
-    </VbenButton>
+    <VbenButton class="ml-2" type="primary" @click="handleUpdateTitle"> 从外部修改标题并打开 </VbenButton>
   </div>
 </template>

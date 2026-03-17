@@ -44,8 +44,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'AccessMenuVisible403Demo',
             path: '/demos/access/menu-visible-403',
-            component: () =>
-              import('#/views/demos/access/menu-visible-403.vue'),
+            component: () => import('#/views/demos/access/menu-visible-403.vue'),
             meta: {
               authority: ['no-body'],
               icon: 'mdi:button-cursor',
@@ -97,8 +96,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'LoginExpiredDemo',
             path: '/demos/features/login-expired',
-            component: () =>
-              import('#/views/demos/features/login-expired/index.vue'),
+            component: () => import('#/views/demos/features/login-expired/index.vue'),
             meta: {
               icon: 'mdi:encryption-expiration',
               title: $t('demos.features.loginExpired'),
@@ -116,8 +114,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'WatermarkDemo',
             path: '/demos/features/watermark',
-            component: () =>
-              import('#/views/demos/features/watermark/index.vue'),
+            component: () => import('#/views/demos/features/watermark/index.vue'),
             meta: {
               icon: 'lucide:tags',
               title: $t('demos.features.watermark'),
@@ -135,8 +132,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'FeatureTabDetailDemo',
             path: '/demos/features/tabs/detail/:id',
-            component: () =>
-              import('#/views/demos/features/tabs/tab-detail.vue'),
+            component: () => import('#/views/demos/features/tabs/tab-detail.vue'),
             meta: {
               activePath: '/demos/features/tabs',
               hideInMenu: true,
@@ -156,8 +152,7 @@ const routes: RouteRecordRaw[] = [
               {
                 name: 'HideChildrenInMenuDemo',
                 path: '',
-                component: () =>
-                  import('#/views/demos/features/hide-menu-children/parent.vue'),
+                component: () => import('#/views/demos/features/hide-menu-children/parent.vue'),
                 meta: {
                   // hideInMenu: true,
                   title: $t('demos.features.hideChildrenInMenu'),
@@ -166,8 +161,7 @@ const routes: RouteRecordRaw[] = [
               {
                 name: 'HideChildrenInMenuChildrenDemo',
                 path: '/demos/features/hide-menu-children/children',
-                component: () =>
-                  import('#/views/demos/features/hide-menu-children/children.vue'),
+                component: () => import('#/views/demos/features/hide-menu-children/children.vue'),
                 meta: {
                   activePath: '/demos/features/hide-menu-children',
                   title: $t('demos.features.hideChildrenInMenu'),
@@ -178,8 +172,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'FullScreenDemo',
             path: '/demos/features/full-screen',
-            component: () =>
-              import('#/views/demos/features/full-screen/index.vue'),
+            component: () => import('#/views/demos/features/full-screen/index.vue'),
             meta: {
               icon: 'lucide:fullscreen',
               title: $t('demos.features.fullScreen'),
@@ -188,8 +181,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'FileDownloadDemo',
             path: '/demos/features/file-download',
-            component: () =>
-              import('#/views/demos/features/file-download/index.vue'),
+            component: () => import('#/views/demos/features/file-download/index.vue'),
             meta: {
               icon: 'lucide:hard-drive-download',
               title: $t('demos.features.fileDownload'),
@@ -198,8 +190,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'ClipboardDemo',
             path: '/demos/features/clipboard',
-            component: () =>
-              import('#/views/demos/features/clipboard/index.vue'),
+            component: () => import('#/views/demos/features/clipboard/index.vue'),
             meta: {
               icon: 'lucide:copy',
               title: $t('demos.features.clipboard'),
@@ -208,8 +199,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'MenuQueryDemo',
             path: '/demos/menu-query',
-            component: () =>
-              import('#/views/demos/features/menu-query/index.vue'),
+            component: () => import('#/views/demos/features/menu-query/index.vue'),
             meta: {
               icon: 'lucide:curly-braces',
               query: {
@@ -221,8 +211,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'NewWindowDemo',
             path: '/demos/new-window',
-            component: () =>
-              import('#/views/demos/features/new-window/index.vue'),
+            component: () => import('#/views/demos/features/new-window/index.vue'),
             meta: {
               icon: 'lucide:app-window',
               openInNewWindow: true,
@@ -232,8 +221,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'VueQueryDemo',
             path: '/demos/features/vue-query',
-            component: () =>
-              import('#/views/demos/features/vue-query/index.vue'),
+            component: () => import('#/views/demos/features/vue-query/index.vue'),
             meta: {
               icon: 'lucide:git-pull-request-arrow',
               title: 'Tanstack Query',
@@ -242,8 +230,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'RequestParamsSerializerDemo',
             path: '/demos/features/request-params-serializer',
-            component: () =>
-              import('#/views/demos/features/request-params-serializer/index.vue'),
+            component: () => import('#/views/demos/features/request-params-serializer/index.vue'),
             meta: {
               icon: 'lucide:git-pull-request-arrow',
               title: $t('demos.features.requestParamsSerializer'),
@@ -252,8 +239,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'BigIntDemo',
             path: '/demos/features/json-bigint',
-            component: () =>
-              import('#/views/demos/features/json-bigint/index.vue'),
+            component: () => import('#/views/demos/features/json-bigint/index.vue'),
             meta: {
               icon: 'lucide:grape',
               title: 'JSON BigInt',
@@ -282,8 +268,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'BreadcrumbLateralDetailDemo',
             path: '/demos/breadcrumb/lateral-detail',
-            component: () =>
-              import('#/views/demos/breadcrumb/lateral-detail.vue'),
+            component: () => import('#/views/demos/breadcrumb/lateral-detail.vue'),
             meta: {
               activePath: '/demos/breadcrumb/lateral',
               hideInMenu: true,
@@ -301,8 +286,7 @@ const routes: RouteRecordRaw[] = [
               {
                 name: 'BreadcrumbLevelDetailDemo',
                 path: '/demos/breadcrumb/level/detail',
-                component: () =>
-                  import('#/views/demos/breadcrumb/level-detail.vue'),
+                component: () => import('#/views/demos/breadcrumb/level-detail.vue'),
                 meta: {
                   title: $t('demos.breadcrumb.levelDetail'),
                 },
@@ -341,8 +325,7 @@ const routes: RouteRecordRaw[] = [
           {
             name: 'Fallback500Demo',
             path: '/demos/fallback/500',
-            component: () =>
-              import('#/views/_core/fallback/internal-error.vue'),
+            component: () => import('#/views/_core/fallback/internal-error.vue'),
             meta: {
               icon: 'mdi:server-network-off',
               title: '500',
@@ -567,8 +550,7 @@ const routes: RouteRecordRaw[] = [
                   {
                     name: 'Menu321Demo',
                     path: '/demos/nested/menu3/menu3-2/menu3-2-1',
-                    component: () =>
-                      import('#/views/demos/nested/menu-3-2-1.vue'),
+                    component: () => import('#/views/demos/nested/menu-3-2-1.vue'),
                     meta: {
                       icon: 'ic:round-menu',
                       keepAlive: true,

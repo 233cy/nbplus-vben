@@ -7,16 +7,7 @@ import depcheck from 'depcheck';
 // 默认配置
 const DEFAULT_CONFIG = {
   // 需要忽略的依赖匹配
-  ignoreMatches: [
-    'vite',
-    'vitest',
-    'unbuild',
-    '@vben/tsconfig',
-    '@vben/vite-config',
-    '@vben/tailwind-config',
-    '@types/*',
-    '@vben-core/design',
-  ],
+  ignoreMatches: ['vite', 'vitest', 'unbuild', '@vben/tsconfig', '@vben/vite-config', '@vben/tailwind-config', '@types/*', '@vben-core/design'],
   // 需要忽略的包
   ignorePackages: [
     '@vben/backend-mock',
@@ -63,9 +54,7 @@ function cleanDepcheckResult(unused: DepcheckResult): void {
 
   // 清理路径依赖
   Object.keys(unused.missing).forEach((key) => {
-    unused.missing[key] = (unused.missing[key] || []).filter(
-      (item: string) => !item.startsWith('/'),
-    );
+    unused.missing[key] = (unused.missing[key] || []).filter((item: string) => !item.startsWith('/'));
     if (unused.missing[key].length === 0) {
       Reflect.deleteProperty(unused.missing, key);
     }
@@ -78,10 +67,7 @@ function cleanDepcheckResult(unused: DepcheckResult): void {
  * @param unused - 依赖检查结果
  */
 function formatDepcheckResult(pkgName: string, unused: DepcheckResult): void {
-  const hasIssues =
-    Object.keys(unused.missing).length > 0 ||
-    unused.dependencies.length > 0 ||
-    unused.devDependencies.length > 0;
+  const hasIssues = Object.keys(unused.missing).length > 0 || unused.dependencies.length > 0 || unused.devDependencies.length > 0;
 
   if (!hasIssues) {
     return;
@@ -137,10 +123,7 @@ async function runDepcheck(config: DepcheckConfig = {}): Promise<void> {
 
         cleanDepcheckResult(unused);
 
-        const pkgHasIssues =
-          Object.keys(unused.missing).length > 0 ||
-          unused.dependencies.length > 0 ||
-          unused.devDependencies.length > 0;
+        const pkgHasIssues = Object.keys(unused.missing).length > 0 || unused.dependencies.length > 0 || unused.devDependencies.length > 0;
 
         if (pkgHasIssues) {
           hasIssues = true;
@@ -153,10 +136,7 @@ async function runDepcheck(config: DepcheckConfig = {}): Promise<void> {
       console.log('\n✅ Dependency check completed, no issues found');
     }
   } catch (error) {
-    console.error(
-      '❌ Dependency check failed:',
-      error instanceof Error ? error.message : error,
-    );
+    console.error('❌ Dependency check failed:', error instanceof Error ? error.message : error);
   }
 }
 
@@ -167,18 +147,9 @@ async function runDepcheck(config: DepcheckConfig = {}): Promise<void> {
 function defineDepcheckCommand(cac: CAC): void {
   cac
     .command('check-dep')
-    .option(
-      '--ignore-packages <packages>',
-      'Packages to ignore, comma separated',
-    )
-    .option(
-      '--ignore-matches <matches>',
-      'Dependency patterns to ignore, comma separated',
-    )
-    .option(
-      '--ignore-patterns <patterns>',
-      'File patterns to ignore, comma separated',
-    )
+    .option('--ignore-packages <packages>', 'Packages to ignore, comma separated')
+    .option('--ignore-matches <matches>', 'Dependency patterns to ignore, comma separated')
+    .option('--ignore-patterns <patterns>', 'File patterns to ignore, comma separated')
     .usage('Analyze project dependencies')
     .action(async ({ ignoreMatches, ignorePackages, ignorePatterns }) => {
       const config: DepcheckConfig = {

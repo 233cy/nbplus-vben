@@ -8,12 +8,7 @@ import { AuthenticationLoginExpiredModal } from '@vben/common-ui';
 import { VBEN_DOC_URL, VBEN_GITHUB_URL } from '@vben/constants';
 import { useWatermark } from '@vben/hooks';
 import { BookOpenText, CircleHelp, SvgGithubIcon } from '@vben/icons';
-import {
-  BasicLayout,
-  LockScreen,
-  Notification,
-  UserDropdown,
-} from '@vben/layouts';
+import { BasicLayout, LockScreen, Notification, UserDropdown } from '@vben/layouts';
 import { preferences } from '@vben/preferences';
 import { useAccessStore, useTabbarStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
@@ -23,17 +18,7 @@ import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const { setMenuList } = useTabbarStore();
-setMenuList([
-  'close',
-  'affix',
-  'maximize',
-  'reload',
-  'open-in-new-window',
-  'close-left',
-  'close-right',
-  'close-other',
-  'close-all',
-]);
+setMenuList(['close', 'affix', 'maximize', 'reload', 'open-in-new-window', 'close-left', 'close-right', 'close-other', 'close-all']);
 
 const notifications = ref<NotificationItem[]>([
   {
@@ -93,9 +78,7 @@ const userStore = useUserStore();
 const authStore = useAuthStore();
 const accessStore = useAccessStore();
 const { destroyWatermark, updateWatermark } = useWatermark();
-const showDot = computed(() =>
-  notifications.value.some((item) => !item.isRead),
-);
+const showDot = computed(() => notifications.value.some((item) => !item.isRead));
 
 const menus = computed(() => [
   {
@@ -171,9 +154,7 @@ watch(
   async ({ enable, content }) => {
     if (enable) {
       await updateWatermark({
-        content:
-          content ||
-          `${userStore.userInfo?.username} - ${userStore.userInfo?.realName}`,
+        content: content || `${userStore.userInfo?.username} - ${userStore.userInfo?.realName}`,
       });
     } else {
       destroyWatermark();
@@ -192,20 +173,9 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <BasicLayout
-    @clear-preferences-and-logout="handleLogout"
-    @click-logo="handleClickLogo"
-  >
+  <BasicLayout @clear-preferences-and-logout="handleLogout" @click-logo="handleClickLogo">
     <template #user-dropdown>
-      <UserDropdown
-        :avatar
-        :menus
-        :text="userStore.userInfo?.realName"
-        description="ann.vben@gmail.com"
-        tag-text="Pro"
-        trigger="both"
-        @logout="handleLogout"
-      />
+      <UserDropdown :avatar :menus :text="userStore.userInfo?.realName" description="ann.vben@gmail.com" tag-text="Pro" trigger="both" @logout="handleLogout" />
     </template>
     <template #notification>
       <Notification
@@ -218,10 +188,7 @@ onBeforeMount(() => {
       />
     </template>
     <template #extra>
-      <AuthenticationLoginExpiredModal
-        v-model:open="accessStore.loginExpired"
-        :avatar
-      >
+      <AuthenticationLoginExpiredModal v-model:open="accessStore.loginExpired" :avatar>
         <LoginForm />
       </AuthenticationLoginExpiredModal>
     </template>

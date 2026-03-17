@@ -3,10 +3,7 @@ import type { Linter } from 'eslint';
 import { interopDefault } from '../util';
 
 export async function jsonc(): Promise<Linter.Config[]> {
-  const [pluginJsonc, parserJsonc] = await Promise.all([
-    interopDefault(import('eslint-plugin-jsonc')),
-    interopDefault(import('jsonc-eslint-parser')),
-  ] as const);
+  const [pluginJsonc, parserJsonc] = await Promise.all([interopDefault(import('eslint-plugin-jsonc')), interopDefault(import('jsonc-eslint-parser'))] as const);
 
   return [
     {
@@ -148,23 +145,12 @@ function sortCspellJson(): Linter.Config {
 
 function sortTsconfig(): Linter.Config {
   return {
-    files: [
-      '**/tsconfig.json',
-      '**/tsconfig.*.json',
-      'internal/tsconfig/*.json',
-    ],
+    files: ['**/tsconfig.json', '**/tsconfig.*.json', 'internal/tsconfig/*.json'],
     rules: {
       'jsonc/sort-keys': [
         'error',
         {
-          order: [
-            'extends',
-            'compilerOptions',
-            'references',
-            'files',
-            'include',
-            'exclude',
-          ],
+          order: ['extends', 'compilerOptions', 'references', 'files', 'include', 'exclude'],
           pathPattern: '^$',
         },
         {

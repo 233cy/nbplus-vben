@@ -84,8 +84,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{ logout: [] }>();
 
-const { globalLockScreenShortcutKey, globalLogoutShortcutKey } =
-  usePreferences();
+const { globalLockScreenShortcutKey, globalLogoutShortcutKey } = usePreferences();
 const accessStore = useAccessStore();
 const [LockModal, lockModalApi] = useVbenModal({
   connectedComponent: LockScreenModal,
@@ -98,10 +97,7 @@ const [LogoutModal, logoutModalApi] = useVbenModal({
 
 const refTrigger = useTemplateRef('refTrigger');
 const refContent = useTemplateRef('refContent');
-const [openPopover, hoverWatcher] = useHoverToggle(
-  [refTrigger, refContent],
-  () => props.hoverDelay,
-);
+const [openPopover, hoverWatcher] = useHoverToggle([refTrigger, refContent], () => props.hoverDelay);
 
 watch(
   () => props.trigger === 'hover' || props.trigger === 'both',
@@ -168,12 +164,7 @@ if (enableShortcutKey.value) {
 </script>
 
 <template>
-  <LockModal
-    v-if="preferences.widget.lockScreen"
-    :avatar="avatar"
-    :text="text"
-    @submit="handleSubmitLock"
-  />
+  <LockModal v-if="preferences.widget.lockScreen" :avatar="avatar" :text="text" @submit="handleSubmitLock" />
 
   <LogoutModal
     :cancel-text="$t('common.cancel')"
@@ -199,18 +190,9 @@ if (enableShortcutKey.value) {
     <DropdownMenuContent class="mr-2 min-w-[240px] p-0 pb-1">
       <div ref="refContent">
         <DropdownMenuLabel class="flex items-center p-3">
-          <VbenAvatar
-            :alt="text"
-            :src="avatar"
-            class="size-12"
-            dot
-            dot-class="bottom-0 right-1 border-2 size-4 bg-green-500"
-          />
+          <VbenAvatar :alt="text" :src="avatar" class="size-12" dot dot-class="bottom-0 right-1 border-2 size-4 bg-green-500" />
           <div class="ml-2 w-full">
-            <div
-              v-if="tagText || text || $slots.tagText"
-              class="text-foreground mb-1 flex items-center text-sm font-medium"
-            >
+            <div v-if="tagText || text || $slots.tagText" class="text-foreground mb-1 flex items-center text-sm font-medium">
               {{ text }}
               <slot name="tagText">
                 <Badge v-if="tagText" class="ml-2 text-green-400">
@@ -224,37 +206,21 @@ if (enableShortcutKey.value) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator v-if="menus?.length" />
-        <DropdownMenuItem
-          v-for="menu in menus"
-          :key="menu.text"
-          class="mx-1 flex cursor-pointer items-center rounded-sm py-1 leading-8"
-          @click="menu.handler"
-        >
+        <DropdownMenuItem v-for="menu in menus" :key="menu.text" class="mx-1 flex cursor-pointer items-center rounded-sm py-1 leading-8" @click="menu.handler">
           <VbenIcon :icon="menu.icon" class="mr-2 size-4" />
           {{ menu.text }}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          v-if="preferences.widget.lockScreen"
-          class="mx-1 flex cursor-pointer items-center rounded-sm py-1 leading-8"
-          @click="handleOpenLock"
-        >
+        <DropdownMenuItem v-if="preferences.widget.lockScreen" class="mx-1 flex cursor-pointer items-center rounded-sm py-1 leading-8" @click="handleOpenLock">
           <LockKeyhole class="mr-2 size-4" />
           {{ $t('ui.widgets.lockScreen.title') }}
-          <DropdownMenuShortcut v-if="enableLockScreenShortcutKey">
-            {{ altView }} L
-          </DropdownMenuShortcut>
+          <DropdownMenuShortcut v-if="enableLockScreenShortcutKey"> {{ altView }} L </DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuSeparator v-if="preferences.widget.lockScreen" />
-        <DropdownMenuItem
-          class="mx-1 flex cursor-pointer items-center rounded-sm py-1 leading-8"
-          @click="handleLogout"
-        >
+        <DropdownMenuItem class="mx-1 flex cursor-pointer items-center rounded-sm py-1 leading-8" @click="handleLogout">
           <LogOut class="mr-2 size-4" />
           {{ $t('common.logout') }}
-          <DropdownMenuShortcut v-if="enableLogoutShortcutKey">
-            {{ altView }} Q
-          </DropdownMenuShortcut>
+          <DropdownMenuShortcut v-if="enableLogoutShortcutKey"> {{ altView }} Q </DropdownMenuShortcut>
         </DropdownMenuItem>
       </div>
     </DropdownMenuContent>

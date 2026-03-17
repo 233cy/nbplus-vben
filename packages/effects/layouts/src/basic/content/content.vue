@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import type { VNode } from 'vue';
-import type {
-  RouteLocationNormalizedLoaded,
-  RouteLocationNormalizedLoadedGeneric,
-} from 'vue-router';
+import type { RouteLocationNormalizedLoaded, RouteLocationNormalizedLoadedGeneric } from 'vue-router';
 
 import { computed } from 'vue';
 import { RouterView } from 'vue-router';
@@ -18,8 +15,7 @@ defineOptions({ name: 'LayoutContent' });
 const tabbarStore = useTabbarStore();
 const { keepAlive } = usePreferences();
 
-const { getCachedTabs, getExcludeCachedTabs, renderRouteView } =
-  storeToRefs(tabbarStore);
+const { getCachedTabs, getExcludeCachedTabs, renderRouteView } = storeToRefs(tabbarStore);
 
 /**
  * 是否使用动画
@@ -59,15 +55,10 @@ function getTransitionName(_route: RouteLocationNormalizedLoaded) {
  * 转换组件，自动添加 name
  * @param component
  */
-function transformComponent(
-  component: VNode,
-  route: RouteLocationNormalizedLoadedGeneric,
-) {
+function transformComponent(component: VNode, route: RouteLocationNormalizedLoadedGeneric) {
   // 组件视图未找到，如果有设置后备视图，则返回后备视图，如果没有，则抛出错误
   if (!component) {
-    console.error(
-      'Component view not found，please check the route configuration',
-    );
+    console.error('Component view not found，please check the route configuration');
     return undefined;
   }
 
@@ -100,48 +91,17 @@ function transformComponent(
   <div class="relative h-full">
     <IFrameRouterView />
     <RouterView v-slot="{ Component, route }">
-      <Transition
-        v-if="getEnabledTransition"
-        :name="getTransitionName(route)"
-        appear
-        mode="out-in"
-      >
-        <KeepAlive
-          v-if="keepAlive"
-          :exclude="getExcludeCachedTabs"
-          :include="getCachedTabs"
-        >
-          <component
-            :is="transformComponent(Component, route)"
-            v-if="renderRouteView"
-            v-show="!route.meta.iframeSrc"
-            :key="getTabKey(route)"
-          />
+      <Transition v-if="getEnabledTransition" :name="getTransitionName(route)" appear mode="out-in">
+        <KeepAlive v-if="keepAlive" :exclude="getExcludeCachedTabs" :include="getCachedTabs">
+          <component :is="transformComponent(Component, route)" v-if="renderRouteView" v-show="!route.meta.iframeSrc" :key="getTabKey(route)" />
         </KeepAlive>
-        <component
-          :is="Component"
-          v-else-if="renderRouteView"
-          :key="getTabKey(route)"
-        />
+        <component :is="Component" v-else-if="renderRouteView" :key="getTabKey(route)" />
       </Transition>
       <template v-else>
-        <KeepAlive
-          v-if="keepAlive"
-          :exclude="getExcludeCachedTabs"
-          :include="getCachedTabs"
-        >
-          <component
-            :is="transformComponent(Component, route)"
-            v-if="renderRouteView"
-            v-show="!route.meta.iframeSrc"
-            :key="getTabKey(route)"
-          />
+        <KeepAlive v-if="keepAlive" :exclude="getExcludeCachedTabs" :include="getCachedTabs">
+          <component :is="transformComponent(Component, route)" v-if="renderRouteView" v-show="!route.meta.iframeSrc" :key="getTabKey(route)" />
         </KeepAlive>
-        <component
-          :is="Component"
-          v-else-if="renderRouteView"
-          :key="getTabKey(route)"
-        />
+        <component :is="Component" v-else-if="renderRouteView" :key="getTabKey(route)" />
       </template>
     </RouterView>
   </div>

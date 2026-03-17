@@ -1,14 +1,7 @@
 <script lang="ts" setup>
 import { onBeforeUnmount } from 'vue';
 
-import {
-  alert,
-  clearAllAlerts,
-  confirm,
-  Page,
-  prompt,
-  useVbenModal,
-} from '@vben/common-ui';
+import { alert, clearAllAlerts, confirm, Page, prompt, useVbenModal } from '@vben/common-ui';
 
 import { Button, Card, Flex, message } from 'ant-design-vue';
 
@@ -173,11 +166,7 @@ async function openPrompt() {
 </script>
 
 <template>
-  <Page
-    auto-content-height
-    description="弹窗组件常用于在不离开当前页面的情况下，显示额外的信息、表单或操作提示，更多api请查看组件文档。"
-    title="弹窗组件示例"
-  >
+  <Page auto-content-height description="弹窗组件常用于在不离开当前页面的情况下，显示额外的信息、表单或操作提示，更多api请查看组件文档。" title="弹窗组件示例">
     <template #extra>
       <DocButton path="/components/common-ui/vben-modal" />
     </template>
@@ -208,9 +197,7 @@ async function openPrompt() {
       <Card class="w-[300px]" title="内容高度自适应">
         <p>可根据内容并自动调整高度</p>
         <template #actions>
-          <Button type="primary" @click="openAutoHeightModal">
-            打开弹窗
-          </Button>
+          <Button type="primary" @click="openAutoHeightModal"> 打开弹窗 </Button>
         </template>
       </Card>
 
@@ -227,18 +214,14 @@ async function openPrompt() {
           <Button type="link" @click="openDynamicModal">打开弹窗</Button>
         </template>
         <template #actions>
-          <Button type="primary" @click="handleUpdateTitle">
-            外部修改标题并打开
-          </Button>
+          <Button type="primary" @click="handleUpdateTitle"> 外部修改标题并打开 </Button>
         </template>
       </Card>
 
       <Card class="w-[300px]" title="内外数据共享示例">
         <p>通过共享 sharedData 来进行数据交互</p>
         <template #actions>
-          <Button type="primary" @click="openSharedModal">
-            打开弹窗并传递数据
-          </Button>
+          <Button type="primary" @click="openSharedModal"> 打开弹窗并传递数据 </Button>
         </template>
       </Card>
 

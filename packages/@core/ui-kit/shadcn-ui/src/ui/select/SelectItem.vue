@@ -6,12 +6,7 @@ import { computed } from 'vue';
 import { cn } from '@vben-core/shared/utils';
 
 import { Check } from 'lucide-vue-next';
-import {
-  SelectItem,
-  SelectItemIndicator,
-  SelectItemText,
-  useForwardProps,
-} from 'reka-ui';
+import { SelectItem, SelectItemIndicator, SelectItemText, useForwardProps } from 'reka-ui';
 
 const props = defineProps<SelectItemProps & { class?: any }>();
 

@@ -29,17 +29,11 @@ function handleUpdate(len: number) {
 </script>
 <template>
   <Modal title="自动计算高度">
-    <div
-      v-for="item in list"
-      :key="item"
-      class="flex-center h-[220px] w-full bg-muted even:bg-heavy"
-    >
+    <div v-for="item in list" :key="item" class="flex-center h-[220px] w-full bg-muted even:bg-heavy">
       {{ item }}
     </div>
     <template #prepend-footer>
-      <VbenButton type="link" @click="handleUpdate(6)">
-        点击更新数据
-      </VbenButton>
+      <VbenButton type="link" @click="handleUpdate(6)"> 点击更新数据 </VbenButton>
     </template>
   </Modal>
 </template>

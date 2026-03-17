@@ -77,9 +77,7 @@ const [SecondForm, secondFormApi] = useVbenForm({
 });
 const needMerge = ref(true);
 async function handleMergeSubmit() {
-  const values = await firstFormApi
-    .merge(secondFormApi)
-    .submitAllForm(needMerge.value);
+  const values = await firstFormApi.merge(secondFormApi).submitAllForm(needMerge.value);
   message.success({
     content: `merged form values: ${JSON.stringify(values)}`,
   });
@@ -93,12 +91,7 @@ async function handleMergeSubmit() {
   >
     <Card title="基础示例">
       <template #extra>
-        <Switch
-          v-model="needMerge"
-          checked-children="开启字段合并"
-          class="mr-4"
-          un-checked-children="关闭字段合并"
-        />
+        <Switch v-model="needMerge" checked-children="开启字段合并" class="mr-4" un-checked-children="关闭字段合并" />
         <Button type="primary" @click="handleMergeSubmit">合并提交</Button>
       </template>
       <div class="mx-auto max-w-lg">

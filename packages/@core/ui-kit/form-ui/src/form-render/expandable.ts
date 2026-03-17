@@ -2,11 +2,7 @@ import type { FormRenderProps } from '../types';
 
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 
-import {
-  breakpointsTailwind,
-  useBreakpoints,
-  useElementVisibility,
-} from '@vueuse/core';
+import { breakpointsTailwind, useBreakpoints, useElementVisibility } from '@vueuse/core';
 
 /**
  * 动态计算行数
@@ -31,22 +27,14 @@ export function useExpandable(props: FormRenderProps) {
     return maxItem - 1 || 1;
   });
 
-  watch(
-    [
-      () => props.showCollapseButton,
-      () => breakpoints.active().value,
-      () => props.schema?.length,
-      () => isVisible.value,
-    ],
-    async ([val]) => {
-      if (val) {
-        await nextTick();
-        rowMapping.value = {};
-        isCalculated.value = false;
-        await calculateRowMapping();
-      }
-    },
-  );
+  watch([() => props.showCollapseButton, () => breakpoints.active().value, () => props.schema?.length, () => isVisible.value], async ([val]) => {
+    if (val) {
+      await nextTick();
+      rowMapping.value = {};
+      isCalculated.value = false;
+      await calculateRowMapping();
+    }
+  });
 
   async function calculateRowMapping() {
     if (!props.showCollapseButton) {
@@ -68,9 +56,7 @@ export function useExpandable(props: FormRenderProps) {
 
     const container = wrapperRef.value;
     const containerStyles = window.getComputedStyle(container);
-    const rowHeights = containerStyles
-      .getPropertyValue('grid-template-rows')
-      .split(' ');
+    const rowHeights = containerStyles.getPropertyValue('grid-template-rows').split(' ');
 
     const containerRect = container?.getBoundingClientRect();
 

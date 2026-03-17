@@ -15,8 +15,7 @@ export const zh = defineConfig({
       prev: '上一页',
     },
     editLink: {
-      pattern:
-        'https://github.com/vbenjs/vue-vben-admin/edit/main/docs/src/:path',
+      pattern: 'https://github.com/vbenjs/vue-vben-admin/edit/main/docs/src/:path',
       text: '在 GitHub 上编辑此页面',
     },
     footer: {

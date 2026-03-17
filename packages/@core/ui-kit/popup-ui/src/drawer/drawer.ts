@@ -137,9 +137,7 @@ export interface DrawerState extends DrawerProps {
 }
 
 export type ExtendedDrawerApi = DrawerApi & {
-  useStore: <T = NoInfer<DrawerState>>(
-    selector?: (state: NoInfer<DrawerState>) => T,
-  ) => Readonly<Ref<T>>;
+  useStore: <T = NoInfer<DrawerState>>(selector?: (state: NoInfer<DrawerState>) => T) => Readonly<Ref<T>>;
 };
 
 export interface DrawerApiOptions extends DrawerState {

@@ -37,10 +37,7 @@ import {
   Upload,
 } from 'ant-design-vue';
 
-const withDefaultPlaceholder = <T extends Component>(
-  component: T,
-  type: 'input' | 'select',
-) => {
+const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select') => {
   return (props: any, { attrs, slots }: Omit<SetupContext, 'expose'>) => {
     const placeholder = props?.placeholder || $t(`ui.placeholder.${type}`);
     return h(component, { ...props, ...attrs, placeholder }, slots);

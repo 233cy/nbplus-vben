@@ -11,14 +11,11 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const props = withDefaults(
-  defineProps<TooltipContentProps & { class?: any }>(),
-  {
-    class: '',
-    side: 'right',
-    sideOffset: 5,
-  },
-);
+const props = withDefaults(defineProps<TooltipContentProps & { class?: any }>(), {
+  class: '',
+  side: 'right',
+  sideOffset: 5,
+});
 
 const emits = defineEmits<TooltipContentEmits>();
 

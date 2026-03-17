@@ -70,15 +70,9 @@ function changeLoading() {
   <div class="vp-raw w-full">
     <Grid>
       <template #toolbar-tools>
-        <Button class="mr-2" type="primary" @click="changeBorder">
-          {{ showBorder ? '隐藏' : '显示' }}边框
-        </Button>
-        <Button class="mr-2" type="primary" @click="changeLoading">
-          显示loading
-        </Button>
-        <Button class="mr-2" type="primary" @click="changeStripe">
-          {{ showStripe ? '隐藏' : '显示' }}斑马纹
-        </Button>
+        <Button class="mr-2" type="primary" @click="changeBorder"> {{ showBorder ? '隐藏' : '显示' }}边框 </Button>
+        <Button class="mr-2" type="primary" @click="changeLoading"> 显示loading </Button>
+        <Button class="mr-2" type="primary" @click="changeStripe"> {{ showStripe ? '隐藏' : '显示' }}斑马纹 </Button>
       </template>
     </Grid>
   </div>

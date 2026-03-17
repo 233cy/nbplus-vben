@@ -33,10 +33,7 @@ const formSchema = computed((): VbenFormSchema[] => {
       componentProps: {
         codeLength: CODE_LENGTH,
         createText: (countdown: number) => {
-          const text =
-            countdown > 0
-              ? $t('authentication.sendText', [countdown])
-              : $t('authentication.sendCode');
+          const text = countdown > 0 ? $t('authentication.sendText', [countdown]) : $t('authentication.sendCode');
           return text;
         },
         placeholder: $t('authentication.code'),
@@ -61,9 +58,5 @@ async function handleLogin(values: Recordable<any>) {
 </script>
 
 <template>
-  <AuthenticationCodeLogin
-    :form-schema="formSchema"
-    :loading="loading"
-    @submit="handleLogin"
-  />
+  <AuthenticationCodeLogin :form-schema="formSchema" :loading="loading" @submit="handleLogin" />
 </template>

@@ -9,14 +9,7 @@ export const rawPathRegexp =
   /^(.+?(?:\.([\da-z]+))?)(#[\w-]+)?(?: ?{(\d+(?:[,-]\d+)*)? ?(\S+)?})? ?(?:\[(.+)])?$/;
 
 function rawPathToToken(rawPath: string) {
-  const [
-    filepath = '',
-    extension = '',
-    region = '',
-    lines = '',
-    lang = '',
-    rawTitle = '',
-  ] = (rawPathRegexp.exec(rawPath) || []).slice(1);
+  const [filepath = '', extension = '', region = '', lines = '', lang = '', rawTitle = ''] = (rawPathRegexp.exec(rawPath) || []).slice(1);
 
   const title = rawTitle || filepath.split('/').pop() || '';
 
@@ -26,9 +19,7 @@ function rawPathToToken(rawPath: string) {
 export const demoPreviewPlugin = (md: MarkdownRenderer) => {
   md.core.ruler.after('inline', 'demo-preview', (state) => {
     const insertComponentImport = (importString: string) => {
-      const index = state.tokens.findIndex(
-        (i) => i.type === 'html_block' && i.content.match(/<script setup>/g),
-      );
+      const index = state.tokens.findIndex((i) => i.type === 'html_block' && i.content.match(/<script setup>/g));
       if (index === -1) {
         const importComponent = new state.Token('html_block', '', 0);
         importComponent.content = `<script setup>\n${importString}\n</script>\n`;
@@ -36,10 +27,7 @@ export const demoPreviewPlugin = (md: MarkdownRenderer) => {
       } else {
         if (state.tokens[index]) {
           const content = state.tokens[index].content;
-          state.tokens[index].content = content.replace(
-            '</script>',
-            `${importString}\n</script>`,
-          );
+          state.tokens[index].content = content.replace('</script>', `${importString}\n</script>`);
         }
       }
     };
@@ -47,10 +35,7 @@ export const demoPreviewPlugin = (md: MarkdownRenderer) => {
     const regex = /<DemoPreview[^>]*\sdir="([^"]*)"/g;
     // Iterate through the Markdown content and replace the pattern
     state.src = state.src.replaceAll(regex, (_match, dir) => {
-      const componentDir = join(process.cwd(), 'src', dir).replaceAll(
-        '\\',
-        '/',
-      );
+      const componentDir = join(process.cwd(), 'src', dir).replaceAll('\\', '/');
 
       let childFiles: string[] = [];
       let dirExists = true;
@@ -73,9 +58,7 @@ export const demoPreviewPlugin = (md: MarkdownRenderer) => {
       const uniqueWord = generateContentHash(componentDir);
 
       const ComponentName = `DemoComponent_${uniqueWord}`;
-      insertComponentImport(
-        `import ${ComponentName} from '${componentDir}/index.vue'`,
-      );
+      insertComponentImport(`import ${ComponentName} from '${componentDir}/index.vue'`);
       const { path: _path } = state.env as MarkdownEnv;
 
       const index = state.tokens.findIndex((i) => i.content.match(regex));
@@ -89,8 +72,7 @@ export const demoPreviewPlugin = (md: MarkdownRenderer) => {
         if (b === firstString) return 1;
         return a.localeCompare(b, 'en', { sensitivity: 'base' });
       });
-      state.tokens[index].content =
-        `<DemoPreview files="${encodeURIComponent(JSON.stringify(childFiles))}" ><${ComponentName}/>
+      state.tokens[index].content = `<DemoPreview files="${encodeURIComponent(JSON.stringify(childFiles))}" ><${ComponentName}/>
         `;
 
       const _dummyToken = new state.Token('', '', 0);
@@ -104,13 +86,10 @@ export const demoPreviewPlugin = (md: MarkdownRenderer) => {
 
         const resolvedPath = join(componentDir, filename);
 
-        const { extension, filepath, lang, lines, title } =
-          rawPathToToken(resolvedPath);
+        const { extension, filepath, lang, lines, title } = rawPathToToken(resolvedPath);
         // Add code tokens for each line
         const token = new state.Token('fence', 'code', 0);
-        token.info = `${lang || extension}${lines ? `{${lines}}` : ''}${
-          title ? `[${title}]` : ''
-        }`;
+        token.info = `${lang || extension}${lines ? `{${lines}}` : ''}${title ? `[${title}]` : ''}`;
 
         token.content = `<<< ${filepath}`;
         (token as any).src = [resolvedPath];

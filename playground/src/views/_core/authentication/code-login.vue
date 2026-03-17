@@ -13,8 +13,7 @@ defineOptions({ name: 'CodeLogin' });
 
 const loading = ref(false);
 const CODE_LENGTH = 6;
-const loginRef =
-  useTemplateRef<InstanceType<typeof AuthenticationCodeLogin>>('loginRef');
+const loginRef = useTemplateRef<InstanceType<typeof AuthenticationCodeLogin>>('loginRef');
 function sendCodeApi(phoneNumber: string) {
   message.loading({
     content: $t('page.auth.sendingCode'),
@@ -53,10 +52,7 @@ const formSchema = computed((): VbenFormSchema[] => {
       componentProps: {
         codeLength: CODE_LENGTH,
         createText: (countdown: number) => {
-          const text =
-            countdown > 0
-              ? $t('authentication.sendText', [countdown])
-              : $t('authentication.sendCode');
+          const text = countdown > 0 ? $t('authentication.sendText', [countdown]) : $t('authentication.sendCode');
           return text;
         },
         handleSendCode: async () => {
@@ -100,10 +96,5 @@ async function handleLogin(values: Recordable<any>) {
 </script>
 
 <template>
-  <AuthenticationCodeLogin
-    ref="loginRef"
-    :form-schema="formSchema"
-    :loading="loading"
-    @submit="handleLogin"
-  />
+  <AuthenticationCodeLogin ref="loginRef" :form-schema="formSchema" :loading="loading" @submit="handleLogin" />
 </template>

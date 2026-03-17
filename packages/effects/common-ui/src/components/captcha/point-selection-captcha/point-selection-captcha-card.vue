@@ -5,13 +5,7 @@ import { computed } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@vben-core/shadcn-ui';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@vben-core/shadcn-ui';
 
 const props = withDefaults(defineProps<PointSelectionCaptchaCardProps>(), {
   height: '220px',
@@ -65,14 +59,7 @@ function handleClick(e: MouseEvent) {
       </CardTitle>
     </CardHeader>
     <CardContent class="relative mt-2 flex w-full overflow-hidden rounded p-0">
-      <img
-        v-show="captchaImage"
-        :alt="$t('ui.captcha.alt')"
-        :src="captchaImage"
-        :style="captchaStyles"
-        class="relative z-10"
-        @click="handleClick"
-      />
+      <img v-show="captchaImage" :alt="$t('ui.captcha.alt')" :src="captchaImage" :style="captchaStyles" class="relative z-10" @click="handleClick" />
       <div class="absolute inset-0">
         <slot></slot>
       </div>

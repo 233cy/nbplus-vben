@@ -91,11 +91,7 @@ const [CustomLayoutForm] = useVbenForm({
 </script>
 
 <template>
-  <Page
-    content-class="flex flex-col gap-4"
-    description="使用tailwind自定义表单项的布局"
-    title="表单自定义布局"
-  >
+  <Page content-class="flex flex-col gap-4" description="使用tailwind自定义表单项的布局" title="表单自定义布局">
     <template #description>
       <div class="text-muted-foreground">
         <p>使用tailwind自定义表单项的布局，使用Divider分割表单。</p>

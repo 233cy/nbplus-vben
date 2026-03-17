@@ -7,9 +7,7 @@ import { cn } from '@vben-core/shared/utils';
 
 import { DropdownMenuItem, useForwardProps } from 'reka-ui';
 
-const props = defineProps<
-  DropdownMenuItemProps & { class?: any; inset?: boolean }
->();
+const props = defineProps<DropdownMenuItemProps & { class?: any; inset?: boolean }>();
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props;

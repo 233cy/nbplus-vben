@@ -43,9 +43,7 @@ async function processItem(currentDir, item, targets, _depth) {
     } else if (error.code === 'EPERM' || error.code === 'EACCES') {
       console.error(`❌ Permission denied: ${item} in ${currentDir}`);
     } else {
-      console.error(
-        `❌ Error handling item ${item} in ${currentDir}: ${error.message}`,
-      );
+      console.error(`❌ Error handling item ${item} in ${currentDir}: ${error.message}`);
     }
     return false;
   }
@@ -95,13 +93,9 @@ async function cleanTargetsRecursively(currentDir, targets, depth = 0) {
     const results = await Promise.allSettled(tasks);
 
     // 检查是否有失败的任务（可选：用于调试）
-    const failedTasks = results.filter(
-      (result) => result.status === 'rejected',
-    );
+    const failedTasks = results.filter((result) => result.status === 'rejected');
     if (failedTasks.length > 0) {
-      console.warn(
-        `${failedTasks.length} tasks failed in batch starting at index ${i} in directory: ${currentDir}`,
-      );
+      console.warn(`${failedTasks.length} tasks failed in batch starting at index ${i} in directory: ${currentDir}`);
     }
   }
 }
@@ -116,9 +110,7 @@ async function cleanTargetsRecursively(currentDir, targets, depth = 0) {
     cleanupTargets.push('pnpm-lock.yaml');
   }
 
-  console.log(
-    `🚀 Starting cleanup of targets: ${cleanupTargets.join(', ')} from root: ${rootDir}`,
-  );
+  console.log(`🚀 Starting cleanup of targets: ${cleanupTargets.join(', ')} from root: ${rootDir}`);
 
   const startTime = Date.now();
 
@@ -131,9 +123,7 @@ async function cleanTargetsRecursively(currentDir, targets, depth = 0) {
     const endTime = Date.now();
     const duration = (endTime - startTime) / 1000;
 
-    console.log(
-      `✨ Cleanup process completed successfully in ${duration.toFixed(2)}s`,
-    );
+    console.log(`✨ Cleanup process completed successfully in ${duration.toFixed(2)}s`);
   } catch (error) {
     console.error(`💥 Unexpected error during cleanup: ${error.message}`);
     process.exit(1);

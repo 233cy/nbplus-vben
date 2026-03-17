@@ -57,10 +57,5 @@ function handleSubmit() {
 }
 </script>
 <template>
-  <ProfilePasswordSetting
-    ref="profilePasswordSettingRef"
-    class="w-1/3"
-    :form-schema="formSchema"
-    @submit="handleSubmit"
-  />
+  <ProfilePasswordSetting ref="profilePasswordSettingRef" class="w-1/3" :form-schema="formSchema" @submit="handleSubmit" />
 </template>

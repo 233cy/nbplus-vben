@@ -21,10 +21,7 @@ isFullscreen.value = !!(
 );
 </script>
 <template>
-  <VbenIconButton
-    class="hover:animate-[shrink_0.3s_ease-in-out]"
-    @click="toggle"
-  >
+  <VbenIconButton class="hover:animate-[shrink_0.3s_ease-in-out]" @click="toggle">
     <Minimize v-if="isFullscreen" class="size-4 text-foreground" />
     <Maximize v-else class="size-4 text-foreground" />
   </VbenIconButton>

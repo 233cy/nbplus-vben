@@ -68,12 +68,7 @@ function diff<T extends Record<string, any>>(obj1: T, obj2: T): DiffResult<T> {
       return undefined;
     }
 
-    if (
-      typeof o1 === 'object' &&
-      typeof o2 === 'object' &&
-      o1 !== null &&
-      o2 !== null
-    ) {
+    if (typeof o1 === 'object' && typeof o2 === 'object' && o1 !== null && o2 !== null) {
       const diffResult: any = {};
 
       const keys = new Set([...Object.keys(o1), ...Object.keys(o2)]);

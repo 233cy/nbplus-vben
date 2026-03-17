@@ -33,13 +33,7 @@ const inputComponent = h(Input);
     <template #description>
       <div class="mt-2 text-foreground/80">
         图标可在
-        <a
-          class="text-primary"
-          href="https://icon-sets.iconify.design/"
-          target="_blank"
-        >
-          Iconify
-        </a>
+        <a class="text-primary" href="https://icon-sets.iconify.design/" target="_blank"> Iconify </a>
         中查找，支持多种图标库，如 Material Design, Font Awesome, Jam Icons 等。
       </div>
     </template>
@@ -89,22 +83,11 @@ const inputComponent = h(Input);
       </div>
       <div class="mb-5 flex items-center gap-5">
         <span>自定义Input:</span>
-        <IconPicker
-          :input-component="inputComponent"
-          v-model="iconValue3"
-          icon-slot="addonAfter"
-          model-value-prop="value"
-          prefix="mdi"
-        />
+        <IconPicker :input-component="inputComponent" v-model="iconValue3" icon-slot="addonAfter" model-value-prop="value" prefix="mdi" />
       </div>
       <div class="flex items-center gap-5">
         <span>显示为一个Icon:</span>
-        <Input
-          v-model:value="iconValue4"
-          allow-clear
-          placeholder="点击这里选择图标"
-          style="width: 300px"
-        >
+        <Input v-model:value="iconValue4" allow-clear placeholder="点击这里选择图标" style="width: 300px">
           <template #addonAfter>
             <IconPicker v-model="iconValue4" prefix="mdi-light" type="icon" />
           </template>

@@ -25,11 +25,7 @@ import { customConfig } from './custom-config';
 
 type FlatConfig = Linter.Config;
 
-type FlatConfigPromise =
-  | FlatConfig
-  | FlatConfig[]
-  | Promise<FlatConfig>
-  | Promise<FlatConfig[]>;
+type FlatConfigPromise = FlatConfig | FlatConfig[] | Promise<FlatConfig> | Promise<FlatConfig[]>;
 
 async function defineConfig(config: FlatConfig[] = []) {
   const configs: FlatConfigPromise[] = [

@@ -2,8 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { loadScript } from '../resources';
 
-const testJsPath =
-  'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js';
+const testJsPath = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js';
 
 describe('loadScript', () => {
   beforeEach(() => {
@@ -15,9 +14,7 @@ describe('loadScript', () => {
     const promise = loadScript(testJsPath);
 
     // 此时脚本元素已被创建并插入
-    const script = document.querySelector(
-      `script[src="${testJsPath}"]`,
-    ) as HTMLScriptElement;
+    const script = document.querySelector(`script[src="${testJsPath}"]`) as HTMLScriptElement;
     expect(script).toBeTruthy();
 
     // 模拟加载成功
@@ -47,9 +44,7 @@ describe('loadScript', () => {
   it('should reject when the script fails to load', async () => {
     const promise = loadScript('error.js');
 
-    const script = document.querySelector(
-      'script[src="error.js"]',
-    ) as HTMLScriptElement;
+    const script = document.querySelector('script[src="error.js"]') as HTMLScriptElement;
     expect(script).toBeTruthy();
 
     // 模拟加载失败
@@ -62,9 +57,7 @@ describe('loadScript', () => {
     const p1 = loadScript(testJsPath);
     const p2 = loadScript(testJsPath);
 
-    const script = document.querySelector(
-      `script[src="${testJsPath}"]`,
-    ) as HTMLScriptElement;
+    const script = document.querySelector(`script[src="${testJsPath}"]`) as HTMLScriptElement;
     expect(script).toBeTruthy();
 
     // 触发一次 load，两个 promise 都应该 resolve
@@ -74,9 +67,7 @@ describe('loadScript', () => {
     await expect(p2).resolves.toBeUndefined();
 
     // 只插入一次
-    const scripts = document.head.querySelectorAll(
-      `script[src="${testJsPath}"]`,
-    );
+    const scripts = document.head.querySelectorAll(`script[src="${testJsPath}"]`);
     expect(scripts).toHaveLength(1);
   });
 });

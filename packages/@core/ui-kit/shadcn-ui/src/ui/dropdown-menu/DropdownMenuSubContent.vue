@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import type {
-  DropdownMenuSubContentEmits,
-  DropdownMenuSubContentProps,
-} from 'reka-ui';
+import type { DropdownMenuSubContentEmits, DropdownMenuSubContentProps } from 'reka-ui';
 
 import { computed } from 'vue';
 

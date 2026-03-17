@@ -22,8 +22,5 @@ export default eventHandler(async (event) => {
   }
   const { id, name } = getQuery(event);
 
-  return (name as string) in namesMap &&
-    (!id || namesMap[name as string] !== String(id))
-    ? useResponseSuccess(true)
-    : useResponseSuccess(false);
+  return (name as string) in namesMap && (!id || namesMap[name as string] !== String(id)) ? useResponseSuccess(true) : useResponseSuccess(false);
 });

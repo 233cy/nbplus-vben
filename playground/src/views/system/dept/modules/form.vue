@@ -16,9 +16,7 @@ import { useSchema } from '../data';
 const emit = defineEmits(['success']);
 const formData = ref<SystemDeptApi.SystemDept>();
 const getTitle = computed(() => {
-  return formData.value?.id
-    ? $t('ui.actionTitle.edit', [$t('system.dept.name')])
-    : $t('ui.actionTitle.create', [$t('system.dept.name')]);
+  return formData.value?.id ? $t('ui.actionTitle.edit', [$t('system.dept.name')]) : $t('ui.actionTitle.create', [$t('system.dept.name')]);
 });
 
 const [Form, formApi] = useVbenForm({
@@ -39,9 +37,7 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.lock();
       const data = await formApi.getValues();
       try {
-        await (formData.value?.id
-          ? updateDept(formData.value.id, data)
-          : createDept(data));
+        await (formData.value?.id ? updateDept(formData.value.id, data) : createDept(data));
         modalApi.close();
         emit('success');
       } finally {

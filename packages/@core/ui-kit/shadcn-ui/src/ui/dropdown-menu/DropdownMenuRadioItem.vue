@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import type {
-  DropdownMenuRadioItemEmits,
-  DropdownMenuRadioItemProps,
-} from 'reka-ui';
+import type { DropdownMenuRadioItemEmits, DropdownMenuRadioItemProps } from 'reka-ui';
 
 import { computed } from 'vue';
 
 import { cn } from '@vben-core/shared/utils';
 
 import { Circle } from 'lucide-vue-next';
-import {
-  DropdownMenuItemIndicator,
-  DropdownMenuRadioItem,
-  useForwardPropsEmits,
-} from 'reka-ui';
+import { DropdownMenuItemIndicator, DropdownMenuRadioItem, useForwardPropsEmits } from 'reka-ui';
 
 const props = defineProps<DropdownMenuRadioItemProps & { class?: any }>();
 

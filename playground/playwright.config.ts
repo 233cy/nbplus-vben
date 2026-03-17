@@ -73,10 +73,7 @@ const config: PlaywrightTestConfig = {
     // },
   ],
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ['list'],
-    ['html', { outputFolder: 'node_modules/.e2e/test-results' }],
-  ],
+  reporter: [['list'], ['html', { outputFolder: 'node_modules/.e2e/test-results' }]],
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   testDir: './__tests__/e2e',

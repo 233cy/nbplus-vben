@@ -39,9 +39,7 @@ const isFirstLevel = computed(() => {
 });
 
 const getCollapseShowTitle = computed(() => {
-  return (
-    rootMenu.props.collapseShowTitle && isFirstLevel.value && collapse.value
-  );
+  return rootMenu.props.collapseShowTitle && isFirstLevel.value && collapse.value;
 });
 
 const mode = computed(() => {
@@ -53,19 +51,11 @@ const showArrowIcon = computed(() => {
 });
 
 const hiddenTitle = computed(() => {
-  return (
-    mode.value === 'vertical' &&
-    isFirstLevel.value &&
-    collapse.value &&
-    !getCollapseShowTitle.value
-  );
+  return mode.value === 'vertical' && isFirstLevel.value && collapse.value && !getCollapseShowTitle.value;
 });
 
 const iconComp = computed(() => {
-  return (mode.value === 'horizontal' && !isFirstLevel.value) ||
-    (mode.value === 'vertical' && collapse.value)
-    ? ChevronRight
-    : ChevronDown;
+  return (mode.value === 'horizontal' && !isFirstLevel.value) || (mode.value === 'vertical' && collapse.value) ? ChevronRight : ChevronDown;
 });
 
 const iconArrowStyle = computed(() => {
@@ -73,33 +63,15 @@ const iconArrowStyle = computed(() => {
 });
 </script>
 <template>
-  <div
-    :class="[
-      b(),
-      is('collapse-show-title', getCollapseShowTitle),
-      is('more', isMenuMore),
-    ]"
-  >
+  <div :class="[b(), is('collapse-show-title', getCollapseShowTitle), is('more', isMenuMore)]">
     <slot></slot>
 
-    <VbenIcon
-      v-if="!isMenuMore"
-      :class="nsMenu.e('icon')"
-      :icon="icon"
-      fallback
-    />
+    <VbenIcon v-if="!isMenuMore" :class="nsMenu.e('icon')" :icon="icon" fallback />
 
     <div v-if="!hiddenTitle" :class="[e('title')]">
       <slot name="title"></slot>
     </div>
 
-    <component
-      :is="iconComp"
-      v-if="!isMenuMore"
-      v-show="showArrowIcon"
-      :class="[e('icon-arrow')]"
-      :style="iconArrowStyle"
-      class="size-4"
-    />
+    <component :is="iconComp" v-if="!isMenuMore" v-show="showArrowIcon" :class="[e('icon-arrow')]" :style="iconArrowStyle" class="size-4" />
   </div>
 </template>

@@ -21,11 +21,7 @@ function useMixedMenu() {
   const defaultSubMap = new Map<string, string>();
   const { isMixedNav, isHeaderMixedNav } = usePreferences();
 
-  const needSplit = computed(
-    () =>
-      (preferences.navigation.split && isMixedNav.value) ||
-      isHeaderMixedNav.value,
-  );
+  const needSplit = computed(() => (preferences.navigation.split && isMixedNav.value) || isHeaderMixedNav.value);
 
   const sidebarVisible = computed(() => {
     const enableSidebar = preferences.sidebar.enable;
@@ -100,11 +96,7 @@ function useMixedMenu() {
     if (_splitSideMenus.length === 0) {
       navigation(key);
     } else if (rootMenu && preferences.sidebar.autoActivateChild) {
-      navigation(
-        defaultSubMap.has(rootMenu.path)
-          ? (defaultSubMap.get(rootMenu.path) as string)
-          : rootMenu.path,
-      );
+      navigation(defaultSubMap.has(rootMenu.path) ? (defaultSubMap.get(rootMenu.path) as string) : rootMenu.path);
     }
   };
 
@@ -115,9 +107,7 @@ function useMixedMenu() {
    */
   const handleMenuOpen = (key: string, parentsPath: string[]) => {
     if (parentsPath.length <= 1 && preferences.sidebar.autoActivateChild) {
-      navigation(
-        defaultSubMap.has(key) ? (defaultSubMap.get(key) as string) : key,
-      );
+      navigation(defaultSubMap.has(key) ? (defaultSubMap.get(key) as string) : key);
     }
   };
 
@@ -145,8 +135,7 @@ function useMixedMenu() {
         return;
       }
       calcSideMenus(currentPath);
-      if (rootMenuPath.value)
-        defaultSubMap.set(rootMenuPath.value, currentPath);
+      if (rootMenuPath.value) defaultSubMap.set(rootMenuPath.value, currentPath);
     },
     { immediate: true },
   );

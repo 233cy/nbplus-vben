@@ -4,16 +4,7 @@ import { getPackagesSync } from '@vben/node-utils';
 
 const { packages } = getPackagesSync();
 
-const allowedScopes = [
-  ...packages.map((pkg) => pkg.packageJson.name),
-  'project',
-  'style',
-  'lint',
-  'ci',
-  'dev',
-  'deploy',
-  'other',
-];
+const allowedScopes = [...packages.map((pkg) => pkg.packageJson.name), 'project', 'style', 'lint', 'ci', 'dev', 'deploy', 'other'];
 
 // precomputed scope
 const scopeComplete = execSync('git status --porcelain || true')
@@ -128,25 +119,7 @@ const userConfig = {
      * type[scope]: [function] description
      * ^^^^
      */
-    'type-enum': [
-      2,
-      'always',
-      [
-        'feat',
-        'fix',
-        'perf',
-        'style',
-        'docs',
-        'test',
-        'refactor',
-        'build',
-        'ci',
-        'chore',
-        'revert',
-        'types',
-        'release',
-      ],
-    ],
+    'type-enum': [2, 'always', ['feat', 'fix', 'perf', 'style', 'docs', 'test', 'refactor', 'build', 'ci', 'chore', 'revert', 'types', 'release']],
   },
 };
 

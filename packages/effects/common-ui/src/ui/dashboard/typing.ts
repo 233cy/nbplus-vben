@@ -39,10 +39,4 @@ interface WorkbenchQuickNavItem {
   url?: string;
 }
 
-export type {
-  AnalysisOverviewItem,
-  WorkbenchProjectItem,
-  WorkbenchQuickNavItem,
-  WorkbenchTodoItem,
-  WorkbenchTrendItem,
-};
+export type { AnalysisOverviewItem, WorkbenchProjectItem, WorkbenchQuickNavItem, WorkbenchTodoItem, WorkbenchTrendItem };

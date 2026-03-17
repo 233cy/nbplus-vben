@@ -23,9 +23,7 @@ function handleUpdateTitle() {
 <template>
   <Drawer>
     <div class="flex-col-center">
-      <Button class="mb-3" type="primary" @click="handleUpdateTitle()">
-        内部动态修改标题
-      </Button>
+      <Button class="mb-3" type="primary" @click="handleUpdateTitle()"> 内部动态修改标题 </Button>
     </div>
   </Drawer>
 </template>

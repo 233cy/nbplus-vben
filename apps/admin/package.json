@@ -26,10 +26,10 @@
     "#/*": "./src/*"
   },
   "dependencies": {
-    "@uppy/core": "^5.1.1",
-    "@uppy/tus": "^5.0.2",
-    "@uppy/vue": "^3.1.0",
-    "@uppy/xhr-upload": "^5.1.1",
+    "@uppy/core": "catalog:",
+    "@uppy/tus": "catalog:",
+    "@uppy/vue": "catalog:",
+    "@uppy/xhr-upload": "catalog:",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",
@@ -45,18 +45,18 @@
     "@vben/types": "workspace:*",
     "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
-    "@wangeditor/editor": "^5.1.23",
-    "@wangeditor/editor-for-vue": "^5.1.12",
+    "@wangeditor/editor": "catalog:",
+    "@wangeditor/editor-for-vue": "catalog:",
     "ant-design-vue": "catalog:",
-    "crypto-js": "^4.2.0",
+    "crypto-js": "catalog:",
     "dayjs": "catalog:",
     "pinia": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:",
-    "xe-utils": "^3.8.4"
+    "xe-utils": "catalog:"
   },
   "devDependencies": {
-    "unplugin-auto-import": "^20.2.0",
-    "unplugin-vue-components": "^30.0.0"
+    "unplugin-auto-import": "catalog:",
+    "unplugin-vue-components": "catalog:"
   }
 }

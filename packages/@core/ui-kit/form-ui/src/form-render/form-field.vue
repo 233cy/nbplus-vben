@@ -6,15 +6,7 @@ import type { FormSchema, MaybeComponentProps } from '../types';
 import { computed, nextTick, onUnmounted, useTemplateRef, watch } from 'vue';
 
 import { CircleAlert } from '@vben-core/icons';
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormMessage,
-  VbenRenderContent,
-  VbenTooltip,
-} from '@vben-core/shadcn-ui';
+import { FormControl, FormDescription, FormField, FormItem, FormMessage, VbenRenderContent, VbenTooltip } from '@vben-core/shadcn-ui';
 import { cn, isFunction, isObject, isString } from '@vben-core/shared/utils';
 
 import { toTypedSchema } from '@vee-validate/zod';
@@ -64,9 +56,7 @@ const compact = computed(() => formRenderProps.compact);
 const isInValid = computed(() => errors.value?.length > 0);
 
 const FieldComponent = computed(() => {
-  const finalComponent = isString(component)
-    ? componentMap.value[component]
-    : component;
+  const finalComponent = isString(component) ? componentMap.value[component] : component;
   if (!finalComponent) {
     // 组件未注册
     console.warn(`Component ${component} is not registered`);
@@ -74,14 +64,7 @@ const FieldComponent = computed(() => {
   return finalComponent;
 });
 
-const {
-  dynamicComponentProps,
-  dynamicRules,
-  isDisabled,
-  isIf,
-  isRequired,
-  isShow,
-} = useDependencies(() => dependencies);
+const { dynamicComponentProps, dynamicRules, isDisabled, isIf, isRequired, isShow } = useDependencies(() => dependencies);
 
 const labelStyle = computed(() => {
   return labelClass?.includes('w-') || isVertical.value
@@ -155,9 +138,7 @@ const fieldRules = computed(() => {
 });
 
 const computedProps = computed(() => {
-  const finalComponentProps = isFunction(componentProps)
-    ? componentProps(values.value, formApi!)
-    : componentProps;
+  const finalComponentProps = isFunction(componentProps) ? componentProps(values.value, formApi!) : componentProps;
 
   return {
     ...commonComponentProps,
@@ -207,16 +188,12 @@ function fieldBindEvent(slotProps: Record<string, any>) {
   const modelValue = slotProps.componentField.modelValue;
   const handler = slotProps.componentField['onUpdate:modelValue'];
 
-  const bindEventField =
-    modelPropName ||
-    (isString(component) ? componentBindEventMap.value?.[component] : null);
+  const bindEventField = modelPropName || (isString(component) ? componentBindEventMap.value?.[component] : null);
 
   let value = modelValue;
   // antd design 的一些组件会传递一个 event 对象
   if (modelValue && isObject(modelValue) && bindEventField) {
-    value = isEventObjectLike(modelValue)
-      ? modelValue?.target?.[bindEventField]
-      : (modelValue?.[bindEventField] ?? modelValue);
+    value = isEventObjectLike(modelValue) ? modelValue?.target?.[bindEventField] : (modelValue?.[bindEventField] ?? modelValue);
   }
 
   if (bindEventField) {
@@ -250,12 +227,8 @@ function createComponentProps(slotProps: Record<string, any>) {
     ...slotProps.componentField,
     ...computedProps.value,
     ...bindEvents,
-    ...(Reflect.has(computedProps.value, 'onChange')
-      ? { onChange: computedProps.value.onChange }
-      : {}),
-    ...(Reflect.has(computedProps.value, 'onInput')
-      ? { onInput: computedProps.value.onInput }
-      : {}),
+    ...(Reflect.has(computedProps.value, 'onChange') ? { onChange: computedProps.value.onChange } : {}),
+    ...(Reflect.has(computedProps.value, 'onInput') ? { onInput: computedProps.value.onInput } : {}),
   };
 
   return binds;
@@ -283,12 +256,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <FormField
-    v-if="!hide && isIf"
-    v-bind="fieldProps"
-    v-slot="slotProps"
-    :name="fieldName"
-  >
+  <FormField v-if="!hide && isIf" v-bind="fieldProps" v-slot="slotProps" :name="fieldName">
     <FormItem
       v-show="isShow"
       :class="{
@@ -339,38 +307,20 @@ onUnmounted(() => {
                 :is="FieldComponent"
                 ref="fieldComponentRef"
                 :class="{
-                  'border-destructive hover:border-destructive/80 focus:border-destructive focus:shadow-[0_0_0_2px_rgba(255,38,5,0.06)]':
-                    isInValid,
+                  'border-destructive hover:border-destructive/80 focus:border-destructive focus:shadow-[0_0_0_2px_rgba(255,38,5,0.06)]': isInValid,
                 }"
                 v-bind="createComponentProps(slotProps)"
                 :disabled="shouldDisabled"
               >
-                <template
-                  v-for="name in renderContentKey"
-                  :key="name"
-                  #[name]="renderSlotProps"
-                >
-                  <VbenRenderContent
-                    :content="customContentRender[name]"
-                    v-bind="{ ...renderSlotProps, formContext: slotProps }"
-                  />
+                <template v-for="name in renderContentKey" :key="name" #[name]="renderSlotProps">
+                  <VbenRenderContent :content="customContentRender[name]" v-bind="{ ...renderSlotProps, formContext: slotProps }" />
                 </template>
                 <!-- <slot></slot> -->
               </component>
-              <VbenTooltip
-                v-if="compact && isInValid"
-                :delay-duration="300"
-                side="left"
-              >
+              <VbenTooltip v-if="compact && isInValid" :delay-duration="300" side="left">
                 <template #trigger>
                   <slot name="trigger">
-                    <CircleAlert
-                      :class="
-                        cn(
-                          'inline-flex size-5 cursor-pointer text-foreground/80 hover:text-foreground',
-                        )
-                      "
-                    />
+                    <CircleAlert :class="cn('inline-flex size-5 cursor-pointer text-foreground/80 hover:text-foreground')" />
                   </slot>
                 </template>
                 <FormMessage />

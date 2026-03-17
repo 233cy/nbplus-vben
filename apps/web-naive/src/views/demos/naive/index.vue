@@ -19,9 +19,7 @@ function success() {
   message.success('Cause you walked hand in hand With another man in my place');
 }
 function loading() {
-  message.loading(
-    'If I were you, I will realize that I love you more than any other guy',
-  );
+  message.loading('If I were you, I will realize that I love you more than any other guy');
 }
 
 function notify(type: NotificationType) {

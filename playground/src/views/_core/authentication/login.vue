@@ -69,9 +69,7 @@ const formSchema = computed((): VbenFormSchema[] => {
       dependencies: {
         trigger(values, form) {
           if (values.selectAccount) {
-            const findUser = MOCK_USER_OPTIONS.find(
-              (item) => item.value === values.selectAccount,
-            );
+            const findUser = MOCK_USER_OPTIONS.find((item) => item.value === values.selectAccount);
             if (findUser) {
               form.setValues({
                 password: '123456',
@@ -105,8 +103,7 @@ const formSchema = computed((): VbenFormSchema[] => {
   ];
 });
 
-const loginRef =
-  useTemplateRef<InstanceType<typeof AuthenticationLogin>>('loginRef');
+const loginRef = useTemplateRef<InstanceType<typeof AuthenticationLogin>>('loginRef');
 
 async function onSubmit(params: Recordable<any>) {
   authStore.authLogin(params).catch(() => {
@@ -115,18 +112,11 @@ async function onSubmit(params: Recordable<any>) {
     // 重置验证码组件的值
     formApi?.setFieldValue('captcha', false, false);
     // 使用表单API获取验证码组件实例，并调用其resume方法来重置验证码
-    formApi
-      ?.getFieldComponentRef<InstanceType<typeof SliderCaptcha>>('captcha')
-      ?.resume();
+    formApi?.getFieldComponentRef<InstanceType<typeof SliderCaptcha>>('captcha')?.resume();
   });
 }
 </script>
 
 <template>
-  <AuthenticationLogin
-    ref="loginRef"
-    :form-schema="formSchema"
-    :loading="authStore.loginLoading"
-    @submit="onSubmit"
-  />
+  <AuthenticationLogin ref="loginRef" :form-schema="formSchema" :loading="authStore.loginLoading" @submit="onSubmit" />
 </template>

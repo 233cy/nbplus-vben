@@ -5,14 +5,7 @@ import { useSlots } from 'vue';
 
 import { CircleHelp } from '@vben/icons';
 
-import {
-  NumberField,
-  NumberFieldContent,
-  NumberFieldDecrement,
-  NumberFieldIncrement,
-  NumberFieldInput,
-  VbenTooltip,
-} from '@vben-core/shadcn-ui';
+import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput, VbenTooltip } from '@vben-core/shadcn-ui';
 
 defineOptions({
   name: 'PreferenceSelectItem',

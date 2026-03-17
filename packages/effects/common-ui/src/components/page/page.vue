@@ -12,8 +12,7 @@ defineOptions({
   name: 'Page',
 });
 
-const { autoContentHeight = false, heightOffset = 0 } =
-  defineProps<PageProps>();
+const { autoContentHeight = false, heightOffset = 0 } = defineProps<PageProps>();
 
 const headerHeight = ref(0);
 const footerHeight = ref(0);
@@ -52,20 +51,9 @@ onMounted(() => {
 <template>
   <div class="relative flex min-h-full flex-col">
     <div
-      v-if="
-        description ||
-        $slots.description ||
-        title ||
-        $slots.title ||
-        $slots.extra
-      "
+      v-if="description || $slots.description || title || $slots.title || $slots.extra"
       ref="headerRef"
-      :class="
-        cn(
-          'bg-card border-border relative flex items-end border-b px-6 py-4',
-          headerClass,
-        )
-      "
+      :class="cn('bg-card border-border relative flex items-end border-b px-6 py-4', headerClass)"
     >
       <div class="flex-auto">
         <slot name="title">
@@ -89,11 +77,7 @@ onMounted(() => {
     <div :class="cn('h-full p-4', contentClass)" :style="contentStyle">
       <slot></slot>
     </div>
-    <div
-      v-if="$slots.footer"
-      ref="footerRef"
-      :class="cn('bg-card align-center flex px-6 py-4', footerClass)"
-    >
+    <div v-if="$slots.footer" ref="footerRef" :class="cn('bg-card align-center flex px-6 py-4', footerClass)">
       <slot name="footer"></slot>
     </div>
   </div>

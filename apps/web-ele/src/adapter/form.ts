@@ -1,7 +1,4 @@
-import type {
-  VbenFormSchema as FormSchema,
-  VbenFormProps,
-} from '@vben/common-ui';
+import type { VbenFormSchema as FormSchema, VbenFormProps } from '@vben/common-ui';
 
 import type { ComponentType } from './component';
 

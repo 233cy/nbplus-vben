@@ -5,11 +5,7 @@ import { computed } from 'vue';
 
 import { cn } from '@vben-core/shared/utils';
 
-import {
-  ContextMenuContent,
-  ContextMenuPortal,
-  useForwardPropsEmits,
-} from 'reka-ui';
+import { ContextMenuContent, ContextMenuPortal, useForwardPropsEmits } from 'reka-ui';
 
 const props = defineProps<ContextMenuContentProps & { class?: any }>();
 const emits = defineEmits<ContextMenuContentEmits>();

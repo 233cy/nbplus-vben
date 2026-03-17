@@ -25,5 +25,18 @@
     "keyword": "search keywords"
   },
   "selectData": "Select data",
-  "showMore": "Show more"
+  "showMore": "Show more",
+  "captcha": {
+    "slide": "Please hold the slider and drag to the right",
+    "points": "Please click all {text} in the image",
+    "clickToVerify": "Click to verify",
+    "verifySuccess": "Verification successful",
+    "pleaseCompleteSecurityVerification": "Please complete security verification",
+    "networkError": "Network error, please refresh and try again",
+    "verifyFailed": "Verification failed",
+    "pointClickOrder": "Please click in order: [{text}]",
+    "loadFailed": "Load failed, please try again",
+    "pleaseRetry": "Please try again",
+    "loading": "Loading"
+  }
 }

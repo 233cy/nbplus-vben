@@ -39,10 +39,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
   <Drawer append-to-main title="基础抽屉示例" title-tooltip="标题提示内容">
     <template #extra> extra </template>
     此弹窗指定在内容区域打开，并且在关闭之后弹窗内容不会被销毁
-    <Input
-      v-model:value="value"
-      placeholder="KeepAlive测试:connectedComponent"
-    />
+    <Input v-model:value="value" placeholder="KeepAlive测试:connectedComponent" />
     <Form />
   </Drawer>
 </template>

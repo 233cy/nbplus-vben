@@ -3,9 +3,7 @@ import type { Linter } from 'eslint';
 import { interopDefault } from '../util';
 
 export async function jsdoc(): Promise<Linter.Config[]> {
-  const [pluginJsdoc] = await Promise.all([
-    interopDefault(import('eslint-plugin-jsdoc')),
-  ] as const);
+  const [pluginJsdoc] = await Promise.all([interopDefault(import('eslint-plugin-jsdoc'))] as const);
 
   return [
     {

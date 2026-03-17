@@ -8,19 +8,7 @@ import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { useContentMaximize, useTabs } from '@vben/hooks';
-import {
-  ArrowLeftToLine,
-  ArrowRightLeft,
-  ArrowRightToLine,
-  ExternalLink,
-  FoldHorizontal,
-  Fullscreen,
-  Minimize2,
-  Pin,
-  PinOff,
-  RotateCw,
-  X,
-} from '@vben/icons';
+import { ArrowLeftToLine, ArrowRightLeft, ArrowRightToLine, ExternalLink, FoldHorizontal, Fullscreen, Minimize2, Pin, PinOff, RotateCw, X } from '@vben/icons';
 import { $t, useI18n } from '@vben/locales';
 import { getTabKey, useAccessStore, useTabbarStore } from '@vben/stores';
 import { filterTree } from '@vben/utils';
@@ -31,18 +19,8 @@ export function useTabbar() {
   const accessStore = useAccessStore();
   const tabbarStore = useTabbarStore();
   const { contentIsMaximize, toggleMaximize } = useContentMaximize();
-  const {
-    closeAllTabs,
-    closeCurrentTab,
-    closeLeftTabs,
-    closeOtherTabs,
-    closeRightTabs,
-    closeTabByKey,
-    getTabDisableState,
-    openTabInNewWindow,
-    refreshTab,
-    toggleTabPin,
-  } = useTabs();
+  const { closeAllTabs, closeCurrentTab, closeLeftTabs, closeOtherTabs, closeRightTabs, closeTabByKey, getTabDisableState, openTabInNewWindow, refreshTab, toggleTabPin } =
+    useTabs();
 
   /**
    * 当前路径对应的tab的key
@@ -53,16 +31,9 @@ export function useTabbar() {
 
   const { locale } = useI18n();
   const currentTabs = ref<RouteLocationNormalizedGeneric[]>();
-  watch(
-    [
-      () => tabbarStore.getTabs,
-      () => tabbarStore.updateTime,
-      () => locale.value,
-    ],
-    ([tabs]) => {
-      currentTabs.value = tabs.map((item) => wrapperTabLocale(item));
-    },
-  );
+  watch([() => tabbarStore.getTabs, () => tabbarStore.updateTime, () => locale.value], ([tabs]) => {
+    currentTabs.value = tabs.map((item) => wrapperTabLocale(item));
+  });
 
   /**
    * 初始化固定标签页
@@ -116,14 +87,7 @@ export function useTabbar() {
   );
 
   const createContextMenus = (tab: TabDefinition) => {
-    const {
-      disabledCloseAll,
-      disabledCloseCurrent,
-      disabledCloseLeft,
-      disabledCloseOther,
-      disabledCloseRight,
-      disabledRefresh,
-    } = getTabDisableState(tab);
+    const { disabledCloseAll, disabledCloseCurrent, disabledCloseLeft, disabledCloseOther, disabledCloseRight, disabledRefresh } = getTabDisableState(tab);
 
     const affixTab = tab?.meta?.affixTab ?? false;
 
@@ -143,9 +107,7 @@ export function useTabbar() {
         },
         icon: affixTab ? PinOff : Pin,
         key: 'affix',
-        text: affixTab
-          ? $t('preferences.tabbar.contextMenu.unpin')
-          : $t('preferences.tabbar.contextMenu.pin'),
+        text: affixTab ? $t('preferences.tabbar.contextMenu.unpin') : $t('preferences.tabbar.contextMenu.pin'),
       },
       {
         handler: async () => {
@@ -156,9 +118,7 @@ export function useTabbar() {
         },
         icon: contentIsMaximize.value ? Minimize2 : Fullscreen,
         key: contentIsMaximize.value ? 'restore-maximize' : 'maximize',
-        text: contentIsMaximize.value
-          ? $t('preferences.tabbar.contextMenu.restoreMaximize')
-          : $t('preferences.tabbar.contextMenu.maximize'),
+        text: contentIsMaximize.value ? $t('preferences.tabbar.contextMenu.restoreMaximize') : $t('preferences.tabbar.contextMenu.maximize'),
       },
       {
         disabled: disabledRefresh,

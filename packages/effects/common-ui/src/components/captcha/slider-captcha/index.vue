@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import type {
-  CaptchaVerifyPassingData,
-  SliderCaptchaProps,
-  SliderRotateVerifyPassingData,
-} from '../types';
+import type { CaptchaVerifyPassingData, SliderCaptchaProps, SliderRotateVerifyPassingData } from '../types';
 
 import { reactive, unref, useTemplateRef, watch, watchEffect } from 'vue';
 
@@ -86,12 +82,7 @@ function handleDragStart(e: MouseEvent | TouchEvent) {
   if (!actionRef.value) return;
   emit('start', e);
 
-  state.moveDistance =
-    getEventPageX(e) -
-    Number.parseInt(
-      actionRef.value.getStyle().left.replace('px', '') || '0',
-      10,
-    );
+  state.moveDistance = getEventPageX(e) - Number.parseInt(actionRef.value.getStyle().left.replace('px', '') || '0', 10);
   state.startTime = Date.now();
   state.isMoving = true;
 }
@@ -198,12 +189,7 @@ function resume() {
 <template>
   <div
     ref="wrapperRef"
-    :class="
-      cn(
-        'border-border bg-background-deep relative flex h-10 w-full items-center overflow-hidden rounded-md border text-center',
-        props.class,
-      )
-    "
+    :class="cn('border-border bg-background-deep relative flex h-10 w-full items-center overflow-hidden rounded-md border text-center', props.class)"
     :style="wrapperStyle"
     @mouseleave="handleDragOver"
     @mousemove="handleDragMoving"
@@ -211,11 +197,7 @@ function resume() {
     @touchend="handleDragOver"
     @touchmove="handleDragMoving"
   >
-    <SliderCaptchaBar
-      ref="barRef"
-      :bar-style="barStyle"
-      :to-left="state.toLeft"
-    />
+    <SliderCaptchaBar ref="barRef" :bar-style="barStyle" :to-left="state.toLeft" />
     <SliderCaptchaContent
       ref="contentRef"
       :content-style="contentStyle"

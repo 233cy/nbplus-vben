@@ -45,12 +45,7 @@ const badgeStyle = computed(() => {
 <template>
   <span v-if="isDot || badge" :class="$attrs.class" class="absolute">
     <BadgeDot v-if="isDot" :dot-class="badgeClass" :dot-style="badgeStyle" />
-    <div
-      v-else
-      :class="badgeClass"
-      :style="badgeStyle"
-      class="flex-center rounded-xl px-1.5 py-0.5 text-[10px] text-primary-foreground"
-    >
+    <div v-else :class="badgeClass" :style="badgeStyle" class="flex-center rounded-xl px-1.5 py-0.5 text-[10px] text-primary-foreground">
       {{ badge }}
     </div>
   </span>

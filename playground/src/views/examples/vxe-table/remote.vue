@@ -69,12 +69,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
   <Page auto-content-height>
     <Grid table-title="数据列表" table-title-help="提示">
       <template #toolbar-tools>
-        <Button class="mr-2" type="primary" @click="() => gridApi.query()">
-          刷新当前页面
-        </Button>
-        <Button type="primary" @click="() => gridApi.reload()">
-          刷新并返回第一页
-        </Button>
+        <Button class="mr-2" type="primary" @click="() => gridApi.query()"> 刷新当前页面 </Button>
+        <Button type="primary" @click="() => gridApi.reload()"> 刷新并返回第一页 </Button>
       </template>
     </Grid>
   </Page>

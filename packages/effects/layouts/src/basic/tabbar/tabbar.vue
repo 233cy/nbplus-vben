@@ -21,13 +21,7 @@ const tabbarStore = useTabbarStore();
 const { contentIsMaximize, toggleMaximize } = useContentMaximize();
 const { unpinTab } = useTabs();
 
-const {
-  createContextMenus,
-  currentActive,
-  currentTabs,
-  handleClick,
-  handleClose,
-} = useTabbar();
+const { createContextMenus, currentActive, currentTabs, handleClick, handleClose } = useTabbar();
 
 const menus = computed(() => {
   const tab = tabbarStore.getTabByKey(currentActive.value);
@@ -65,11 +59,6 @@ if (!preferences.tabbar.persist) {
   />
   <div class="flex-center h-full">
     <TabsToolMore v-if="preferences.tabbar.showMore" :menus="menus" />
-    <TabsToolScreen
-      v-if="preferences.tabbar.showMaximize"
-      :screen="contentIsMaximize"
-      @change="toggleMaximize"
-      @update:screen="toggleMaximize"
-    />
+    <TabsToolScreen v-if="preferences.tabbar.showMaximize" :screen="contentIsMaximize" @change="toggleMaximize" @update:screen="toggleMaximize" />
   </div>
 </template>

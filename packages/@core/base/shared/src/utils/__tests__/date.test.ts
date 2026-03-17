@@ -3,15 +3,7 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  formatDate,
-  formatDateTime,
-  getCurrentTimezone,
-  getSystemTimezone,
-  isDate,
-  isDayjsObject,
-  setCurrentTimezone,
-} from '../date';
+import { formatDate, formatDateTime, getCurrentTimezone, getSystemTimezone, isDate, isDayjsObject, setCurrentTimezone } from '../date';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

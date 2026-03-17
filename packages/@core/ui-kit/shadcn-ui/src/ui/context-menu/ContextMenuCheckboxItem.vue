@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import type {
-  ContextMenuCheckboxItemEmits,
-  ContextMenuCheckboxItemProps,
-} from 'reka-ui';
+import type { ContextMenuCheckboxItemEmits, ContextMenuCheckboxItemProps } from 'reka-ui';
 
 import { computed } from 'vue';
 
 import { cn } from '@vben-core/shared/utils';
 
 import { Check } from 'lucide-vue-next';
-import {
-  ContextMenuCheckboxItem,
-  ContextMenuItemIndicator,
-  useForwardPropsEmits,
-} from 'reka-ui';
+import { ContextMenuCheckboxItem, ContextMenuItemIndicator, useForwardPropsEmits } from 'reka-ui';
 
 const props = defineProps<ContextMenuCheckboxItemProps & { class?: any }>();
 const emits = defineEmits<ContextMenuCheckboxItemEmits>();

@@ -151,16 +151,11 @@ const [Modal, modalApi] = useVbenModal({
 });
 </script>
 <template>
-  <Page
-    description="表单适配器重新包装了CheckboxGroup和RadioGroup，可以通过options属性传递选项数据（选项数据将作为子组件的属性）"
-    title="表单演示"
-  >
+  <Page description="表单适配器重新包装了CheckboxGroup和RadioGroup，可以通过options属性传递选项数据（选项数据将作为子组件的属性）" title="表单演示">
     <NCard title="基础表单">
       <template #header-extra>
         <NButton type="primary" @click="setFormValues">设置表单值</NButton>
-        <NButton type="primary" @click="modalApi.open()" class="ml-2">
-          打开弹窗
-        </NButton>
+        <NButton type="primary" @click="modalApi.open()" class="ml-2"> 打开弹窗 </NButton>
       </template>
       <Form />
     </NCard>

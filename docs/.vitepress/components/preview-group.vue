@@ -6,13 +6,7 @@ import { computed, ref, useSlots } from 'vue';
 import { VbenTooltip } from '@vben-core/shadcn-ui';
 
 import { Code } from 'lucide-vue-next';
-import {
-  TabsContent,
-  TabsIndicator,
-  TabsList,
-  TabsRoot,
-  TabsTrigger,
-} from 'reka-ui';
+import { TabsContent, TabsIndicator, TabsList, TabsRoot, TabsTrigger } from 'reka-ui';
 
 defineOptions({
   inheritAttrs: false,
@@ -46,11 +40,7 @@ const toggleOpen = () => {
 </script>
 
 <template>
-  <TabsRoot
-    v-model="currentTab"
-    class="overflow-hidden rounded-b-xl border-t border-border bg-background-deep"
-    @update:model-value="open = true"
-  >
+  <TabsRoot v-model="currentTab" class="overflow-hidden rounded-b-xl border-t border-border bg-background-deep" @update:model-value="open = true">
     <div class="flex border-b-2 border-border bg-background pr-2">
       <div class="flex w-full items-center justify-between text-[13px]">
         <TabsList class="relative flex">
@@ -80,27 +70,15 @@ const toggleOpen = () => {
         >
           <VbenTooltip side="top">
             <template #trigger>
-              <Code
-                class="size-7 cursor-pointer rounded-full p-1.5 hover:bg-accent"
-                @click="toggleOpen"
-              />
+              <Code class="size-7 cursor-pointer rounded-full p-1.5 hover:bg-accent" @click="toggleOpen" />
             </template>
             {{ open ? 'Collapse code' : 'Expand code' }}
           </VbenTooltip>
         </div>
       </div>
     </div>
-    <div
-      :class="`${open ? 'h-[unset] max-h-[80vh]' : 'h-0'}`"
-      class="block overflow-y-scroll bg-[var(--vp-code-block-bg)] transition-all duration-300"
-    >
-      <TabsContent
-        v-for="tab in tabs"
-        :key="tab.label"
-        :value="tab.label"
-        as-child
-        class="rounded-xl"
-      >
+    <div :class="`${open ? 'h-[unset] max-h-[80vh]' : 'h-0'}`" class="block overflow-y-scroll bg-[var(--vp-code-block-bg)] transition-all duration-300">
+      <TabsContent v-for="tab in tabs" :key="tab.label" :value="tab.label" as-child class="rounded-xl">
         <div class="relative rounded-xl text-foreground">
           <component :is="tab.component" class="border-0" />
         </div>

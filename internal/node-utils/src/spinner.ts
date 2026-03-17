@@ -7,10 +7,7 @@ interface SpinnerOptions {
   successText?: string;
   title: string;
 }
-export async function spinner<T>(
-  { failedText, successText, title }: SpinnerOptions,
-  callback: () => Promise<T>,
-): Promise<T> {
+export async function spinner<T>({ failedText, successText, title }: SpinnerOptions, callback: () => Promise<T>): Promise<T> {
   const loading: Ora = ora(title).start();
 
   try {
