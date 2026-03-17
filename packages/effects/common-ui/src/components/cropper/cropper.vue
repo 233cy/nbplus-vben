@@ -621,7 +621,6 @@ onUnmounted(() => {
   document.removeEventListener('mousemove', handleMouseMove);
   document.removeEventListener('mouseup', handleMouseUp);
 });
-
 defineExpose({ getCropImage });
 </script>
 

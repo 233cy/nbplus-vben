@@ -138,33 +138,49 @@ defineExpose({
 <template>
   <div>
     <!-- 弹出式触发按钮 -->
-    <div v-if="mode === 'pop'"
+    <div
+      v-if="mode === 'pop'"
       class="group flex h-[40px] w-full cursor-pointer items-center justify-between rounded-md border px-3 transition-all duration-300"
-      :class="[
-        successData !== null ? 'border-green-500 bg-green-50' : (clickShow ? 'border-blue-400 bg-blue-50' : 'border-gray-300 bg-white hover:border-blue-400')
-      ]"
+      :class="[successData !== null ? 'border-green-500 bg-green-50' : clickShow ? 'border-blue-400 bg-blue-50' : 'border-gray-300 bg-white hover:border-blue-400']"
       @click="successData === null && show()"
     >
       <div class="flex items-center gap-2">
         <!-- 验证成功 -->
         <div v-if="successData !== null" class="flex items-center text-green-600">
-          <svg class="mr-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <svg class="mr-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
           <span class="text-sm font-medium">{{ $t('page.captcha.verifySuccess') }}</span>
         </div>
         <!-- 验证中 -->
         <div v-else-if="clickShow" class="flex items-center text-blue-500">
-           <svg class="mr-1.5 h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+          <svg class="mr-1.5 h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+          </svg>
           <span class="text-sm font-medium">{{ $t('page.captcha.loading') || '验证中...' }}</span>
         </div>
         <!-- 待验证 -->
         <div v-else class="flex items-center text-gray-500 transition-colors group-hover:text-blue-500">
-          <svg class="mr-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7a4 4 0 00-8 0v4h8z"></path></svg>
+          <svg class="mr-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7a4 4 0 00-8 0v4h8z"
+            />
+          </svg>
           <span class="text-sm font-medium">{{ $t('page.captcha.clickToVerify') }}</span>
         </div>
       </div>
       <!-- 右侧引导图标 -->
-      <div v-if="successData === null" class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition-colors group-hover:bg-blue-100 group-hover:text-blue-500">
-         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+      <div
+        v-if="successData === null"
+        class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-gray-500 transition-colors group-hover:bg-blue-100 group-hover:text-blue-500"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
       </div>
     </div>
     <div :class="mode === 'pop' ? 'mask' : ''" v-show="showBox">

@@ -281,6 +281,7 @@ const [BaseForm] = useVbenForm({
 /* 验证器 */
 const verify = ref<any>(null);
 const captchaType = ref('blockPuzzle');
+const avatar = ref('');
 
 const onShow = (type: any) => {
   captchaType.value = type;
@@ -320,8 +321,11 @@ const handleSuccess = (res: any) => {
     </a-card>
 
     <a-card class="mb-5" title="上传插件">
-      <Upload :is-private="2" />
-      <Upload :is-private="1" />
+      <UpFile :is-private="2" />
+      <UpFile :is-private="1" />
+      <div>
+        <UpAvatar v-model="avatar" />
+      </div>
     </a-card>
 
     <a-card class="mb-5" :title="$t('demos.page.title')">

@@ -273,31 +273,6 @@ const refresh = () => {
   }, 300);
 };
 
-// 请求背景图片和验证图片
-// function getPicture() {
-//   isLoad.value = true;
-//   const data = {
-//     captchaType: props.captchaType || '',
-//   };
-
-//   reqGet(data)
-//     .then((res) => {
-//       // if (res.repCode === '0000') {
-//       backImgBase.value = res.originalImageBase64;
-//       blockBackImgBase.value = res.jigsawImageBase64;
-//       backToken.value = res.token;
-//       secretKey.value = res.secretKey;
-//       // } else {
-//       //   tipWords.value = res.repMsg || '获取验证码失败';
-//       // }
-//       isLoad.value = false;
-//     })
-//     .catch((error) => {
-//       console.error('获取验证码失败:', error);
-//       tipWords.value = '网络错误，请刷新重试';
-//       isLoad.value = false;
-//     });
-// }
 const getPicture = useThrottleFn(async () => {
   isLoad.value = true;
   try {

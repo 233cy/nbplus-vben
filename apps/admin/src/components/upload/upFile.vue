@@ -4,6 +4,8 @@ import type { UploadFile } from 'ant-design-vue';
 
 import { markRaw, onBeforeUnmount, ref } from 'vue'; // 🌟 引入了 markRaw
 
+import { $t } from '@vben/locales';
+
 import Uppy from '@uppy/core';
 import Tus from '@uppy/tus';
 import XHRUpload from '@uppy/xhr-upload';
@@ -148,7 +150,7 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
         target.downloadUrl = xhrData.fullUrl;
       }
     }
-    message.success(`上传成功：${file?.name}`);
+    message.success($t('page.upload.uploadSuccess', { name: file?.name }));
   });
 
   instance.on('upload-error', (file, error, response) => {
@@ -235,9 +237,9 @@ async function handleRemove(file: UIFile) {
     if (file.logicalPath) {
       try {
         await deleteOssFile({ logicalPath: file.logicalPath });
-        message.success('已彻底抹除服务器上的源文件');
+        message.success($t('page.upload.deleteSourceSuccess'));
       } catch {
-        message.error('文件删除失败，请检查网络或权限');
+        message.error($t('page.upload.deleteFailed'));
         return;
       }
     }
@@ -306,7 +308,7 @@ async function handleDownload(file: UIFile) {
       const res: any = await getTusFileInfo({ uploadKey: file.fileId });
       file.downloadUrl = res.data?.fullUrl || res.fullUrl;
     } catch {
-      return message.error('获取文件下载地址失败');
+      return message.error($t('page.upload.getDownloadUrlFailed'));
     }
   }
 
@@ -323,7 +325,7 @@ async function handleDownload(file: UIFile) {
     :show-upload-list="{ showRemoveIcon: false, showDownloadIcon: false, showPreviewIcon: false }"
     :custom-request="() => {}"
   >
-    <a-button type="primary">选择文件</a-button>
+    <a-button type="primary">{{ $t('page.upload.selectFile') }}</a-button>
 
     <template #itemRender="{ file: rawFile }">
       <a-list
@@ -334,38 +336,45 @@ async function handleDownload(file: UIFile) {
         <template #renderItem="{ item: file }">
           <a-list-item>
             <template #actions>
-              <a-button v-if="!file.isStart" type="link" size="small" @click.stop="handleToggleAction(file)"> 上传 </a-button>
-              <a-button v-else-if="file.status === 'error'" type="link" size="small" @click.stop="handleToggleAction(file)"> 重试 </a-button>
+              <a-button v-if="!file.isStart" type="link" size="small" @click.stop="handleToggleAction(file)"> {{ $t('page.upload.uploadAction') }} </a-button>
+              <a-button v-else-if="file.status === 'error'" type="link" size="small" @click.stop="handleToggleAction(file)"> {{ $t('page.upload.retry') }} </a-button>
               <template v-else-if="file.status !== 'done'">
                 <a-button v-if="file.engine === 'tus'" type="link" size="small" :disabled="file.status === 'queued'" @click.stop="handleToggleAction(file)">
-                  {{ file.status === 'queued' ? '等待中...' : file.paused ? '继续' : '暂停' }}
+                  {{ file.status === 'queued' ? $t('page.upload.waiting') : file.paused ? $t('page.upload.resume') : $t('page.upload.pause') }}
                 </a-button>
 
                 <a-button v-else type="link" size="small" disabled>
-                  {{ file.status === 'queued' ? '等待中...' : '上传中...' }}
+                  {{ file.status === 'queued' ? $t('page.upload.waiting') : $t('page.upload.uploading') }}
                 </a-button>
               </template>
 
-              <a-button type="link" size="small" :disabled="file.status !== 'done'" @click.stop="handleDownload(file)"> 下载 </a-button>
-              <a-button type="link" danger size="small" @click.stop="handleRemove(file)"> 删除 </a-button>
+              <a-button type="link" size="small" :disabled="file.status !== 'done'" @click.stop="handleDownload(file)"> {{ $t('page.upload.download') }} </a-button>
+              <a-button type="link" danger size="small" @click.stop="handleRemove(file)"> {{ $t('page.upload.delete') }} </a-button>
             </template>
 
             <a-list-item-meta>
               <template #title>
                 {{ file.name }}
                 <a-tag class="ml-2" :color="file.engine === 'tus' ? 'blue' : 'green'">
-                  {{ file.engine === 'tus' ? '大文件加速' : '普通极速' }}
+                  {{ file.engine === 'tus' ? $t('page.upload.largeFileSpeedUp') : $t('page.upload.standardSpeed') }}
                 </a-tag>
                 <a-tag class="ml-2" :color="props.isPrivate === 1 ? 'red' : props.isPrivate === 2 ? 'cyan' : 'purple'">
-                  <span v-if="props.isPrivate === 1">私密资源</span>
-                  <span v-else-if="props.isPrivate === 2">公开资源</span>
-                  <span v-else-if="props.isPrivate === 3">保护资源</span>
+                  <span v-if="props.isPrivate === 1">{{ $t('page.upload.privateResource') }}</span>
+                  <span v-else-if="props.isPrivate === 2">{{ $t('page.upload.publicResource') }}</span>
+                  <span v-else-if="props.isPrivate === 3">{{ $t('page.upload.protectedResource') }}</span>
                 </a-tag>
 
                 <span v-if="['uploading', 'paused', 'queued'].includes(file.status)" class="ml-1 text-gray-500">
-                  <template v-if="file.status === 'queued'"> （等待资源分配...） </template>
+                  <template v-if="file.status === 'queued'"> {{ $t('page.upload.waitingAllocation') }} </template>
                   <template v-else>
-                    （{{ file.uploadedMB?.toFixed(2) }} MB / {{ file.totalMB?.toFixed(2) }} MB， {{ file.speed?.toFixed(2) }} MB/s， 剩余 {{ file.eta?.toFixed(1) }}s）
+                    {{
+                      $t('page.upload.progressText', {
+                        uploaded: file.uploadedMB?.toFixed(2),
+                        total: file.totalMB?.toFixed(2),
+                        speed: file.speed?.toFixed(2),
+                        eta: file.eta?.toFixed(1),
+                      })
+                    }}
                   </template>
                 </span>
               </template>
