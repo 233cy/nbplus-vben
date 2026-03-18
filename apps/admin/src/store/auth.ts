@@ -10,8 +10,9 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from '#/api';
+import { getUserInfoApi, loginApi, logoutApi, mfaLoginApi } from '#/api';
 import { $t } from '#/locales';
+import { useAdminUserStore } from '#/store';
 
 export const useAuthStore = defineStore('auth', () => {
   const accessStore = useAccessStore();
@@ -21,50 +22,70 @@ export const useAuthStore = defineStore('auth', () => {
   const loginLoading = ref(false);
 
   /**
-   * 异步处理登录操作
-   * Asynchronously handle the login process
-   * @param params 登录表单数据
+   * 普通登录
+   * 若后端返回 SAFE_MFA_REQUIRED，抛出错误由调用方（login.vue）处理跳转
    */
   async function authLogin(params: Recordable<any>, onSuccess?: () => Promise<void> | void) {
-    // 异步处理用户登录操作并获取 accessToken
     let userInfo: null | UserInfo = null;
     try {
       loginLoading.value = true;
       const { accessToken } = await loginApi(params);
 
-      // 如果成功获取到 accessToken
       if (accessToken) {
-        accessStore.setAccessToken(accessToken);
-
-        // 获取用户信息并存储到 accessStore 中
-        const [fetchUserInfoResult, accessCodes] = await Promise.all([fetchUserInfo(), getAccessCodesApi()]);
-
-        userInfo = fetchUserInfoResult;
-
-        userStore.setUserInfo(userInfo);
-        accessStore.setAccessCodes(accessCodes);
-
-        if (accessStore.loginExpired) {
-          accessStore.setLoginExpired(false);
-        } else {
-          onSuccess ? await onSuccess?.() : await router.push(userInfo.homePath || preferences.app.defaultHomePath);
-        }
-
-        if (userInfo?.realName) {
-          notification.success({
-            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
-            duration: 3,
-            message: $t('authentication.loginSuccess'),
-          });
-        }
+        userInfo = await afterLoginSuccess(accessToken, onSuccess);
       }
     } finally {
       loginLoading.value = false;
     }
+    return { userInfo };
+  }
 
-    return {
-      userInfo,
-    };
+  /**
+   * MFA 二次验证登录
+   */
+  async function authMfaLogin(params: Recordable<any>, onSuccess?: () => Promise<void> | void) {
+    let userInfo: null | UserInfo = null;
+    try {
+      loginLoading.value = true;
+      const { accessToken } = await mfaLoginApi({
+        mfa_channel: params.mfa_channel,
+        mfa_code: params.mfa_code,
+        username: params.username,
+      });
+
+      if (accessToken) {
+        userInfo = await afterLoginSuccess(accessToken, onSuccess);
+      }
+    } finally {
+      loginLoading.value = false;
+    }
+    return { userInfo };
+  }
+
+  /**
+   * 登录成功后的公共处理：存 token、拉用户信息、跳转
+   */
+  async function afterLoginSuccess(accessToken: string, onSuccess?: () => Promise<void> | void) {
+    accessStore.setAccessToken(accessToken);
+
+    const userInfo = await fetchUserInfo();
+    userStore.setUserInfo(userInfo);
+
+    if (accessStore.loginExpired) {
+      accessStore.setLoginExpired(false);
+    } else {
+      onSuccess ? await onSuccess() : await router.push(userInfo.homePath || preferences.app.defaultHomePath);
+    }
+
+    if (userInfo?.realName) {
+      notification.success({
+        description: `${$t('authentication.loginSuccessDesc')}:${userInfo.realName}`,
+        duration: 3,
+        message: $t('authentication.loginSuccess'),
+      });
+    }
+
+    return userInfo;
   }
 
   async function logout(redirect: boolean = true) {
@@ -76,21 +97,39 @@ export const useAuthStore = defineStore('auth', () => {
     resetAllStores();
     accessStore.setLoginExpired(false);
 
-    // 回登录页带上当前路由地址
     await router.replace({
       path: LOGIN_PATH,
-      query: redirect
-        ? {
-            redirect: encodeURIComponent(router.currentRoute.value.fullPath),
-          }
-        : {},
+      query: redirect ? { redirect: encodeURIComponent(router.currentRoute.value.fullPath) } : {},
     });
   }
 
   async function fetchUserInfo() {
-    let userInfo: null | UserInfo = null;
-    userInfo = await getUserInfoApi();
+    const result = await getUserInfoApi();
+    const adminUserStore = useAdminUserStore();
+
+    // 框架所需字段映射
+    const userInfo: UserInfo = {
+      avatar: result.avatar ?? '',
+      desc: '',
+      homePath: preferences.app.defaultHomePath,
+      realName: result.nickname,
+      roles: result.roles ?? [],
+      token: '',
+      userId: result.id,
+      username: result.username,
+    };
     userStore.setUserInfo(userInfo);
+
+    // 业务扩展字段
+    adminUserStore.setAdminUserInfo({
+      email: result.email,
+      permissions: result.permissions,
+      phone: result.phone,
+    });
+
+    // 将 permissions 作为 accessCodes 注入框架权限系统
+    accessStore.setAccessCodes(result.permissions ?? []);
+
     return userInfo;
   }
 
@@ -100,9 +139,19 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     $reset,
+    afterLoginSuccess,
     authLogin,
+    authMfaLogin,
     fetchUserInfo,
     loginLoading,
     logout,
   };
 });
+
+// 解决热更新问题
+const hot = import.meta.hot;
+if (hot) {
+  hot.accept();
+}
+
+export { BizCode } from '#/api/error-codes';

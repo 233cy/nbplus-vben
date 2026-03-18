@@ -1,6 +1,6 @@
 import { requestClient } from '#/api/request';
 
-export namespace uploadApi {
+export namespace uploadType {
   /** 获取tus文件 */
   export interface getTusFileInfo {
     uploadKey?: string;
@@ -19,10 +19,10 @@ export function getUploadUrl() {
   return `${import.meta.env.VITE_API_URL}/upload/file`;
 }
 
-export function getTusFileInfo(data: uploadApi.getTusFileInfo) {
+export function getTusFileInfo(data: uploadType.getTusFileInfo) {
   return requestClient.get(`${import.meta.env.VITE_API_URL}/upload/tus/${data.uploadKey}`);
 }
 
-export function deleteOssFile(data: uploadApi.deleteOssFile) {
+export function deleteOssFile(data: uploadType.deleteOssFile) {
   return requestClient.delete(`${import.meta.env.VITE_API_URL}/upload/del`, { params: data });
 }

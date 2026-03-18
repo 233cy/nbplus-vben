@@ -88,6 +88,14 @@ const coreRoutes: RouteRecordRaw[] = [
           title: $t('page.auth.register'),
         },
       },
+      {
+        name: 'MfaLogin',
+        path: 'mfa-login',
+        component: () => import('#/views/_core/authentication/mfa-login.vue'),
+        meta: {
+          title: $t('page.auth.mfaLogin') || 'MFA 验证',
+        },
+      },
     ],
   },
 ];

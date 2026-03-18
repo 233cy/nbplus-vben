@@ -62,7 +62,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[vue]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "Vue.volar"
   },
   // extensions
   "extensions.ignoreRecommendations": true,
@@ -222,5 +222,6 @@
   "task.autoDetect": "off",
   "window.title": "${folderName}",
   "prettier.printWidth": 160,
-  "oxc.enable": false
+  "oxc.enable": false,
+  "kiroAgent.configureMCP": "Disabled"
 }

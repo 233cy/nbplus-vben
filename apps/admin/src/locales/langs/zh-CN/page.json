@@ -70,6 +70,7 @@
     "pointClickOrder": "请依次点击【{text}】",
     "loadFailed": "加载失败，请重试",
     "pleaseRetry": "请重试",
-    "loading": "加载中"
+    "loading": "加载中",
+    "reVerify": "重新验证"
   }
 }

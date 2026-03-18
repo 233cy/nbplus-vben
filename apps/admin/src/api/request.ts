@@ -28,10 +28,10 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
   // 节流的错误提示函数：1.5 秒内只显示一次，避免弹窗堆叠
   const showErrorMessage = (() => {
     let lastTime = 0;
-    return (msg: string, delay = 1500) => {
+    return (msg: string, delay = 1500, type: 'error' | 'warning' = 'error') => {
       const now = Date.now();
       if (now - lastTime > delay) {
-        message.error(msg);
+        message[type](msg);
         lastTime = now;
       }
     };
@@ -113,9 +113,10 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       const businessMessage = responseData?.message || responseData?.error;
       const finalMsg = businessMessage || msg;
 
-      // 1. 业务逻辑错误 (Http Status 200, 但 Code != 0)
+      // 1. 业务逻辑错误 (HTTP 200, 但 code != 0)：显示警告并 throw，让调用方 catch 到
       if (status === 200 && responseData.code !== 0) {
-        return;
+        showErrorMessage(finalMsg || '操作失败', 1500, 'warning');
+        throw error;
       }
 
       // 2. 致命错误处理：401, 403, 500 等

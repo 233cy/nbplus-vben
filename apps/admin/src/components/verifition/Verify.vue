@@ -195,6 +195,18 @@ defineExpose({
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
       </div>
+      <!-- 验证成功后右侧重新验证按钮 -->
+      <button
+        v-else
+        class="flex items-center gap-1 rounded px-2 py-0.5 text-xs text-green-600 transition-colors hover:bg-green-100 hover:text-green-700 dark:text-green-400 dark:hover:bg-green-500/20"
+        type="button"
+        @click.stop="clearVerifyVal(); show()"
+      >
+        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        {{ $t('page.captcha.reVerify') || '重新验证' }}
+      </button>
     </div>
     <div :class="mode === 'pop' ? 'mask' : ''" v-show="showBox">
       <div :class="mode === 'pop' ? 'verifybox' : ''" :style="boxWidthStyle">

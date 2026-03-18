@@ -1,17 +1,42 @@
 <script lang="ts" setup>
 import type { VbenFormSchema } from '@vben/common-ui';
+import type { Recordable } from '@vben/types';
 
-import { computed, markRaw } from 'vue';
+import { computed, markRaw, useTemplateRef } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { AuthenticationLogin, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { BizCode } from '#/api/error-codes';
 import Verify from '#/components/verifition/Verify.vue';
 import { useAuthStore } from '#/store';
 
 defineOptions({ name: 'Login' });
 
 const authStore = useAuthStore();
+const router = useRouter();
+const loginRef = useTemplateRef<InstanceType<typeof AuthenticationLogin>>('loginRef');
+
+function resetCaptcha() {
+  const formApi = loginRef.value?.getFormApi();
+  formApi?.setFieldValue('captcha', null);
+  const verifyRef = formApi?.getFieldComponentRef<InstanceType<typeof Verify>>('captcha');
+  verifyRef?.clearVerifyVal();
+}
+
+async function onSubmit(params: Recordable<any>) {
+  try {
+    await authStore.authLogin(params);
+  } catch (error: any) {
+    if (error.code === BizCode.SAFE_MFA_REQUIRED) {
+      router.push({ path: '/auth/mfa-login', query: { username: params.username } });
+      return;
+    }
+
+    resetCaptcha();
+  }
+}
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
@@ -30,17 +55,18 @@ const formSchema = computed((): VbenFormSchema[] => {
         placeholder: $t('authentication.password'),
       },
       fieldName: 'password',
+      defaultValue: 'admin',
       label: $t('authentication.password'),
       rules: z.string().min(1, { message: $t('authentication.passwordTip') }),
     },
     {
-      component: 'hidden',
+      hide: true,
+      component: 'input',
       fieldName: 'captchaType',
       defaultValue: 'blockPuzzle',
     },
     {
       component: markRaw(Verify),
-      // 2. 🌟 你需要的参数（Props 或事件）统一放到 componentProps 里
       componentProps: {
         captchaType: 'blockPuzzle',
       },
@@ -48,8 +74,6 @@ const formSchema = computed((): VbenFormSchema[] => {
       fieldName: 'captcha',
       rules: z.any().refine(
         (value) => {
-          // value 就是 handleSuccess 传出来的 data
-          // 只要 value 不是 null/undefined/空，就说明验证通过了
           return value !== null && value !== undefined && value !== '';
         },
         {
@@ -62,5 +86,5 @@ const formSchema = computed((): VbenFormSchema[] => {
 </script>
 
 <template>
-  <AuthenticationLogin :form-schema="formSchema" :loading="authStore.loginLoading" @submit="authStore.authLogin" />
+  <AuthenticationLogin ref="loginRef" :form-schema="formSchema" :loading="authStore.loginLoading" @submit="onSubmit" />
 </template>
