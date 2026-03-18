@@ -13,9 +13,9 @@ export enum BizCode {
   /** 用户不存在 */
   AUTH_USER_NOT_FOUND = 30_003,
 
+  /* 验证码 */
   /** 验证码校验失败 */
   CAPTCHA_CHECK_FAILED = 20_101,
-  /* 验证码 */
   /** 验证码类型不合法 */
   CAPTCHA_TYPE_INVALID = 20_100,
 
@@ -35,12 +35,12 @@ export enum BizCode {
   /** 登录频率超限，触发限流 */
   SAFE_LOGIN_THROTTLE = 20_200,
 
+  /** 需要 MFA 验证 */
   /** MFA 渠道未开启 */
   SAFE_MFA_CHANNEL_OFF = 20_211,
   /** MFA 验证码无效或已过期 */
   SAFE_MFA_CODE_INVALID = 20_213,
   /* 安全防护 - MFA 多因素认证 */
-  /** 需要 MFA 验证 */
   SAFE_MFA_REQUIRED = 20_210,
   /** MFA 验证码发送失败 */
   SAFE_MFA_SEND_FAILED = 20_212,
