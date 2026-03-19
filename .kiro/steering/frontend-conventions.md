@@ -73,11 +73,11 @@ await requestClient.delete('/admin/xxx/del', { data: { id } });
 
 **错误处理机制（request.ts 中已配置）：**
 
-| 情况 | 行为 |
-|------|------|
-| HTTP 200 + `code !== 0` | 弹出 warning，throw error（调用方可 catch） |
-| HTTP 400/401/403/500 | 弹出 error，标记 `isSystemDown = true`（5s 后恢复） |
-| Token 过期 | 自动刷新 token（`refreshTokenApi`）或跳转登录 |
+| 情况                    | 行为                                                |
+| ----------------------- | --------------------------------------------------- |
+| HTTP 200 + `code !== 0` | 弹出 warning，throw error（调用方可 catch）         |
+| HTTP 400/401/403/500    | 弹出 error，标记 `isSystemDown = true`（5s 后恢复） |
+| Token 过期              | 自动刷新 token（`refreshTokenApi`）或跳转登录       |
 
 **调用方捕获业务错误：**
 
@@ -104,7 +104,7 @@ export namespace XxxApi {
   // 参数字段名：camelCase，与后端 Request rules() 一致
   export interface CreateParams {
     name: string;
-    mfaChannel: string;   // 不用 mfa_channel
+    mfaChannel: string; // 不用 mfa_channel
   }
 
   export interface XxxResult {
@@ -127,8 +127,8 @@ export async function createXxxApi(data: XxxApi.CreateParams) {
 ```typescript
 // src/api/error-codes.ts
 export enum BizCode {
-  AUTH_LOGIN_FAILED   = 30_000,
-  SAFE_MFA_REQUIRED   = 20_210,
+  AUTH_LOGIN_FAILED = 30_000,
+  SAFE_MFA_REQUIRED = 20_210,
   // ...与后端 ErrorCode 枚举值一一对应
 }
 ```
@@ -140,14 +140,15 @@ export enum BizCode {
 
 ## 六、Store 分层规范
 
-| Store | 位置 | 职责 |
-|-------|------|------|
-| `useUserStore` | `@vben/stores`（框架） | 框架基础用户信息（avatar、realName、roles、token 等） |
-| `useAccessStore` | `@vben/stores`（框架） | token、权限码、菜单、路由 |
-| `useAuthStore` | `#/store/auth.ts`（业务） | 登录、MFA、登出、fetchUserInfo |
-| `useAdminUserStore` | `#/store/user.ts`（业务） | 业务扩展字段（email、phone、permissions） |
+| Store               | 位置                      | 职责                                                  |
+| ------------------- | ------------------------- | ----------------------------------------------------- |
+| `useUserStore`      | `@vben/stores`（框架）    | 框架基础用户信息（avatar、realName、roles、token 等） |
+| `useAccessStore`    | `@vben/stores`（框架）    | token、权限码、菜单、路由                             |
+| `useAuthStore`      | `#/store/auth.ts`（业务） | 登录、MFA、登出、fetchUserInfo                        |
+| `useAdminUserStore` | `#/store/user.ts`（业务） | 业务扩展字段（email、phone、permissions）             |
 
 **规则：**
+
 - 框架 store 通过 `@vben/stores` 导入，不要在 `#/store` 中重复定义
 - 业务扩展字段放 `useAdminUserStore`，不要污染框架 store
 - `fetchUserInfo` 在 `useAuthStore` 中，负责同时更新框架 store 和业务 store
@@ -212,6 +213,7 @@ $t('page.upload.progressText', { uploaded: 1.2, total: 10, speed: 2.1, eta: 5 })
 ### i18n 开发强制要求
 
 **每新增一个页面/功能，必须同步完成：**
+
 1. 在 `zh-CN/page.json` 中添加对应翻译
 2. 在 `en-US/page.json` 中添加对应翻译（结构完全一致）
 3. 路由 `meta.title` 使用 `$t()` 而非硬编码字符串
@@ -261,34 +263,34 @@ formApi.resetForm();
 
 ### 可用 ComponentType（完整列表）
 
-| 类型 | 说明 |
-|------|------|
-| `Input` | 文本输入框 |
-| `InputPassword` | 密码输入框 |
-| `InputNumber` | 数字输入框 |
-| `Textarea` | 多行文本 |
-| `Select` | 下拉选择 |
-| `ApiSelect` | 异步数据下拉（自动调用 api 加载选项） |
-| `ApiTreeSelect` | 异步树形下拉 |
-| `TreeSelect` | 树形下拉 |
-| `DatePicker` | 日期选择 |
-| `RangePicker` | 日期范围选择 |
-| `TimePicker` | 时间选择 |
-| `Checkbox` | 单个复选框 |
-| `CheckboxGroup` | 复选框组 |
-| `Radio` | 单选按钮 |
-| `RadioGroup` | 单选按钮组 |
-| `Switch` | 开关 |
-| `Rate` | 评分 |
-| `Upload` | 文件上传 |
-| `AutoComplete` | 自动完成 |
-| `Mentions` | 提及输入 |
-| `IconPicker` | 图标选择器 |
-| `Edit` | 富文本编辑器（wangEditor） |
-| `Divider` | 分割线 |
-| `Space` | 间距 |
-| `DefaultButton` | 默认按钮 |
-| `PrimaryButton` | 主要按钮 |
+| 类型            | 说明                                  |
+| --------------- | ------------------------------------- |
+| `Input`         | 文本输入框                            |
+| `InputPassword` | 密码输入框                            |
+| `InputNumber`   | 数字输入框                            |
+| `Textarea`      | 多行文本                              |
+| `Select`        | 下拉选择                              |
+| `ApiSelect`     | 异步数据下拉（自动调用 api 加载选项） |
+| `ApiTreeSelect` | 异步树形下拉                          |
+| `TreeSelect`    | 树形下拉                              |
+| `DatePicker`    | 日期选择                              |
+| `RangePicker`   | 日期范围选择                          |
+| `TimePicker`    | 时间选择                              |
+| `Checkbox`      | 单个复选框                            |
+| `CheckboxGroup` | 复选框组                              |
+| `Radio`         | 单选按钮                              |
+| `RadioGroup`    | 单选按钮组                            |
+| `Switch`        | 开关                                  |
+| `Rate`          | 评分                                  |
+| `Upload`        | 文件上传                              |
+| `AutoComplete`  | 自动完成                              |
+| `Mentions`      | 提及输入                              |
+| `IconPicker`    | 图标选择器                            |
+| `Edit`          | 富文本编辑器（wangEditor）            |
+| `Divider`       | 分割线                                |
+| `Space`         | 间距                                  |
+| `DefaultButton` | 默认按钮                              |
+| `PrimaryButton` | 主要按钮                              |
 
 ### VbenFormSchema 示例
 
@@ -319,7 +321,7 @@ const schema: VbenFormSchema[] = [
     fieldName: 'deptId',
     label: '部门',
     componentProps: {
-      api: getDeptListApi,  // 自动调用，返回 { label, value }[] 格式
+      api: getDeptListApi, // 自动调用，返回 { label, value }[] 格式
       placeholder: '请选择部门',
     },
   },
@@ -333,11 +335,13 @@ const schema: VbenFormSchema[] = [
 项目完整的接口文档（含所有路由的请求参数、响应结构、字段说明）可通过以下方式获取：
 
 **在线 Swagger UI：**
+
 ```
 {后端服务地址}/dev-api/doc
 ```
 
 **使用原则：**
+
 - 开发新功能前，先访问 Swagger 确认接口契约（路径、请求字段、响应结构）
 - 如果 Swagger 无法访问，告知用户"Swagger 无法访问，请确认后端服务是否运行，或提供可访问的文档地址"
 - 不要在代码或 steering 中硬编码具体的接口路径或字段名，一切以 Swagger 文档为准

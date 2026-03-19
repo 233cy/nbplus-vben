@@ -61,7 +61,7 @@ async function handleSendCode() {
 
   await sendMfaCodeApi({
     mfaChannel: selectedChannel.value,
-    mfaTarget: mfaTarget,
+    mfaTarget,
     username: username.value,
   });
 
@@ -88,8 +88,7 @@ const formSchema = computed((): VbenFormSchema[] => {
     component: 'VbenPinInput',
     componentProps: {
       codeLength: CODE_LENGTH,
-      createText: (countdown: number) =>
-        countdown > 0 ? `${countdown}s 后重新发送` : $t('authentication.sendCode'),
+      createText: (countdown: number) => (countdown > 0 ? `${countdown}s 后重新发送` : $t('authentication.sendCode')),
       handleSendCode: isTotpChannel.value ? undefined : handleSendCode,
       placeholder: isTotpChannel.value ? '请输入 Authenticator App 中的验证码' : $t('authentication.code'),
     },
@@ -137,7 +136,7 @@ onMounted(loadChannels);
     :form-schema="formSchema"
     :loading="authStore.loginLoading"
     :sub-title="isTotpChannel ? '请输入 Authenticator App 中显示的 6 位动态验证码' : '验证码将发送至您绑定的手机或邮箱'"
-    :title="'身份二次验证 🔐'"
+    title="身份二次验证 🔐"
     submit-button-text="确认验证"
     @submit="handleSubmit"
   >
@@ -148,12 +147,8 @@ onMounted(loadChannels);
         <button
           v-for="ch in channels"
           :key="ch"
-          :class="[
-            'rounded-full border px-3 py-1 text-xs transition-colors',
-            selectedChannel === ch
-              ? 'border-primary bg-primary text-primary-foreground'
-              : 'border-border text-muted-foreground hover:border-primary hover:text-foreground',
-          ]"
+          class="rounded-full border px-3 py-1 text-xs transition-colors"
+          :class="[selectedChannel === ch ? 'border-primary bg-primary text-primary-foreground' : 'border-border text-muted-foreground hover:border-primary hover:text-foreground']"
           type="button"
           @click="selectedChannel = ch"
         >
