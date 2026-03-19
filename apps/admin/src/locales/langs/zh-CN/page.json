@@ -2,6 +2,7 @@
   "auth": {
     "forgetPassword": "忘记密码",
     "login": "登录",
+    "mfaLogin": "身份二次验证",
     "profile": "个人中心",
     "qrcodeLogin": "二维码登录",
     "register": "注册"

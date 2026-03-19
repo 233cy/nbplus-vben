@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+import type { VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
-import { ref } from 'vue';
+import { computed, onMounted, ref, useTemplateRef } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { AuthenticationCodeLogin, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { message } from 'ant-design-vue';
@@ -18,128 +20,146 @@ const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 
-// 从路由 query 中取登录时传过来的用户名
 const username = ref((route.query.username as string) ?? '');
 const channels = ref<string[]>([]);
 const selectedChannel = ref('');
-const mfaTarget = ref('');
-const mfaCode = ref('');
-const codeSent = ref(false);
-const sending = ref(false);
+const CODE_LENGTH = 6;
+
+/** 渠道友好名称映射 */
+const channelLabels: Record<string, string> = {
+  email: '邮箱验证码',
+  sms: '短信验证码',
+  totp: '动态口令 (TOTP)',
+};
+
+/** TOTP 渠道不需要发送，用户自行从 App 获取 */
+const isTotpChannel = computed(() => selectedChannel.value === 'totp');
 
 async function loadChannels() {
   try {
     const res = await getMfaChannelsApi();
-    channels.value = res.channels;
-    if (res.channels.length > 0) {
-      selectedChannel.value = res.channels[0] ?? '';
+    channels.value = res.channels ?? [];
+    if (channels.value.length > 0) {
+      selectedChannel.value = channels.value[0] ?? '';
     }
   } catch {
-    message.error('获取 MFA 渠道失败');
+    message.error('获取 MFA 渠道失败，请返回重新登录');
   }
 }
 
-async function sendCode() {
-  if (!mfaTarget.value) {
-    message.warning('请输入验证目标（手机号或邮箱）');
+const loginRef = useTemplateRef<InstanceType<typeof AuthenticationCodeLogin>>('loginRef');
+
+/** 发送验证码（由 VbenPinInput 的 handleSendCode 调用） */
+async function handleSendCode() {
+  const formApi = loginRef.value?.getFormApi();
+  const values = formApi ? await formApi.getValues() : {};
+  const mfaTarget = values.mfa_target as string | undefined;
+
+  if (!mfaTarget) {
+    throw new Error('请先填写手机号或邮箱');
+  }
+
+  await sendMfaCodeApi({
+    mfaChannel: selectedChannel.value,
+    mfaTarget: mfaTarget,
+    username: username.value,
+  });
+
+  message.success('验证码已发送');
+}
+
+const formSchema = computed((): VbenFormSchema[] => {
+  const schema: VbenFormSchema[] = [];
+
+  // 非 TOTP 渠道需要填写接收目标
+  if (!isTotpChannel.value) {
+    schema.push({
+      component: 'VbenInput',
+      componentProps: {
+        placeholder: selectedChannel.value === 'sms' ? '请输入手机号' : '请输入邮箱地址',
+      },
+      fieldName: 'mfa_target',
+      label: selectedChannel.value === 'sms' ? '手机号' : '邮箱',
+      rules: z.string().min(1, { message: '请填写接收目标' }),
+    });
+  }
+
+  schema.push({
+    component: 'VbenPinInput',
+    componentProps: {
+      codeLength: CODE_LENGTH,
+      createText: (countdown: number) =>
+        countdown > 0 ? `${countdown}s 后重新发送` : $t('authentication.sendCode'),
+      handleSendCode: isTotpChannel.value ? undefined : handleSendCode,
+      placeholder: isTotpChannel.value ? '请输入 Authenticator App 中的验证码' : $t('authentication.code'),
+    },
+    fieldName: 'mfa_code',
+    label: '验证码',
+    rules: z.string().length(CODE_LENGTH, {
+      message: `请输入 ${CODE_LENGTH} 位验证码`,
+    }),
+  });
+
+  return schema;
+});
+
+async function handleSubmit(values: Recordable<any>) {
+  if (!username.value) {
+    message.error('用户名丢失，请返回重新登录');
+    router.push('/auth/login');
     return;
   }
-  sending.value = true;
-  try {
-    await sendMfaCodeApi({
-      mfa_channel: selectedChannel.value,
-      mfa_target: mfaTarget.value,
-      username: username.value,
-    });
-    codeSent.value = true;
-    message.success('验证码已发送');
-  } catch (error: any) {
-    const bizCode = String(error?.data?.code ?? '') as unknown as BizCode;
-    if (bizCode === BizCode.SAFE_MFA_CHANNEL_OFF) {
-      message.error('该验证渠道未开启');
-    } else {
-      message.error(error?.data?.message || '发送失败，请重试');
-    }
-  } finally {
-    sending.value = false;
-  }
-}
 
-async function onSubmit(params: Recordable<any>) {
   try {
     await authStore.authMfaLogin({
-      mfa_channel: selectedChannel.value,
-      mfa_code: params.mfa_code ?? mfaCode.value,
+      mfaChannel: selectedChannel.value,
+      mfaCode: values.mfa_code,
       username: username.value,
     });
   } catch (error: any) {
-    const bizCode = String(error?.data?.code ?? '') as unknown as BizCode;
-    if (bizCode === BizCode.SAFE_MFA_CODE_INVALID) {
-      message.error(error?.data?.message || 'MFA 验证码无效或已过期');
+    const code = error?.code ?? error?.data?.code;
+    if (code === BizCode.SAFE_MFA_CODE_INVALID) {
+      message.error(error?.data?.message || '验证码无效或已过期，请重新获取');
+    } else if (code === BizCode.SAFE_LOGIN_THROTTLE) {
+      message.error(error?.data?.message || '操作过于频繁，请稍后再试');
     } else {
       message.error(error?.data?.message || '验证失败，请重试');
     }
   }
 }
 
-function goBack() {
-  router.push('/auth/login');
-}
-
-loadChannels();
+onMounted(loadChannels);
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <div class="text-2xl font-semibold text-foreground">
-      {{ $t('page.auth.mfaLogin') || '二次验证' }}
-    </div>
-    <p class="text-sm text-muted-foreground">
-      {{ $t('page.auth.mfaLoginDesc') || '请完成身份二次验证以继续登录' }}
-    </p>
-
-    <div class="flex flex-col gap-3">
-      <!-- 渠道选择 -->
-      <div v-if="channels.length > 1" class="flex gap-2">
+  <AuthenticationCodeLogin
+    ref="loginRef"
+    :form-schema="formSchema"
+    :loading="authStore.loginLoading"
+    :sub-title="isTotpChannel ? '请输入 Authenticator App 中显示的 6 位动态验证码' : '验证码将发送至您绑定的手机或邮箱'"
+    :title="'身份二次验证 🔐'"
+    submit-button-text="确认验证"
+    @submit="handleSubmit"
+  >
+    <!-- 多渠道切换 Tab -->
+    <template v-if="channels.length > 1" #title>
+      <div class="mb-2 text-xl font-semibold">身份二次验证 🔐</div>
+      <div class="mb-4 flex gap-2">
         <button
           v-for="ch in channels"
           :key="ch"
-          class="rounded-md border px-3 py-1.5 text-sm transition-colors"
-          :class="[selectedChannel === ch ? 'border-primary bg-primary text-primary-foreground' : 'border-border hover:border-primary']"
+          :class="[
+            'rounded-full border px-3 py-1 text-xs transition-colors',
+            selectedChannel === ch
+              ? 'border-primary bg-primary text-primary-foreground'
+              : 'border-border text-muted-foreground hover:border-primary hover:text-foreground',
+          ]"
           type="button"
           @click="selectedChannel = ch"
         >
-          {{ ch }}
+          {{ channelLabels[ch] ?? ch }}
         </button>
       </div>
-
-      <!-- 验证目标输入 -->
-      <input v-model="mfaTarget" class="rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-1" placeholder="手机号或邮箱" type="text" />
-
-      <!-- 发送验证码 -->
-      <button
-        :disabled="sending"
-        class="rounded-md border border-border px-3 py-2 text-sm transition-colors hover:border-primary disabled:opacity-50"
-        type="button"
-        @click="sendCode"
-      >
-        {{ sending ? '发送中...' : codeSent ? '重新发送' : '发送验证码' }}
-      </button>
-
-      <!-- 验证码输入 -->
-      <input v-model="mfaCode" class="rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-1" placeholder="请输入验证码" type="text" />
-
-      <!-- 提交 -->
-      <button
-        :disabled="authStore.loginLoading || !mfaCode"
-        class="rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground transition-opacity disabled:opacity-50"
-        type="button"
-        @click="onSubmit({})"
-      >
-        {{ authStore.loginLoading ? '验证中...' : '确认验证' }}
-      </button>
-
-      <button class="text-sm text-muted-foreground hover:text-foreground" type="button" @click="goBack">返回登录</button>
-    </div>
-  </div>
+    </template>
+  </AuthenticationCodeLogin>
 </template>

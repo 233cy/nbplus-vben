@@ -48,8 +48,8 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       loginLoading.value = true;
       const { accessToken } = await mfaLoginApi({
-        mfa_channel: params.mfa_channel,
-        mfa_code: params.mfa_code,
+        mfaChannel: params.mfaChannel,
+        mfaCode: params.mfaCode,
         username: params.username,
       });
 

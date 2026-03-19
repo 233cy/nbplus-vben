@@ -21,15 +21,15 @@ export namespace AuthApi {
 
   /** MFA 发送验证码参数 */
   export interface MfaSendParams {
-    mfa_channel: string;
-    mfa_target: string;
+    mfaChannel: string;
+    mfaTarget: string;
     username: string;
   }
 
   /** MFA 登录参数 */
   export interface MfaLoginParams {
-    mfa_channel: string;
-    mfa_code: string;
+    mfaChannel: string;
+    mfaCode: string;
     username: string;
   }
 
