@@ -14,6 +14,19 @@ export namespace AuthApi {
     accessToken: string;
   }
 
+  /** 验证码登录参数 */
+  export interface CodeSendParams {
+    captcha: string;
+    codeChannel: 'email' | 'sms';
+    codeTarget: string;
+  }
+
+  export interface CodeLoginParams {
+    code: string;
+    codeChannel: 'email' | 'sms';
+    codeTarget: string;
+  }
+
   /** MFA 渠道列表 */
   export interface MfaChannelsResult {
     channels: string[];
@@ -37,6 +50,16 @@ export namespace AuthApi {
   export interface RefreshTokenResult {
     accessToken: string;
   }
+}
+
+/** 发送登录验证码 */
+export async function sendLoginCodeApi(data: AuthApi.CodeSendParams) {
+  return requestClient.post('/admin/auth/code/send', data);
+}
+
+/** 验证码直接登录 */
+export async function codeLoginApi(data: AuthApi.CodeLoginParams) {
+  return requestClient.post<AuthApi.LoginResult>('/admin/auth/code/login', data);
 }
 
 /** 普通登录 */

@@ -10,7 +10,7 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { getUserInfoApi, loginApi, logoutApi, mfaLoginApi } from '#/api';
+import { getUserInfoApi, loginApi, logoutApi, mfaLoginApi, codeLoginApi } from '#/api';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store';
 
@@ -31,6 +31,23 @@ export const useAuthStore = defineStore('auth', () => {
       loginLoading.value = true;
       const { accessToken } = await loginApi(params);
 
+      if (accessToken) {
+        userInfo = await afterLoginSuccess(accessToken, onSuccess);
+      }
+    } finally {
+      loginLoading.value = false;
+    }
+    return { userInfo };
+  }
+
+  /**
+   * 验证码直接登录（短信 / 邮箱）
+   */
+  async function authCodeLogin(params: { code: string; codeChannel: 'email' | 'sms'; codeTarget: string }, onSuccess?: () => Promise<void> | void) {
+    let userInfo: null | UserInfo = null;
+    try {
+      loginLoading.value = true;
+      const { accessToken } = await codeLoginApi(params);
       if (accessToken) {
         userInfo = await afterLoginSuccess(accessToken, onSuccess);
       }
@@ -140,6 +157,7 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     $reset,
     afterLoginSuccess,
+    authCodeLogin,
     authLogin,
     authMfaLogin,
     fetchUserInfo,

@@ -16,10 +16,10 @@ export namespace captchaApi {
 
 // 获取验证码
 export function reqGet(data: captchaApi.reqGet) {
-  return requestClient.post(`${import.meta.env.VITE_API_URL}/captcha/get`, data);
+  return requestClient.post(`/captcha/get`, data);
 }
 
 // 一次验证 (检查验证码).
 export function reqCheck(data: captchaApi.reqCheck) {
-  return requestClient.post(`${import.meta.env.VITE_API_URL}/captcha/check`, data);
+  return requestClient.post(`/captcha/check`, data);
 }

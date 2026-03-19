@@ -5,7 +5,22 @@
     "mfaLogin": "身份二次验证",
     "profile": "个人中心",
     "qrcodeLogin": "二维码登录",
-    "register": "注册"
+    "register": "注册",
+    "codeLogin": {
+      "title": "验证码登录",
+      "subTitle": "验证码将发送至您的手机或邮箱",
+      "smsChannel": "短信验证码",
+      "emailChannel": "邮箱验证码",
+      "phone": "手机号",
+      "email": "邮箱",
+      "phonePlaceholder": "请输入手机号",
+      "emailPlaceholder": "请输入邮箱地址",
+      "targetRequired": "请填写手机号或邮箱",
+      "codeSent": "验证码已发送，请注意查收",
+      "captchaTitle": "请先完成安全验证",
+      "invalidPhone": "请输入有效的手机号",
+      "invalidEmail": "请输入有效的邮箱地址"
+    }
   },
   "clearAll": "清空全部",
   "dashboard": {

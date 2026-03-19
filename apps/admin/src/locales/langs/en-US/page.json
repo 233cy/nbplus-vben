@@ -5,7 +5,22 @@
     "mfaLogin": "Two-Factor Verification",
     "profile": "Profile",
     "qrcodeLogin": "Qr Code Login",
-    "register": "Register"
+    "register": "Register",
+    "codeLogin": {
+      "title": "Code Login",
+      "subTitle": "A verification code will be sent to your phone or email",
+      "smsChannel": "SMS Code",
+      "emailChannel": "Email Code",
+      "phone": "Phone",
+      "email": "Email",
+      "phonePlaceholder": "Enter your phone number",
+      "emailPlaceholder": "Enter your email address",
+      "targetRequired": "Please enter your phone number or email",
+      "codeSent": "Verification code sent, please check your inbox",
+      "captchaTitle": "Please complete security verification",
+      "invalidPhone": "Please enter a valid phone number",
+      "invalidEmail": "Please enter a valid email address"
+    }
   },
   "clearAll": "Clear all",
   "dashboard": {

@@ -145,8 +145,11 @@ defineExpose({
 <template>
   <div class="w-full">
     <!-- 弹出式触发按钮 -->
+    <div v-if="mode === 'pop' && $slots.trigger" @click="show()">
+      <slot name="trigger"></slot>
+    </div>
     <div
-      v-if="mode === 'pop'"
+      v-else-if="mode === 'pop'"
       class="group flex h-[40px] w-full cursor-pointer items-center justify-between rounded-md border px-3 transition-all duration-300"
       :class="[
         successData !== null
@@ -200,10 +203,18 @@ defineExpose({
         v-else
         class="flex items-center gap-1 rounded px-2 py-0.5 text-xs text-green-600 transition-colors hover:bg-green-100 hover:text-green-700 dark:text-green-400 dark:hover:bg-green-500/20"
         type="button"
-        @click.stop="clearVerifyVal(); show()"
+        @click.stop="
+          clearVerifyVal();
+          show();
+        "
       >
         <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          />
         </svg>
         {{ $t('page.captcha.reVerify') || '重新验证' }}
       </button>

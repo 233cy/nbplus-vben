@@ -12,17 +12,17 @@ export namespace uploadType {
 }
 
 export function getTusUrl() {
-  return `${import.meta.env.VITE_API_URL}/upload/tus`;
+  return `/upload/tus`;
 }
 
 export function getUploadUrl() {
-  return `${import.meta.env.VITE_API_URL}/upload/file`;
+  return `/upload/file`;
 }
 
 export function getTusFileInfo(data: uploadType.getTusFileInfo) {
-  return requestClient.get(`${import.meta.env.VITE_API_URL}/upload/tus/${data.uploadKey}`);
+  return requestClient.get(`/upload/tus/${data.uploadKey}`);
 }
 
 export function deleteOssFile(data: uploadType.deleteOssFile) {
-  return requestClient.delete(`${import.meta.env.VITE_API_URL}/upload/del`, { params: data });
+  return requestClient.delete(`/upload/del`, { params: data });
 }
