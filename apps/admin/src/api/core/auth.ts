@@ -50,6 +50,36 @@ export namespace AuthApi {
   export interface RefreshTokenResult {
     accessToken: string;
   }
+
+  /** 是否需要验证码 */
+  export interface CaptchaCheckResult {
+    captchaRequired: boolean;
+  }
+
+  /** 找回密码 - 发送验证码 */
+  export interface PasswordResetSendParams {
+    captcha: string;
+    channel: 'email' | 'sms';
+    target: string;
+  }
+
+  /** 找回密码 - 校验验证码 */
+  export interface PasswordResetVerifyParams {
+    channel: 'email' | 'sms';
+    code: string;
+    target: string;
+  }
+
+  export interface PasswordResetVerifyResult {
+    resetToken: string;
+  }
+
+  /** 找回密码 - 提交新密码 */
+  export interface PasswordResetSubmitParams {
+    confirmPassword: string;
+    newPassword: string;
+    resetToken: string;
+  }
 }
 
 /** 发送登录验证码 */
@@ -65,6 +95,11 @@ export async function codeLoginApi(data: AuthApi.CodeLoginParams) {
 /** 普通登录 */
 export async function loginApi(data: AuthApi.LoginParams) {
   return requestClient.post<AuthApi.LoginResult>('/admin/auth/login', data);
+}
+
+/** 查询当前登录是否需要验证码 */
+export async function checkCaptchaRequiredApi(username: string) {
+  return requestClient.post<AuthApi.CaptchaCheckResult>('/admin/auth/captcha/check', { username });
 }
 
 /** 获取可用 MFA 渠道 */
@@ -95,4 +130,19 @@ export async function refreshTokenApi() {
 /** 获取用户权限码（从 user-info 的 permissions 字段来，此接口作为兼容保留） */
 export async function getAccessCodesApi(): Promise<string[]> {
   return [];
+}
+
+/** 找回密码 - 发送重置验证码 */
+export async function sendPasswordResetCodeApi(data: AuthApi.PasswordResetSendParams) {
+  return requestClient.post('/admin/password/reset/send', data);
+}
+
+/** 找回密码 - 校验重置验证码 */
+export async function verifyPasswordResetCodeApi(data: AuthApi.PasswordResetVerifyParams) {
+  return requestClient.post<AuthApi.PasswordResetVerifyResult>('/admin/password/reset/verify', data);
+}
+
+/** 找回密码 - 提交新密码 */
+export async function submitPasswordResetApi(data: AuthApi.PasswordResetSubmitParams) {
+  return requestClient.post('/admin/password/reset/submit', data);
 }
