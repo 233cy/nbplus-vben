@@ -11,6 +11,7 @@ import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 import { getUserInfoApi, loginApi, logoutApi, mfaLoginApi, codeLoginApi } from '#/api';
+import { BizCode } from '#/api/error-codes';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store';
 
@@ -33,6 +34,12 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (accessToken) {
         userInfo = await afterLoginSuccess(accessToken, onSuccess);
+      }
+    } catch (error: any) {
+      // 将 MFA 错误向上抛，由调用方处理跳转
+      const code = error?.data?.code ?? error?.response?.data?.code;
+      if (code === BizCode.SAFE_MFA_REQUIRED) {
+        throw error;
       }
     } finally {
       loginLoading.value = false;

@@ -14,7 +14,7 @@ import { useAccessStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
 import { $t } from '#/locales';
-import { useAuthStore } from '#/store';
+import { useAdminUserStore, useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const notifications = ref<NotificationItem[]>([
@@ -74,6 +74,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const authStore = useAuthStore();
 const accessStore = useAccessStore();
+const adminUserStore = useAdminUserStore();
 const { destroyWatermark, updateWatermark } = useWatermark();
 const showDot = computed(() => notifications.value.some((item) => !item.isRead));
 
@@ -163,7 +164,7 @@ watch(
 <template>
   <BasicLayout @clear-preferences-and-logout="handleLogout">
     <template #user-dropdown>
-      <UserDropdown :avatar :menus :text="userStore.userInfo?.realName" description="ann.vben@gmail.com" tag-text="Pro" @logout="handleLogout" />
+      <UserDropdown :avatar :menus :text="userStore.userInfo?.realName" :description="adminUserStore.email || userStore.userInfo?.username" tag-text="Pro" @logout="handleLogout" />
     </template>
     <template #notification>
       <Notification

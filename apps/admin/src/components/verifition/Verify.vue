@@ -3,6 +3,9 @@ import { computed, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { reqGet } from '#/api/core/captcha';
+
+import CaptchaWidget from './Verify/CaptchaWidget.vue';
 import VerifyPoints from './Verify/VerifyPoints.vue';
 import VerifySlide from './Verify/VerifySlide.vue';
 
@@ -10,11 +13,10 @@ import VerifySlide from './Verify/VerifySlide.vue';
  * 定义类型接口
  */
 interface Props {
-  captchaType: string;
   figure?: number;
   arith?: number;
-  mode?: 'fixed' | 'pop'; // 限制 mode 的类型
-  modelValue?: any; // 🌟 新增：接收 Vben 表单传进来的当前值
+  mode?: 'fixed' | 'pop';
+  modelValue?: any;
   space?: number;
   explain?: string;
   imgSize?: { height: string; width: string };
@@ -42,38 +44,63 @@ const props = withDefaults(defineProps<Props>(), {
  */
 const emit = defineEmits<{
   (e: 'success', data: any): void;
-  (e: 'update:modelValue', value: any): void; // 🌟 新增：通知 Vben 表单值变了
+  (e: 'update:modelValue', value: any): void;
   (e: 'error', data: any): void;
   (e: 'ready', instance: any): void;
   (e: 'close'): void;
 }>();
 
+// 内部管理的验证码类型，由 /captcha/get 返回
+const captchaType = ref('');
+const captchaData = ref<any>(null); // 完整响应数据，传给子组件作为初始值
+const captchaLoading = ref(false);
+
 // 状态
 const clickShow = ref(false);
-// 这里的 instance 类型设为 any，因为它是动态组件，可能是 Slide 也可能是 Points
 const verifyInstance = ref<any>(null);
 
 /**
+ * 弹窗打开 / type 变化时调用，获取完整验证码数据后传给子组件
+ */
+async function fetchCaptcha() {
+  captchaLoading.value = true;
+  captchaData.value = null;
+  try {
+    const res: any = await reqGet();
+    if (res?.type) {
+      captchaType.value = res.type;
+      captchaData.value = res;
+    }
+  } catch {
+    captchaType.value = 'blockPuzzle';
+  } finally {
+    captchaLoading.value = false;
+  }
+}
+
+/**
  * 计算属性：当前应该渲染哪个组件
- * 替代了原来的 switch (captchaType)
+ * captchaType 为空（加载中）时返回 null，由 loading 占位接管
  */
 const currentComponent = computed(() => {
-  return props.captchaType === 'clickWord' ? VerifyPoints : VerifySlide;
+  if (!captchaType.value) return null;
+  if (captchaType.value === 'imageText' || captchaType.value === 'math') {
+    return CaptchaWidget;
+  }
+  return captchaType.value === 'clickWord' ? VerifyPoints : VerifySlide;
 });
 
 /**
- * 计算属性：传递给子组件的 type 参数
+ * 计算属性：传递给子组件的 type 参数（blockPuzzle/clickWord 用）
  */
 const verifyType = computed(() => {
-  return props.captchaType === 'blockPuzzle' ? '2' : undefined;
+  return captchaType.value === 'blockPuzzle' ? '2' : undefined;
 });
 
 /**
  * 计算属性：容器宽度样式
- * 解决模板中 parseInt 报错问题
  */
 const boxWidthStyle = computed(() => {
-  // 移除 px 后转数字，防止 parseInt 在 TS 中报错
   const widthStr = String(props.imgSize.width).replace('px', '');
   const width = Number.parseInt(widthStr) || 310;
   return {
@@ -89,51 +116,55 @@ const showBox = computed(() => {
 });
 
 /**
- * 方法：刷新
+ * 刷新验证码：直接调子组件 refresh，子组件内部会检查 type 是否变化
+ * 若 type 变了，子组件会 emit type-change，由 handleTypeChange 处理重建
  */
 const refresh = () => {
   verifyInstance.value?.refresh?.();
 };
 
-/**
- * 方法：关闭弹窗
- */
 const closeBox = () => {
   clickShow.value = false;
   emit('close');
 };
 
-/**
- * 方法：显示弹窗
- */
 const show = () => {
   if (props.mode === 'pop') {
     clickShow.value = true;
   }
   clearVerifyVal();
+  fetchCaptcha();
 };
 
 const clearVerifyVal = () => {
-  // 🌟 新增：重置/清空验证码时，把表单里的值也清空
   emit('update:modelValue', null);
-  verifyInstance.value.refresh();
   successData.value = null;
+  // 重置时清空 type，下次 show() 重新获取
+  captchaType.value = '';
+};
+
+/**
+ * 子组件检测到 type 变化时，重新拉取数据（含新 type 的完整数据）
+ */
+const handleTypeChange = (newType: string) => {
+  captchaType.value = newType;
+  fetchCaptcha();
 };
 
 /**
  * 事件处理：转发子组件事件
+ * success 时统一输出 { token, type }，token 为验证凭证，type 为验证码类型
  */
 const successData = ref(null);
 const handleSuccess = (data: any) => {
   successData.value = data;
-  // 🌟 新增：验证成功时，把后端返回的 token/data 赋值给表单
-  emit('update:modelValue', data.captchaVerification ?? undefined);
-  emit('success', data);
+  const payload = { token: data.captchaVerification, type: captchaType.value };
+  emit('update:modelValue', payload);
+  emit('success', payload);
 };
 const handleError = (data: any) => emit('error', data);
 const handleReady = (instance: any) => emit('ready', instance);
 
-// 暴露方法给父组件使用
 defineExpose({
   show,
   closeBox,
@@ -229,11 +260,20 @@ defineExpose({
         </div>
 
         <div class="verifybox-bottom" :style="{ padding: mode === 'pop' ? '15px' : '0' }">
+          <!-- 加载占位：type 未就绪或正在请求时显示 -->
+          <div v-if="captchaLoading || !currentComponent" class="flex h-[155px] w-full items-center justify-center">
+            <svg class="h-8 w-8 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+          </div>
           <component
-            v-if="currentComponent"
+            v-else-if="currentComponent"
             :is="currentComponent"
+            :key="captchaType"
             ref="verifyInstance"
             :captcha-type="captchaType"
+            :initial-data="captchaData"
             :type="verifyType"
             :figure="figure"
             :arith="arith"
@@ -247,6 +287,7 @@ defineExpose({
             @error="handleError"
             @ready="handleReady"
             @close="closeBox"
+            @type-change="handleTypeChange"
           />
         </div>
       </div>

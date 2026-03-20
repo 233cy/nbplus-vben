@@ -44,4 +44,8 @@ export enum BizCode {
   SAFE_MFA_REQUIRED = 20_210,
   /** MFA 验证码发送失败 */
   SAFE_MFA_SEND_FAILED = 20_212,
+
+  /* 个人中心 */
+  /** 旧密码不正确 */
+  PROFILE_OLD_PASSWORD_WRONG = 30_020,
 }

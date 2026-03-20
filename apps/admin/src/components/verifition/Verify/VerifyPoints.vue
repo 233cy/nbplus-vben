@@ -3,7 +3,7 @@ import { getCurrentInstance, nextTick, onMounted, reactive, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { useThrottleFn } from '@vueuse/core';
+import { useDebounceFn } from '@vueuse/core';
 
 import { reqCheck, reqGet } from '#/api/core/captcha';
 
@@ -16,6 +16,7 @@ import { resetSize } from './../utils/util';
 interface Props {
   mode?: 'fixed' | 'pop';
   captchaType?: string;
+  initialData?: any;
   space?: number;
   imgSize?: { height: string; width: string };
   barSize?: { height: string; width: string };
@@ -38,6 +39,7 @@ interface SetSize {
  */
 const props = withDefaults(defineProps<Props>(), {
   captchaType: '',
+  initialData: undefined,
   mode: 'fixed',
   space: 5,
   imgSize: () => ({ width: '310px', height: '155px' }),
@@ -51,7 +53,8 @@ const emit = defineEmits<{
   (e: 'ready', instance: any): void;
   (e: 'success', data: { captchaVerification: string }): void;
   (e: 'error', instance: any): void;
-  (e: 'close'): void; // 新增 close 事件，用于通知父组件关闭弹窗
+  (e: 'close'): void;
+  (e: 'typeChange', type: string): void;
 }>();
 
 // 获取当前实例 (仅用于兼容 resetSize 工具函数)
@@ -88,7 +91,7 @@ const setSize = reactive<SetSize>({
 const init = () => {
   tempPoints.value = [];
   checkPosArr.value = [];
-  getPicture();
+  doGetPicture(props.initialData ?? undefined);
 
   nextTick(() => {
     if (!proxy) return;
@@ -104,23 +107,34 @@ const init = () => {
 };
 
 /**
- * 获取图片验证码
+ * 获取图片验证码（内部实现，不节流）
  */
-const getPicture = useThrottleFn(async () => {
+async function doGetPicture(initial?: any) {
   isLoad.value = true;
   try {
-    const res = await reqGet({ captchaType: props.captchaType });
+    const res = initial ?? (await reqGet());
+    // 服务端返回的 type 与当前不一致时，通知父组件切换组件
+    if (res.type && res.type !== props.captchaType) {
+      emit('typeChange', res.type);
+      return;
+    }
     pointBackImgBase.value = res.originalImageBase64;
     backToken.value = res.token;
     secretKey.value = res.secretKey;
     poinTextList.value = res.wordList;
+    // 图片加载完成后再更新提示文字
     text.value = $t('page.captcha.pointClickOrder', { text: poinTextList.value.join(',') });
   } catch {
     text.value = $t('page.captcha.loadFailed');
   } finally {
     isLoad.value = false;
   }
-}, 1000);
+}
+
+/**
+ * 节流版本，仅用于用户手动点击刷新按钮
+ */
+const getPicture = useDebounceFn((initial?: any) => doGetPicture(initial), 800);
 
 /**
  * 点击 Canvas 处理
@@ -193,7 +207,6 @@ const handleSuccess = (captchaVerification: string) => {
   if (props.mode === 'pop') {
     setTimeout(() => {
       emit('close'); // 通知父组件关闭
-      refresh();
     }, 1500);
   }
   emit('success', { captchaVerification });
@@ -223,8 +236,9 @@ const refresh = () => {
   barAreaBorderColor.value = '#ddd';
   bindingClick.value = true;
   showRefresh.value = true;
-  text.value = $t('page.captcha.pleaseRetry');
-  getPicture();
+  text.value = '';
+  isLoad.value = true; // 立即显示 loading，避免旧图片 + 无文字的空窗期
+  getPicture(undefined);
 };
 
 /**

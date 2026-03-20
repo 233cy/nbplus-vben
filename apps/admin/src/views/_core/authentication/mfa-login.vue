@@ -53,7 +53,7 @@ const loginRef = useTemplateRef<InstanceType<typeof AuthenticationCodeLogin>>('l
 async function handleSendCode() {
   const formApi = loginRef.value?.getFormApi();
   const values = formApi ? await formApi.getValues() : {};
-  const mfaTarget = values.mfa_target as string | undefined;
+  const mfaTarget = values.mfaTarget as string | undefined;
 
   if (!mfaTarget) {
     throw new Error('请先填写手机号或邮箱');
@@ -78,7 +78,7 @@ const formSchema = computed((): VbenFormSchema[] => {
       componentProps: {
         placeholder: selectedChannel.value === 'sms' ? '请输入手机号' : '请输入邮箱地址',
       },
-      fieldName: 'mfa_target',
+      fieldName: 'mfaTarget',
       label: selectedChannel.value === 'sms' ? '手机号' : '邮箱',
       rules: z.string().min(1, { message: '请填写接收目标' }),
     });
@@ -92,7 +92,7 @@ const formSchema = computed((): VbenFormSchema[] => {
       handleSendCode: isTotpChannel.value ? undefined : handleSendCode,
       placeholder: isTotpChannel.value ? '请输入 Authenticator App 中的验证码' : $t('authentication.code'),
     },
-    fieldName: 'mfa_code',
+    fieldName: 'mfaCode',
     label: '验证码',
     rules: z.string().length(CODE_LENGTH, {
       message: `请输入 ${CODE_LENGTH} 位验证码`,
@@ -112,11 +112,11 @@ async function handleSubmit(values: Recordable<any>) {
   try {
     await authStore.authMfaLogin({
       mfaChannel: selectedChannel.value,
-      mfaCode: values.mfa_code,
+      mfaCode: values.mfaCode,
       username: username.value,
     });
   } catch (error: any) {
-    const code = error?.code ?? error?.data?.code;
+    const code = error?.data?.code ?? error?.response?.data?.code;
     if (code === BizCode.SAFE_MFA_CODE_INVALID) {
       message.error(error?.data?.message || '验证码无效或已过期，请重新获取');
     } else if (code === BizCode.SAFE_LOGIN_THROTTLE) {

@@ -125,6 +125,13 @@
     "loadFailed": "加载失败，请重试",
     "pleaseRetry": "请重试",
     "loading": "加载中",
-    "reVerify": "重新验证"
+    "reVerify": "重新验证",
+    "title": "验证码",
+    "required": "请先完成安全验证",
+    "confirm": "确认",
+    "inputRequired": "请输入验证码",
+    "imageTextPlaceholder": "请输入图中字符",
+    "mathPlaceholder": "请输入计算结果",
+    "clickImageToRefresh": "点击图片可刷新"
   }
 }

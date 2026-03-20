@@ -5,7 +5,10 @@ export namespace UserApi {
   export interface UserInfoResult {
     avatar?: string;
     email?: string;
+    gender?: number;
     id: string;
+    lastLoginIp?: string;
+    lastLoginTime?: string;
     nickname: string;
     permissions?: string[];
     phone?: string;

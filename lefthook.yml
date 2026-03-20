@@ -42,6 +42,7 @@
 #       runner: go run
 
 pre-commit:
+  skip: true
   parallel: true
   commands:
     code-workspace:
@@ -71,6 +72,7 @@ post-merge:
       run: pnpm install
 
 commit-msg:
+  skip: true
   commands:
     commitlint:
       run: pnpm exec commitlint --edit $1

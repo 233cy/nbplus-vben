@@ -1,43 +1,50 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { onMounted, ref } from 'vue';
 
-import { ProfileSecuritySetting } from '@vben/common-ui';
+import { getProfileInfoApi } from '#/api';
 
-const formSchema = computed(() => {
-  return [
-    {
-      value: true,
-      fieldName: 'accountPassword',
-      label: '账户密码',
-      description: '当前密码强度：强',
-    },
-    {
-      value: true,
-      fieldName: 'securityPhone',
-      label: '密保手机',
-      description: '已绑定手机：138****8293',
-    },
-    {
-      value: true,
-      fieldName: 'securityQuestion',
-      label: '密保问题',
-      description: '未设置密保问题，密保问题可有效保护账户安全',
-    },
-    {
-      value: true,
-      fieldName: 'securityEmail',
-      label: '备用邮箱',
-      description: '已绑定邮箱：ant***sign.com',
-    },
-    {
-      value: false,
-      fieldName: 'securityMfa',
-      label: 'MFA 设备',
-      description: '未绑定 MFA 设备，绑定后，可以进行二次确认',
-    },
-  ];
+interface ProfileInfo {
+  email?: string;
+  phone?: string;
+}
+
+const profileInfo = ref<ProfileInfo>({});
+
+onMounted(async () => {
+  profileInfo.value = await getProfileInfoApi();
 });
+
+function maskPhone(phone: string) {
+  return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+}
+
+function maskEmail(email: string) {
+  return email.replace(/(.{2}).+(@.+)/, '$1***$2');
+}
 </script>
+
 <template>
-  <ProfileSecuritySetting :form-schema="formSchema" />
+  <div class="space-y-4 p-2">
+    <!-- 密保手机 -->
+    <div class="flex items-center justify-between rounded-lg border p-4">
+      <div>
+        <div class="font-medium">密保手机</div>
+        <div class="mt-1 text-sm text-muted-foreground">
+          <template v-if="profileInfo.phone"> 已绑定：{{ maskPhone(profileInfo.phone) }} </template>
+          <template v-else> 未绑定手机号，绑定后可通过手机号登录和接收验证码 </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- 备用邮箱 -->
+    <div class="flex items-center justify-between rounded-lg border p-4">
+      <div>
+        <div class="font-medium">备用邮箱</div>
+        <div class="mt-1 text-sm text-muted-foreground">
+          <template v-if="profileInfo.email"> 已绑定：{{ maskEmail(profileInfo.email) }} </template>
+          <template v-else> 未绑定邮箱，绑定后可通过邮箱登录和接收验证码 </template>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>

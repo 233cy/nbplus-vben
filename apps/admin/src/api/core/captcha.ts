@@ -1,11 +1,6 @@
 import { requestClient } from '#/api/request';
 
 export namespace captchaApi {
-  /** 获取验证码 */
-  export interface reqGet {
-    captchaType?: string;
-  }
-
   /** 一次验证 (检查验证码). */
   export interface reqCheck {
     captchaType: string;
@@ -15,8 +10,8 @@ export namespace captchaApi {
 }
 
 // 获取验证码
-export function reqGet(data: captchaApi.reqGet) {
-  return requestClient.post(`/captcha/get`, data);
+export function reqGet() {
+  return requestClient.post(`/captcha/get`);
 }
 
 // 一次验证 (检查验证码).

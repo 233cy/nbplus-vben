@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { AuthApi } from '#/api/core/auth';
+
 import { ref, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -25,13 +27,24 @@ const channel = ref<Channel>('sms');
 const target = ref('');
 const targetError = ref('');
 
-let captchaResolve: ((token: string) => void) | null = null;
+// 缓存已验证的 captcha，避免重复弹窗
+let cachedCaptcha: AuthApi.CaptchaPayload | null = null;
+let captchaResolve: ((payload: AuthApi.CaptchaPayload) => void) | null = null;
 
-function onCaptchaSuccess(data: any) {
+function onCaptchaSuccess(data: AuthApi.CaptchaPayload) {
   const resolve = captchaResolve;
   captchaResolve = null;
+  cachedCaptcha = data;
   verifyRef.value?.closeBox();
-  resolve?.(data.captchaVerification as string);
+  resolve?.(data);
+}
+
+async function getCaptcha(): Promise<AuthApi.CaptchaPayload> {
+  if (cachedCaptcha) return cachedCaptcha;
+  verifyRef.value?.show();
+  return new Promise<AuthApi.CaptchaPayload>((resolve) => {
+    captchaResolve = resolve;
+  });
 }
 
 function validateTarget(): boolean {
@@ -54,14 +67,12 @@ function validateTarget(): boolean {
 async function handleSendCode() {
   if (!validateTarget()) return;
 
-  verifyRef.value?.show();
-  const captcha = await new Promise<string>((resolve) => {
-    captchaResolve = resolve;
-  });
+  const captcha = await getCaptcha();
 
   loading.value = true;
   try {
     await sendPasswordResetCodeApi({ channel: channel.value, target: target.value, captcha });
+    cachedCaptcha = null; // 发送成功后清空，下次重发需重新验证
     message.success($t('page.auth.forgetPassword.codeSent'));
     currentStep.value = 1;
     countdown.value = 60;
@@ -90,13 +101,13 @@ function startCountdown() {
 
 async function handleResend() {
   if (countdown.value > 0) return;
-  verifyRef.value?.show();
-  const captcha = await new Promise<string>((resolve) => {
-    captchaResolve = resolve;
-  });
+  // 每次重发都需要重新验证
+  cachedCaptcha = null;
+  const captcha = await getCaptcha();
   loading.value = true;
   try {
     await sendPasswordResetCodeApi({ channel: channel.value, target: target.value, captcha });
+    cachedCaptcha = null; // 发送成功后清空
     message.success($t('page.auth.forgetPassword.codeSent'));
     countdown.value = 60;
     startCountdown();

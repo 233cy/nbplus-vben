@@ -1,12 +1,20 @@
 import { requestClient } from '#/api/request';
 
 export namespace AuthApi {
+  /** 人机验证结果，Verify 组件 emit 的统一格式 */
+  export interface CaptchaPayload {
+    /** 验证凭证（captchaVerification 加密串） */
+    token: string;
+    /** 验证码类型：blockPuzzle / clickWord / imageText / math */
+    type: string;
+  }
+
   /** 登录参数 */
   export interface LoginParams {
-    captcha?: string;
-    captchaType?: string;
-    password?: string;
-    username?: string;
+    /** 人机验证结果，action=captcha 时必传 */
+    captcha?: CaptchaPayload;
+    password: string;
+    username: string;
   }
 
   /** 登录成功返回 */
@@ -16,7 +24,7 @@ export namespace AuthApi {
 
   /** 验证码登录参数 */
   export interface CodeSendParams {
-    captcha: string;
+    captcha: CaptchaPayload;
     codeChannel: 'email' | 'sms';
     codeTarget: string;
   }
@@ -51,14 +59,15 @@ export namespace AuthApi {
     accessToken: string;
   }
 
-  /** 是否需要验证码 */
-  export interface CaptchaCheckResult {
-    captchaRequired: boolean;
+  /** 登录前置安全状态 */
+  export interface LoginStatusResult {
+    /** none=无需验证 / captcha=需人机验证 / mfa=账号已触发 MFA / block=账号已锁定 */
+    action: 'block' | 'captcha' | 'mfa' | 'none';
   }
 
   /** 找回密码 - 发送验证码 */
   export interface PasswordResetSendParams {
-    captcha: string;
+    captcha: CaptchaPayload;
     channel: 'email' | 'sms';
     target: string;
   }
@@ -97,9 +106,9 @@ export async function loginApi(data: AuthApi.LoginParams) {
   return requestClient.post<AuthApi.LoginResult>('/admin/auth/login', data);
 }
 
-/** 查询当前登录是否需要验证码 */
-export async function checkCaptchaRequiredApi(username: string) {
-  return requestClient.post<AuthApi.CaptchaCheckResult>('/admin/auth/captcha/check', { username });
+/** 查询登录前置安全状态 */
+export async function checkLoginStatusApi(username: string) {
+  return requestClient.post<AuthApi.LoginStatusResult>('/admin/auth/captcha/check', { username });
 }
 
 /** 获取可用 MFA 渠道 */

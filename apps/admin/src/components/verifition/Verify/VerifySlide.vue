@@ -3,7 +3,7 @@ import { computed, getCurrentInstance, nextTick, onMounted, onUnmounted, reactiv
 
 import { $t } from '@vben/locales';
 
-import { useThrottleFn } from '@vueuse/core';
+import { useDebounceFn } from '@vueuse/core';
 
 import { reqCheck, reqGet } from '#/api/core/captcha';
 
@@ -12,6 +12,7 @@ import { resetSize } from './../utils/util';
 
 const props = withDefaults(defineProps<Props>(), {
   captchaType: '',
+  initialData: undefined,
   type: '1',
   mode: 'pop',
   space: 5,
@@ -33,6 +34,7 @@ const emit = defineEmits<{
   error: [instance: ComponentInstance];
   ready: [instance: ComponentInstance];
   success: [data: { captchaVerification: string }];
+  typeChange: [type: string];
 }>();
 /**
  * VerifySlide 滑块验证组件
@@ -45,6 +47,7 @@ const Y_POSITION = 5; // Y轴固定位置
 
 interface Props {
   captchaType?: string;
+  initialData?: any;
   type?: string;
   mode?: 'fixed' | 'pop';
   space?: number;
@@ -205,16 +208,6 @@ function handleSuccess(moveLeftDistance: number) {
     ? aesEncrypt(`${backToken.value}---${JSON.stringify(pointData)}`, secretKey.value)
     : `${backToken.value}---${JSON.stringify(pointData)}`;
 
-  if (props.mode === 'pop') {
-    setTimeout(() => {
-      const parent = proxy?.$parent as ComponentInstance['$parent'];
-      if (parent?.clickShow !== undefined) {
-        parent.clickShow = false;
-      }
-      refresh();
-    }, 1500);
-  }
-
   setTimeout(() => {
     tipWords.value = '';
     const parent = proxy?.$parent as ComponentInstance['$parent'];
@@ -233,8 +226,8 @@ function handleError() {
   tipWords.value = $t('page.captcha.verifyFailed');
 
   setTimeout(() => {
-    refresh();
     tipWords.value = '';
+    refresh();
   }, 1000);
 
   emit('error', proxy as ComponentInstance);
@@ -263,8 +256,9 @@ const refresh = () => {
   iconColor.value = '#000';
   iconClass.value = 'icon-right';
   isEnd.value = false;
+  isLoad.value = true; // 立即显示 loading，避免旧图片的空窗期
 
-  getPicture();
+  getPicture(undefined);
 
   setTimeout(() => {
     transitionWidth.value = '';
@@ -273,10 +267,17 @@ const refresh = () => {
   }, 300);
 };
 
-const getPicture = useThrottleFn(async () => {
+// 获取图片验证码（内部实现，不节流）
+async function doGetPicture(initial?: any) {
   isLoad.value = true;
   try {
-    const res = await reqGet({ captchaType: props.captchaType });
+    // 有初始数据时直接用，不发请求（首次挂载由父组件传入）
+    const res = initial ?? (await reqGet());
+    // 服务端返回的 type 与当前不一致时，通知父组件切换组件
+    if (res.type && res.type !== props.captchaType) {
+      emit('typeChange', res.type);
+      return;
+    }
     if (res.code) {
       tipWords.value = res.msg;
     } else {
@@ -289,12 +290,15 @@ const getPicture = useThrottleFn(async () => {
     tipWords.value = $t('page.captcha.networkError');
   }
   isLoad.value = false;
-}, 1000);
+}
+
+// 节流版本，仅用于用户手动点击刷新按钮
+const getPicture = useDebounceFn((initial?: any) => doGetPicture(initial), 800);
 
 // 初始化
 function init() {
   text.value = props.explain || $t('page.captcha.slide');
-  getPicture();
+  doGetPicture(props.initialData ?? undefined);
 
   nextTick(() => {
     if (!proxy) return;
@@ -418,11 +422,19 @@ defineExpose({
 </template>
 <style scoped>
 :deep(.ant-skeleton-image) {
-  display: flex; /* 保证内部图标居中 */
+  display: flex;
+
+  /* 保证内部图标居中 */
   align-items: center;
   justify-content: center;
-  width: 100% !important; /* 强制宽度 100% */
-  min-width: unset !important; /* 清除 ant 可能设置的最小宽度 */
-  height: 100% !important; /* 强制高度 100% */
+  width: 100% !important;
+
+  /* 强制宽度 100% */
+  min-width: unset !important;
+
+  /* 清除 ant 可能设置的最小宽度 */
+  height: 100% !important;
+
+  /* 强制高度 100% */
 }
 </style>

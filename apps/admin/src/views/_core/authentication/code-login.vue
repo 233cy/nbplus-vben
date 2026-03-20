@@ -2,6 +2,8 @@
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
+import type { AuthApi } from '#/api/core/auth';
+
 import { computed, ref, useTemplateRef } from 'vue';
 
 import { AuthenticationCodeLogin, z } from '@vben/common-ui';
@@ -34,14 +36,24 @@ const channelIcons: Record<Channel, string> = {
   email: 'ant-design:mail-outlined',
 };
 
-// 等待人机验证结果的 Promise 控制器
-let captchaResolve: ((token: string) => void) | null = null;
+// 缓存已验证的 captcha，避免重复弹窗
+let cachedCaptcha: AuthApi.CaptchaPayload | null = null;
+let captchaResolve: ((payload: AuthApi.CaptchaPayload) => void) | null = null;
 
-function onCaptchaSuccess(data: any) {
+function onCaptchaSuccess(data: AuthApi.CaptchaPayload) {
   const resolve = captchaResolve;
   captchaResolve = null;
+  cachedCaptcha = data;
   verifyRef.value?.closeBox();
-  resolve?.(data.captchaVerification as string);
+  resolve?.(data);
+}
+
+async function getCaptcha(): Promise<AuthApi.CaptchaPayload> {
+  if (cachedCaptcha) return cachedCaptcha;
+  verifyRef.value?.show();
+  return new Promise<AuthApi.CaptchaPayload>((resolve) => {
+    captchaResolve = resolve;
+  });
 }
 
 // VbenPinInput 的 handleSendCode：resolve 后倒计时启动，throw 则不启动
@@ -59,12 +71,11 @@ async function handleSendCode() {
   const codeTarget = values.codeTarget as string | undefined;
   if (!codeTarget) throw new Error($t('page.auth.codeLogin.targetRequired'));
 
-  verifyRef.value?.show();
-  const captcha = await new Promise<string>((resolve) => {
-    captchaResolve = resolve;
-  });
+  // 已有缓存时直接复用，否则弹窗验证
+  const captcha = await getCaptcha();
 
   await sendLoginCodeApi({ codeChannel: selectedChannel.value, codeTarget, captcha });
+  cachedCaptcha = null; // 发送成功后清空，下次需重新验证
   message.success($t('page.auth.codeLogin.codeSent'));
 }
 
