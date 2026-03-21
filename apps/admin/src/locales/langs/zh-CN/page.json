@@ -142,6 +142,7 @@
     "title": "个人中心",
     "saveChanges": "保存修改",
     "basic": {
+      "avatar": "头像",
       "nickname": "昵称",
       "gender": "性别",
       "genderUnknown": "未知",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { VCropper } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
@@ -11,45 +11,67 @@ import { message } from 'ant-design-vue';
 
 import { getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/core/upload';
 import { requestClient } from '#/api/request';
+import { pathToFullUrl } from '#/utils/upload';
 
 const props = withDefaults(
   defineProps<{
     /** 裁剪比例，默认 1:1 */
     aspectRatio?: string;
-    /** 是否私有资源 */
+    /** 是否私有资源：1私有 2公开 3登录可查阅 */
     isPrivate?: number;
-    /** 当前头像地址（支持 v-model:value） */
+    /**
+     * v-model 绑定值，存储逻辑路径（logicalPath）。
+     * 组件内部自动调用 pathToFullUrl 接口将其转换为 fullUrl 用于回显，
+     * 上传成功后同样自动更新显示，外部无需关心 fullUrl。
+     */
     modelValue?: string;
-    /** 默认头像框的形状 */
+    /** 头像框形状 */
     shape?: 'circle' | 'square';
   }>(),
   {
     aspectRatio: '1:1',
-    isPrivate: 2, // 默认公开资源
+    isPrivate: 2,
     modelValue: '',
     shape: 'circle',
   },
 );
 
 const emit = defineEmits<{
-  change: [string];
-  'update:modelValue': [string];
+  change: [logicalPath: string, fullUrl: string];
+  'update:modelValue': [logicalPath: string];
 }>();
 
-// 全局/后台配置项 (后续可接入后台获取的配置)
 const UPLOAD_CONFIG = {
   accept: 'image/png, image/jpeg, image/jpg, image/gif, image/webp',
-  maxSize: 10, // 文件大小限制 (MB)
-  tusThreshold: 2, // 触发 TUS 上传的阈值 (MB)，大于此值将自动使用 TUS 引擎
+  maxSize: 10, // MB
+  tusThreshold: 2, // 超过此值走 TUS 分片上传
 };
 
-// 内部状态
 const previewVisible = ref(false);
 const cropperVisible = ref(false);
-const tempImage = ref<string>('');
+const tempImage = ref('');
 const originalFile = ref<File | null>(null);
 const uploading = ref(false);
 const cropperRef = ref<any>(null);
+
+// 回显用的完整访问 URL，由 modelValue（logicalPath）自动解析得到
+const internalDisplayUrl = ref('');
+// 只有合法的 http(s) URL 才渲染到 img src，避免 public:// 等逻辑路径触发无效网络请求
+const displaySrc = computed(() => (internalDisplayUrl.value.startsWith('http') ? internalDisplayUrl.value : ''));
+// 标记是否刚刚完成上传（上传成功后 fullUrl 已知，跳过 watch 里的转换请求）
+let skipNextWatch = false;
+
+watch(
+  () => props.modelValue,
+  async (logicalPath) => {
+    if (skipNextWatch) {
+      skipNextWatch = false;
+      return;
+    }
+    internalDisplayUrl.value = await pathToFullUrl(logicalPath);
+  },
+  { immediate: true },
+);
 
 /**
  * 查看头像大图
@@ -112,8 +134,7 @@ async function handleCropOk() {
     const isBigFile = blob.size / 1024 / 1024 > UPLOAD_CONFIG.tusThreshold;
 
     isBigFile ? await uploadWithTus(blob, fileName) : await uploadWithXhr(blob, fileName);
-  } catch (error) {
-    console.error(error);
+  } catch {
     message.error($t('page.upload.uploadFailed'));
   } finally {
     uploading.value = false;
@@ -134,7 +155,7 @@ async function uploadWithXhr(blob: Blob, fileName: string) {
     },
   });
 
-  handleUploadSuccess(res.fullUrl || res.url || res.data?.fullUrl);
+  handleUploadSuccess(res.logicalPath, res.fullUrl);
 }
 
 /**
@@ -169,8 +190,7 @@ function uploadWithTus(blob: Blob, fileName: string) {
         if (tusUrl) {
           const fileId = tusUrl.split('/').pop();
           const infoRes: any = await getTusFileInfo({ uploadKey: fileId });
-          const url = infoRes?.data?.fullUrl || infoRes?.fullUrl;
-          handleUploadSuccess(url);
+          handleUploadSuccess(infoRes.logicalPath, infoRes.fullUrl);
           resolve();
         } else {
           throw new Error('未获取到 Tus 上传地址');
@@ -182,7 +202,7 @@ function uploadWithTus(blob: Blob, fileName: string) {
       }
     });
 
-    uppy.on('upload-error', (file, error) => {
+    uppy.on('upload-error', (_file, error) => {
       uppy.destroy();
       reject(error);
     });
@@ -191,11 +211,15 @@ function uploadWithTus(blob: Blob, fileName: string) {
 
 /**
  * 统一处理上传成功逻辑
+ * @param logicalPath 逻辑路径，用于存库（emit 给父组件）
+ * @param fullUrl 完整访问 URL，用于回显
  */
-function handleUploadSuccess(url: string) {
-  if (url) {
-    emit('update:modelValue', url);
-    emit('change', url);
+function handleUploadSuccess(logicalPath: string, fullUrl: string) {
+  if (logicalPath && fullUrl) {
+    skipNextWatch = true; // 上传成功，fullUrl 已知，跳过 watch 里的转换请求
+    internalDisplayUrl.value = fullUrl;
+    emit('update:modelValue', logicalPath);
+    emit('change', logicalPath, fullUrl);
     message.success($t('page.upload.avatarUploadSuccess'));
     cropperVisible.value = false;
   } else {
@@ -219,10 +243,10 @@ function handleModalCancel() {
   <div class="avatar-upload-container">
     <a-upload :accept="UPLOAD_CONFIG.accept" :before-upload="handleBeforeUpload" :show-upload-list="false" name="file">
       <!-- 【核心】暴露默认插槽，允许外部完全自定义触发器和回显内容 -->
-      <slot :image="modelValue" :loading="uploading" name="default">
+      <slot :image="displaySrc" :loading="uploading" name="default">
         <!-- 如果外部没有传入插槽，就渲染默认的 Antd 头像上传样式 -->
         <div :class="shape" class="default-avatar-trigger group">
-          <img v-if="modelValue" :src="modelValue" alt="avatar" class="avatar-image" />
+          <img v-if="displaySrc" :src="displaySrc" alt="avatar" class="avatar-image" />
           <div v-else class="avatar-placeholder">
             <IconifyIcon v-if="uploading" icon="ant-design:loading-outlined" class="animate-spin text-xl text-gray-400" />
             <IconifyIcon v-else icon="ant-design:plus-outlined" class="text-xl text-gray-400" />
@@ -230,7 +254,7 @@ function handleModalCancel() {
           </div>
 
           <!-- 悬浮遮罩 (仅在有图片时显示操作按钮) -->
-          <div v-if="modelValue" class="avatar-mask">
+          <div v-if="displaySrc" class="avatar-mask">
             <IconifyIcon v-if="uploading" icon="ant-design:loading-outlined" class="animate-spin text-2xl text-white" />
             <div v-else class="flex w-full items-center justify-center gap-4 text-white">
               <!-- 查看大图 (阻止冒泡避免触发上传) -->
@@ -266,7 +290,7 @@ function handleModalCancel() {
 
     <!-- 查看大图弹窗 -->
     <a-modal v-model:open="previewVisible" :footer="null" :title="$t('page.upload.previewAvatar')" width="800px" centered @cancel="previewVisible = false">
-      <img :src="modelValue" alt="avatar" class="w-full" />
+      <img v-if="displaySrc" :src="displaySrc" alt="avatar" class="w-full" />
     </a-modal>
   </div>
 </template>

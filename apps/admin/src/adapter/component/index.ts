@@ -37,6 +37,7 @@ const TimePicker = defineAsyncComponent(() => import('ant-design-vue/es/time-pic
 const TreeSelect = defineAsyncComponent(() => import('ant-design-vue/es/tree-select'));
 const Upload = defineAsyncComponent(() => import('ant-design-vue/es/upload'));
 const Edit = defineAsyncComponent(() => import('#/components/wangEditor/index.vue'));
+const AvatarUpload = defineAsyncComponent(() => import('#/components/upload/upAvatar.vue'));
 
 const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select', componentProps: Recordable<any> = {}) => {
   return defineComponent({
@@ -65,6 +66,7 @@ export type ComponentType =
   | 'ApiSelect'
   | 'ApiTreeSelect'
   | 'AutoComplete'
+  | 'AvatarUpload'
   | 'Checkbox'
   | 'CheckboxGroup'
   | 'DatePicker'
@@ -157,6 +159,7 @@ async function initComponentAdapter() {
     TreeSelect: withDefaultPlaceholder(TreeSelect, 'select'),
     Upload,
     Edit,
+    AvatarUpload,
   };
 
   // 将组件注册到全局共享状态中

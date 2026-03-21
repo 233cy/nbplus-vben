@@ -142,6 +142,7 @@
     "title": "Profile",
     "saveChanges": "Save Changes",
     "basic": {
+      "avatar": "Avatar",
       "nickname": "Nickname",
       "gender": "Gender",
       "genderUnknown": "Unknown",

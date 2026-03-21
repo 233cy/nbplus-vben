@@ -291,6 +291,7 @@ formApi.resetForm();
 | `Rate`          | 评分                                  |
 | `Upload`        | 文件上传                              |
 | `AutoComplete`  | 自动完成                              |
+| `AvatarUpload`  | 头像上传（裁剪 + TUS 分片上传）       |
 | `Mentions`      | 提及输入                              |
 | `IconPicker`    | 图标选择器                            |
 | `Edit`          | 富文本编辑器（wangEditor）            |

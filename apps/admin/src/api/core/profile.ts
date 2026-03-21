@@ -3,12 +3,18 @@ import { requestClient } from '#/api/request';
 export namespace ProfileApi {
   export interface ProfileInfo {
     nickname: string;
-    avatar: string;
+    avatar: string;       // logicalPath，存库用
     email: string;
     phone: string;
     gender: number; // 0=未知 1=男 2=女
     lastLoginIp: string;
     lastLoginTime: string;
+  }
+
+  export interface UpdateProfileResult {
+    nickname: string;
+    avatar: string;   // logicalPath
+    gender: number;
   }
 
   export interface UpdateProfileParams {
@@ -40,7 +46,7 @@ export async function getProfileInfoApi() {
 }
 
 export async function updateProfileApi(data: ProfileApi.UpdateProfileParams) {
-  return requestClient.post<ProfileApi.ProfileInfo>('/admin/profile/update', data);
+  return requestClient.post<ProfileApi.UpdateProfileResult>('/admin/profile/update', data);
 }
 
 export async function changePasswordApi(data: ProfileApi.ChangePasswordParams) {

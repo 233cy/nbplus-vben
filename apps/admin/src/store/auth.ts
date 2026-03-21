@@ -10,10 +10,11 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { getUserInfoApi, loginApi, logoutApi, mfaLoginApi, codeLoginApi } from '#/api';
+import { codeLoginApi, getUserInfoApi, loginApi, logoutApi, mfaLoginApi } from '#/api';
 import { BizCode } from '#/api/error-codes';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store';
+import { pathToFullUrl } from '#/utils/upload';
 
 export const useAuthStore = defineStore('auth', () => {
   const accessStore = useAccessStore();
@@ -133,7 +134,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     // 框架所需字段映射
     const userInfo: UserInfo = {
-      avatar: result.avatar ?? '',
+      avatar: await pathToFullUrl(result.avatar),
       desc: '',
       homePath: preferences.app.defaultHomePath,
       realName: result.nickname,

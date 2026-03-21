@@ -10,6 +10,7 @@ import { getProfileInfoApi, updateProfileApi } from '#/api';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store/user';
 import { formatUnixTime } from '#/utils/time';
+import { pathToFullUrl } from '#/utils/upload';
 
 const userStore = useUserStore();
 const adminUserStore = useAdminUserStore();
@@ -22,6 +23,12 @@ const [Form, formApi] = useVbenForm({
   },
   showDefaultActions: false,
   schema: [
+    {
+      fieldName: 'avatar',
+      component: 'AvatarUpload',
+      label: $t('page.profile.basic.avatar'),
+      componentProps: { isPrivate: 3 },
+    },
     {
       fieldName: 'nickname',
       component: 'Input',
@@ -56,13 +63,15 @@ const [Form, formApi] = useVbenForm({
 });
 
 async function handleSubmit() {
-  const { valid, values } = await formApi.validate();
-  if (!valid || !values) return;
+  const { valid } = await formApi.validate();
+  if (!valid) return;
+
+  const values = await formApi.getValues();
 
   const result = await updateProfileApi({
     nickname: values.nickname as string,
     avatar: values.avatar as string | undefined,
-    gender: values.gender as number | undefined,
+    gender: (values.gender as number) ?? undefined,
   });
 
   const current = userStore.userInfo;
@@ -70,13 +79,13 @@ async function handleSubmit() {
     userStore.setUserInfo({
       ...current,
       realName: result.nickname,
-      avatar: result.avatar ?? current.avatar,
+      avatar: await pathToFullUrl(result.avatar),
     });
   }
 
   adminUserStore.setAdminUserInfo({
-    email: result.email,
-    phone: result.phone,
+    email: adminUserStore.email,
+    phone: adminUserStore.phone,
   });
 
   message.success($t('page.profile.basic.updateSuccess'));
