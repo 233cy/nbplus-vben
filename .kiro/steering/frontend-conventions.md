@@ -73,11 +73,17 @@ await requestClient.delete('/admin/xxx/del', { data: { id } });
 
 **错误处理机制（request.ts 中已配置）：**
 
-| 情况                    | 行为                                                |
-| ----------------------- | --------------------------------------------------- |
-| HTTP 200 + `code !== 0` | 弹出 warning，throw error（调用方可 catch）         |
-| HTTP 400/401/403/500    | 弹出 error，标记 `isSystemDown = true`（5s 后恢复） |
-| Token 过期              | 自动刷新 token（`refreshTokenApi`）或跳转登录       |
+| 情况 | 行为 |
+| ---- | ---- |
+| HTTP 200 + `code !== 0` | 弹出 warning（节流 1.5s），throw error，调用方可 catch |
+| HTTP 401 | 由 `authenticateResponseInterceptor` 接管：已登录则弹窗重登录（`loginExpired` 模式），未登录则跳转登录页 |
+| HTTP 400 / 403 / 500 等 | 弹出 error（节流 1.5s），标记 `isSystemDown = true`，5s 后恢复；期间所有请求被拦截（登录过期弹窗模式除外） |
+| `isSystemDown = true` 期间 | 新请求直接 throw，不发出，避免雪崩 |
+| Token 过期（启用 refreshToken） | 自动调用 `refreshTokenApi` 换新 token 后重试原请求 |
+
+**请求头自动注入：**
+- `Authorization: Bearer <token>`（从 `useAccessStore` 读取）
+- `Accept-Language: zh-CN / en-US`（从 `preferences.app.locale` 读取，后端 `LocaleMiddleware` 据此切换语言包）
 
 **调用方捕获业务错误：**
 
@@ -85,7 +91,8 @@ await requestClient.delete('/admin/xxx/del', { data: { id } });
 try {
   await someApi(params);
 } catch (error: any) {
-  const code = error?.response?.data?.code;
+  // HTTP 200 + code != 0 的业务错误，从响应体取 code
+  const code = error?.response?.data?.code ?? error?.data?.code;
   if (code === BizCode.SOME_ERROR) {
     // 处理特定业务错误
   }
@@ -374,3 +381,53 @@ const schema: VbenFormSchema[] = [
 6. **动态路由写在 core.ts** → 只有认证相关的静态页面才放 `core.ts`，业务页面走后端菜单
 7. **i18n 只更新了中文** → 中英文必须同步，否则切换语言时显示 key 而非翻译文本
 8. **VbenForm 使用了不存在的 ComponentType** → 参考第九节完整列表，自定义组件需先在 `adapter/component/index.ts` 注册
+9. **时间展示未走时区转换** → 禁止直接用 `new Date()`、裸 `dayjs()` 展示时间，必须使用 `#/utils/time` 中的方法（见第十三节）
+
+---
+
+## 十三、时间处理规范
+
+### 架构约定
+
+- 后端所有时间字段统一返回 **秒级 UTC Unix 时间戳**（`number` 或 `string`）
+- 前端展示时必须转换为用户时区，时区跟随右上角时区切换器（`useTimezoneStore`，默认设备时区）
+- 禁止使用 `new Date(ts)`、裸 `dayjs(ts)` 直接展示，这两种方式不跟随时区设置
+
+### 统一入口：`#/utils/time`
+
+```typescript
+import { formatUnixTime, formatDate, formatDateTime } from '#/utils/time';
+```
+
+### 使用场景
+
+**场景 1：展示后端返回的时间戳（最常用）**
+
+```typescript
+import { formatUnixTime } from '#/utils/time';
+
+formatUnixTime(data.createdAt)               // '2025-03-21 14:30:00'
+formatUnixTime(data.createdAt, 'YYYY-MM-DD') // '2025-03-21'
+formatUnixTime(null)                          // '-'（空值安全）
+```
+
+**场景 2：格式化 Date 对象 / dayjs 对象 / 毫秒时间戳**
+
+```typescript
+import { formatDate, formatDateTime } from '#/utils/time';
+
+formatDate(new Date())       // '2025-03-21'
+formatDateTime(new Date())   // '2025-03-21 14:30:00'
+```
+
+**场景 3：需要直接操作 dayjs 对象（计算时间差、加减等）**
+
+```typescript
+import dayjs from 'dayjs';
+
+// 必须调用 .tz() 才能跟随时区设置，否则按 UTC 输出
+dayjs.unix(ts).tz().format('YYYY-MM-DD HH:mm:ss')  // ✅
+dayjs.unix(ts).format('YYYY-MM-DD HH:mm:ss')        // ❌ 不跟随时区
+```
+
+> `dayjs.tz` 的类型声明由 `#/utils/time` 在项目级全局注册，无需在每个文件单独 import 插件。

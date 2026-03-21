@@ -9,6 +9,7 @@ import { useVbenForm, z } from '#/adapter/form';
 import { getProfileInfoApi, updateProfileApi } from '#/api';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store/user';
+import { formatUnixTime } from '#/utils/time';
 
 const userStore = useUserStore();
 const adminUserStore = useAdminUserStore();
@@ -83,7 +84,10 @@ async function handleSubmit() {
 
 onMounted(async () => {
   const data = await getProfileInfoApi();
-  formApi.setValues(data);
+  formApi.setValues({
+    ...data,
+    lastLoginTime: formatUnixTime(data.lastLoginTime),
+  });
 });
 </script>
 <template>
