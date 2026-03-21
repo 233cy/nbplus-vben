@@ -70,12 +70,13 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
   // 请求头处理
   client.addRequestInterceptor({
     fulfilled: async (config) => {
-      if (isSystemDown) {
-        // 如果系统已被标记为异常（如 500、401），直接拒绝后续请求，不再发送给后端
-        throw new Error('系统异常或未认证，已拦截后续请求。');
-      }
-
       const accessStore = useAccessStore();
+
+      if (isSystemDown && !accessStore.loginExpired) {
+        // 如果系统已被标记为异常（如 500），直接拒绝后续请求
+        // 登录过期弹窗模式下不拦截，允许重新登录的请求通过
+        throw new Error('系统异常，已拦截后续请求。');
+      }
 
       config.headers.Authorization = formatToken(accessStore.accessToken);
       config.headers['Accept-Language'] = preferences.app.locale;
@@ -119,12 +120,16 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
         throw error;
       }
 
-      // 2. 致命错误处理：401, 403, 500 等
+      // 2. 致命错误处理：403, 500 等
+      // 401 由 authenticateResponseInterceptor 处理（弹窗重登录），不在此拦截
+      if (status === 401) {
+        return;
+      }
+
       if (status >= 400) {
         isSystemDown = true;
         showErrorMessage(finalMsg || '服务器异常，请稍后再试');
 
-        // 可以设置一个冷却时间，例如 5 秒后恢复请求机制，或者只允许在登录后重置状态
         setTimeout(() => {
           isSystemDown = false;
         }, 5000);
