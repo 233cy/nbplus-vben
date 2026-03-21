@@ -250,8 +250,9 @@ defineExpose({
         {{ $t('page.captcha.reVerify') || '重新验证' }}
       </button>
     </div>
-    <div :class="mode === 'pop' ? 'mask' : ''" v-show="showBox">
-      <div :class="mode === 'pop' ? 'verifybox' : ''" :style="boxWidthStyle">
+    <Teleport to="body">
+      <div :class="mode === 'pop' ? 'mask' : ''" v-show="showBox">
+        <div :class="mode === 'pop' ? 'verifybox' : ''" :style="boxWidthStyle">
         <div class="verifybox-top" v-if="mode === 'pop'">
           {{ $t('page.captcha.pleaseCompleteSecurityVerification') }}
           <span class="verifybox-close" @click="closeBox">
@@ -290,8 +291,9 @@ defineExpose({
             @type-change="handleTypeChange"
           />
         </div>
+        </div>
       </div>
-    </div>
+    </Teleport>
   </div>
 </template>
 <style>

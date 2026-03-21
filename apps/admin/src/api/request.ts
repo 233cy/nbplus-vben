@@ -39,15 +39,19 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 
   /**
    * 重新认证逻辑
+   * 已登录状态下 token 失效 → 弹窗重登录，不跳转登录页
    */
   async function doReAuthenticate() {
-    console.warn('Access token or refresh token is invalid or expired. ');
+    console.warn('Access token or refresh token is invalid or expired.');
     const accessStore = useAccessStore();
-    const authStore = useAuthStore();
-    accessStore.setAccessToken(null);
-    if (preferences.app.loginExpiredMode === 'modal' && accessStore.isAccessChecked) {
+    // isAccessChecked=true 说明用户已完成登录并进入后台，此时弹窗而非跳转
+    if (accessStore.isAccessChecked) {
+      // 先设 loginExpired，守卫检测到此标志会阻止跳转
       accessStore.setLoginExpired(true);
+      accessStore.setAccessToken(null);
     } else {
+      // 未完成初始化（如刷新页面时 token 已失效），直接走登出跳转
+      const authStore = useAuthStore();
       await authStore.logout();
     }
   }

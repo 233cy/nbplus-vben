@@ -60,6 +60,11 @@ function setupAccessGuard(router: Router) {
 
     // accessToken 检查
     if (!accessStore.accessToken) {
+      // 登录过期弹窗模式下，弹窗正在显示，停留在当前页不跳转
+      if (accessStore.loginExpired) {
+        return to.fullPath === from.fullPath ? true : false;
+      }
+
       // 明确声明忽略权限访问权限，则可以访问
       if (to.meta.ignoreAccess) {
         return true;
