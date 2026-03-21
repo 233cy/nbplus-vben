@@ -1,4 +1,6 @@
-import { requestClient } from '#/api/request';
+import { useAccessStore } from '@vben/stores';
+
+import { baseRequestClient, requestClient } from '#/api/request';
 
 export namespace AuthApi {
   /** 人机验证结果，Verify 组件 emit 的统一格式 */
@@ -128,12 +130,20 @@ export async function mfaLoginApi(data: AuthApi.MfaLoginParams) {
 
 /** 退出登录 */
 export async function logoutApi() {
-  return requestClient.post('/admin/auth/logout');
+  return baseRequestClient.post('/admin/auth/logout', null, {
+    headers: { Authorization: `Bearer ${useAccessStore().accessToken}` },
+  });
 }
 
 /** 刷新 Token */
-export async function refreshTokenApi() {
-  return requestClient.post<AuthApi.RefreshTokenResult>('/admin/auth/refresh');
+export async function refreshTokenApi(): Promise<AuthApi.RefreshTokenResult> {
+  const resp = await baseRequestClient.post<{ code: number; data: AuthApi.RefreshTokenResult }>(
+    '/admin/auth/refresh',
+    null,
+    { headers: { Authorization: `Bearer ${useAccessStore().accessToken}` } },
+  );
+  // baseRequestClient 无拦截器，返回原始 AxiosResponse，body 在 .data
+  return (resp as any).data?.data ?? resp;
 }
 
 /** 获取用户权限码（从 user-info 的 permissions 字段来，此接口作为兼容保留） */

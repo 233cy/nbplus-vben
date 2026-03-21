@@ -48,4 +48,6 @@ export enum BizCode {
   /* 个人中心 */
   /** 旧密码不正确 */
   PROFILE_OLD_PASSWORD_WRONG = 30_020,
+  /** 该联系方式尚未绑定 */
+  PROFILE_CONTACT_NOT_BOUND = 30_021,
 }

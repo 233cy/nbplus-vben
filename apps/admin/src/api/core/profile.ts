@@ -14,8 +14,6 @@ export namespace ProfileApi {
   export interface UpdateProfileParams {
     nickname: string;
     avatar?: string;
-    email?: string;
-    phone?: string;
     gender?: number;
   }
 
@@ -23,6 +21,17 @@ export namespace ProfileApi {
     oldPassword: string;
     newPassword: string;
     confirmPassword: string;
+  }
+
+  export interface BindContactParams {
+    channel: 'email' | 'sms';
+    target: string;
+    code: string;
+  }
+
+  export interface UnbindContactParams {
+    channel: 'email' | 'sms';
+    code: string;
   }
 }
 
@@ -36,4 +45,16 @@ export async function updateProfileApi(data: ProfileApi.UpdateProfileParams) {
 
 export async function changePasswordApi(data: ProfileApi.ChangePasswordParams) {
   return requestClient.post('/admin/profile/change-password', data);
+}
+
+export async function bindContactApi(data: ProfileApi.BindContactParams) {
+  return requestClient.post<ProfileApi.ProfileInfo>('/admin/profile/bind-contact', data);
+}
+
+export async function unbindContactApi(data: ProfileApi.UnbindContactParams) {
+  return requestClient.post<ProfileApi.ProfileInfo>('/admin/profile/unbind-contact', data);
+}
+
+export async function sendContactCodeApi(data: { channel: 'email' | 'sms'; target: string; captcha: { token: string; type: string } }) {
+  return requestClient.post('/admin/profile/send-code', data);
 }

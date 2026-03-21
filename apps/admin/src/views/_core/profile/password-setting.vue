@@ -3,6 +3,7 @@ import { message } from 'ant-design-vue';
 
 import { useVbenForm, z } from '#/adapter/form';
 import { changePasswordApi } from '#/api';
+import { $t } from '#/locales';
 
 const [Form, formApi] = useVbenForm({
   layout: 'horizontal',
@@ -14,31 +15,31 @@ const [Form, formApi] = useVbenForm({
   schema: [
     {
       fieldName: 'oldPassword',
-      label: '旧密码',
+      label: $t('page.profile.password.oldPassword'),
       component: 'InputPassword',
-      componentProps: { placeholder: '请输入旧密码' },
-      rules: z.string().min(1, { message: '请输入旧密码' }),
+      componentProps: { placeholder: $t('page.profile.password.oldPasswordPlaceholder') },
+      rules: z.string().min(1, { message: $t('page.profile.password.oldPasswordRequired') }),
     },
     {
       fieldName: 'newPassword',
-      label: '新密码',
+      label: $t('page.profile.password.newPassword'),
       component: 'InputPassword',
-      componentProps: { placeholder: '请输入新密码（至少 8 位）' },
-      rules: z.string().min(8, { message: '新密码至少 8 位' }),
+      componentProps: { placeholder: $t('page.profile.password.newPasswordPlaceholder') },
+      rules: z.string().min(8, { message: $t('page.profile.password.newPasswordMinLength') }),
     },
     {
       fieldName: 'confirmPassword',
-      label: '确认密码',
+      label: $t('page.profile.password.confirmPassword'),
       component: 'InputPassword',
-      componentProps: { placeholder: '请再次输入新密码' },
+      componentProps: { placeholder: $t('page.profile.password.confirmPasswordPlaceholder') },
       dependencies: {
         rules(values) {
           const { newPassword } = values;
           return z
-            .string({ required_error: '请再次输入新密码' })
-            .min(1, { message: '请再次输入新密码' })
+            .string({ required_error: $t('page.profile.password.confirmPasswordRequired') })
+            .min(1, { message: $t('page.profile.password.confirmPasswordRequired') })
             .refine((value) => value === newPassword, {
-              message: '两次输入的密码不一致',
+              message: $t('page.profile.password.passwordMismatch'),
             });
         },
         triggerFields: ['newPassword'],
@@ -56,13 +57,15 @@ async function handleSubmit() {
     newPassword: values.newPassword as string,
     confirmPassword: values.confirmPassword as string,
   });
-  message.success('密码修改成功');
+  message.success($t('page.profile.password.changeSuccess'));
   formApi.resetForm();
 }
 </script>
 <template>
   <div class="w-1/3">
     <Form />
-    <a-button class="mt-4" type="primary" @click="handleSubmit">修改密码</a-button>
+    <a-button class="mt-4" type="primary" @click="handleSubmit">
+      {{ $t('page.profile.password.changePassword') }}
+    </a-button>
   </div>
 </template>

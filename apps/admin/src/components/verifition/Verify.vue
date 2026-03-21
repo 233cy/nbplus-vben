@@ -338,7 +338,7 @@ defineExpose({
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1001;
+  z-index: 2001;
   width: 100%;
   height: 100vh;
   background: rgb(0 0 0 / 30%);

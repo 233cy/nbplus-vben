@@ -90,7 +90,7 @@ const formSchema = computed((): VbenFormSchema[] => {
         placeholder: $t('authentication.password'),
       },
       fieldName: 'password',
-      defaultValue: 'admin',
+      defaultValue: 'xiaogui1',
       label: $t('authentication.password'),
       rules: z.string().min(1, { message: $t('authentication.passwordTip') }),
     },
