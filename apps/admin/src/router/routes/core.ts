@@ -96,6 +96,14 @@ const coreRoutes: RouteRecordRaw[] = [
           title: $t('page.auth.mfaLogin') || 'MFA 验证',
         },
       },
+      {
+        name: 'TotpLogin',
+        path: 'totp-login',
+        component: () => import('#/views/_core/authentication/totp-login.vue'),
+        meta: {
+          title: $t('page.auth.totpLogin') || 'TOTP 验证',
+        },
+      },
     ],
   },
 ];

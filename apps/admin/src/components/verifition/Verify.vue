@@ -253,44 +253,44 @@ defineExpose({
     <Teleport to="body">
       <div :class="mode === 'pop' ? 'mask' : ''" v-show="showBox">
         <div :class="mode === 'pop' ? 'verifybox' : ''" :style="boxWidthStyle">
-        <div class="verifybox-top" v-if="mode === 'pop'">
-          {{ $t('page.captcha.pleaseCompleteSecurityVerification') }}
-          <span class="verifybox-close" @click="closeBox">
-            <i class="iconfont icon-close"></i>
-          </span>
-        </div>
-
-        <div class="verifybox-bottom" :style="{ padding: mode === 'pop' ? '15px' : '0' }">
-          <!-- 加载占位：type 未就绪或正在请求时显示 -->
-          <div v-if="captchaLoading || !currentComponent" class="flex h-[155px] w-full items-center justify-center">
-            <svg class="h-8 w-8 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-            </svg>
+          <div class="verifybox-top" v-if="mode === 'pop'">
+            {{ $t('page.captcha.pleaseCompleteSecurityVerification') }}
+            <span class="verifybox-close" @click="closeBox">
+              <i class="iconfont icon-close"></i>
+            </span>
           </div>
-          <component
-            v-else-if="currentComponent"
-            :is="currentComponent"
-            :key="captchaType"
-            ref="verifyInstance"
-            :captcha-type="captchaType"
-            :initial-data="captchaData"
-            :type="verifyType"
-            :figure="figure"
-            :arith="arith"
-            :mode="mode"
-            :space="space"
-            :explain="explain"
-            :img-size="imgSize"
-            :block-size="blockSize"
-            :bar-size="barSize"
-            @success="handleSuccess"
-            @error="handleError"
-            @ready="handleReady"
-            @close="closeBox"
-            @type-change="handleTypeChange"
-          />
-        </div>
+
+          <div class="verifybox-bottom" :style="{ padding: mode === 'pop' ? '15px' : '0' }">
+            <!-- 加载占位：type 未就绪或正在请求时显示 -->
+            <div v-if="captchaLoading || !currentComponent" class="flex h-[155px] w-full items-center justify-center">
+              <svg class="h-8 w-8 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+              </svg>
+            </div>
+            <component
+              v-else-if="currentComponent"
+              :is="currentComponent"
+              :key="captchaType"
+              ref="verifyInstance"
+              :captcha-type="captchaType"
+              :initial-data="captchaData"
+              :type="verifyType"
+              :figure="figure"
+              :arith="arith"
+              :mode="mode"
+              :space="space"
+              :explain="explain"
+              :img-size="imgSize"
+              :block-size="blockSize"
+              :bar-size="barSize"
+              @success="handleSuccess"
+              @error="handleError"
+              @ready="handleReady"
+              @close="closeBox"
+              @type-change="handleTypeChange"
+            />
+          </div>
         </div>
       </div>
     </Teleport>

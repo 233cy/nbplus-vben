@@ -111,14 +111,11 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
   // 通用的错误处理,如果没有进入上面的错误处理逻辑，就会进入这里
   client.addResponseInterceptor(
     errorMessageResponseInterceptor((msg: string, error) => {
-      const response = error?.response;
-      const status = response?.status;
-      const responseData = response?.data ?? {};
+      // responseReturn: 'data' 模式下 error 是解包后的响应体，需从原始 axios error 取 status
+      const status: number | undefined = error?.response?.status ?? error?.[Symbol.for('axios-error')]?.response?.status;
 
-      // 调用方传了 silentError: true，跳过所有自动弹窗，由业务层自行处理
-      if (error?.config?.silentError) {
-        return;
-      }
+      const response = error?.response;
+      const responseData = response?.data ?? error ?? {};
 
       const businessMessage = responseData?.message || responseData?.error;
       const finalMsg = businessMessage || msg;
@@ -128,16 +125,22 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
         showErrorMessage(finalMsg || '操作失败', 1500, 'warning');
       }
 
-      // 2. 致命错误处理：403, 500 等
-      // 401 由 authenticateResponseInterceptor 处理（弹窗重登录），不在此拦截
+      // 2. HTTP 错误分类处理
+      // 401 由 authenticateResponseInterceptor 接管，此处跳过
       if (status === 401) {
         return;
       }
 
-      if (status >= 400) {
+      // 4xx：业务/安全类错误，后端消息有意义，弹 warning，不影响后续请求
+      if (status !== undefined && status >= 400 && status < 500) {
+        showErrorMessage(finalMsg || '请求失败，请稍后再试', 1500, 'warning');
+        return;
+      }
+
+      // 5xx：系统故障，标记 isSystemDown，5 秒内拦截后续请求防止雪崩
+      if (status !== undefined && status >= 500) {
         isSystemDown = true;
         showErrorMessage(finalMsg || '服务器异常，请稍后再试');
-
         setTimeout(() => {
           isSystemDown = false;
         }, 5000);

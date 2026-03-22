@@ -41,10 +41,12 @@ export enum BizCode {
   SAFE_MFA_CHANNEL_OFF = 20_211,
   /** MFA 验证码发送失败 */
   SAFE_MFA_SEND_FAILED = 20_212,
-  /** MFA 验证码无效或已过期 */
+  /** MFA 验证码无效 */
   SAFE_MFA_CODE_INVALID = 20_213,
   /** 账号已绑定 TOTP，需完成 TOTP 二步验证 */
   SAFE_TOTP_REQUIRED = 20_214,
+  /** MFA 验证码已失效（错误次数超限） */
+  SAFE_MFA_CODE_EXPIRED = 20_215,
 
   /* 个人中心 */
   /** 旧密码不正确 */

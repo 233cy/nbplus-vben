@@ -3,6 +3,7 @@
     "forgetPassword": "Forget Password",
     "login": "Login",
     "mfaLogin": "Two-Factor Verification",
+    "totpLogin": "Authenticator Verification",
     "profile": "Profile",
     "qrcodeLogin": "Qr Code Login",
     "register": "Register",

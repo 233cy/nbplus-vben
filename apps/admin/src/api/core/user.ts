@@ -21,5 +21,5 @@ export namespace UserApi {
  * 获取用户信息
  */
 export async function getUserInfoApi() {
-  return requestClient.get<UserApi.UserInfoResult>('/admin/auth/user-info');
+  return requestClient.get<UserApi.UserInfoResult>('/admin/profile/info');
 }

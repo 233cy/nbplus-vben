@@ -37,8 +37,8 @@ function resetCaptcha() {
   verifyRef?.clearVerifyVal();
 }
 
-async function doCheckLoginStatus(username: string) {
-  if (!username || username === lastCheckedUsername) return;
+async function doCheckLoginStatus(username: string, isFor: boolean = false) {
+  if (!isFor && (!username || username === lastCheckedUsername)) return;
   checkingStatus.value = true;
   try {
     const { action } = await checkLoginStatusApi(username);
@@ -57,7 +57,9 @@ async function doCheckLoginStatus(username: string) {
 /** 用户名失焦后防抖查询，300ms 内只触发一次 */
 const checkLoginStatus = useDebounceFn((username: string) => doCheckLoginStatus(username), 300);
 
-async function onSubmit(params: Recordable<any>) {
+const onSubmit = useDebounceFn((params: Recordable<any>) => submit(params), 300);
+
+async function submit(params: Recordable<any>) {
   try {
     await authStore.authLogin(params as AuthApi.LoginParams);
   } catch (error: any) {
@@ -67,9 +69,10 @@ async function onSubmit(params: Recordable<any>) {
       return;
     }
     if (code === BizCode.SAFE_TOTP_REQUIRED) {
-      router.push({ path: '/auth/mfa-login', query: { username: params.username, totp: '1' } });
+      router.push({ path: '/auth/totp-login', query: { username: params.username } });
       return;
     }
+    doCheckLoginStatus(params.username, true);
     resetCaptcha();
   }
 }

@@ -12,7 +12,7 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { codeLoginApi, getUserInfoApi, loginApi, logoutApi, mfaLoginApi } from '#/api';
+import { codeLoginApi, getUserInfoApi, loginApi, logoutApi, mfaLoginApi, totpLoginApi } from '#/api';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store';
 import { pathToFullUrl } from '#/utils/upload';
@@ -61,7 +61,24 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   /**
-   * MFA 二次验证登录
+   * TOTP 主动二步验证登录
+   */
+  async function authTotpLogin(params: { totpCode: string; username: string }, onSuccess?: () => Promise<void> | void) {
+    let userInfo: null | UserInfo = null;
+    try {
+      loginLoading.value = true;
+      const { accessToken } = await totpLoginApi(params);
+      if (accessToken) {
+        userInfo = await afterLoginSuccess(accessToken, onSuccess);
+      }
+    } finally {
+      loginLoading.value = false;
+    }
+    return { userInfo };
+  }
+
+  /**
+   * MFA 防爆二次验证登录
    */
   async function authMfaLogin(params: Recordable<any>, onSuccess?: () => Promise<void> | void) {
     let userInfo: null | UserInfo = null;
@@ -163,6 +180,7 @@ export const useAuthStore = defineStore('auth', () => {
     authCodeLogin,
     authLogin,
     authMfaLogin,
+    authTotpLogin,
     fetchUserInfo,
     loginLoading,
     logout,

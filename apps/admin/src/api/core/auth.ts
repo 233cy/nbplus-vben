@@ -123,9 +123,14 @@ export async function sendMfaCodeApi(data: AuthApi.MfaSendParams) {
   return requestClient.post('/admin/auth/mfa/send', data);
 }
 
-/** MFA 二次验证登录 */
+/** MFA 二次验证登录（sms/email，被动防护） */
 export async function mfaLoginApi(data: AuthApi.MfaLoginParams) {
   return requestClient.post<AuthApi.LoginResult>('/admin/auth/mfa/login', data);
+}
+
+/** TOTP 主动二步验证登录 */
+export async function totpLoginApi(data: { totpCode: string; username: string }) {
+  return requestClient.post<AuthApi.LoginResult>('/admin/auth/totp/login', data);
 }
 
 /** 退出登录 */
