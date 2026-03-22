@@ -1,5 +1,7 @@
 import type { Recordable, UserInfo } from '@vben/types';
 
+import type { AuthApi } from '#/api';
+
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -11,7 +13,6 @@ import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 import { codeLoginApi, getUserInfoApi, loginApi, logoutApi, mfaLoginApi } from '#/api';
-import { BizCode } from '#/api/error-codes';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store';
 import { pathToFullUrl } from '#/utils/upload';
@@ -27,7 +28,7 @@ export const useAuthStore = defineStore('auth', () => {
    * 普通登录
    * 若后端返回 SAFE_MFA_REQUIRED，抛出错误由调用方（login.vue）处理跳转
    */
-  async function authLogin(params: Recordable<any>, onSuccess?: () => Promise<void> | void) {
+  async function authLogin(params: AuthApi.LoginParams, onSuccess?: () => Promise<void> | void) {
     let userInfo: null | UserInfo = null;
     try {
       loginLoading.value = true;
@@ -35,12 +36,6 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (accessToken) {
         userInfo = await afterLoginSuccess(accessToken, onSuccess);
-      }
-    } catch (error: any) {
-      // 将 MFA 错误向上抛，由调用方处理跳转
-      const code = error?.data?.code ?? error?.response?.data?.code;
-      if (code === BizCode.SAFE_MFA_REQUIRED) {
-        throw error;
       }
     } finally {
       loginLoading.value = false;

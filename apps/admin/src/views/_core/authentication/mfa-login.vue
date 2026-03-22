@@ -2,7 +2,7 @@
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
-import { computed, onMounted, ref, useTemplateRef } from 'vue';
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { AuthenticationCodeLogin, z } from '@vben/common-ui';
@@ -21,23 +21,36 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const username = ref((route.query.username as string) ?? '');
+const isTotpOnly = route.query.totp === '1'; // 从密码登录跳转过来的 TOTP 强制二步验证
 const channels = ref<string[]>([]);
 const selectedChannel = ref('');
 const CODE_LENGTH = 6;
 
-/** 渠道友好名称映射 */
 const channelLabels: Record<string, string> = {
   email: '邮箱验证码',
   sms: '短信验证码',
   totp: '动态口令 (TOTP)',
 };
 
-/** TOTP 渠道不需要发送，用户自行从 App 获取 */
 const isTotpChannel = computed(() => selectedChannel.value === 'totp');
 
+const loginRef = useTemplateRef<InstanceType<typeof AuthenticationCodeLogin>>('loginRef');
+
+// 切换渠道时重置表单，清除残留的校验状态
+watch(selectedChannel, () => {
+  loginRef.value?.getFormApi()?.resetForm();
+});
+
 async function loadChannels() {
+  // TOTP 强制二步验证：直接锁定 totp 渠道，不需要查接口
+  if (isTotpOnly) {
+    channels.value = ['totp'];
+    selectedChannel.value = 'totp';
+    return;
+  }
+
   try {
-    const res = await getMfaChannelsApi();
+    const res = await getMfaChannelsApi(username.value);
     channels.value = res.channels ?? [];
     if (channels.value.length > 0) {
       selectedChannel.value = channels.value[0] ?? '';
@@ -47,9 +60,6 @@ async function loadChannels() {
   }
 }
 
-const loginRef = useTemplateRef<InstanceType<typeof AuthenticationCodeLogin>>('loginRef');
-
-/** 发送验证码（由 VbenPinInput 的 handleSendCode 调用） */
 async function handleSendCode() {
   const formApi = loginRef.value?.getFormApi();
   const values = formApi ? await formApi.getValues() : {};
@@ -71,7 +81,6 @@ async function handleSendCode() {
 const formSchema = computed((): VbenFormSchema[] => {
   const schema: VbenFormSchema[] = [];
 
-  // 非 TOTP 渠道需要填写接收目标
   if (!isTotpChannel.value) {
     schema.push({
       component: 'VbenInput',
@@ -80,24 +89,39 @@ const formSchema = computed((): VbenFormSchema[] => {
       },
       fieldName: 'mfaTarget',
       label: selectedChannel.value === 'sms' ? '手机号' : '邮箱',
-      rules: z.string().min(1, { message: '请填写接收目标' }),
+      rules: z.string().min(1, {
+        message: selectedChannel.value === 'sms' ? '请输入手机号' : '请输入邮箱地址',
+      }),
     });
   }
 
-  schema.push({
-    component: 'VbenPinInput',
-    componentProps: {
-      codeLength: CODE_LENGTH,
-      createText: (countdown: number) => (countdown > 0 ? `${countdown}s 后重新发送` : $t('authentication.sendCode')),
-      handleSendCode: isTotpChannel.value ? undefined : handleSendCode,
-      placeholder: isTotpChannel.value ? '请输入 Authenticator App 中的验证码' : $t('authentication.code'),
-    },
-    fieldName: 'mfaCode',
-    label: '验证码',
-    rules: z.string().length(CODE_LENGTH, {
-      message: `请输入 ${CODE_LENGTH} 位验证码`,
-    }),
-  });
+  if (isTotpChannel.value) {
+    // TOTP：普通输入框，无发送按钮
+    schema.push({
+      component: 'VbenInput',
+      componentProps: {
+        placeholder: '请输入 Authenticator App 中的 6 位验证码',
+        maxlength: CODE_LENGTH,
+      },
+      fieldName: 'mfaCode',
+      label: '验证码',
+      rules: z.string().length(CODE_LENGTH, { message: `请输入 ${CODE_LENGTH} 位验证码` }),
+    });
+  } else {
+    // 短信/邮箱：带发送按钮的 PinInput
+    schema.push({
+      component: 'VbenPinInput',
+      componentProps: {
+        codeLength: CODE_LENGTH,
+        createText: (countdown: number) => (countdown > 0 ? `${countdown}s 后重新发送` : $t('authentication.sendCode')),
+        handleSendCode,
+        placeholder: $t('authentication.code'),
+      },
+      fieldName: 'mfaCode',
+      label: '验证码',
+      rules: z.string().length(CODE_LENGTH, { message: `请输入 ${CODE_LENGTH} 位验证码` }),
+    });
+  }
 
   return schema;
 });
@@ -109,6 +133,8 @@ async function handleSubmit(values: Recordable<any>) {
     return;
   }
 
+  // request.ts 已托管通用错误提示，catch 只处理需要特殊 UI 响应的业务码
+  // error 直接是后端响应体 { code, message, data, ... }，不是 axios 原始 error
   try {
     await authStore.authMfaLogin({
       mfaChannel: selectedChannel.value,
@@ -116,13 +142,9 @@ async function handleSubmit(values: Recordable<any>) {
       username: username.value,
     });
   } catch (error: any) {
-    const code = error?.data?.code ?? error?.response?.data?.code;
-    if (code === BizCode.SAFE_MFA_CODE_INVALID) {
-      message.error(error?.data?.message || '验证码无效或已过期，请重新获取');
-    } else if (code === BizCode.SAFE_LOGIN_THROTTLE) {
-      message.error(error?.data?.message || '操作过于频繁，请稍后再试');
-    } else {
-      message.error(error?.data?.message || '验证失败，请重试');
+    if (error?.code === BizCode.SAFE_MFA_CODE_INVALID) {
+      // 验证码错误时清空输入框，方便用户重新输入
+      loginRef.value?.getFormApi()?.setValues({ mfaCode: '' });
     }
   }
 }
@@ -136,13 +158,12 @@ onMounted(loadChannels);
     :form-schema="formSchema"
     :loading="authStore.loginLoading"
     :sub-title="isTotpChannel ? '请输入 Authenticator App 中显示的 6 位动态验证码' : '验证码将发送至您绑定的手机或邮箱'"
-    title="身份二次验证 🔐"
+    :title="isTotpOnly ? '动态验证器验证 🔐' : '身份二次验证 🔐'"
     submit-button-text="确认验证"
     @submit="handleSubmit"
   >
-    <!-- 多渠道切换 Tab -->
     <template v-if="channels.length > 1" #title>
-      <div class="mb-2 text-xl font-semibold">身份二次验证 🔐</div>
+      <div class="mb-2 font-semibold">身份二次验证 🔐</div>
       <div class="mb-4 flex gap-2">
         <button
           v-for="ch in channels"

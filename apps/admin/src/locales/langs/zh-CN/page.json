@@ -187,7 +187,22 @@
       "emailRequired": "请输入邮箱",
       "invalidPhone": "请输入有效的手机号",
       "invalidEmail": "请输入有效的邮箱地址",
-      "codeRequired": "请输入 6 位验证码"
+      "codeRequired": "请输入 6 位验证码",
+      "totp": "动态验证器（TOTP）",
+      "totpDesc": "已绑定验证器，登录时可使用动态验证码进行二次验证",
+      "totpEmpty": "未绑定验证器，绑定后可使用 Google Authenticator 等 App 进行二次验证",
+      "totpBind": "绑定验证器",
+      "totpUnbind": "解绑验证器",
+      "totpBindTitle": "绑定动态验证器",
+      "totpUnbindTitle": "解绑动态验证器",
+      "totpStep1": "使用 Google Authenticator 或其他 TOTP App 扫描下方二维码",
+      "totpStep2": "扫码后输入 App 中显示的 6 位动态验证码完成绑定",
+      "totpCode": "动态验证码",
+      "totpCodePlaceholder": "请输入 App 中的 6 位验证码",
+      "totpUnbindConfirm": "解绑后将无法使用动态验证码登录，请输入当前验证码确认身份",
+      "totpBindSuccess": "验证器绑定成功",
+      "totpUnbindSuccess": "验证器已解绑",
+      "totpLoading": "正在生成二维码..."
     },
     "password": {
       "oldPassword": "旧密码",

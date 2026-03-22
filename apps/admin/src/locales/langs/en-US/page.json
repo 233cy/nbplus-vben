@@ -187,7 +187,22 @@
       "emailRequired": "Please enter your email",
       "invalidPhone": "Please enter a valid phone number",
       "invalidEmail": "Please enter a valid email address",
-      "codeRequired": "Please enter the 6-digit code"
+      "codeRequired": "Please enter the 6-digit code",
+      "totp": "Authenticator App (TOTP)",
+      "totpDesc": "Authenticator bound. You can use dynamic codes for two-factor login",
+      "totpEmpty": "No authenticator bound. Bind one to use Google Authenticator or similar apps for 2FA",
+      "totpBind": "Bind Authenticator",
+      "totpUnbind": "Unbind Authenticator",
+      "totpBindTitle": "Bind Authenticator App",
+      "totpUnbindTitle": "Unbind Authenticator App",
+      "totpStep1": "Scan the QR code below with Google Authenticator or any TOTP app",
+      "totpStep2": "Enter the 6-digit code shown in the app to complete binding",
+      "totpCode": "Authenticator Code",
+      "totpCodePlaceholder": "Enter the 6-digit code from your app",
+      "totpUnbindConfirm": "After unbinding you cannot use dynamic codes to log in. Enter your current code to confirm",
+      "totpBindSuccess": "Authenticator bound successfully",
+      "totpUnbindSuccess": "Authenticator unbound successfully",
+      "totpLoading": "Generating QR code..."
     },
     "password": {
       "oldPassword": "Old Password",

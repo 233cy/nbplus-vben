@@ -63,8 +63,8 @@ export namespace AuthApi {
 
   /** 登录前置安全状态 */
   export interface LoginStatusResult {
-    /** none=无需验证 / captcha=需人机验证 / mfa=账号已触发 MFA / block=账号已锁定 */
-    action: 'block' | 'captcha' | 'mfa' | 'none';
+    /** none=无需验证 / captcha=需人机验证 / mfa=账号已触发 MFA / totp=需 TOTP 二步验证 / block=账号已锁定 */
+    action: 'block' | 'captcha' | 'mfa' | 'none' | 'totp';
   }
 
   /** 找回密码 - 发送验证码 */
@@ -114,8 +114,8 @@ export async function checkLoginStatusApi(username: string) {
 }
 
 /** 获取可用 MFA 渠道 */
-export async function getMfaChannelsApi() {
-  return requestClient.get<AuthApi.MfaChannelsResult>('/admin/auth/mfa/channels');
+export async function getMfaChannelsApi(username: string) {
+  return requestClient.get<AuthApi.MfaChannelsResult>('/admin/auth/mfa/channels', { params: { username } });
 }
 
 /** 发送 MFA 验证码 */
@@ -137,11 +137,9 @@ export async function logoutApi() {
 
 /** 刷新 Token */
 export async function refreshTokenApi(): Promise<AuthApi.RefreshTokenResult> {
-  const resp = await baseRequestClient.post<{ code: number; data: AuthApi.RefreshTokenResult }>(
-    '/admin/auth/refresh',
-    null,
-    { headers: { Authorization: `Bearer ${useAccessStore().accessToken}` } },
-  );
+  const resp = await baseRequestClient.post<{ code: number; data: AuthApi.RefreshTokenResult }>('/admin/auth/refresh', null, {
+    headers: { Authorization: `Bearer ${useAccessStore().accessToken}` },
+  });
   // baseRequestClient 无拦截器，返回原始 AxiosResponse，body 在 .data
   return (resp as any).data?.data ?? resp;
 }

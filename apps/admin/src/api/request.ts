@@ -115,13 +115,17 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       const status = response?.status;
       const responseData = response?.data ?? {};
 
+      // 调用方传了 silentError: true，跳过所有自动弹窗，由业务层自行处理
+      if (error?.config?.silentError) {
+        return;
+      }
+
       const businessMessage = responseData?.message || responseData?.error;
       const finalMsg = businessMessage || msg;
 
       // 1. 业务逻辑错误 (HTTP 200, 但 code != 0)：显示警告并 throw，让调用方 catch 到
       if (status === 200 && responseData.code !== 0) {
         showErrorMessage(finalMsg || '操作失败', 1500, 'warning');
-        throw error;
       }
 
       // 2. 致命错误处理：403, 500 等

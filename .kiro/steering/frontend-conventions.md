@@ -85,16 +85,62 @@ await requestClient.delete('/admin/xxx/del', { data: { id } });
 - `Authorization: Bearer <token>`（从 `useAccessStore` 读取）
 - `Accept-Language: zh-CN / en-US`（从 `preferences.app.locale` 读取，后端 `LocaleMiddleware` 据此切换语言包）
 
-**调用方捕获业务错误：**
+**错误对象结构（重要）：**
+
+`responseReturn: 'data'` 配置下，拦截器抛出的 error **直接就是后端响应体**，即：
 
 ```typescript
+// error 的结构就是后端返回的 JSON：
+// { code: 20213, message: '身份验证码错误或已过期', data: null, timestamp: ..., traceId: ... }
+
+const code = error?.code;       // ✅ 正确
+const msg  = error?.message;    // ✅ 正确
+
+// ❌ 错误写法（axios 原始 error 结构，此项目不适用）
+const code = error?.response?.data?.code;
+```
+
+**catch 使用原则：**
+
+request.ts 已托管所有通用错误提示（warning/error 弹窗），**绝大多数情况下不需要 catch**。只有需要根据特定业务码做额外 UI 操作时才 catch，且 **catch 内不要再重复调用 `message.error()`**，否则会出现两个弹窗。
+
+```typescript
+// ✅ 正确：只处理特定业务码的 UI 副作用，不重复弹窗
 try {
   await someApi(params);
 } catch (error: any) {
-  // HTTP 200 + code != 0 的业务错误，从响应体取 code
-  const code = error?.response?.data?.code ?? error?.data?.code;
-  if (code === BizCode.SOME_ERROR) {
-    // 处理特定业务错误
+  if (error?.code === BizCode.SOME_ERROR) {
+    // 做 UI 操作，如清空输入框、跳转等
+  }
+  // 其他错误不处理，request.ts 已弹窗
+}
+
+// ❌ 错误：重复弹窗
+try {
+  await someApi(params);
+} catch (error: any) {
+  message.error(error?.message || '操作失败'); // request.ts 已弹过一次了
+}
+```
+
+**silentError：完全接管错误处理**
+
+需要自己控制所有错误提示时，传 `silentError: true` 跳过 request.ts 的自动弹窗：
+
+```typescript
+// API 函数层传入（推荐，统一管理）
+export function someApi(data: SomeParams) {
+  return requestClient.post('/admin/xxx', data, { silentError: true });
+}
+
+// 或调用时临时传入
+try {
+  await requestClient.post('/admin/xxx', data, { silentError: true });
+} catch (error: any) {
+  // error 直接是后端响应体 { code, message, data }
+  // 此时 request.ts 不会弹窗，完全由业务层控制
+  if (error?.code === BizCode.SOME_ERROR) {
+    message.warning('自定义提示');
   }
 }
 ```
@@ -378,7 +424,8 @@ const schema: VbenFormSchema[] = [
 2. **直接修改 `@vben/stores` 的 userStore** → 框架字段用 `useUserStore`，业务扩展字段用 `useAdminUserStore`
 3. **硬编码中文字符串** → 必须用 `$t()` 包裹，并同步更新中英文语言包
 4. **新增错误码未同步 BizCode** → 后端新增 ErrorCode 时，前端 `error-codes.ts` 必须同步
-5. **catch 块中直接用 `error.code`** → 应用 `error?.response?.data?.code` 或 `error?.data?.code`（取决于拦截器处理后的结构）
+5. **catch 块中用了 axios 原始 error 结构** → `responseReturn: 'data'` 下 error 直接是后端响应体，取 `error?.code` 和 `error?.message`，不是 `error?.response?.data?.code`
+6. **catch 内重复调用 `message.error()`** → request.ts 已托管通用弹窗，catch 内只做 UI 副作用操作，不要再弹窗，否则出现两个提示
 6. **动态路由写在 core.ts** → 只有认证相关的静态页面才放 `core.ts`，业务页面走后端菜单
 7. **i18n 只更新了中文** → 中英文必须同步，否则切换语言时显示 key 而非翻译文本
 8. **VbenForm 使用了不存在的 ComponentType** → 参考第九节完整列表，自定义组件需先在 `adapter/component/index.ts` 注册

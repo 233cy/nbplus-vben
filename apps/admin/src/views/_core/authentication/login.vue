@@ -2,6 +2,8 @@
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
+import type { AuthApi } from '#/api/core/auth';
+
 import { computed, markRaw, onMounted, ref, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -57,11 +59,15 @@ const checkLoginStatus = useDebounceFn((username: string) => doCheckLoginStatus(
 
 async function onSubmit(params: Recordable<any>) {
   try {
-    await authStore.authLogin(params);
+    await authStore.authLogin(params as AuthApi.LoginParams);
   } catch (error: any) {
-    const code = error?.data?.code ?? error?.response?.data?.code;
+    const code = error?.code;
     if (code === BizCode.SAFE_MFA_REQUIRED) {
       router.push({ path: '/auth/mfa-login', query: { username: params.username } });
+      return;
+    }
+    if (code === BizCode.SAFE_TOTP_REQUIRED) {
+      router.push({ path: '/auth/mfa-login', query: { username: params.username, totp: '1' } });
       return;
     }
     resetCaptcha();

@@ -7,6 +7,7 @@ export namespace ProfileApi {
     email: string;
     phone: string;
     gender: number; // 0=未知 1=男 2=女
+    totpEnabled: boolean;
     lastLoginIp: string;
     lastLoginTime: string;
   }
@@ -15,6 +16,7 @@ export namespace ProfileApi {
     nickname: string;
     avatar: string;   // logicalPath
     gender: number;
+    totpEnabled: boolean;
   }
 
   export interface UpdateProfileParams {
@@ -38,6 +40,21 @@ export namespace ProfileApi {
   export interface UnbindContactParams {
     channel: 'email' | 'sms';
     code: string;
+  }
+
+  export interface TotpGenerateResult {
+    secret: string;
+    qrCodeSvg: string;
+    otpauthUrl: string;
+  }
+
+  export interface TotpBindParams {
+    totpSecret: string;
+    totpCode: string;
+  }
+
+  export interface TotpUnbindParams {
+    totpCode: string;
   }
 }
 
@@ -63,4 +80,16 @@ export async function unbindContactApi(data: ProfileApi.UnbindContactParams) {
 
 export async function sendContactCodeApi(data: { channel: 'email' | 'sms'; target: string; captcha: { token: string; type: string } }) {
   return requestClient.post('/admin/profile/send-code', data);
+}
+
+export async function totpGenerateApi() {
+  return requestClient.post<ProfileApi.TotpGenerateResult>('/admin/profile/totp/generate');
+}
+
+export async function totpBindApi(data: ProfileApi.TotpBindParams) {
+  return requestClient.post<ProfileApi.ProfileInfo>('/admin/profile/totp/bind', data);
+}
+
+export async function totpUnbindApi(data: ProfileApi.TotpUnbindParams) {
+  return requestClient.post<ProfileApi.ProfileInfo>('/admin/profile/totp/unbind', data);
 }

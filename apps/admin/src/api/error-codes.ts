@@ -35,15 +35,16 @@ export enum BizCode {
   /** 登录频率超限，触发限流 */
   SAFE_LOGIN_THROTTLE = 20_200,
 
-  /** 需要 MFA 验证 */
-  /** MFA 渠道未开启 */
-  SAFE_MFA_CHANNEL_OFF = 20_211,
-  /** MFA 验证码无效或已过期 */
-  SAFE_MFA_CODE_INVALID = 20_213,
   /* 安全防护 - MFA 多因素认证 */
   SAFE_MFA_REQUIRED = 20_210,
+  /** MFA 渠道未开启 */
+  SAFE_MFA_CHANNEL_OFF = 20_211,
   /** MFA 验证码发送失败 */
   SAFE_MFA_SEND_FAILED = 20_212,
+  /** MFA 验证码无效或已过期 */
+  SAFE_MFA_CODE_INVALID = 20_213,
+  /** 账号已绑定 TOTP，需完成 TOTP 二步验证 */
+  SAFE_TOTP_REQUIRED = 20_214,
 
   /* 个人中心 */
   /** 旧密码不正确 */

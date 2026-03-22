@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { AuthApi } from '#/api/core/auth';
+import type { ProfileApi } from '#/api/core/profile';
 
 import { computed, onMounted, ref, useTemplateRef } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { bindContactApi, getProfileInfoApi, sendContactCodeApi, unbindContactApi } from '#/api';
+import { bindContactApi, getProfileInfoApi, sendContactCodeApi, totpBindApi, totpGenerateApi, totpUnbindApi, unbindContactApi } from '#/api';
 import Verify from '#/components/verifition/Verify.vue';
 import { $t } from '#/locales';
 
@@ -14,6 +15,7 @@ type Channel = 'email' | 'sms';
 interface ProfileInfo {
   email?: string;
   phone?: string;
+  totpEnabled?: boolean;
 }
 
 const profileInfo = ref<ProfileInfo>({});
@@ -151,6 +153,57 @@ async function handleSubmit() {
   }
 }
 
+// =========================================================================
+// TOTP
+// =========================================================================
+const totpModalVisible = ref(false);
+const totpModalMode = ref<'bind' | 'unbind'>('bind');
+const totpGenerating = ref(false);
+const totpData = ref<null | ProfileApi.TotpGenerateResult>(null);
+const totpCodeInput = ref('');
+const totpSubmitting = ref(false);
+
+async function openTotpBind() {
+  totpModalMode.value = 'bind';
+  totpCodeInput.value = '';
+  totpData.value = null;
+  totpGenerating.value = true;
+  totpModalVisible.value = true;
+  try {
+    totpData.value = await totpGenerateApi();
+  } finally {
+    totpGenerating.value = false;
+  }
+}
+
+function openTotpUnbind() {
+  totpModalMode.value = 'unbind';
+  totpCodeInput.value = '';
+  totpData.value = null;
+  totpModalVisible.value = true;
+}
+
+async function handleTotpSubmit() {
+  const code = totpCodeInput.value.trim();
+  if (!code) return;
+
+  totpSubmitting.value = true;
+  try {
+    if (totpModalMode.value === 'bind') {
+      const result = await totpBindApi({ totpSecret: totpData.value!.secret, totpCode: code });
+      profileInfo.value = { ...profileInfo.value, ...result };
+      message.success($t('page.profile.security.totpBindSuccess'));
+    } else {
+      const result = await totpUnbindApi({ totpCode: code });
+      profileInfo.value = { ...profileInfo.value, ...result };
+      message.success($t('page.profile.security.totpUnbindSuccess'));
+    }
+    totpModalVisible.value = false;
+  } finally {
+    totpSubmitting.value = false;
+  }
+}
+
 onMounted(loadProfile);
 </script>
 
@@ -173,14 +226,14 @@ onMounted(loadProfile);
         </div>
       </div>
       <div class="flex gap-2">
-        <a-button v-if="!profileInfo.phone" size="small" @click="openModal('sms', 'bind')">
+        <a-button v-if="!profileInfo.phone" @click="openModal('sms', 'bind')">
           {{ $t('page.profile.security.bind') }}
         </a-button>
         <template v-else>
-          <a-button size="small" @click="openModal('sms', 'change')">
+          <a-button @click="openModal('sms', 'change')">
             {{ $t('page.profile.security.change') }}
           </a-button>
-          <a-button size="small" danger @click="openModal('sms', 'unbind')">
+          <a-button danger @click="openModal('sms', 'unbind')">
             {{ $t('page.profile.security.unbind') }}
           </a-button>
         </template>
@@ -199,17 +252,38 @@ onMounted(loadProfile);
         </div>
       </div>
       <div class="flex gap-2">
-        <a-button v-if="!profileInfo.email" size="small" @click="openModal('email', 'bind')">
+        <a-button v-if="!profileInfo.email" @click="openModal('email', 'bind')">
           {{ $t('page.profile.security.bind') }}
         </a-button>
         <template v-else>
-          <a-button size="small" @click="openModal('email', 'change')">
+          <a-button @click="openModal('email', 'change')">
             {{ $t('page.profile.security.change') }}
           </a-button>
-          <a-button size="small" danger @click="openModal('email', 'unbind')">
+          <a-button danger @click="openModal('email', 'unbind')">
             {{ $t('page.profile.security.unbind') }}
           </a-button>
         </template>
+      </div>
+    </div>
+
+    <!-- 动态验证器 TOTP -->
+    <div class="flex items-center justify-between rounded-lg border p-4">
+      <div>
+        <div class="font-medium">{{ $t('page.profile.security.totp') }}</div>
+        <div class="mt-1 text-sm text-muted-foreground">
+          <template v-if="profileInfo.totpEnabled">
+            {{ $t('page.profile.security.totpDesc') }}
+          </template>
+          <template v-else>{{ $t('page.profile.security.totpEmpty') }}</template>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <a-button v-if="!profileInfo.totpEnabled" type="primary" @click="openTotpBind">
+          {{ $t('page.profile.security.totpBind') }}
+        </a-button>
+        <a-button v-else danger @click="openTotpUnbind">
+          {{ $t('page.profile.security.totpUnbind') }}
+        </a-button>
       </div>
     </div>
 
@@ -238,6 +312,44 @@ onMounted(loadProfile);
               <template v-else>{{ $t('page.profile.security.sendCode') }}</template>
             </a-button>
           </a-input-group>
+        </div>
+      </div>
+    </a-modal>
+
+    <!-- TOTP 绑定/解绑弹窗 -->
+    <a-modal
+      v-model:open="totpModalVisible"
+      :title="totpModalMode === 'bind' ? $t('page.profile.security.totpBindTitle') : $t('page.profile.security.totpUnbindTitle')"
+      :confirm-loading="totpSubmitting"
+      :ok-text="totpModalMode === 'bind' ? $t('page.profile.security.totpBind') : $t('page.profile.security.totpUnbind')"
+      :ok-button-props="{ danger: totpModalMode === 'unbind' }"
+      @ok="handleTotpSubmit"
+    >
+      <div class="space-y-4 py-2">
+        <!-- 绑定流程：展示二维码 -->
+        <template v-if="totpModalMode === 'bind'">
+          <a-spin :spinning="totpGenerating" :tip="$t('page.profile.security.totpLoading')">
+            <div v-if="totpData" class="flex flex-col items-center gap-3">
+              <!-- SVG 二维码 -->
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <div class="rounded border p-2" v-html="totpData.qrCodeSvg"></div>
+              <div class="text-center text-sm text-muted-foreground">
+                <div>{{ $t('page.profile.security.totpStep1') }}</div>
+                <div class="mt-1">{{ $t('page.profile.security.totpStep2') }}</div>
+              </div>
+            </div>
+          </a-spin>
+        </template>
+
+        <!-- 解绑流程：提示 -->
+        <template v-else>
+          <a-alert type="warning" show-icon :message="$t('page.profile.security.totpUnbindConfirm')" />
+        </template>
+
+        <!-- 验证码输入 -->
+        <div>
+          <div class="mb-1 text-sm font-medium">{{ $t('page.profile.security.totpCode') }}</div>
+          <a-input v-model:value="totpCodeInput" :placeholder="$t('page.profile.security.totpCodePlaceholder')" :maxlength="6" autocomplete="one-time-code" />
         </div>
       </div>
     </a-modal>
