@@ -17,5 +17,24 @@
   "inputRequired": "Please enter the captcha",
   "imageTextPlaceholder": "Enter characters in the image",
   "mathPlaceholder": "Enter the calculation result",
-  "clickImageToRefresh": "Click image to refresh"
+  "clickImageToRefresh": "Click image to refresh",
+  "driver": {
+    "pageTitle": "Captcha Drivers",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "invalid": "Invalid",
+    "invalidTip": "Driver file not found, cannot enable",
+    "enableConfirm": "Enable this driver?",
+    "disableConfirm": "Disable this driver?",
+    "saveSuccess": "Config saved successfully",
+    "noDriverEnabled": "No driver enabled, captcha verification is disabled",
+    "configTitle": "Driver Config",
+    "preview": "Preview",
+    "previewTitle": "Captcha Preview",
+    "watermarkTitle": "Watermark Config",
+    "watermarkText": "Watermark Text",
+    "watermarkTextPlaceholder": "Text shown on captcha image",
+    "watermarkColor": "Watermark Color",
+    "watermarkFontsize": "Watermark Font Size"
+  }
 }

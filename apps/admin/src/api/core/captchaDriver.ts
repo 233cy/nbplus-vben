@@ -1,0 +1,60 @@
+import { requestClient } from '#/api/request';
+
+export namespace CaptchaDriverApi {
+  export interface SchemaField {
+    key: string;
+    label: string;
+    component: 'Input' | 'InputNumber' | 'Select' | 'Switch';
+    default: any;
+    options?: { label: string; value: string }[];
+  }
+
+  export interface DriverItem {
+    id: string;
+    type: string;
+    label: string;
+    isEnabled: boolean;
+    isValid: boolean;
+    schema: SchemaField[];
+    config: Record<string, any>;
+    sort: number;
+  }
+
+  export interface UpdateParams {
+    id: string;
+    isEnabled?: boolean;
+    config?: Record<string, any>;
+    sort?: number;
+  }
+
+  export interface WatermarkConfig {
+    fontsize: number;
+    color: string;
+    text: string;
+  }
+}
+
+/** 获取所有人机验证驱动列表 */
+export function getCaptchaDriversApi() {
+  return requestClient.get<CaptchaDriverApi.DriverItem[]>('/admin/captcha/driver/list');
+}
+
+/** 更新驱动配置 */
+export function updateCaptchaDriverApi(data: CaptchaDriverApi.UpdateParams) {
+  return requestClient.put('/admin/captcha/driver/update', data);
+}
+
+/** 获取水印配置 */
+export function getCaptchaWatermarkApi() {
+  return requestClient.get<CaptchaDriverApi.WatermarkConfig>('/admin/captcha/driver/watermark');
+}
+
+/** 保存水印配置 */
+export function saveCaptchaWatermarkApi(data: Partial<CaptchaDriverApi.WatermarkConfig>) {
+  return requestClient.post('/admin/captcha/driver/watermark', data);
+}
+
+/** 预览指定驱动的验证码 */
+export function previewCaptchaDriverApi(type: string) {
+  return requestClient.get<Record<string, any>>('/admin/captcha/driver/preview', { params: { type } });
+}

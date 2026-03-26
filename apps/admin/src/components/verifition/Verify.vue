@@ -22,6 +22,8 @@ interface Props {
   imgSize?: { height: string; width: string };
   blockSize?: { height: string; width: string };
   barSize?: { height: string; width: string };
+  /** 自定义获取验证码数据的函数，不传则使用默认的 /captcha/get 接口 */
+  fetchFn?: () => Promise<any>;
 }
 
 /**
@@ -37,6 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
   blockSize: undefined,
   barSize: undefined,
   imgSize: () => ({ width: '310px', height: '155px' }),
+  fetchFn: undefined,
 });
 
 /**
@@ -66,7 +69,7 @@ async function fetchCaptcha() {
   captchaLoading.value = true;
   captchaData.value = null;
   try {
-    const res: any = await reqGet();
+    const res: any = await (props.fetchFn ? props.fetchFn() : reqGet());
     if (res?.type) {
       captchaType.value = res.type;
       captchaData.value = res;
@@ -181,7 +184,7 @@ defineExpose({
     </div>
     <div
       v-else-if="mode === 'pop'"
-      class="group flex h-[40px] w-full cursor-pointer items-center justify-between rounded-md border px-3 transition-all duration-300"
+      class="group flex h-[40px] w-full cursor-pointer items-center justify-between rounded-md border bg-background px-3 transition-all duration-300"
       :class="[
         successData !== null
           ? 'border-green-500 bg-green-50 dark:bg-green-500/10'

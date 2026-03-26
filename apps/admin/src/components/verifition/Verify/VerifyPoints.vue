@@ -61,7 +61,7 @@ const emit = defineEmits<{
 const { proxy } = getCurrentInstance()!;
 
 // 常量
-const CHECK_NUM = 3; // 默认需要点击的字数
+const CHECK_NUM = 4; // 默认需要点击的字数
 
 // 状态
 const backToken = ref('');
