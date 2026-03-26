@@ -304,10 +304,10 @@ defineExpose({
   position: relative;
   top: 50%;
   left: 50%;
-  box-sizing: border-box; /* Safari 和 Chrome 的旧版本 */ /* Firefox 的旧版本 */ /* Internet Explorer/Edge */
-  user-select: none; /* 标准语法 */
-  background-color: #fff;
-  border: 1px solid #e4e7eb;
+  box-sizing: border-box;
+  user-select: none;
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
   border-radius: 2px;
   box-shadow: 0 0 10px rgb(0 0 0 / 30%);
   transform: translate(-50%, -50%);
@@ -319,9 +319,9 @@ defineExpose({
   padding: 0 15px;
   font-size: 16px;
   line-height: 50px;
-  color: #45494c;
+  color: hsl(var(--foreground));
   text-align: left;
-  border-bottom: 1px solid #e4e7eb;
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .verifybox-bottom {
@@ -390,7 +390,7 @@ defineExpose({
   font-size: 20px;
   text-align: center;
   cursor: pointer;
-  border: 1px solid #ddd;
+  border: 1px solid hsl(var(--border));
 }
 
 .cerify-code-panel {
@@ -438,8 +438,8 @@ defineExpose({
   position: relative;
   box-sizing: content-box;
   text-align: center;
-  background: #fff;
-  border: 1px solid #ddd;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
   border-radius: 4px;
 }
 
@@ -449,7 +449,7 @@ defineExpose({
   left: 0;
   box-sizing: content-box;
   cursor: pointer;
-  background: #fff;
+  background: hsl(var(--background));
   border-radius: 1px;
   box-shadow: 0 0 2px #888;
 }
@@ -465,16 +465,16 @@ defineExpose({
   left: -1px;
   box-sizing: content-box;
   cursor: pointer;
-  background: #f0fff0;
-  border: 1px solid #ddd;
+  background: hsl(var(--primary) / 0.1);
+  border: 1px solid hsl(var(--border));
 }
 
 .verify-img-panel {
   position: relative;
   box-sizing: content-box;
   margin: 0;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--border));
   border-radius: 3px;
 }
 
@@ -498,8 +498,8 @@ defineExpose({
 .verify-img-panel .verify-gap {
   position: relative;
   z-index: 2;
-  background-color: #fff;
-  border: 1px solid #fff;
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
 }
 
 .verify-bar-area .verify-move-block .verify-sub-block {
