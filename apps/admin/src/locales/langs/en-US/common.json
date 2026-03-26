@@ -1,0 +1,19 @@
+{
+  "clearAll": "Clear all",
+  "add": "Add",
+  "inputToAdd": "Type and press Enter to add",
+  "foldUp": "Fold up",
+  "itemsSelect": "{count} items have been selected",
+  "loadingSelectedData": "Loading selected data",
+  "noDataAvailable": "No data available",
+  "noSelectData": "No data selected",
+  "richTextEditor": {
+    "editContent": "Edit content",
+    "textContent": "Content length {len}"
+  },
+  "search": {
+    "keyword": "Search keywords"
+  },
+  "selectData": "Select data",
+  "showMore": "Show more"
+}

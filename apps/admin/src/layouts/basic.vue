@@ -14,7 +14,7 @@ import { useAccessStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
 import { $t } from '#/locales';
-import { useAdminUserStore, useAuthStore } from '#/store';
+import { useAdminUserStore, useAuthStore, useSiteStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const notifications = ref<NotificationItem[]>([
@@ -75,6 +75,7 @@ const userStore = useUserStore();
 const authStore = useAuthStore();
 const accessStore = useAccessStore();
 const adminUserStore = useAdminUserStore();
+const siteStore = useSiteStore();
 const { destroyWatermark, updateWatermark } = useWatermark();
 const showDot = computed(() => notifications.value.some((item) => !item.isRead));
 
@@ -84,7 +85,7 @@ const menus = computed(() => [
       router.push({ name: 'Profile' });
     },
     icon: 'lucide:user',
-    text: $t('page.auth.profile'),
+    text: $t('authentication.profile'),
   },
   {
     handler: () => {
@@ -183,6 +184,11 @@ watch(
     </template>
     <template #lock-screen>
       <LockScreen :avatar @to-login="handleLogout" />
+    </template>
+    <template #footer>
+      <div class="py-3 text-center text-xs text-gray-400 dark:text-gray-500">
+        {{ siteStore.copyright }}
+      </div>
     </template>
   </BasicLayout>
 </template>

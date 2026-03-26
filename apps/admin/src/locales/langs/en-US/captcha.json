@@ -1,0 +1,21 @@
+{
+  "slide": "Please hold the slider and drag to the right",
+  "points": "Please click all {text} in the image",
+  "clickToVerify": "Click to verify",
+  "verifySuccess": "Verification successful",
+  "pleaseCompleteSecurityVerification": "Please complete security verification",
+  "networkError": "Network error, please refresh and try again",
+  "verifyFailed": "Verification failed",
+  "pointClickOrder": "Please click in order: [{text}]",
+  "loadFailed": "Load failed, please try again",
+  "pleaseRetry": "Please try again",
+  "loading": "Loading",
+  "reVerify": "Re-verify",
+  "title": "Captcha",
+  "required": "Please complete security verification first",
+  "confirm": "Confirm",
+  "inputRequired": "Please enter the captcha",
+  "imageTextPlaceholder": "Enter characters in the image",
+  "mathPlaceholder": "Enter the calculation result",
+  "clickImageToRefresh": "Click image to refresh"
+}

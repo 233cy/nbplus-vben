@@ -16,19 +16,19 @@ export namespace uploadType {
 }
 
 export function getTusUrl() {
-  return `/admin/upload/tus`;
+  return `/admin/file/tus`;
 }
 
 export function getUploadUrl() {
-  return `/admin/upload/file`;
+  return `/admin/file/file`;
 }
 
 export function getTusFileInfo(data: uploadType.getTusFileInfo) {
-  return requestClient.get(`/admin/upload/tus/${data.uploadKey}`);
+  return requestClient.get(`/admin/file/tus/${data.uploadKey}`);
 }
 
 export function deleteOssFile(data: uploadType.deleteOssFile) {
-  return requestClient.delete(`/admin/upload/del`, { params: data });
+  return requestClient.delete(`/admin/file/del`, { params: data });
 }
 
 /**
@@ -37,7 +37,7 @@ export function deleteOssFile(data: uploadType.deleteOssFile) {
  */
 export function pathToFullUrlApi(logicalPath: string | string[]) {
   const paths = Array.isArray(logicalPath) ? logicalPath.join(',') : logicalPath;
-  return requestClient.get<Record<string, string>>('/admin/upload/pathToFullUrl', {
+  return requestClient.get<Record<string, string>>('/admin/file/pathToFullUrl', {
     params: { logicalPath: paths },
   });
 }

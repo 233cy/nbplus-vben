@@ -38,6 +38,8 @@ const TreeSelect = defineAsyncComponent(() => import('ant-design-vue/es/tree-sel
 const Upload = defineAsyncComponent(() => import('ant-design-vue/es/upload'));
 const Edit = defineAsyncComponent(() => import('#/components/wangEditor/index.vue'));
 const AvatarUpload = defineAsyncComponent(() => import('#/components/upload/upAvatar.vue'));
+const ImageUpload = defineAsyncComponent(() => import('#/components/upload/upImg.vue'));
+const CreatableSelect = defineAsyncComponent(() => import('#/components/creatableSelect/index.vue'));
 
 const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select', componentProps: Recordable<any> = {}) => {
   return defineComponent({
@@ -69,11 +71,13 @@ export type ComponentType =
   | 'AvatarUpload'
   | 'Checkbox'
   | 'CheckboxGroup'
+  | 'CreatableSelect'
   | 'DatePicker'
   | 'DefaultButton'
   | 'Divider'
   | 'Edit'
   | 'IconPicker'
+  | 'ImageUpload'
   | 'Input'
   | 'InputNumber'
   | 'InputPassword'
@@ -160,6 +164,8 @@ async function initComponentAdapter() {
     Upload,
     Edit,
     AvatarUpload,
+    ImageUpload,
+    CreatableSelect,
   };
 
   // 将组件注册到全局共享状态中

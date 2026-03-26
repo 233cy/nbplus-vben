@@ -6,7 +6,7 @@ import { useAccessStore, useUserStore } from '@vben/stores';
 import { startProgress, stopProgress } from '@vben/utils';
 
 import { accessRoutes, coreRouteNames } from '#/router/routes';
-import { useAuthStore } from '#/store';
+import { useAuthStore, useSiteStore } from '#/store';
 
 import { generateAccess } from './access';
 
@@ -17,9 +17,16 @@ import { generateAccess } from './access';
 function setupCommonGuard(router: Router) {
   // 记录已经加载的页面
   const loadedPaths = new Set<string>();
+  let siteConfigLoaded = false;
 
   router.beforeEach((to) => {
     to.meta.loaded = loadedPaths.has(to.path);
+
+    // 首次导航时拉取公开系统参数（无需登录）
+    if (!siteConfigLoaded) {
+      siteConfigLoaded = true;
+      useSiteStore().fetchPublicConfig();
+    }
 
     // 页面加载进度条
     if (!to.meta.loaded && preferences.transition.progress) {
@@ -105,7 +112,26 @@ function setupAccessGuard(router: Router) {
     accessStore.setAccessMenus(accessibleMenus);
     accessStore.setAccessRoutes(accessibleRoutes);
     accessStore.setIsAccessChecked(true);
-    const redirectPath = (from.query.redirect ?? (to.path === preferences.app.defaultHomePath ? userInfo.homePath || preferences.app.defaultHomePath : to.fullPath)) as string;
+
+    // 计算最终跳转路径：redirect 参数 > 有效的 homePath > defaultHomePath
+    const defaultHome = preferences.app.defaultHomePath;
+    const rawRedirect = from.query.redirect as string | undefined;
+
+    let redirectPath: string;
+    if (rawRedirect) {
+      // 有明确的 redirect 参数（如登录过期后重登）
+      redirectPath = decodeURIComponent(rawRedirect);
+    } else if (to.path === defaultHome) {
+      // 正常登录流程：尝试跳 homePath，但要验证路由是否存在
+      const homePath = userInfo.homePath;
+      if (homePath && homePath !== defaultHome && router.hasRoute(homePath.replace(/^\//, '') as any) || (homePath && router.resolve(homePath).matched.length > 0)) {
+        redirectPath = homePath;
+      } else {
+        redirectPath = defaultHome;
+      }
+    } else {
+      redirectPath = to.fullPath;
+    }
 
     return {
       ...router.resolve(decodeURIComponent(redirectPath)),

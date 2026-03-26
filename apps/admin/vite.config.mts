@@ -39,6 +39,7 @@ export default defineApplicationConfig(async () => {
       },
       server: {
         port: 2300,
+        allowedHosts: ['nbplus.233cy.com'],
         proxy: {
           '/api': {
             changeOrigin: true,

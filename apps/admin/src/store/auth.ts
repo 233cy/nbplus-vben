@@ -133,6 +133,11 @@ export const useAuthStore = defineStore('auth', () => {
     }
     resetAllStores();
     accessStore.setLoginExpired(false);
+    if (import.meta.env.DEV) {
+      localStorage.clear();
+      sessionStorage.clear();
+      location.reload();
+    }
 
     await router.replace({
       path: LOGIN_PATH,

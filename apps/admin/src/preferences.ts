@@ -10,5 +10,16 @@ export const overridesPreferences = defineOverridesPreferences({
   app: {
     name: import.meta.env.VITE_APP_TITLE,
     loginExpiredMode: 'modal',
+    accessMode: 'mixed',
+    defaultHomePath: '/workspace',
+  },
+  footer: {
+    enable: true,
+  },
+  copyright: {
+    enable: true,
+    companyName: '233cy · nbplus',
+    companySiteLink: 'https://blog.233cy.com',
+    date: '2026',
   },
 });

@@ -49,15 +49,15 @@ async function getCaptcha(): Promise<AuthApi.CaptchaPayload> {
 
 function validateTarget(): boolean {
   if (!target.value) {
-    targetError.value = channel.value === 'sms' ? $t('page.auth.forgetPassword.phoneRequired') : $t('page.auth.forgetPassword.emailRequired');
+    targetError.value = channel.value === 'sms' ? $t('authentication.forgetPasswordPage.phoneRequired') : $t('authentication.forgetPasswordPage.emailRequired');
     return false;
   }
   if (channel.value === 'sms' && !/^1[3-9]\d{9}$/.test(target.value)) {
-    targetError.value = $t('page.auth.forgetPassword.invalidPhone');
+    targetError.value = $t('authentication.forgetPasswordPage.invalidPhone');
     return false;
   }
   if (channel.value === 'email' && !/^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(target.value)) {
-    targetError.value = $t('page.auth.forgetPassword.invalidEmail');
+    targetError.value = $t('authentication.forgetPasswordPage.invalidEmail');
     return false;
   }
   targetError.value = '';
@@ -73,7 +73,7 @@ async function handleSendCode() {
   try {
     await sendPasswordResetCodeApi({ channel: channel.value, target: target.value, captcha });
     cachedCaptcha = null; // 发送成功后清空，下次重发需重新验证
-    message.success($t('page.auth.forgetPassword.codeSent'));
+    message.success($t('authentication.forgetPasswordPage.codeSent'));
     currentStep.value = 1;
     countdown.value = 60;
     startCountdown();
@@ -108,7 +108,7 @@ async function handleResend() {
   try {
     await sendPasswordResetCodeApi({ channel: channel.value, target: target.value, captcha });
     cachedCaptcha = null; // 发送成功后清空
-    message.success($t('page.auth.forgetPassword.codeSent'));
+    message.success($t('authentication.forgetPasswordPage.codeSent'));
     countdown.value = 60;
     startCountdown();
   } finally {
@@ -118,7 +118,7 @@ async function handleResend() {
 
 async function handleVerifyCode() {
   if (!code.value || code.value.length !== 6) {
-    codeError.value = $t('page.auth.forgetPassword.codeRequired');
+    codeError.value = $t('authentication.forgetPasswordPage.codeRequired');
     return;
   }
   codeError.value = '';
@@ -143,11 +143,11 @@ const passwordError = ref('');
 
 async function handleResetPassword() {
   if (!newPassword.value || newPassword.value.length < 8) {
-    passwordError.value = $t('page.auth.forgetPassword.passwordMinLength');
+    passwordError.value = $t('authentication.forgetPasswordPage.passwordMinLength');
     return;
   }
   if (newPassword.value !== confirmPassword.value) {
-    passwordError.value = $t('page.auth.forgetPassword.passwordMismatch');
+    passwordError.value = $t('authentication.forgetPasswordPage.passwordMismatch');
     return;
   }
   passwordError.value = '';
@@ -173,15 +173,15 @@ function goLogin() {
   <div class="mx-auto w-full max-w-md px-4 py-8">
     <!-- 标题 -->
     <div class="mb-8 text-center">
-      <h2 class="text-2xl font-semibold">{{ $t('page.auth.forgetPassword.title') }}</h2>
-      <p class="mt-1 text-sm text-muted-foreground">{{ $t('page.auth.forgetPassword.subTitle') }}</p>
+      <h2 class="text-2xl font-semibold">{{ $t('authentication.forgetPasswordPage.title') }}</h2>
+      <p class="mt-1 text-sm text-muted-foreground">{{ $t('authentication.forgetPasswordPage.subTitle') }}</p>
     </div>
 
     <!-- 步骤条 -->
     <Steps :current="currentStep" class="mb-8" size="small">
-      <Steps.Step :title="$t('page.auth.forgetPassword.step1')" />
-      <Steps.Step :title="$t('page.auth.forgetPassword.step2')" />
-      <Steps.Step :title="$t('page.auth.forgetPassword.step3')" />
+      <Steps.Step :title="$t('authentication.forgetPasswordPage.step1')" />
+      <Steps.Step :title="$t('authentication.forgetPasswordPage.step2')" />
+      <Steps.Step :title="$t('authentication.forgetPasswordPage.step3')" />
     </Steps>
 
     <!-- 人机验证弹窗 -->
@@ -194,7 +194,7 @@ function goLogin() {
       <!-- 渠道切换 -->
       <div class="flex gap-2">
         <button
-          v-for="(label, ch) in { sms: $t('page.auth.forgetPassword.smsChannel'), email: $t('page.auth.forgetPassword.emailChannel') }"
+          v-for="(label, ch) in { sms: $t('authentication.forgetPasswordPage.smsChannel'), email: $t('authentication.forgetPasswordPage.emailChannel') }"
           :key="ch"
           class="flex-1 rounded-full border py-1.5 text-sm transition-colors"
           :class="[channel === ch ? 'border-primary bg-primary text-primary-foreground' : 'border-border text-muted-foreground hover:border-primary']"
@@ -211,13 +211,13 @@ function goLogin() {
 
       <Form layout="vertical">
         <FormItem
-          :label="channel === 'sms' ? $t('page.auth.forgetPassword.phone') : $t('page.auth.forgetPassword.email')"
+          :label="channel === 'sms' ? $t('authentication.forgetPasswordPage.phone') : $t('authentication.forgetPasswordPage.email')"
           :validate-status="targetError ? 'error' : ''"
           :help="targetError"
         >
           <Input
             v-model:value="target"
-            :placeholder="channel === 'sms' ? $t('page.auth.forgetPassword.phonePlaceholder') : $t('page.auth.forgetPassword.emailPlaceholder')"
+            :placeholder="channel === 'sms' ? $t('authentication.forgetPasswordPage.phonePlaceholder') : $t('authentication.forgetPasswordPage.emailPlaceholder')"
             size="large"
             @change="targetError = ''"
           />
@@ -225,34 +225,34 @@ function goLogin() {
       </Form>
 
       <Button type="primary" block size="large" :loading="loading" @click="handleSendCode">
-        {{ $t('page.auth.forgetPassword.sendCode') }}
+        {{ $t('authentication.forgetPasswordPage.sendCode') }}
       </Button>
 
       <div class="text-center">
-        <a class="text-sm text-primary" @click="goLogin">{{ $t('page.auth.forgetPassword.backToLogin') }}</a>
+        <a class="text-sm text-primary" @click="goLogin">{{ $t('authentication.forgetPasswordPage.backToLogin') }}</a>
       </div>
     </div>
 
     <!-- 步骤二：输入验证码 -->
     <div v-else-if="currentStep === 1" class="space-y-4">
       <p class="text-sm text-muted-foreground">
-        {{ $t('page.auth.forgetPassword.codeSentTo', { target }) }}
+        {{ $t('authentication.forgetPasswordPage.codeSentTo', { target }) }}
       </p>
 
       <Form layout="vertical">
-        <FormItem :label="$t('page.auth.forgetPassword.code')" :validate-status="codeError ? 'error' : ''" :help="codeError">
-          <Input v-model:value="code" :placeholder="$t('page.auth.forgetPassword.codePlaceholder')" size="large" maxlength="6" @change="codeError = ''" />
+        <FormItem :label="$t('authentication.forgetPasswordPage.code')" :validate-status="codeError ? 'error' : ''" :help="codeError">
+          <Input v-model:value="code" :placeholder="$t('authentication.forgetPasswordPage.codePlaceholder')" size="large" maxlength="6" @change="codeError = ''" />
         </FormItem>
       </Form>
 
       <Button type="primary" block size="large" :loading="loading" @click="handleVerifyCode">
-        {{ $t('page.auth.forgetPassword.verifyCode') }}
+        {{ $t('authentication.forgetPasswordPage.verifyCode') }}
       </Button>
 
       <div class="text-center text-sm">
-        <span class="text-muted-foreground">{{ $t('page.auth.forgetPassword.noCode') }}</span>
+        <span class="text-muted-foreground">{{ $t('authentication.forgetPasswordPage.noCode') }}</span>
         <a class="ml-1" :class="countdown > 0 ? 'cursor-not-allowed text-muted-foreground' : 'cursor-pointer text-primary'" @click="handleResend">
-          {{ countdown > 0 ? $t('page.auth.forgetPassword.resendCountdown', { seconds: countdown }) : $t('page.auth.forgetPassword.resend') }}
+          {{ countdown > 0 ? $t('authentication.forgetPasswordPage.resendCountdown', { seconds: countdown }) : $t('authentication.forgetPasswordPage.resend') }}
         </a>
       </div>
     </div>
@@ -260,26 +260,26 @@ function goLogin() {
     <!-- 步骤三：设置新密码 -->
     <div v-else-if="currentStep === 2" class="space-y-4">
       <Form layout="vertical">
-        <FormItem :label="$t('page.auth.forgetPassword.newPassword')" :validate-status="passwordError ? 'error' : ''" :help="passwordError">
-          <InputPassword v-model:value="newPassword" :placeholder="$t('page.auth.forgetPassword.newPasswordPlaceholder')" size="large" @change="passwordError = ''" />
+        <FormItem :label="$t('authentication.forgetPasswordPage.newPassword')" :validate-status="passwordError ? 'error' : ''" :help="passwordError">
+          <InputPassword v-model:value="newPassword" :placeholder="$t('authentication.forgetPasswordPage.newPasswordPlaceholder')" size="large" @change="passwordError = ''" />
         </FormItem>
-        <FormItem :label="$t('page.auth.forgetPassword.confirmPassword')">
-          <InputPassword v-model:value="confirmPassword" :placeholder="$t('page.auth.forgetPassword.confirmPasswordPlaceholder')" size="large" />
+        <FormItem :label="$t('authentication.forgetPasswordPage.confirmPassword')">
+          <InputPassword v-model:value="confirmPassword" :placeholder="$t('authentication.forgetPasswordPage.confirmPasswordPlaceholder')" size="large" />
         </FormItem>
       </Form>
 
       <Button type="primary" block size="large" :loading="loading" @click="handleResetPassword">
-        {{ $t('page.auth.forgetPassword.submit') }}
+        {{ $t('authentication.forgetPasswordPage.submit') }}
       </Button>
     </div>
 
     <!-- 步骤四：完成 -->
     <div v-else class="space-y-4 text-center">
       <div class="text-5xl text-success">✓</div>
-      <p class="text-lg font-medium">{{ $t('page.auth.forgetPassword.successTitle') }}</p>
-      <p class="text-sm text-muted-foreground">{{ $t('page.auth.forgetPassword.successDesc') }}</p>
+      <p class="text-lg font-medium">{{ $t('authentication.forgetPasswordPage.successTitle') }}</p>
+      <p class="text-sm text-muted-foreground">{{ $t('authentication.forgetPasswordPage.successDesc') }}</p>
       <Button type="primary" block size="large" @click="goLogin">
-        {{ $t('page.auth.forgetPassword.goLogin') }}
+        {{ $t('authentication.forgetPasswordPage.goLogin') }}
       </Button>
     </div>
   </div>

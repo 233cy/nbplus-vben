@@ -27,8 +27,8 @@ const selectedChannel = ref<Channel>('sms');
 const CODE_LENGTH = 6;
 
 const channelLabels: Record<Channel, string> = {
-  email: $t('page.auth.codeLogin.emailChannel'),
-  sms: $t('page.auth.codeLogin.smsChannel'),
+  email: $t('authentication.codeLogin.emailChannel'),
+  sms: $t('authentication.codeLogin.smsChannel'),
 };
 
 const channelIcons: Record<Channel, string> = {
@@ -63,35 +63,35 @@ async function handleSendCode() {
   if (formApi) {
     const result = await formApi.validateField('codeTarget');
     if (result?.errors && Object.keys(result.errors).length > 0) {
-      throw new Error($t('page.auth.codeLogin.targetRequired'));
+      throw new Error($t('authentication.codeLogin.targetRequired'));
     }
   }
 
   const values = formApi ? await formApi.getValues() : {};
   const codeTarget = values.codeTarget as string | undefined;
-  if (!codeTarget) throw new Error($t('page.auth.codeLogin.targetRequired'));
+  if (!codeTarget) throw new Error($t('authentication.codeLogin.targetRequired'));
 
   // 已有缓存时直接复用，否则弹窗验证
   const captcha = await getCaptcha();
 
   await sendLoginCodeApi({ codeChannel: selectedChannel.value, codeTarget, captcha });
   cachedCaptcha = null; // 发送成功后清空，下次需重新验证
-  message.success($t('page.auth.codeLogin.codeSent'));
+  message.success($t('authentication.codeLogin.codeSent'));
 }
 
 const formSchema = computed((): VbenFormSchema[] => [
   {
     component: 'Input',
     componentProps: {
-      placeholder: selectedChannel.value === 'sms' ? $t('page.auth.codeLogin.phonePlaceholder') : $t('page.auth.codeLogin.emailPlaceholder'),
+      placeholder: selectedChannel.value === 'sms' ? $t('authentication.codeLogin.phonePlaceholder') : $t('authentication.codeLogin.emailPlaceholder'),
     },
     fieldName: 'codeTarget',
     defaultValue: '18700842199',
-    label: selectedChannel.value === 'sms' ? $t('page.auth.codeLogin.phone') : $t('page.auth.codeLogin.email'),
+    label: selectedChannel.value === 'sms' ? $t('authentication.codeLogin.phone') : $t('authentication.codeLogin.email'),
     rules:
       selectedChannel.value === 'sms'
-        ? z.string().regex(/^1[3-9]\d{9}$/, { message: $t('page.auth.codeLogin.invalidPhone') })
-        : z.string().email({ message: $t('page.auth.codeLogin.invalidEmail') }),
+        ? z.string().regex(/^1[3-9]\d{9}$/, { message: $t('authentication.codeLogin.invalidPhone') })
+        : z.string().email({ message: $t('authentication.codeLogin.invalidEmail') }),
   },
   {
     component: 'VbenPinInput',
@@ -121,7 +121,7 @@ async function handleSubmit(values: Recordable<any>) {
 <template>
   <AuthenticationCodeLogin ref="loginRef" :form-schema="formSchema" sub-title="通过你绑定的邮箱/手机号快捷登录" :loading="authStore.loginLoading" @submit="handleSubmit">
     <template #title>
-      <div class="mb-2 text-xl font-semibold">{{ $t('page.auth.codeLogin.title') }}</div>
+      <div class="mb-2 text-xl font-semibold">{{ $t('authentication.codeLogin.title') }}</div>
       <div class="mb-4 flex gap-2">
         <button
           v-for="(label, ch) in channelLabels"

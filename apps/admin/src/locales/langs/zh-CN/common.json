@@ -1,0 +1,19 @@
+{
+  "clearAll": "清空全部",
+  "add": "添加",
+  "inputToAdd": "输入后回车添加",
+  "foldUp": "收起",
+  "itemsSelect": "已选择 {count} 项",
+  "loadingSelectedData": "正在加载已选数据",
+  "noDataAvailable": "暂无数据",
+  "noSelectData": "尚未选择数据",
+  "richTextEditor": {
+    "editContent": "编辑内容",
+    "textContent": "内容长度 {len} 字符"
+  },
+  "search": {
+    "keyword": "搜索关键词"
+  },
+  "selectData": "选择数据",
+  "showMore": "显示更多"
+}

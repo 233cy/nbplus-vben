@@ -35,7 +35,7 @@ const props = withDefaults(
   {
     modelValue: '',
     multiple: true,
-    title: $t('page.selectData'),
+    title: $t('common.selectData'),
     pageSize: 10,
     initEcho: null,
   },
@@ -99,7 +99,7 @@ const gridOptions: VxeGridProps<RowType> = {
   checkboxConfig: { highlight: props.multiple, reserve: true, trigger: 'row' },
   radioConfig: { highlight: !props.multiple, reserve: true, trigger: 'row' },
 
-  emptyText: $t('page.noDataAvailable'),
+  emptyText: $t('common.noDataAvailable'),
   pagerConfig: { pageSize: props.pageSize },
   sortConfig: { remote: true },
   rowConfig: { keyField: 'id' },
@@ -262,13 +262,13 @@ onMounted(async () => {
       <template #icon>
         <IconifyIcon icon="mdi:cursor-default" />
       </template>
-      {{ $t('page.selectData') }}
+      {{ $t('common.selectData') }}
     </AButton>
 
     <!-- 加载提示 -->
     <div v-if="loading" class="flex items-center text-sm text-gray-500 dark:text-gray-400">
       <IconifyIcon icon="mdi:loading" class="mr-1 animate-spin text-base" />
-      {{ $t('page.loadingSelectedData') }}...
+      {{ $t('common.loadingSelectedData') }}...
     </div>
 
     <div
@@ -290,13 +290,13 @@ onMounted(async () => {
             <template #icon>
               <IconifyIcon icon="mdi:trash-can-outline" class="text-base" />
             </template>
-            {{ $t('page.clearAll') }}
+            {{ $t('common.clearAll') }}
           </AButton>
         </div>
 
         <div class="mb-2 flex flex-wrap">
           <Tag v-if="selectedMap.size > maxDisplayTags" color="processing" class="cursor-pointer" @click="toggleExpand">
-            {{ isExpanded ? $t('page.foldUp') : `${$t('page.showMore')}（${selectedMap.size - maxDisplayTags}）` }}
+            {{ isExpanded ? $t('common.foldUp') : `${$t('common.showMore')}（${selectedMap.size - maxDisplayTags}）` }}
           </Tag>
 
           <Tag v-for="item in visibleTags" :key="item[valueField]" color="blue" class="cursor-pointer transition hover:opacity-60">
@@ -308,7 +308,7 @@ onMounted(async () => {
       </div>
 
       <div v-else class="text-sm text-primary dark:text-gray-400">
-        {{ $t('page.noSelectData') }}
+        {{ $t('common.noSelectData') }}
       </div>
     </div>
 
@@ -318,7 +318,7 @@ onMounted(async () => {
 
       <!-- 搜索栏 -->
       <div class="mb-3 flex items-center gap-2">
-        <Input v-model:value="keyword" style="width: 260px" allow-clear :placeholder="$t('page.search.keyword')" @press-enter="handleSearch">
+        <Input v-model:value="keyword" style="width: 260px" allow-clear :placeholder="$t('common.search.keyword')" @press-enter="handleSearch">
           <template #prefix>
             <IconifyIcon icon="mdi:magnify" class="text-base" />
           </template>
@@ -340,7 +340,7 @@ onMounted(async () => {
         class="hover:text-regular hover:border-border-strong rounded-md border border-border bg-card px-3 py-1 text-primary transition-all hover:bg-gray-100 dark:bg-gray-800 hover:dark:bg-gray-900"
       >
         <div class="mb-1 mt-2 text-sm text-gray-500 dark:text-gray-400">
-          {{ $t('page.itemsSelect', { count: tempSelectedMap.size }) }}
+          {{ $t('common.itemsSelect', { count: tempSelectedMap.size }) }}
         </div>
         <Tag
           v-for="item in Array.from(tempSelectedMap.values())"

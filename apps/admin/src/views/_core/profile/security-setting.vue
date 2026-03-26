@@ -59,19 +59,19 @@ const canSend = computed(() => countdown.value === 0 && targetInput.value.trim()
 
 const modalTitle = computed(() => {
   const ch = modalChannel.value;
-  if (modalMode.value === 'bind') return ch === 'sms' ? $t('page.profile.security.bindPhone') : $t('page.profile.security.bindEmail');
-  if (modalMode.value === 'change') return ch === 'sms' ? $t('page.profile.security.changePhone') : $t('page.profile.security.changeEmail');
-  return ch === 'sms' ? $t('page.profile.security.unbindPhone') : $t('page.profile.security.unbindEmail');
+  if (modalMode.value === 'bind') return ch === 'sms' ? $t('profile.security.bindPhone') : $t('profile.security.bindEmail');
+  if (modalMode.value === 'change') return ch === 'sms' ? $t('profile.security.changePhone') : $t('profile.security.changeEmail');
+  return ch === 'sms' ? $t('profile.security.unbindPhone') : $t('profile.security.unbindEmail');
 });
 
 const targetLabel = computed(() => {
   if (modalMode.value === 'unbind') {
-    return modalChannel.value === 'sms' ? $t('page.profile.security.currentPhone') : $t('page.profile.security.currentEmail');
+    return modalChannel.value === 'sms' ? $t('profile.security.currentPhone') : $t('profile.security.currentEmail');
   }
-  return modalChannel.value === 'sms' ? $t('page.profile.security.newPhone') : $t('page.profile.security.newEmail');
+  return modalChannel.value === 'sms' ? $t('profile.security.newPhone') : $t('profile.security.newEmail');
 });
 
-const targetPlaceholder = computed(() => (modalChannel.value === 'sms' ? $t('page.profile.security.phonePlaceholder') : $t('page.profile.security.emailPlaceholder')));
+const targetPlaceholder = computed(() => (modalChannel.value === 'sms' ? $t('profile.security.phonePlaceholder') : $t('profile.security.emailPlaceholder')));
 
 function maskPhone(phone: string) {
   return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
@@ -113,11 +113,11 @@ async function handleSendCode() {
 
   // 1. 校验格式
   if (modalChannel.value === 'sms' && !/^1[3-9]\d{9}$/.test(target)) {
-    message.warning($t('page.profile.security.invalidPhone'));
+    message.warning($t('profile.security.invalidPhone'));
     return;
   }
   if (modalChannel.value === 'email' && !/^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(target)) {
-    message.warning($t('page.profile.security.invalidEmail'));
+    message.warning($t('profile.security.invalidEmail'));
     return;
   }
 
@@ -128,7 +128,7 @@ async function handleSendCode() {
   try {
     await sendContactCodeApi({ channel: modalChannel.value, target, captcha });
     cachedCaptcha = null; // 发送成功后清空，下次需重新验证
-    message.success($t('page.profile.security.codeSent'));
+    message.success($t('profile.security.codeSent'));
     startCountdown();
   } catch {
     // 发送失败：清空缓存，下次点击需重新人机验证
@@ -146,7 +146,7 @@ async function handleSubmit() {
   try {
     const result = await (modalMode.value === 'unbind' ? unbindContactApi({ channel: modalChannel.value, code }) : bindContactApi({ channel: modalChannel.value, target, code }));
     profileInfo.value = { ...profileInfo.value, ...result };
-    message.success(modalMode.value === 'unbind' ? $t('page.profile.security.unbindSuccess') : $t('page.profile.security.bindSuccess'));
+    message.success(modalMode.value === 'unbind' ? $t('profile.security.unbindSuccess') : $t('profile.security.bindSuccess'));
     modalVisible.value = false;
   } finally {
     submitting.value = false;
@@ -192,11 +192,11 @@ async function handleTotpSubmit() {
     if (totpModalMode.value === 'bind') {
       const result = await totpBindApi({ totpSecret: totpData.value!.secret, totpCode: code });
       profileInfo.value = { ...profileInfo.value, ...result };
-      message.success($t('page.profile.security.totpBindSuccess'));
+      message.success($t('profile.security.totpBindSuccess'));
     } else {
       const result = await totpUnbindApi({ totpCode: code });
       profileInfo.value = { ...profileInfo.value, ...result };
-      message.success($t('page.profile.security.totpUnbindSuccess'));
+      message.success($t('profile.security.totpUnbindSuccess'));
     }
     totpModalVisible.value = false;
   } finally {
@@ -217,24 +217,24 @@ onMounted(loadProfile);
     <!-- 密保手机 -->
     <div class="flex items-center justify-between rounded-lg border p-4">
       <div>
-        <div class="font-medium">{{ $t('page.profile.security.phone') }}</div>
+        <div class="font-medium">{{ $t('profile.security.phone') }}</div>
         <div class="mt-1 text-sm text-muted-foreground">
           <template v-if="profileInfo.phone">
-            {{ $t('page.profile.security.phoneDesc', { phone: maskPhone(profileInfo.phone) }) }}
+            {{ $t('profile.security.phoneDesc', { phone: maskPhone(profileInfo.phone) }) }}
           </template>
-          <template v-else>{{ $t('page.profile.security.phoneEmpty') }}</template>
+          <template v-else>{{ $t('profile.security.phoneEmpty') }}</template>
         </div>
       </div>
       <div class="flex gap-2">
         <a-button v-if="!profileInfo.phone" @click="openModal('sms', 'bind')">
-          {{ $t('page.profile.security.bind') }}
+          {{ $t('profile.security.bind') }}
         </a-button>
         <template v-else>
           <a-button @click="openModal('sms', 'change')">
-            {{ $t('page.profile.security.change') }}
+            {{ $t('profile.security.change') }}
           </a-button>
           <a-button danger @click="openModal('sms', 'unbind')">
-            {{ $t('page.profile.security.unbind') }}
+            {{ $t('profile.security.unbind') }}
           </a-button>
         </template>
       </div>
@@ -243,24 +243,24 @@ onMounted(loadProfile);
     <!-- 备用邮箱 -->
     <div class="flex items-center justify-between rounded-lg border p-4">
       <div>
-        <div class="font-medium">{{ $t('page.profile.security.email') }}</div>
+        <div class="font-medium">{{ $t('profile.security.email') }}</div>
         <div class="mt-1 text-sm text-muted-foreground">
           <template v-if="profileInfo.email">
-            {{ $t('page.profile.security.emailDesc', { email: maskEmail(profileInfo.email) }) }}
+            {{ $t('profile.security.emailDesc', { email: maskEmail(profileInfo.email) }) }}
           </template>
-          <template v-else>{{ $t('page.profile.security.emailEmpty') }}</template>
+          <template v-else>{{ $t('profile.security.emailEmpty') }}</template>
         </div>
       </div>
       <div class="flex gap-2">
         <a-button v-if="!profileInfo.email" @click="openModal('email', 'bind')">
-          {{ $t('page.profile.security.bind') }}
+          {{ $t('profile.security.bind') }}
         </a-button>
         <template v-else>
           <a-button @click="openModal('email', 'change')">
-            {{ $t('page.profile.security.change') }}
+            {{ $t('profile.security.change') }}
           </a-button>
           <a-button danger @click="openModal('email', 'unbind')">
-            {{ $t('page.profile.security.unbind') }}
+            {{ $t('profile.security.unbind') }}
           </a-button>
         </template>
       </div>
@@ -269,29 +269,29 @@ onMounted(loadProfile);
     <!-- 动态验证器 TOTP -->
     <div class="flex items-center justify-between rounded-lg border p-4">
       <div>
-        <div class="font-medium">{{ $t('page.profile.security.totp') }}</div>
+        <div class="font-medium">{{ $t('profile.security.totp') }}</div>
         <div class="mt-1 text-sm text-muted-foreground">
           <template v-if="profileInfo.totpEnabled">
-            {{ $t('page.profile.security.totpDesc') }}
+            {{ $t('profile.security.totpDesc') }}
           </template>
-          <template v-else>{{ $t('page.profile.security.totpEmpty') }}</template>
+          <template v-else>{{ $t('profile.security.totpEmpty') }}</template>
         </div>
       </div>
       <div class="flex gap-2">
         <a-button v-if="!profileInfo.totpEnabled" type="primary" @click="openTotpBind">
-          {{ $t('page.profile.security.totpBind') }}
+          {{ $t('profile.security.totpBind') }}
         </a-button>
         <a-button v-else danger @click="openTotpUnbind">
-          {{ $t('page.profile.security.totpUnbind') }}
+          {{ $t('profile.security.totpUnbind') }}
         </a-button>
       </div>
     </div>
 
     <!-- 绑定/换绑/解绑弹窗 -->
-    <a-modal v-model:open="modalVisible" :title="modalTitle" :confirm-loading="submitting" :ok-text="$t('page.profile.security.bind')" @ok="handleSubmit">
+    <a-modal v-model:open="modalVisible" :title="modalTitle" :confirm-loading="submitting" :ok-text="$t('profile.security.bind')" @ok="handleSubmit">
       <div class="space-y-4 py-2">
         <!-- 解绑时提示 -->
-        <a-alert v-if="modalMode === 'unbind'" type="warning" show-icon :message="$t('page.profile.security.unbindConfirm', { target: targetInput })" />
+        <a-alert v-if="modalMode === 'unbind'" type="warning" show-icon :message="$t('profile.security.unbindConfirm', { target: targetInput })" />
 
         <!-- 目标输入（解绑时只读） -->
         <div>
@@ -302,14 +302,14 @@ onMounted(loadProfile);
         <!-- 验证码输入 + 发送按钮 -->
         <!-- 点击发送：校验格式 → 人机验证弹窗 → 调接口 → 成功倒计时 / 失败重置验证码 -->
         <div>
-          <div class="mb-1 text-sm font-medium">{{ $t('page.profile.security.code') }}</div>
+          <div class="mb-1 text-sm font-medium">{{ $t('profile.security.code') }}</div>
           <a-input-group compact>
-            <a-input v-model:value="codeInput" :placeholder="$t('page.profile.security.codePlaceholder')" :maxlength="6" style="width: calc(100% - 130px)" />
+            <a-input v-model:value="codeInput" :placeholder="$t('profile.security.codePlaceholder')" :maxlength="6" style="width: calc(100% - 130px)" />
             <a-button :disabled="!canSend" style="width: 130px" @click="handleSendCode">
               <template v-if="countdown > 0">
-                {{ $t('page.profile.security.resendCountdown', { seconds: countdown }) }}
+                {{ $t('profile.security.resendCountdown', { seconds: countdown }) }}
               </template>
-              <template v-else>{{ $t('page.profile.security.sendCode') }}</template>
+              <template v-else>{{ $t('profile.security.sendCode') }}</template>
             </a-button>
           </a-input-group>
         </div>
@@ -319,23 +319,23 @@ onMounted(loadProfile);
     <!-- TOTP 绑定/解绑弹窗 -->
     <a-modal
       v-model:open="totpModalVisible"
-      :title="totpModalMode === 'bind' ? $t('page.profile.security.totpBindTitle') : $t('page.profile.security.totpUnbindTitle')"
+      :title="totpModalMode === 'bind' ? $t('profile.security.totpBindTitle') : $t('profile.security.totpUnbindTitle')"
       :confirm-loading="totpSubmitting"
-      :ok-text="totpModalMode === 'bind' ? $t('page.profile.security.totpBind') : $t('page.profile.security.totpUnbind')"
+      :ok-text="totpModalMode === 'bind' ? $t('profile.security.totpBind') : $t('profile.security.totpUnbind')"
       :ok-button-props="{ danger: totpModalMode === 'unbind' }"
       @ok="handleTotpSubmit"
     >
       <div class="space-y-4 py-2">
         <!-- 绑定流程：展示二维码 -->
         <template v-if="totpModalMode === 'bind'">
-          <a-spin :spinning="totpGenerating" :tip="$t('page.profile.security.totpLoading')">
+          <a-spin :spinning="totpGenerating" :tip="$t('profile.security.totpLoading')">
             <div v-if="totpData" class="flex flex-col items-center gap-3">
               <!-- SVG 二维码 -->
               <!-- eslint-disable-next-line vue/no-v-html -->
               <div class="rounded border p-2" v-html="totpData.qrCodeSvg"></div>
               <div class="text-center text-sm text-muted-foreground">
-                <div>{{ $t('page.profile.security.totpStep1') }}</div>
-                <div class="mt-1">{{ $t('page.profile.security.totpStep2') }}</div>
+                <div>{{ $t('profile.security.totpStep1') }}</div>
+                <div class="mt-1">{{ $t('profile.security.totpStep2') }}</div>
               </div>
             </div>
           </a-spin>
@@ -343,13 +343,13 @@ onMounted(loadProfile);
 
         <!-- 解绑流程：提示 -->
         <template v-else>
-          <a-alert type="warning" show-icon :message="$t('page.profile.security.totpUnbindConfirm')" />
+          <a-alert type="warning" show-icon :message="$t('profile.security.totpUnbindConfirm')" />
         </template>
 
         <!-- 验证码输入 -->
         <div>
-          <div class="mb-1 text-sm font-medium">{{ $t('page.profile.security.totpCode') }}</div>
-          <a-input v-model:value="totpCodeInput" :placeholder="$t('page.profile.security.totpCodePlaceholder')" :maxlength="6" autocomplete="one-time-code" />
+          <div class="mb-1 text-sm font-medium">{{ $t('profile.security.totpCode') }}</div>
+          <a-input v-model:value="totpCodeInput" :placeholder="$t('profile.security.totpCodePlaceholder')" :maxlength="6" autocomplete="one-time-code" />
         </div>
       </div>
     </a-modal>

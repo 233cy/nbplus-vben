@@ -109,9 +109,9 @@ const formSchema = computed((): VbenFormSchema[] => {
     schema.push({
       component: markRaw(Verify),
       componentProps: {},
-      label: $t('page.captcha.title') || '验证码',
+      label: $t('captcha.title') || '验证码',
       fieldName: 'captcha',
-      rules: z.any().refine((value) => value !== null && value !== undefined && value !== '', { message: $t('page.captcha.required') || '请先完成安全验证' }),
+      rules: z.any().refine((value) => value !== null && value !== undefined && value !== '', { message: $t('captcha.required') || '请先完成安全验证' }),
     });
   }
 

@@ -150,7 +150,7 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
         target.downloadUrl = xhrData.fullUrl;
       }
     }
-    message.success($t('page.upload.uploadSuccess', { name: file?.name }));
+    message.success($t('upload.uploadSuccess', { name: file?.name }));
   });
 
   instance.on('upload-error', (file, error, response) => {
@@ -237,9 +237,9 @@ async function handleRemove(file: UIFile) {
     if (file.logicalPath) {
       try {
         await deleteOssFile({ logicalPath: file.logicalPath });
-        message.success($t('page.upload.deleteSourceSuccess'));
+        message.success($t('upload.deleteSourceSuccess'));
       } catch {
-        message.error($t('page.upload.deleteFailed'));
+        message.error($t('upload.deleteFailed'));
         return;
       }
     }
@@ -308,7 +308,7 @@ async function handleDownload(file: UIFile) {
       const res: any = await getTusFileInfo({ uploadKey: file.fileId });
       file.downloadUrl = res.data?.fullUrl || res.fullUrl;
     } catch {
-      return message.error($t('page.upload.getDownloadUrlFailed'));
+      return message.error($t('upload.getDownloadUrlFailed'));
     }
   }
 
@@ -325,46 +325,46 @@ async function handleDownload(file: UIFile) {
     :show-upload-list="{ showRemoveIcon: false, showDownloadIcon: false, showPreviewIcon: false }"
     :custom-request="() => {}"
   >
-    <a-button type="primary">{{ $t('page.upload.selectFile') }}</a-button>
+    <a-button type="primary">{{ $t('upload.selectFile') }}</a-button>
 
     <template #itemRender="{ file: rawFile }">
       <a-list item-layout="horizontal" :data-source="[rawFile as UIFile]" class="hover:text-regular mt-2 rounded-md border border-border bg-card transition-all hover:bg-muted">
         <template #renderItem="{ item: file }">
           <a-list-item>
             <template #actions>
-              <a-button v-if="!file.isStart" type="link" size="small" @click.stop="handleToggleAction(file)"> {{ $t('page.upload.uploadAction') }} </a-button>
-              <a-button v-else-if="file.status === 'error'" type="link" size="small" @click.stop="handleToggleAction(file)"> {{ $t('page.upload.retry') }} </a-button>
+              <a-button v-if="!file.isStart" type="link" size="small" @click.stop="handleToggleAction(file)"> {{ $t('upload.uploadAction') }} </a-button>
+              <a-button v-else-if="file.status === 'error'" type="link" size="small" @click.stop="handleToggleAction(file)"> {{ $t('upload.retry') }} </a-button>
               <template v-else-if="file.status !== 'done'">
                 <a-button v-if="file.engine === 'tus'" type="link" size="small" :disabled="file.status === 'queued'" @click.stop="handleToggleAction(file)">
-                  {{ file.status === 'queued' ? $t('page.upload.waiting') : file.paused ? $t('page.upload.resume') : $t('page.upload.pause') }}
+                  {{ file.status === 'queued' ? $t('upload.waiting') : file.paused ? $t('upload.resume') : $t('upload.pause') }}
                 </a-button>
 
                 <a-button v-else type="link" size="small" disabled>
-                  {{ file.status === 'queued' ? $t('page.upload.waiting') : $t('page.upload.uploading') }}
+                  {{ file.status === 'queued' ? $t('upload.waiting') : $t('upload.uploading') }}
                 </a-button>
               </template>
 
-              <a-button type="link" size="small" :disabled="file.status !== 'done'" @click.stop="handleDownload(file)"> {{ $t('page.upload.download') }} </a-button>
-              <a-button type="link" danger size="small" @click.stop="handleRemove(file)"> {{ $t('page.upload.delete') }} </a-button>
+              <a-button type="link" size="small" :disabled="file.status !== 'done'" @click.stop="handleDownload(file)"> {{ $t('upload.download') }} </a-button>
+              <a-button type="link" danger size="small" @click.stop="handleRemove(file)"> {{ $t('upload.delete') }} </a-button>
             </template>
 
             <a-list-item-meta>
               <template #title>
                 {{ file.name }}
                 <a-tag class="ml-2" :color="file.engine === 'tus' ? 'blue' : 'green'">
-                  {{ file.engine === 'tus' ? $t('page.upload.largeFileSpeedUp') : $t('page.upload.standardSpeed') }}
+                  {{ file.engine === 'tus' ? $t('upload.largeFileSpeedUp') : $t('upload.standardSpeed') }}
                 </a-tag>
                 <a-tag class="ml-2" :color="props.isPrivate === 1 ? 'red' : props.isPrivate === 2 ? 'cyan' : 'purple'">
-                  <span v-if="props.isPrivate === 1">{{ $t('page.upload.privateResource') }}</span>
-                  <span v-else-if="props.isPrivate === 2">{{ $t('page.upload.publicResource') }}</span>
-                  <span v-else-if="props.isPrivate === 3">{{ $t('page.upload.protectedResource') }}</span>
+                  <span v-if="props.isPrivate === 1">{{ $t('upload.privateResource') }}</span>
+                  <span v-else-if="props.isPrivate === 2">{{ $t('upload.publicResource') }}</span>
+                  <span v-else-if="props.isPrivate === 3">{{ $t('upload.protectedResource') }}</span>
                 </a-tag>
 
                 <span v-if="['uploading', 'paused', 'queued'].includes(file.status)" class="ml-1 text-gray-500">
-                  <template v-if="file.status === 'queued'"> {{ $t('page.upload.waitingAllocation') }} </template>
+                  <template v-if="file.status === 'queued'"> {{ $t('upload.waitingAllocation') }} </template>
                   <template v-else>
                     {{
-                      $t('page.upload.progressText', {
+                      $t('upload.progressText', {
                         uploaded: file.uploadedMB?.toFixed(2),
                         total: file.totalMB?.toFixed(2),
                         speed: file.speed?.toFixed(2),

@@ -26,37 +26,37 @@ const [Form, formApi] = useVbenForm({
     {
       fieldName: 'avatar',
       component: 'AvatarUpload',
-      label: $t('page.profile.basic.avatar'),
+      label: $t('profile.basic.avatar'),
       componentProps: { isPrivate: 3 },
     },
     {
       fieldName: 'nickname',
       component: 'Input',
-      label: $t('page.profile.basic.nickname'),
-      rules: z.string().min(1, { message: $t('page.profile.basic.nicknameRequired') }),
+      label: $t('profile.basic.nickname'),
+      rules: z.string().min(1, { message: $t('profile.basic.nicknameRequired') }),
     },
     {
       fieldName: 'gender',
       component: 'RadioGroup',
-      label: $t('page.profile.basic.gender'),
+      label: $t('profile.basic.gender'),
       componentProps: {
         options: [
-          { label: $t('page.profile.basic.genderUnknown'), value: 0 },
-          { label: $t('page.profile.basic.genderMale'), value: 1 },
-          { label: $t('page.profile.basic.genderFemale'), value: 2 },
+          { label: $t('profile.basic.genderUnknown'), value: 0 },
+          { label: $t('profile.basic.genderMale'), value: 1 },
+          { label: $t('profile.basic.genderFemale'), value: 2 },
         ],
       },
     },
     {
       fieldName: 'lastLoginIp',
       component: 'Input',
-      label: $t('page.profile.basic.lastLoginIp'),
+      label: $t('profile.basic.lastLoginIp'),
       componentProps: { disabled: true },
     },
     {
       fieldName: 'lastLoginTime',
       component: 'Input',
-      label: $t('page.profile.basic.lastLoginTime'),
+      label: $t('profile.basic.lastLoginTime'),
       componentProps: { disabled: true },
     },
   ],
@@ -88,7 +88,7 @@ async function handleSubmit() {
     phone: adminUserStore.phone,
   });
 
-  message.success($t('page.profile.basic.updateSuccess'));
+  message.success($t('profile.basic.updateSuccess'));
 }
 
 onMounted(async () => {
@@ -103,7 +103,7 @@ onMounted(async () => {
   <div>
     <Form />
     <a-button class="mt-4" type="primary" @click="handleSubmit">
-      {{ $t('page.profile.saveChanges') }}
+      {{ $t('profile.saveChanges') }}
     </a-button>
   </div>
 </template>

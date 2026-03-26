@@ -88,7 +88,7 @@ function handleBeforeUpload(file: File) {
   if (UPLOAD_CONFIG.accept && UPLOAD_CONFIG.accept !== '*') {
     const acceptList = UPLOAD_CONFIG.accept.split(',').map((t) => t.trim());
     if (!acceptList.includes(file.type)) {
-      message.error($t('page.upload.onlySupportImageFormat', { accept: UPLOAD_CONFIG.accept }));
+      message.error($t('upload.onlySupportImageFormat', { accept: UPLOAD_CONFIG.accept }));
       return false;
     }
   }
@@ -96,7 +96,7 @@ function handleBeforeUpload(file: File) {
   // 验证大小
   const isLtMaxSize = file.size / 1024 / 1024 < UPLOAD_CONFIG.maxSize;
   if (!isLtMaxSize) {
-    message.error($t('page.upload.imageSizeLimit', { maxSize: UPLOAD_CONFIG.maxSize }));
+    message.error($t('upload.imageSizeLimit', { maxSize: UPLOAD_CONFIG.maxSize }));
     return false;
   }
 
@@ -123,7 +123,7 @@ async function handleCropOk() {
     // 调用 VCropper 实例方法获取裁剪后的 blob
     const blob = await cropperRef.value.getCropImage('image/jpeg', 0.92, 'blob');
     if (!blob) {
-      message.error($t('page.upload.cropFailed'));
+      message.error($t('upload.cropFailed'));
       return;
     }
 
@@ -135,7 +135,7 @@ async function handleCropOk() {
 
     isBigFile ? await uploadWithTus(blob, fileName) : await uploadWithXhr(blob, fileName);
   } catch {
-    message.error($t('page.upload.uploadFailed'));
+    message.error($t('upload.uploadFailed'));
   } finally {
     uploading.value = false;
   }
@@ -220,10 +220,10 @@ function handleUploadSuccess(logicalPath: string, fullUrl: string) {
     internalDisplayUrl.value = fullUrl;
     emit('update:modelValue', logicalPath);
     emit('change', logicalPath, fullUrl);
-    message.success($t('page.upload.avatarUploadSuccess'));
+    message.success($t('upload.avatarUploadSuccess'));
     cropperVisible.value = false;
   } else {
-    message.error($t('page.upload.uploadFailedNoUrl'));
+    message.error($t('upload.uploadFailedNoUrl'));
   }
 }
 
@@ -250,7 +250,7 @@ function handleModalCancel() {
           <div v-else class="avatar-placeholder">
             <IconifyIcon v-if="uploading" icon="ant-design:loading-outlined" class="animate-spin text-xl text-gray-400" />
             <IconifyIcon v-else icon="ant-design:plus-outlined" class="text-xl text-gray-400" />
-            <div class="mt-2 text-sm text-gray-500">{{ $t('page.upload.uploadAvatar') }}</div>
+            <div class="mt-2 text-sm text-gray-500">{{ $t('upload.uploadAvatar') }}</div>
           </div>
 
           <!-- 悬浮遮罩 (仅在有图片时显示操作按钮) -->
@@ -260,25 +260,32 @@ function handleModalCancel() {
               <!-- 查看大图 (阻止冒泡避免触发上传) -->
               <div class="group/preview flex cursor-pointer flex-col items-center transition-colors hover:text-blue-400" @click.stop="handlePreview">
                 <IconifyIcon icon="ant-design:eye-outlined" class="text-xl" />
-                <span class="mt-1 text-xs opacity-90 group-hover/preview:opacity-100">{{ $t('page.upload.preview') }}</span>
+                <span class="mt-1 text-xs opacity-90 group-hover/preview:opacity-100">{{ $t('upload.preview') }}</span>
               </div>
               <!-- 修改头像 (允许冒泡以触发 a-upload) -->
               <div class="group/edit flex cursor-pointer flex-col items-center transition-colors hover:text-blue-400">
                 <IconifyIcon icon="ant-design:camera-outlined" class="text-xl" />
-                <span class="mt-1 text-xs opacity-90 group-hover/edit:opacity-100">{{ $t('page.upload.modify') }}</span>
+                <span class="mt-1 text-xs opacity-90 group-hover/edit:opacity-100">{{ $t('upload.modify') }}</span>
               </div>
             </div>
           </div>
         </div>
       </slot>
     </a-upload>
+    <div class="mt-2">
+      <a-tag :color="isPrivate === 1 ? 'red' : isPrivate === 2 ? 'cyan' : 'purple'">
+        <span v-if="isPrivate === 1">{{ $t('upload.privateResource') }}</span>
+        <span v-else-if="isPrivate === 2">{{ $t('upload.publicResource') }}</span>
+        <span v-else-if="isPrivate === 3">{{ $t('upload.protectedResource') }}</span>
+      </a-tag>
+    </div>
 
     <!-- 裁剪弹窗 -->
     <a-modal
       v-model:open="cropperVisible"
       :confirm-loading="uploading"
       destroy-on-close
-      :title="$t('page.upload.cropAndUpload')"
+      :title="$t('upload.cropAndUpload')"
       width="700px"
       @cancel="handleModalCancel"
       @ok="handleCropOk"
@@ -289,7 +296,7 @@ function handleModalCancel() {
     </a-modal>
 
     <!-- 查看大图弹窗 -->
-    <a-modal v-model:open="previewVisible" :footer="null" :title="$t('page.upload.previewAvatar')" width="800px" centered @cancel="previewVisible = false">
+    <a-modal v-model:open="previewVisible" :footer="null" :title="$t('upload.previewAvatar')" width="800px" centered @cancel="previewVisible = false">
       <img v-if="displaySrc" :src="displaySrc" alt="avatar" class="w-full" />
     </a-modal>
   </div>
