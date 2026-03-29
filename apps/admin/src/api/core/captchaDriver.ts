@@ -36,25 +36,25 @@ export namespace CaptchaDriverApi {
 
 /** 获取所有人机验证驱动列表 */
 export function getCaptchaDriversApi() {
-  return requestClient.get<CaptchaDriverApi.DriverItem[]>('/admin/captcha/driver/list');
+  return requestClient.get<CaptchaDriverApi.DriverItem[]>('/admin/captcha-driver/list');
 }
 
 /** 更新驱动配置 */
 export function updateCaptchaDriverApi(data: CaptchaDriverApi.UpdateParams) {
-  return requestClient.put('/admin/captcha/driver/update', data);
+  return requestClient.put('/admin/captcha-driver/update', data);
 }
 
 /** 获取水印配置 */
 export function getCaptchaWatermarkApi() {
-  return requestClient.get<CaptchaDriverApi.WatermarkConfig>('/admin/captcha/driver/watermark');
+  return requestClient.get<CaptchaDriverApi.WatermarkConfig>('/admin/captcha-driver/watermark');
 }
 
 /** 保存水印配置 */
 export function saveCaptchaWatermarkApi(data: Partial<CaptchaDriverApi.WatermarkConfig>) {
-  return requestClient.post('/admin/captcha/driver/watermark', data);
+  return requestClient.post('/admin/captcha-driver/watermark', data);
 }
 
 /** 预览指定驱动的验证码 */
 export function previewCaptchaDriverApi(type: string) {
-  return requestClient.get<Record<string, any>>('/admin/captcha/driver/preview', { params: { type } });
+  return requestClient.get<Record<string, any>>('/admin/captcha-driver/preview', { params: { type } });
 }

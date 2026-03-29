@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue';
+import { defineComponent, nextTick, ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
 import { Button, Divider, Input, Select, Space } from 'ant-design-vue';
+
+// 用于渲染 dropdownRender 传入的 vnode，避免 () => menu 每次创建新函数导致无限更新
+const VNodes = defineComponent({
+  props: { vnodes: { type: Object, required: true } },
+  render() { return this.vnodes; },
+});
 
 interface Option {
   label: string;
@@ -85,7 +91,7 @@ async function handleAdd(e: Event) {
     :filter-option="(input: string, opt: any) => opt?.value?.toLowerCase().includes(input.toLowerCase())"
   >
     <template #dropdownRender="{ menuNode: menu }">
-      <component :is="() => menu" />
+      <VNodes :vnodes="menu" />
       <Divider style="margin: 4px 0" />
       <Space style="width: 100%; padding: 4px 8px">
         <Input ref="inputRef" v-model:value="newItemName" :placeholder="addPlaceholder ?? $t('common.inputToAdd')" style="flex: 1" @keydown.enter="handleAdd" />

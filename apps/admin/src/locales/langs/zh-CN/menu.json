@@ -1,0 +1,40 @@
+{
+  "pageTitle": "菜单管理",
+  "addRoot": "新增顶级菜单",
+  "addChild": "新增子菜单",
+  "edit": "编辑",
+  "delete": "删除",
+  "confirmDelete": "确认删除该菜单？",
+  "type": {
+    "label": "菜单类型",
+    "dir": "目录",
+    "menu": "菜单",
+    "button": "按钮/权限码"
+  },
+  "fields": {
+    "parentId": "父级菜单",
+    "type": "类型",
+    "title": "标题",
+    "name": "路由名称",
+    "path": "路由路径",
+    "component": "组件路径",
+    "icon": "图标",
+    "permission": "权限码",
+    "sort": "排序",
+    "isHidden": "隐藏菜单",
+    "isKeepAlive": "缓存页面",
+    "status": "状态"
+  },
+  "status": {
+    "enabled": "启用",
+    "disabled": "禁用"
+  },
+  "placeholder": {
+    "component": "如：/system/config/index 或 BasicLayout",
+    "permission": "如：system:config:edit",
+    "icon": "如：lucide:settings"
+  },
+  "createSuccess": "菜单创建成功",
+  "updateSuccess": "菜单更新成功",
+  "deleteSuccess": "菜单删除成功"
+}
