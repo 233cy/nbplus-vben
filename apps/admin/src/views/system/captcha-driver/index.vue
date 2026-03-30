@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CaptchaDriverApi } from '#/api/core/captchaDriver';
+import type { CaptchaDriverApi } from '#/api/system/captchaDriver';
 
 import { nextTick, onMounted, ref } from 'vue';
 

@@ -2,7 +2,7 @@ import { preferencesManager } from '@vben/preferences';
 
 import { acceptHMRUpdate, defineStore } from 'pinia';
 
-import { getPublicConfigApi } from '#/api/core/config';
+import { getPublicConfigApi } from '#/api/system/config';
 
 interface SiteState {
   /** 版权信息 */

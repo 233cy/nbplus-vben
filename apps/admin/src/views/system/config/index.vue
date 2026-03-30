@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ConfigApi } from '#/api/core/config';
+import type { ConfigApi } from '#/api/system/config';
 
 import { computed, ref, watch } from 'vue';
 
@@ -30,7 +30,7 @@ import {
   Typography,
 } from 'ant-design-vue';
 
-import { createConfigApi, deleteConfigApi, getConfigGroupsApi, getConfigListApi, reorderConfigApi, saveConfigApi, toggleConfigApi, updateConfigApi } from '#/api/core/config';
+import { createConfigApi, deleteConfigApi, getConfigGroupsApi, getConfigListApi, reorderConfigApi, saveConfigApi, toggleConfigApi, updateConfigApi } from '#/api/system/config';
 import CreatableSelect from '#/components/creatableSelect/index.vue';
 import UpImg from '#/components/upload/upImg.vue';
 import { $t } from '#/locales';

@@ -1,0 +1,57 @@
+{
+  "pageTitle": "CURD管理",
+  "table": {
+    "add": "新增表配置",
+    "edit": "编辑表配置",
+    "confirmDelete": "确认删除该表配置及其所有字段？",
+    "fields": {
+      "title": "业务名称",
+      "tableName": "数据库表名",
+      "module": "模块名",
+      "className": "类名前缀",
+      "routePrefix": "路由前缀",
+      "author": "作者",
+      "remark": "备注",
+      "status": "状态"
+    },
+    "placeholder": {
+      "title": "如：用户管理",
+      "tableName": "如：sys_user",
+      "module": "如：system",
+      "className": "如：User",
+      "routePrefix": "如：/system/user"
+    }
+  },
+  "field": {
+    "title": "字段配置",
+    "sync": "从数据库同步",
+    "syncConfirm": "同步将覆盖当前未保存的字段，确认继续？",
+    "addField": "新增字段",
+    "fields": {
+      "columnName": "字段名",
+      "columnType": "类型",
+      "label": "标签",
+      "isList": "列表",
+      "isSearch": "搜索",
+      "isForm": "表单",
+      "isRequired": "必填",
+      "sort": "排序"
+    },
+    "columnType": {
+      "string": "文本",
+      "int": "整数",
+      "bool": "布尔",
+      "datetime": "日期时间",
+      "enum": "枚举",
+      "relation": "关联"
+    }
+  },
+  "status": {
+    "enabled": "启用",
+    "disabled": "禁用"
+  },
+  "createSuccess": "创建成功",
+  "updateSuccess": "更新成功",
+  "deleteSuccess": "删除成功",
+  "syncSuccess": "同步成功"
+}

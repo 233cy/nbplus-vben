@@ -1,0 +1,57 @@
+{
+  "pageTitle": "CURD Manager",
+  "table": {
+    "add": "Add Table",
+    "edit": "Edit Table",
+    "confirmDelete": "Confirm delete this table config and all its fields?",
+    "fields": {
+      "title": "Business Name",
+      "tableName": "Table Name",
+      "module": "Module",
+      "className": "Class Name Prefix",
+      "routePrefix": "Route Prefix",
+      "author": "Author",
+      "remark": "Remark",
+      "status": "Status"
+    },
+    "placeholder": {
+      "title": "e.g. User Management",
+      "tableName": "e.g. sys_user",
+      "module": "e.g. system",
+      "className": "e.g. User",
+      "routePrefix": "e.g. /system/user"
+    }
+  },
+  "field": {
+    "title": "Field Config",
+    "sync": "Sync from DB",
+    "syncConfirm": "Sync will overwrite unsaved fields, continue?",
+    "addField": "Add Field",
+    "fields": {
+      "columnName": "Column",
+      "columnType": "Type",
+      "label": "Label",
+      "isList": "List",
+      "isSearch": "Search",
+      "isForm": "Form",
+      "isRequired": "Required",
+      "sort": "Sort"
+    },
+    "columnType": {
+      "string": "String",
+      "int": "Integer",
+      "bool": "Boolean",
+      "datetime": "Datetime",
+      "enum": "Enum",
+      "relation": "Relation"
+    }
+  },
+  "status": {
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "createSuccess": "Created successfully",
+  "updateSuccess": "Updated successfully",
+  "deleteSuccess": "Deleted successfully",
+  "syncSuccess": "Synced successfully"
+}

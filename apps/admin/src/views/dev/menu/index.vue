@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MenuAdminApi } from '#/api/core/menuAdmin';
+import type { MenuAdminApi } from '#/api/dev/menuAdmin';
 
 import { computed, ref, toRaw } from 'vue';
 
@@ -556,12 +556,7 @@ function typeTag(type: number) {
     <!-- 移动节点弹窗 -->
     <Modal v-model:open="moveVisible" :title="`移动「${moveItem?.title}」到`" :confirm-loading="moveLoading" width="400px" @ok="handleMove">
       <div class="py-4">
-        <TreeSelect
-          v-model:value="moveParentId"
-          :tree-data="moveTreeData"
-          tree-default-expand-all
-          class="w-full"
-        />
+        <TreeSelect v-model:value="moveParentId" :tree-data="moveTreeData" tree-default-expand-all class="w-full" />
       </div>
     </Modal>
   </div>
