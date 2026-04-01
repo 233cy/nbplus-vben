@@ -5,17 +5,6 @@ import { $t } from '@vben/locales';
 
 import { Button, Divider, Input, Select, Space } from 'ant-design-vue';
 
-// 用于渲染 dropdownRender 传入的 vnode，避免 () => menu 每次创建新函数导致无限更新
-const VNodes = defineComponent({
-  props: { vnodes: { type: Object, required: true } },
-  render() { return this.vnodes; },
-});
-
-interface Option {
-  label: string;
-  value: string;
-}
-
 const props = withDefaults(
   defineProps<{
     addPlaceholder?: string;
@@ -38,6 +27,19 @@ const props = withDefaults(
 const emit = defineEmits<{
   add: [value: string];
 }>();
+
+// 用于渲染 dropdownRender 传入的 vnode，避免 () => menu 每次创建新函数导致无限更新
+const VNodes = defineComponent({
+  props: { vnodes: { type: Object, required: true } },
+  render() {
+    return this.vnodes;
+  },
+});
+
+interface Option {
+  label: string;
+  value: string;
+}
 
 const modelValue = defineModel<string | undefined>('value');
 

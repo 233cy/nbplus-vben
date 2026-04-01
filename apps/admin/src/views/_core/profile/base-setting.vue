@@ -37,15 +37,9 @@ const [Form, formApi] = useVbenForm({
     },
     {
       fieldName: 'gender',
-      component: 'RadioGroup',
+      component: 'DictRadio',
       label: $t('profile.basic.gender'),
-      componentProps: {
-        options: [
-          { label: $t('profile.basic.genderUnknown'), value: 0 },
-          { label: $t('profile.basic.genderMale'), value: 1 },
-          { label: $t('profile.basic.genderFemale'), value: 2 },
-        ],
-      },
+      componentProps: { code: 'sys_user_gender', valueType: 'number' },
     },
     {
       fieldName: 'lastLoginIp',

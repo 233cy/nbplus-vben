@@ -40,6 +40,8 @@ const Edit = defineAsyncComponent(() => import('#/components/wangEditor/index.vu
 const AvatarUpload = defineAsyncComponent(() => import('#/components/upload/upAvatar.vue'));
 const ImageUpload = defineAsyncComponent(() => import('#/components/upload/upImg.vue'));
 const CreatableSelect = defineAsyncComponent(() => import('#/components/creatableSelect/index.vue'));
+const DictSelect = defineAsyncComponent(() => import('#/components/dict/DictSelect.vue'));
+const DictRadio = defineAsyncComponent(() => import('#/components/dict/DictRadio.vue'));
 
 const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select', componentProps: Recordable<any> = {}) => {
   return defineComponent({
@@ -74,6 +76,8 @@ export type ComponentType =
   | 'CreatableSelect'
   | 'DatePicker'
   | 'DefaultButton'
+  | 'DictRadio'
+  | 'DictSelect'
   | 'Divider'
   | 'Edit'
   | 'IconPicker'
@@ -166,6 +170,8 @@ async function initComponentAdapter() {
     AvatarUpload,
     ImageUpload,
     CreatableSelect,
+    DictSelect,
+    DictRadio,
   };
 
   // 将组件注册到全局共享状态中

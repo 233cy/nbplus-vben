@@ -1,0 +1,44 @@
+{
+  "pageTitle": "Dictionary",
+  "addDict": "Add Dict",
+  "addDictInGroup": "Add dict in this group",
+  "editDict": "Edit Dict",
+  "manageItems": "Manage Items",
+  "addItem": "Add Item",
+  "editItem": "Edit Item",
+  "confirmDelete": "Confirm Delete",
+  "confirmDeleteContent": "Delete dict \"{name}\" and all its items?",
+  "confirmDeleteItem": "Confirm delete this item?",
+  "itemsEmpty": "No items yet, click the button to add",
+  "empty": "No dicts yet",
+  "selectDictTip": "Select a dict from the left",
+  "searchPlaceholder": "Search name or code",
+  "itemSearchPlaceholder": "Search label or value",
+  "createSuccess": "Dict created successfully",
+  "updateSuccess": "Dict updated successfully",
+  "deleteSuccess": "Dict deleted successfully",
+  "itemCreateSuccess": "Item created successfully",
+  "itemUpdateSuccess": "Item updated successfully",
+  "itemDeleteSuccess": "Item deleted successfully",
+  "fields": {
+    "name": "Name",
+    "code": "Code",
+    "groups": "Group",
+    "remark": "Remark",
+    "status": "Status",
+    "createdAt": "Created At",
+    "keyword": "Keyword"
+  },
+  "itemFields": {
+    "label": "Label",
+    "value": "Value",
+    "color": "Color",
+    "sort": "Sort"
+  },
+  "defaultGroup": "Default Group",
+  "placeholder": {
+    "name": "Enter dict name",
+    "code": "Start with a letter, only letters/numbers/underscores allowed. Cannot be changed after creation.",
+    "groups": "Enter or select a group name"
+  }
+}

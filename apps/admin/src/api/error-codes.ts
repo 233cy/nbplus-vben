@@ -57,4 +57,10 @@ export enum BizCode {
   /* 菜单管理 */
   /** 存在子节点，不可删除 */
   MENU_HAS_CHILDREN = 40_100,
+
+  /* 字典管理 */
+  /** 字典编码已存在 */
+  DICT_CODE_EXISTS = 40_300,
+  /** 字典项存在子项，不可删除 */
+  DICT_ITEM_HAS_CHILDREN = 40_301,
 }

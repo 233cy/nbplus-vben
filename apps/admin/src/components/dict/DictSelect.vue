@@ -1,0 +1,71 @@
+<script setup lang="ts">
+import { computed, nextTick, watch } from 'vue';
+
+import { Select, Tag } from 'ant-design-vue';
+
+import { useDict } from '#/utils/dict';
+
+const props = defineProps<{
+  allowClear?: boolean;
+  code: string;
+  disabled?: boolean;
+  multiple?: boolean;
+  /** 是否只显示启用的字典项，默认 true */
+  onlyEnabled?: boolean;
+  placeholder?: string;
+  /** 指定 option value 的类型，默认 'string'，传 'number' 时自动转换 */
+  valueType?: 'number' | 'string';
+}>();
+
+const modelValue = defineModel<null | number | number[] | string | string[] | undefined>('value');
+
+const { items, loading } = useDict(props.code);
+
+const options = computed(() => {
+  const list = props.onlyEnabled === false ? items.value : items.value.filter((i) => i.status === 1);
+  // valueType 明确指定时优先使用，否则根据 modelValue 当前类型推断
+  const asNumber =
+    props.valueType === 'number' ||
+    (props.valueType !== 'string' && (typeof modelValue.value === 'number' || (Array.isArray(modelValue.value) && typeof modelValue.value[0] === 'number')));
+  return list.map((i) => ({
+    label: i.label,
+    value: asNumber ? Number(i.value) : i.value,
+    color: i.color,
+  }));
+});
+
+/**
+ * options 加载完成后，如果 modelValue 已有值，强制触发一次重新赋值
+ * 解决：setValues 比字典加载先完成时，Select 拿到 value 但 options 为空导致反显失败
+ */
+watch(loading, (isLoading) => {
+  if (!isLoading && modelValue.value !== null && modelValue.value !== undefined) {
+    const current = modelValue.value;
+    nextTick(() => {
+      modelValue.value = undefined;
+      nextTick(() => {
+        modelValue.value = current;
+      });
+    });
+  }
+});
+</script>
+
+<template>
+  <Select
+    v-model:value="modelValue"
+    :options="options"
+    :loading="loading"
+    :placeholder="placeholder"
+    :allow-clear="allowClear ?? true"
+    :mode="multiple ? 'multiple' : undefined"
+    :disabled="disabled"
+    option-filter-prop="label"
+    show-search
+  >
+    <template #option="{ label, color }">
+      <Tag v-if="color" :color="color" class="mr-1">{{ label }}</Tag>
+      <span v-else>{{ label }}</span>
+    </template>
+  </Select>
+</template>

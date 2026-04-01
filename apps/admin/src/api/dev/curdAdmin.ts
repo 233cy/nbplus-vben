@@ -1,18 +1,44 @@
 import { requestClient } from '#/api/request';
 
 export namespace CurdAdminApi {
-  export type ColumnType = 'bool' | 'datetime' | 'enum' | 'int' | 'relation' | 'string';
+  /** 对应 adapter/component/index.ts 中的 ComponentType */
+  export type ComponentType =
+    | 'ApiSelect'
+    | 'ApiTreeSelect'
+    | 'AutoComplete'
+    | 'AvatarUpload'
+    | 'Checkbox'
+    | 'CheckboxGroup'
+    | 'CreatableSelect'
+    | 'DatePicker'
+    | 'Edit'
+    | 'IconPicker'
+    | 'ImageUpload'
+    | 'Input'
+    | 'InputNumber'
+    | 'InputPassword'
+    | 'Mentions'
+    | 'Radio'
+    | 'RadioGroup'
+    | 'RangePicker'
+    | 'Rate'
+    | 'Select'
+    | 'Switch'
+    | 'Textarea'
+    | 'TimePicker'
+    | 'TreeSelect'
+    | 'Upload';
 
   export interface EnumOption {
     label: string;
     value: number | string;
   }
 
+  /** options JSON 结构 */
   export interface FieldOptions {
-    items?: EnumOption[]; // enum 类型的枚举值
-    table?: string; // relation 类型的关联表名
-    labelColumn?: string; // relation 类型的显示字段
-    valueColumn?: string; // relation 类型的值字段
+    items?: EnumOption[]; // Select/RadioGroup 枚举值
+    api?: string; // ApiSelect 远程接口
+    componentProps?: Record<string, any>; // 透传给组件的 props
     rules?: Record<string, any>[]; // 额外校验规则
   }
 
@@ -20,6 +46,7 @@ export namespace CurdAdminApi {
     id: string;
     title: string;
     tableName: string;
+    dbConnection: string;
     module: string;
     className: string;
     routePrefix: string;
@@ -32,7 +59,7 @@ export namespace CurdAdminApi {
     id?: string;
     tableId: string;
     columnName: string;
-    columnType: ColumnType;
+    component: ComponentType;
     label: string;
     isList: boolean;
     isSearch: boolean;
@@ -53,6 +80,7 @@ export namespace CurdAdminApi {
     id?: string;
     title: string;
     tableName: string;
+    dbConnection?: string;
     module: string;
     className: string;
     routePrefix: string;
@@ -63,11 +91,23 @@ export namespace CurdAdminApi {
 }
 
 // =========================================================================
+// 数据库连接
+// =========================================================================
+
+export function getCurdConnectionsApi() {
+  return requestClient.get<string[]>('/admin/curd/connections');
+}
+
+export function getCurdTablesApi(connection: string) {
+  return requestClient.get<string[]>('/admin/curd/tables', { params: { connection } });
+}
+
+// =========================================================================
 // 表配置
 // =========================================================================
 
 export function getCurdTableListApi(params: CurdAdminApi.TablePageParams) {
-  return requestClient.get<{ items: CurdAdminApi.CurdTable[]; total: number }>('/admin/curd/table/list', { params });
+  return requestClient.get<{ items: CurdAdminApi.CurdTable[]; meta: any }>('/admin/curd/table/list', { params });
 }
 
 export function createCurdTableApi(data: CurdAdminApi.TableSaveParams) {
@@ -100,4 +140,8 @@ export function syncCurdFieldsApi(id: string) {
 
 export function generateCurdApi(id: string) {
   return requestClient.post<string[]>('/admin/curd/generate', { id });
+}
+
+export function createCurdMenuApi(data: { id: string; menuIcon?: string; menuParentId?: null | string; menuPath: string; menuSort?: number }) {
+  return requestClient.post('/admin/curd/create-menu', data);
 }

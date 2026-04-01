@@ -11,9 +11,10 @@
     "editContent": "编辑内容",
     "textContent": "内容长度 {len} 字符"
   },
-  "search": {
-    "keyword": "搜索关键词"
-  },
+  "keyword": "请输入关键词",
+  "enabled": "启用",
+  "searchBunton": "查询",
   "selectData": "选择数据",
-  "showMore": "显示更多"
+  "showMore": "显示更多",
+  "operation": "操作"
 }

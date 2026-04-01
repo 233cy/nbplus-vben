@@ -37,7 +37,7 @@ async function handleSaveWatermark() {
   watermarkSaving.value = true;
   try {
     await saveCaptchaWatermarkApi(watermark.value);
-    message.success($t('captcha.driver.saveSuccess'));
+    message.success($t('system/captcha-driver.saveSuccess'));
   } finally {
     watermarkSaving.value = false;
   }
@@ -71,7 +71,7 @@ async function handleSave(driver: CaptchaDriverApi.DriverItem) {
   saving.value[driver.id] = true;
   try {
     await updateCaptchaDriverApi({ id: driver.id, config: editConfigs.value[driver.id] });
-    message.success($t('captcha.driver.saveSuccess'));
+    message.success($t('system/captcha-driver.saveSuccess'));
     await loadDrivers();
   } finally {
     saving.value[driver.id] = false;
@@ -92,26 +92,26 @@ async function handlePreview(driver: CaptchaDriverApi.DriverItem) {
 <template>
   <div class="p-4">
     <Spin :spinning="loading">
-      <Alert v-if="!loading && !hasEnabled()" :message="$t('captcha.driver.noDriverEnabled')" type="warning" show-icon class="mb-4" />
+      <Alert v-if="!loading && !hasEnabled()" :message="$t('system/captcha-driver.noDriverEnabled')" type="warning" show-icon class="mb-4" />
 
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Card v-for="driver in drivers" :key="driver.id">
           <template #title>
             <div class="flex items-center gap-2">
               <span class="font-medium">{{ driver.label }}</span>
-              <Tag v-if="!driver.isValid" color="red">{{ $t('captcha.driver.invalid') }}</Tag>
-              <Badge v-else-if="driver.isEnabled" status="success" :text="$t('captcha.driver.enabled')" />
-              <Badge v-else status="default" :text="$t('captcha.driver.disabled')" />
+              <Tag v-if="!driver.isValid" color="red">{{ $t('system/captcha-driver.invalid') }}</Tag>
+              <Badge v-else-if="driver.isEnabled" status="success" :text="$t('system/captcha-driver.enabled')" />
+              <Badge v-else status="default" :text="$t('system/captcha-driver.disabled')" />
             </div>
           </template>
 
           <template #extra>
-            <Tooltip v-if="!driver.isValid" :title="$t('captcha.driver.invalidTip')">
+            <Tooltip v-if="!driver.isValid" :title="$t('system/captcha-driver.invalidTip')">
               <Switch :checked="false" disabled />
             </Tooltip>
             <Popconfirm
               v-else
-              :title="driver.isEnabled ? $t('captcha.driver.disableConfirm') : $t('captcha.driver.enableConfirm')"
+              :title="driver.isEnabled ? $t('system/captcha-driver.disableConfirm') : $t('system/captcha-driver.enableConfirm')"
               @confirm="handleToggle(driver, !driver.isEnabled)"
             >
               <Switch :checked="driver.isEnabled" />
@@ -143,30 +143,30 @@ async function handlePreview(driver: CaptchaDriverApi.DriverItem) {
               <template #icon>
                 <IconifyIcon icon="ant-design:eye-outlined" />
               </template>
-              {{ $t('captcha.driver.preview') }}
+              {{ $t('system/captcha-driver.preview') }}
             </Button>
             <Button type="primary" size="small" :loading="saving[driver.id]" :disabled="!driver.isValid" @click="handleSave(driver)">
               <template #icon>
                 <IconifyIcon icon="ant-design:save-outlined" />
               </template>
-              {{ $t('config.save') }}
+              {{ $t('system/config.save') }}
             </Button>
           </div>
         </Card>
 
         <!-- 水印配置卡片 -->
-        <Card :title="$t('captcha.driver.watermarkTitle')">
+        <Card :title="$t('system/captcha-driver.watermarkTitle')">
           <Form layout="vertical">
-            <FormItem :label="$t('captcha.driver.watermarkText')">
-              <Input v-model:value="watermark.text" :placeholder="$t('captcha.driver.watermarkTextPlaceholder')" />
+            <FormItem :label="$t('system/captcha-driver.watermarkText')">
+              <Input v-model:value="watermark.text" :placeholder="$t('system/captcha-driver.watermarkTextPlaceholder')" />
             </FormItem>
-            <FormItem :label="$t('captcha.driver.watermarkColor')">
+            <FormItem :label="$t('system/captcha-driver.watermarkColor')">
               <div class="flex items-center gap-2">
                 <input v-model="watermark.color" type="color" class="h-8 w-10 cursor-pointer rounded border" />
                 <Input v-model:value="watermark.color" class="flex-1" placeholder="#ffffff" />
               </div>
             </FormItem>
-            <FormItem :label="$t('captcha.driver.watermarkFontsize')">
+            <FormItem :label="$t('system/captcha-driver.watermarkFontsize')">
               <InputNumber v-model:value="watermark.fontsize" :min="8" :max="32" class="w-full" />
             </FormItem>
           </Form>
@@ -175,7 +175,7 @@ async function handlePreview(driver: CaptchaDriverApi.DriverItem) {
               <template #icon>
                 <IconifyIcon icon="ant-design:save-outlined" />
               </template>
-              {{ $t('config.save') }}
+              {{ $t('system/config.save') }}
             </Button>
           </div>
         </Card>

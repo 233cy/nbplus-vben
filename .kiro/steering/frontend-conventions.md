@@ -239,55 +239,96 @@ export enum BizCode {
 
 ## 八、i18n 规范
 
-### 文件结构
+### 语言包目录结构
 
 ```
 src/locales/langs/
 ├── zh-CN/
-│   └── page.json    # 页面级翻译
+│   ├── captcha.json          # 验证码组件通用文案（组件级，不属于某个页面）
+│   ├── authentication.json   # 登录/注册等 _core 页面
+│   ├── common.json           # 全局公共按钮/状态文案
+│   ├── profile.json          # 个人中心（_core 页面）
+│   ├── upload.json           # 上传组件
+│   ├── workspace.json        # 工作台
+│   ├── dev/                  # views/dev/ 模块
+│   │   ├── menu.json         # views/dev/menu/
+│   │   └── curd.json         # views/dev/curd/
+│   └── system/               # views/system/ 模块
+│       ├── config.json       # views/system/config/
+│       ├── dict.json         # views/system/dict/
+│       └── captcha-driver.json  # views/system/captcha-driver/
 └── en-US/
-    └── page.json    # 结构完全相同
+    └── ...（结构完全相同，由用户自行填充）
 ```
+
+### 目录规则（强制）
+
+- `views/_core/**` 对应的语言包放根目录（`zh-CN/*.json`），不加子目录
+- `views/{module}/{page}/` 对应 `zh-CN/{module}/{page}.json`
+- 组件级公共文案（如 captcha 验证码组件）放根目录，不属于某个页面
+- 如果某个模块下有多个子页面且需要共享部分 key，可在模块目录下建 `common.json`
+
+### $t() key 格式
+
+语言包路径决定 key 前缀：
+
+| 文件路径 | key 前缀 |
+|---------|---------|
+| `zh-CN/common.json` | `common.xxx` |
+| `zh-CN/dev/menu.json` | `dev/menu.xxx` |
+| `zh-CN/system/dict.json` | `system/dict.xxx` |
+| `zh-CN/system/captcha-driver.json` | `system/captcha-driver.xxx` |
+
+规律：**`{子目录}/{文件名}.{json内key路径}`**，子目录和文件名之间用 `/`，json 内部嵌套用 `.`。
 
 ### 使用方式
 
 ```typescript
-// 在 <script setup> 中
 import { $t } from '#/locales';
-const title = $t('page.auth.mfaLogin');
 
-// 在 <template> 中
-<span>{{ $t('page.auth.login') }}</span>
+// 根目录语言包
+$t('common.enabled')
+$t('captcha.slide')
+
+// 模块语言包
+$t('dev/menu.pageTitle')
+$t('system/dict.addDict')
+$t('system/captcha-driver.saveSuccess')
 
 // 带参数
-$t('page.upload.progressText', { uploaded: 1.2, total: 10, speed: 2.1, eta: 5 })
+$t('system/dict.confirmDeleteContent', { name: '性别' })
 ```
 
 ### i18n 开发强制要求
 
-**每新增一个页面/功能，必须同步完成：**
+**每新增一个业务页面，必须：**
 
-1. 在 `zh-CN/page.json` 中添加对应翻译
-2. 在 `en-US/page.json` 中添加对应翻译（结构完全一致）
+1. 在 `zh-CN/{module}/{page}.json` 创建对应语言包（**不要放在根目录**）
+2. en-US 由用户自行填充，AI 不需要同步创建 en-US 语言包
 3. 路由 `meta.title` 使用 `$t()` 而非硬编码字符串
 
-**page.json 结构约定：**
+**语言包结构约定：**
 
 ```json
 {
-  "auth": {
-    "login": "登录",
-    "mfaLogin": "身份二次验证"
-  },
-  "moduleName": {
-    "pageTitle": "页面标题",
-    "actionCreate": "新建",
-    "actionEdit": "编辑",
-    "actionDelete": "删除",
-    "confirmDelete": "确认删除该记录？"
+  "pageTitle": "页面标题",
+  "addXxx": "新增xxx",
+  "editXxx": "编辑xxx",
+  "confirmDelete": "确认删除该记录？",
+  "createSuccess": "创建成功",
+  "updateSuccess": "更新成功",
+  "deleteSuccess": "删除成功",
+  "fields": {
+    "name": "名称",
+    "status": "状态"
   }
 }
 ```
+
+**禁止行为：**
+- 把业务页面的语言包放在根目录（如 `zh-CN/menu.json`）
+- 在根目录语言包里混入业务页面的 key
+- 使用 PowerShell `Set-Content` 写入含中文的文件（会导致编码损坏），必须用 `fsWrite` 工具
 
 ---
 
@@ -411,8 +452,7 @@ const schema: VbenFormSchema[] = [
 - [ ] `src/api/index.ts` 导出新 API
 - [ ] `src/api/error-codes.ts` 补充新业务错误码（如有）
 - [ ] `src/views/{module}/xxx.vue` 实现页面
-- [ ] `src/locales/langs/zh-CN/page.json` 添加中文翻译
-- [ ] `src/locales/langs/en-US/page.json` 添加英文翻译（结构一致）
+- [ ] `src/locales/langs/zh-CN/{module}/{page}.json` 添加中文翻译（**不要放根目录**）
 - [ ] 后端菜单表配置路由（动态路由）或 `core.ts` 添加静态路由
 - [ ] 路由 `meta.title` 使用 `$t()` 而非硬编码
 
@@ -427,7 +467,8 @@ const schema: VbenFormSchema[] = [
 5. **catch 块中用了 axios 原始 error 结构** → `responseReturn: 'data'` 下 error 直接是后端响应体，取 `error?.code` 和 `error?.message`，不是 `error?.response?.data?.code`
 6. **catch 内重复调用 `message.error()`** → request.ts 已托管通用弹窗，catch 内只做 UI 副作用操作，不要再弹窗，否则出现两个提示
 6. **动态路由写在 core.ts** → 只有认证相关的静态页面才放 `core.ts`，业务页面走后端菜单
-7. **i18n 只更新了中文** → 中英文必须同步，否则切换语言时显示 key 而非翻译文本
+7. **i18n 只更新了中文** → en-US 由用户自行填充，AI 只需创建 zh-CN 语言包
+8. **业务页面语言包放在根目录** → 必须放 `zh-CN/{module}/{page}.json`，根目录只放组件级公共文案和 `_core` 页面文案
 8. **VbenForm 使用了不存在的 ComponentType** → 参考第九节完整列表，自定义组件需先在 `adapter/component/index.ts` 注册
 9. **时间展示未走时区转换** → 禁止直接用 `new Date()`、裸 `dayjs()` 展示时间，必须使用 `#/utils/time` 中的方法（见第十三节）
 
