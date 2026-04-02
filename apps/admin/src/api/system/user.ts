@@ -44,19 +44,19 @@ export namespace UserApi {
 
 export function getUserListApi(params: UserApi.PageParams) {
   return requestClient.get<{ items: UserApi.UserItem[]; meta: { total: number; currentPage: number; perPage: number } }>(
-    '/admin/user/list',
+    '/admin/system/user/list',
     { params },
   );
 }
 
 export function createUserApi(data: UserApi.SaveParams) {
-  return requestClient.post<UserApi.UserItem>('/admin/user/create', data);
+  return requestClient.post<UserApi.UserItem>('/admin/system/user/create', data);
 }
 
 export function updateUserApi(data: UserApi.SaveParams & { id: string }) {
-  return requestClient.put<UserApi.UserItem>('/admin/user/update', data);
+  return requestClient.put<UserApi.UserItem>('/admin/system/user/update', data);
 }
 
 export function deleteUserApi(id: string) {
-  return requestClient.delete('/admin/user/delete', { data: { id } });
+  return requestClient.delete('/admin/system/user/delete', { data: { id } });
 }

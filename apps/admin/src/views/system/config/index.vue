@@ -47,13 +47,13 @@ const loading = ref(false);
 const selectedKeys = computed(() => (activeGroup.value ? [activeGroup.value] : []));
 
 function groupLabel(item: ConfigApi.GroupItem): string {
-  return item.groupLabel || item.group;
+  return item.groupLabel || item.groups;
 }
 
 async function loadGroups() {
   groups.value = await getConfigGroupsApi();
   if (groups.value.length > 0 && !activeGroup.value) {
-    activeGroup.value = groups.value[0]!.group;
+    activeGroup.value = groups.value[0]!.groups;
   }
 }
 
@@ -144,7 +144,7 @@ const modalLoading = ref(false);
 const editingItem = ref<ConfigApi.ConfigItem | null>(null);
 
 const formState = ref({
-  group: '',
+  groups: '',
   key: '',
   label: '',
   component: 'Input',
@@ -160,7 +160,7 @@ const editingIsSys = computed(() => modalMode.value === 'edit' && !!editingItem.
 function openCreate() {
   modalMode.value = 'create';
   formState.value = {
-    group: activeGroup.value,
+    groups: activeGroup.value,
     key: '',
     label: '',
     component: 'Input',
@@ -177,7 +177,7 @@ function openEdit(item: ConfigApi.ConfigItem) {
   modalMode.value = 'edit';
   editingItem.value = item;
   formState.value = {
-    group: item.group,
+    groups: item.groups,
     key: item.key,
     label: item.label,
     component: item.component,
@@ -256,7 +256,8 @@ function onTreeDrop(info: any) {
   if (dragIdx === -1) return;
   const [dragObj] = data.splice(dragIdx, 1);
 
-  // 2. 找目标位置（splice 后重新找）  const targetIdx = data.findIndex((n) => n.key === dropKey);
+  // 2. 找目标位置（splice 后重新找）
+  const targetIdx = data.findIndex((n) => n.key === dropKey);
   if (targetIdx === -1) {
     // 找不到目标（极端情况），放回原位
     data.splice(dragIdx, 0, dragObj!);
@@ -294,10 +295,10 @@ async function handleSortOk() {
 // =========================================================================
 // 渲染辅助
 // =========================================================================
-const groupOptions = computed(() => groups.value.map((g) => ({ value: g.group, label: `${g.group} (${g.groupLabel})` })));
+const groupOptions = computed(() => groups.value.map((g) => ({ value: g.groups, label: `${g.groups} (${g.groupLabel})` })));
 
 const activeGroupLabel = computed(() => {
-  const found = groups.value.find((g) => g.group === activeGroup.value);
+  const found = groups.value.find((g) => g.groups === activeGroup.value);
   return found ? groupLabel(found) : activeGroup.value;
 });
 
@@ -314,19 +315,19 @@ function onSwitchChange(key: string, checked: boolean | string) {
         {{ $t('system/config.groupTitle') }}
       </div>
       <Menu :selected-keys="selectedKeys" mode="inline" class="border-none" @click="({ key }) => (activeGroup = key as string)">
-        <MenuItem v-for="g in groups" :key="g.group">
+        <MenuItem v-for="g in groups" :key="g.groups">
           {{ groupLabel(g) }}
         </MenuItem>
       </Menu>
     </div>
 
-    <!-- 右侧内容�?-->
+    <!-- 右侧内容-->
     <div class="flex flex-1 flex-col overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
-      <!-- 顶部操作�?-->
+      <!-- 顶部操作-->
       <div class="flex items-center justify-between border-b px-6 py-3 dark:border-gray-700">
         <span class="text-base font-medium">{{ activeGroupLabel }}</span>
         <div class="flex gap-2">
-        <Button size="small" @click="openSortModal">⇅ {{ $t('system/config.sortModal') }}</Button>
+          <Button size="small" @click="openSortModal">⇅ {{ $t('system/config.sortModal') }}</Button>
           <Button type="primary" size="small" @click="openCreate"> + {{ $t('system/config.addItem') }} </Button>
         </div>
       </div>
@@ -457,15 +458,20 @@ function onSwitchChange(key: string, checked: boolean | string) {
     </div>
 
     <!-- 新增 / 编辑弹窗 -->
-    <Modal v-model:open="modalVisible" :title="modalMode === 'create' ? $t('system/config.addItem') : $t('system/config.editItem')" :confirm-loading="modalLoading" @ok="handleModalOk">
+    <Modal
+      v-model:open="modalVisible"
+      :title="modalMode === 'create' ? $t('system/config.addItem') : $t('system/config.editItem')"
+      :confirm-loading="modalLoading"
+      @ok="handleModalOk"
+    >
       <Form :model="formState" layout="vertical" class="mt-4">
-        <FormItem :label="$t('system/config.fields.group')" required>
-          <CreatableSelect v-model:value="formState.group" :options="groupOptions" :disabled="editingIsSys" :add-placeholder="$t('system/config.fields.group')" />
+        <FormItem :label="$t('system/config.fields.groups')" required>
+          <CreatableSelect v-model:value="formState.groups" :options="groupOptions" :disabled="editingIsSys" :add-placeholder="$t('system/config.fields.groups')" />
         </FormItem>
         <FormItem v-if="modalMode === 'create'" :label="$t('system/config.fields.key')" required>
           <Input v-model:value="formState.key" />
         </FormItem>
-        <!-- 编辑�?key 只读展示 -->
+        <!-- 编辑 只读展示 -->
         <FormItem v-else :label="$t('system/config.fields.key')">
           <Input :value="formState.key" disabled />
         </FormItem>

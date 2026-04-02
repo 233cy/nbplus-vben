@@ -22,7 +22,7 @@
   "sortModalTip": "拖动条目调整顺序，点击确认保存",
   "sortSuccess": "排序保存成功",
   "fields": {
-    "group": "分组标识",
+    "groups": "分组标识",
     "key": "配置键",
     "label": "显示名称",
     "value": "配置值",

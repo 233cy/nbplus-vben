@@ -3,7 +3,7 @@ import { requestClient } from '#/api/request';
 export namespace ProfileApi {
   export interface ProfileInfo {
     nickname: string;
-    avatar: string;       // logicalPath，存库用
+    avatar: string; // logicalPath，存库用
     email: string;
     phone: string;
     gender: number; // 0=未知 1=男 2=女
@@ -14,7 +14,7 @@ export namespace ProfileApi {
 
   export interface UpdateProfileResult {
     nickname: string;
-    avatar: string;   // logicalPath
+    avatar: string; // logicalPath
     gender: number;
     totpEnabled: boolean;
   }
@@ -78,7 +78,7 @@ export async function unbindContactApi(data: ProfileApi.UnbindContactParams) {
   return requestClient.post<ProfileApi.ProfileInfo>('/admin/profile/unbind-contact', data);
 }
 
-export async function sendContactCodeApi(data: { channel: 'email' | 'sms'; target: string; captcha: { token: string; type: string } }) {
+export async function sendContactCodeApi(data: { captcha: { token: string; type: string }; channel: 'email' | 'sms'; target: string }) {
   return requestClient.post('/admin/profile/send-code', data);
 }
 

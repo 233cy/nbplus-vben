@@ -59,25 +59,25 @@ export namespace MenuAdminApi {
 }
 
 export function getMenuListApi() {
-  return requestClient.get<MenuAdminApi.MenuItem[]>('/admin/menu/list');
+  return requestClient.get<MenuAdminApi.MenuItem[]>('/admin/dev/menu/list');
 }
 
 export function createMenuApi(data: MenuAdminApi.SaveParams) {
-  return requestClient.post<MenuAdminApi.MenuItem>('/admin/menu/create', data);
+  return requestClient.post<MenuAdminApi.MenuItem>('/admin/dev/menu/create', data);
 }
 
 export function updateMenuApi(data: MenuAdminApi.SaveParams & { id: string }) {
-  return requestClient.put<MenuAdminApi.MenuItem>('/admin/menu/update', data);
+  return requestClient.put<MenuAdminApi.MenuItem>('/admin/dev/menu/update', data);
 }
 
 export function deleteMenuApi(id: string) {
-  return requestClient.delete('/admin/menu/delete', { data: { id } });
+  return requestClient.delete('/admin/dev/menu/delete', { data: { id } });
 }
 
 export function sortMenuApi(items: { id: string; sort: number }[]) {
-  return requestClient.put('/admin/menu/sort', { items });
+  return requestClient.put('/admin/dev/menu/sort', { items });
 }
 
 export function toggleMenuApi(id: string, field: 'isAffixTab' | 'isHidden' | 'isKeepAlive' | 'status', value: boolean | number) {
-  return requestClient.put('/admin/menu/toggle', { id, [field]: value });
+  return requestClient.put('/admin/dev/menu/toggle', { id, [field]: value });
 }

@@ -47,52 +47,42 @@ export namespace DictApi {
   }
 }
 
-/** 获取所有字典类型（Tree 用） */
 export function getAllDictsApi() {
-  return requestClient.get<DictApi.DictItem[]>('/admin/dict/all');
+  return requestClient.get<DictApi.DictItem[]>('/admin/system/dict/all');
 }
 
-/** 新增字典类型 */
 export function createDictApi(data: DictApi.DictSaveParams) {
-  return requestClient.post<DictApi.DictItem>('/admin/dict/create', data);
+  return requestClient.post<DictApi.DictItem>('/admin/system/dict/create', data);
 }
 
-/** 更新字典类型 */
 export function updateDictApi(data: DictApi.DictSaveParams & { id: string }) {
-  return requestClient.put<DictApi.DictItem>('/admin/dict/update', data);
+  return requestClient.put<DictApi.DictItem>('/admin/system/dict/update', data);
 }
 
-/** 删除字典类型 */
 export function deleteDictApi(id: string) {
-  return requestClient.delete('/admin/dict/delete', { data: { id } });
+  return requestClient.delete('/admin/system/dict/delete', { data: { id } });
 }
 
-/** 批量更新字典类型排序 */
 export function sortDictApi(items: DictApi.SortItem[]) {
-  return requestClient.put('/admin/dict/sort', { items });
+  return requestClient.put('/admin/system/dict/sort', { items });
 }
 
-/** 获取字典项列表 */
 export function getDictItemsApi(id: string) {
-  return requestClient.get<DictApi.DictItemData[]>('/admin/dict/items', { params: { id } });
+  return requestClient.get<DictApi.DictItemData[]>('/admin/system/dict/items', { params: { id } });
 }
 
-/** 新增字典项 */
 export function createDictItemApi(data: DictApi.DictItemSaveParams) {
-  return requestClient.post<DictApi.DictItemData>('/admin/dict/item/create', data);
+  return requestClient.post<DictApi.DictItemData>('/admin/system/dict/item/create', data);
 }
 
-/** 更新字典项 */
 export function updateDictItemApi(data: DictApi.DictItemSaveParams & { id: string }) {
-  return requestClient.put<DictApi.DictItemData>('/admin/dict/item/update', data);
+  return requestClient.put<DictApi.DictItemData>('/admin/system/dict/item/update', data);
 }
 
-/** 删除字典项 */
 export function deleteDictItemApi(id: string) {
-  return requestClient.delete('/admin/dict/item/delete', { data: { id } });
+  return requestClient.delete('/admin/system/dict/item/delete', { data: { id } });
 }
 
-/** 批量更新字典项排序 */
 export function sortDictItemApi(items: DictApi.SortItem[]) {
-  return requestClient.put('/admin/dict/item/sort', { items });
+  return requestClient.put('/admin/system/dict/item/sort', { items });
 }

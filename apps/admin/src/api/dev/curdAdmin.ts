@@ -90,58 +90,46 @@ export namespace CurdAdminApi {
   }
 }
 
-// =========================================================================
-// 数据库连接
-// =========================================================================
-
 export function getCurdConnectionsApi() {
-  return requestClient.get<string[]>('/admin/curd/connections');
+  return requestClient.get<string[]>('/admin/dev/curd/connections');
 }
 
 export function getCurdTablesApi(connection: string) {
-  return requestClient.get<string[]>('/admin/curd/tables', { params: { connection } });
+  return requestClient.get<string[]>('/admin/dev/curd/tables', { params: { connection } });
 }
 
-// =========================================================================
-// 表配置
-// =========================================================================
-
 export function getCurdTableListApi(params: CurdAdminApi.TablePageParams) {
-  return requestClient.get<{ items: CurdAdminApi.CurdTable[]; meta: any }>('/admin/curd/table/list', { params });
+  return requestClient.get<{ items: CurdAdminApi.CurdTable[]; meta: any }>('/admin/dev/curd/table/list', { params });
 }
 
 export function createCurdTableApi(data: CurdAdminApi.TableSaveParams) {
-  return requestClient.post<CurdAdminApi.CurdTable>('/admin/curd/table/create', data);
+  return requestClient.post<CurdAdminApi.CurdTable>('/admin/dev/curd/table/create', data);
 }
 
 export function updateCurdTableApi(data: CurdAdminApi.TableSaveParams & { id: string }) {
-  return requestClient.put<CurdAdminApi.CurdTable>('/admin/curd/table/update', data);
+  return requestClient.put<CurdAdminApi.CurdTable>('/admin/dev/curd/table/update', data);
 }
 
 export function deleteCurdTableApi(id: string) {
-  return requestClient.delete('/admin/curd/table/delete', { data: { id } });
+  return requestClient.delete('/admin/dev/curd/table/delete', { data: { id } });
 }
 
-// =========================================================================
-// 字段配置
-// =========================================================================
-
 export function getCurdFieldListApi(tableId: string) {
-  return requestClient.get<CurdAdminApi.CurdField[]>('/admin/curd/field/list', { params: { tableId } });
+  return requestClient.get<CurdAdminApi.CurdField[]>('/admin/dev/curd/field/list', { params: { tableId } });
 }
 
 export function saveCurdFieldsApi(tableId: string, fields: CurdAdminApi.CurdField[]) {
-  return requestClient.post('/admin/curd/field/save', { tableId, fields });
+  return requestClient.post('/admin/dev/curd/field/save', { tableId, fields });
 }
 
 export function syncCurdFieldsApi(id: string) {
-  return requestClient.post<CurdAdminApi.CurdField[]>('/admin/curd/field/sync', { id });
+  return requestClient.post<CurdAdminApi.CurdField[]>('/admin/dev/curd/field/sync', { id });
 }
 
 export function generateCurdApi(id: string) {
-  return requestClient.post<string[]>('/admin/curd/generate', { id });
+  return requestClient.post<string[]>('/admin/dev/curd/generate', { id });
 }
 
 export function createCurdMenuApi(data: { id: string; menuIcon?: string; menuParentId?: null | string; menuPath: string; menuSort?: number }) {
-  return requestClient.post('/admin/curd/create-menu', data);
+  return requestClient.post('/admin/dev/curd/create-menu', data);
 }
