@@ -2,25 +2,19 @@
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
-import type { AuthApi } from '#/api/core/auth';
-
 import { computed, ref, useTemplateRef } from 'vue';
 
 import { AuthenticationCodeLogin, z } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
-
 import { sendLoginCodeApi } from '#/api';
-import Verify from '#/components/verifition/Verify.vue';
 import { useAuthStore } from '#/store';
 
 defineOptions({ name: 'CodeLogin' });
 
 const authStore = useAuthStore();
 const loginRef = useTemplateRef<InstanceType<typeof AuthenticationCodeLogin>>('loginRef');
-const verifyRef = useTemplateRef<InstanceType<typeof Verify>>('verifyRef');
 
 type Channel = 'email' | 'sms';
 const selectedChannel = ref<Channel>('sms');
@@ -36,47 +30,22 @@ const channelIcons: Record<Channel, string> = {
   email: 'ant-design:mail-outlined',
 };
 
-// 缓存已验证的 captcha，避免重复弹窗
-let cachedCaptcha: AuthApi.CaptchaPayload | null = null;
-let captchaResolve: ((payload: AuthApi.CaptchaPayload) => void) | null = null;
-
-function onCaptchaSuccess(data: AuthApi.CaptchaPayload) {
-  const resolve = captchaResolve;
-  captchaResolve = null;
-  cachedCaptcha = data;
-  verifyRef.value?.closeBox();
-  resolve?.(data);
-}
-
-async function getCaptcha(): Promise<AuthApi.CaptchaPayload> {
-  if (cachedCaptcha) return cachedCaptcha;
-  verifyRef.value?.show();
-  return new Promise<AuthApi.CaptchaPayload>((resolve) => {
-    captchaResolve = resolve;
-  });
-}
-
-// VbenPinInput 的 handleSendCode：resolve 后倒计时启动，throw 则不启动
-async function handleSendCode() {
+async function beforeSend() {
   const formApi = loginRef.value?.getFormApi();
-
   if (formApi) {
     const result = await formApi.validateField('codeTarget');
     if (result?.errors && Object.keys(result.errors).length > 0) {
       throw new Error($t('authentication.codeLogin.targetRequired'));
     }
   }
+}
 
+async function sendApi(captcha: any) {
+  const formApi = loginRef.value?.getFormApi();
   const values = formApi ? await formApi.getValues() : {};
-  const codeTarget = values.codeTarget as string | undefined;
-  if (!codeTarget) throw new Error($t('authentication.codeLogin.targetRequired'));
-
-  // 已有缓存时直接复用，否则弹窗验证
-  const captcha = await getCaptcha();
-
-  await sendLoginCodeApi({ codeChannel: selectedChannel.value, codeTarget, captcha });
-  cachedCaptcha = null; // 发送成功后清空，下次需重新验证
-  message.success($t('authentication.codeLogin.codeSent'));
+  const codeTarget = values.codeTarget as string;
+  const result = await sendLoginCodeApi({ codeChannel: selectedChannel.value, codeTarget, captcha });
+  return result?.retryAfter ?? 0;
 }
 
 const formSchema = computed((): VbenFormSchema[] => [
@@ -94,12 +63,12 @@ const formSchema = computed((): VbenFormSchema[] => [
         : z.string().email({ message: $t('authentication.codeLogin.invalidEmail') }),
   },
   {
-    component: 'VbenPinInput',
+    component: 'CaptchaPinInput',
     componentProps: {
       codeLength: CODE_LENGTH,
       createText: (countdown: number) => (countdown > 0 ? $t('authentication.sendText', [countdown]) : $t('authentication.sendCode')),
-      handleSendCode,
-      placeholder: $t('authentication.code'),
+      beforeSend,
+      sendApi,
     },
     fieldName: 'code',
     label: $t('authentication.code'),
@@ -135,10 +104,6 @@ async function handleSubmit(values: Recordable<any>) {
           {{ label }}
         </button>
       </div>
-      <!-- 人机验证弹窗，通过 ref 手动触发，无触发器 UI -->
-      <Verify ref="verifyRef" captcha-type="blockPuzzle" mode="pop" @success="onCaptchaSuccess">
-        <template #trigger></template>
-      </Verify>
     </template>
   </AuthenticationCodeLogin>
 </template>

@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 
 import { useUserStore } from '@vben/stores';
 
+import { IconifyIcon } from '@vben/icons';
 import { Avatar, Badge, Card, Col, Row, Spin, Tag, Tooltip } from 'ant-design-vue';
 
 import { getProfileInfoApi } from '#/api/core/profile';

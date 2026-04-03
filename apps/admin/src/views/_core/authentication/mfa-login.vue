@@ -2,6 +2,8 @@
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
+import type { AuthApi } from '#/api/core/auth';
+
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -39,7 +41,6 @@ watch(selectedChannel, () => {
 async function loadChannels() {
   try {
     const res = await getMfaChannelsApi(username.value);
-    // 过滤掉 totp，MFA 防爆只走 sms/email
     channels.value = (res.channels ?? []).filter((c) => c !== 'totp');
     if (channels.value.length > 0) {
       selectedChannel.value = channels.value[0] ?? '';
@@ -49,22 +50,27 @@ async function loadChannels() {
   }
 }
 
-async function handleSendCode() {
+async function beforeSend() {
+  const formApi = loginRef.value?.getFormApi();
+  if (formApi) {
+    const result = await formApi.validateField('mfaTarget');
+    if (result?.errors && Object.keys(result.errors).length > 0) {
+      throw new Error('请先填写手机号或邮箱');
+    }
+  }
+}
+
+async function sendApi(captcha: AuthApi.CaptchaPayload) {
   const formApi = loginRef.value?.getFormApi();
   const values = formApi ? await formApi.getValues() : {};
-  const mfaTarget = values.mfaTarget as string | undefined;
-
-  if (!mfaTarget) {
-    throw new Error('请先填写手机号或邮箱');
-  }
-
-  await sendMfaCodeApi({
+  const mfaTarget = values.mfaTarget as string;
+  const result = await sendMfaCodeApi({
+    captcha,
     mfaChannel: selectedChannel.value,
     mfaTarget,
     username: username.value,
   });
-
-  message.success('验证码已发送');
+  return result?.retryAfter ?? 0;
 }
 
 const formSchema = computed((): VbenFormSchema[] => {
@@ -81,12 +87,12 @@ const formSchema = computed((): VbenFormSchema[] => {
       }),
     },
     {
-      component: 'VbenPinInput',
+      component: 'CaptchaPinInput',
       componentProps: {
         codeLength: CODE_LENGTH,
         createText: (countdown: number) => (countdown > 0 ? `${countdown}s 后重新发送` : $t('authentication.sendCode')),
-        handleSendCode,
-        placeholder: $t('authentication.code'),
+        beforeSend,
+        sendApi,
       },
       fieldName: 'mfaCode',
       label: '验证码',

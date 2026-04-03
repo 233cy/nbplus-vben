@@ -95,7 +95,7 @@ export namespace AuthApi {
 
 /** 发送登录验证码 */
 export async function sendLoginCodeApi(data: AuthApi.CodeSendParams) {
-  return requestClient.post('/admin/auth/code/send', data);
+  return requestClient.post<{ retryAfter: number }>('/admin/auth/code/send', data);
 }
 
 /** 验证码直接登录 */
@@ -120,7 +120,7 @@ export async function getMfaChannelsApi(username: string) {
 
 /** 发送 MFA 验证码 */
 export async function sendMfaCodeApi(data: AuthApi.MfaSendParams) {
-  return requestClient.post('/admin/auth/mfa/send', data);
+  return requestClient.post<{ retryAfter: number }>('/admin/auth/mfa/send', data);
 }
 
 /** MFA 二次验证登录（sms/email，被动防护） */

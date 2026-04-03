@@ -79,7 +79,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       if (isSystemDown && !accessStore.loginExpired) {
         // 如果系统已被标记为异常（如 500），直接拒绝后续请求
         // 登录过期弹窗模式下不拦截，允许重新登录的请求通过
-        throw new Error('系统异常，已拦截后续请求。');
+        throw new Error('系统异常，已拦截后续请求（请稍后重试）。');
       }
 
       config.headers.Authorization = formatToken(accessStore.accessToken);

@@ -3,13 +3,13 @@ import { requestClient } from '#/api/request';
 export namespace ConfigApi {
   export interface GroupItem {
     groups: string;
-    groupLabel: string;
+    groupsLabel: string;
   }
 
   export interface ConfigItem {
     id: string;
     groups: string;
-    groupLabel: string;
+    groupsLabel: string;
     key: string;
     value: string;
     component: string;

@@ -46,8 +46,8 @@ const loading = ref(false);
 
 const selectedKeys = computed(() => (activeGroup.value ? [activeGroup.value] : []));
 
-function groupLabel(item: ConfigApi.GroupItem): string {
-  return item.groupLabel || item.groups;
+function groupsLabel(item: ConfigApi.GroupItem): string {
+  return item.groupsLabel || item.groups;
 }
 
 async function loadGroups() {
@@ -295,11 +295,11 @@ async function handleSortOk() {
 // =========================================================================
 // 渲染辅助
 // =========================================================================
-const groupOptions = computed(() => groups.value.map((g) => ({ value: g.groups, label: `${g.groups} (${g.groupLabel})` })));
+const groupOptions = computed(() => groups.value.map((g) => ({ value: g.groups, label: `${g.groups} (${g.groupsLabel})` })));
 
 const activeGroupLabel = computed(() => {
   const found = groups.value.find((g) => g.groups === activeGroup.value);
-  return found ? groupLabel(found) : activeGroup.value;
+  return found ? groupsLabel(found) : activeGroup.value;
 });
 
 function onSwitchChange(key: string, checked: boolean | string) {
@@ -316,7 +316,7 @@ function onSwitchChange(key: string, checked: boolean | string) {
       </div>
       <Menu :selected-keys="selectedKeys" mode="inline" class="border-none" @click="({ key }) => (activeGroup = key as string)">
         <MenuItem v-for="g in groups" :key="g.groups">
-          {{ groupLabel(g) }}
+          {{ groupsLabel(g) }}
         </MenuItem>
       </Menu>
     </div>

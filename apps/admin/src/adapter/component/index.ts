@@ -42,6 +42,7 @@ const ImageUpload = defineAsyncComponent(() => import('#/components/upload/upImg
 const CreatableSelect = defineAsyncComponent(() => import('#/components/creatableSelect/index.vue'));
 const DictSelect = defineAsyncComponent(() => import('#/components/dict/DictSelect.vue'));
 const DictRadio = defineAsyncComponent(() => import('#/components/dict/DictRadio.vue'));
+const CaptchaPinInput = defineAsyncComponent(() => import('#/components/captchaPinInput/index.vue'));
 
 const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select', componentProps: Recordable<any> = {}) => {
   return defineComponent({
@@ -71,6 +72,7 @@ export type ComponentType =
   | 'ApiTreeSelect'
   | 'AutoComplete'
   | 'AvatarUpload'
+  | 'CaptchaPinInput'
   | 'Checkbox'
   | 'CheckboxGroup'
   | 'CreatableSelect'
@@ -172,6 +174,7 @@ async function initComponentAdapter() {
     CreatableSelect,
     DictSelect,
     DictRadio,
+    CaptchaPinInput,
   };
 
   // 将组件注册到全局共享状态中

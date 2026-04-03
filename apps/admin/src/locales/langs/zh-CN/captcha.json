@@ -17,5 +17,6 @@
   "inputRequired": "请输入验证码",
   "imageTextPlaceholder": "请输入图中字符",
   "mathPlaceholder": "请输入计算结果",
-  "clickImageToRefresh": "点击图片可刷新"
+  "clickImageToRefresh": "点击图片可刷新",
+  "sendSuccess": "验证码已发送"
 }
