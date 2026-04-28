@@ -11,6 +11,8 @@ export namespace CurdAdminApi {
     | 'CheckboxGroup'
     | 'CreatableSelect'
     | 'DatePicker'
+    | 'DictRadio'
+    | 'DictSelect'
     | 'Edit'
     | 'IconPicker'
     | 'ImageUpload'
@@ -37,6 +39,7 @@ export namespace CurdAdminApi {
   /** options JSON 结构 */
   export interface FieldOptions {
     items?: EnumOption[]; // Select/RadioGroup 枚举值
+    dictCode?: string; // DictSelect/DictRadio 字典编码
     api?: string; // ApiSelect 远程接口
     componentProps?: Record<string, any>; // 透传给组件的 props
     rules?: Record<string, any>[]; // 额外校验规则
@@ -65,6 +68,7 @@ export namespace CurdAdminApi {
     isSearch: boolean;
     isForm: boolean;
     isRequired: boolean;
+    isBatchUpdate: boolean;
     options: FieldOptions | null;
     sort: number;
   }

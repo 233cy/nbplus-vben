@@ -151,7 +151,7 @@ export async function refreshTokenApi(): Promise<AuthApi.RefreshTokenResult> {
 
 /** 获取用户权限码（从 user-info 的 permissions 字段来，此接口作为兼容保留） */
 export async function getAccessCodesApi(): Promise<string[]> {
-  return [];
+  return ['*:*:*'];
 }
 
 /** 找回密码 - 发送重置验证码 */

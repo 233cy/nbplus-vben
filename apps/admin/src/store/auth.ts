@@ -12,7 +12,7 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { codeLoginApi, getUserInfoApi, loginApi, logoutApi, mfaLoginApi, totpLoginApi } from '#/api';
+import { codeLoginApi, getAccessCodesApi, getUserInfoApi, loginApi, logoutApi, mfaLoginApi, totpLoginApi } from '#/api';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store';
 import { pathToFullUrl } from '#/utils/upload';
@@ -133,11 +133,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
     resetAllStores();
     accessStore.setLoginExpired(false);
-    // if (import.meta.env.DEV) {
-    //   localStorage.clear();
-    //   sessionStorage.clear();
-    //   location.reload();
-    // }
 
     await router.replace({
       path: LOGIN_PATH,
@@ -170,7 +165,8 @@ export const useAuthStore = defineStore('auth', () => {
     });
 
     // 将 permissions 作为 accessCodes 注入框架权限系统
-    accessStore.setAccessCodes(result.permissions ?? []);
+    const accessCodes = await getAccessCodesApi();
+    accessStore.setAccessCodes(accessCodes);
 
     return userInfo;
   }

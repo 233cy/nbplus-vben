@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import type { UserApi } from '#/api/system/user';
 
-import { nextTick, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 
+import { useAccess } from '#/composables/use-access';
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { createUserApi, updateUserApi } from '#/api/system/user';
+import { $t } from '#/locales';
 
 import { useFormSchema } from '../data';
 
 const emit = defineEmits<{ success: [] }>();
 
+const { hasAccessByCodes } = useAccess();
+const canUpdate = computed(() => hasAccessByCodes(['system:user:update']));
 const rowId = ref<string | undefined>();
+const isReadonly = ref(false);
 
 const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
@@ -26,9 +31,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     const values = await formApi.getValues<UserApi.SaveParams>();
     drawerApi.lock();
     try {
-      await (rowId.value
-        ? updateUserApi({ id: rowId.value, ...values })
-        : createUserApi(values));
+      await (rowId.value ? updateUserApi({ id: rowId.value, ...values }) : createUserApi(values));
       emit('success');
       drawerApi.close();
     } finally {
@@ -37,16 +40,15 @@ const [Drawer, drawerApi] = useVbenDrawer({
   },
   async onOpenChange(isOpen) {
     if (isOpen) {
-      const data = drawerApi.getData<UserApi.UserItem>();
+      const data = drawerApi.getData<UserApi.UserItem & { readonly?: boolean }>();
       formApi.resetForm();
+      isReadonly.value = data?.readonly ?? false;
       if (data?.id) {
         rowId.value = data.id;
-        formApi.updateSchema([{ fieldName: 'password', rules: '' }]);
         await nextTick();
         formApi.setValues(data);
       } else {
         rowId.value = undefined;
-        formApi.updateSchema([{ fieldName: 'password', rules: 'required' }]);
       }
     }
   },
@@ -54,7 +56,10 @@ const [Drawer, drawerApi] = useVbenDrawer({
 </script>
 
 <template>
-  <Drawer :title="rowId ? '编辑用户管理' : '新增用户管理'">
-    <Form />
+  <Drawer
+    :title="isReadonly ? $t('system.user.detail') : rowId ? $t('system.user.edit') : $t('system.user.create')"
+    :show-confirm-button="!isReadonly && (!!rowId ? canUpdate : true)"
+  >
+    <Form :disabled="isReadonly" />
   </Drawer>
 </template>

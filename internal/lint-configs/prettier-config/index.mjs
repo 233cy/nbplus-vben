@@ -1,4 +1,5 @@
 export default {
+  arrowParens: 'avoid',
   endOfLine: 'auto',
   overrides: [
     {

@@ -4,12 +4,12 @@ import type { ProfileApi } from '#/api/core/profile';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { IconifyIcon } from '@vben/icons';
 import { useUserStore } from '@vben/stores';
 
-import { IconifyIcon } from '@vben/icons';
-import { Avatar, Badge, Card, Col, Row, Spin, Tag, Tooltip } from 'ant-design-vue';
+import { Avatar, Badge, Card, Col, message, Popconfirm, Row, Spin, Tag, Tooltip } from 'ant-design-vue';
 
-import { getProfileInfoApi } from '#/api/core/profile';
+import { getMyDevicesApi, getProfileInfoApi, removeMyDeviceApi } from '#/api/core/profile';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store/user';
 import { formatUnixTime } from '#/utils/time';
@@ -20,14 +20,21 @@ const adminUserStore = useAdminUserStore();
 
 const loading = ref(true);
 const profile = ref<null | ProfileApi.ProfileInfo>(null);
+const devices = ref<ProfileApi.OnlineDevice[]>([]);
 
 onMounted(async () => {
   try {
-    profile.value = await getProfileInfoApi();
+    [profile.value, devices.value] = await Promise.all([getProfileInfoApi(), getMyDevicesApi()]);
   } finally {
     loading.value = false;
   }
 });
+
+async function kickDevice(tmpId: string) {
+  await removeMyDeviceApi(tmpId);
+  message.success('已下线');
+  devices.value = await getMyDevicesApi();
+}
 
 const greeting = computed(() => {
   const hour = new Date().getHours();
@@ -137,6 +144,31 @@ const appTitle = import.meta.env.VITE_APP_TITLE;
               <div class="flex items-center justify-between">
                 <span class="text-sm text-gray-600">{{ $t('workspace.systemEnv') }}</span>
                 <Tag :color="appEnv === 'production' ? 'red' : 'green'">{{ appEnv }}</Tag>
+              </div>
+            </div>
+          </Card>
+        </Col>
+
+        <!-- 在线设备 -->
+        <Col :span="24">
+          <Card :bordered="false" :title="`在线设备（${devices.length}）`">
+            <div v-if="devices.length === 0" class="py-4 text-center text-sm text-gray-400">暂无在线设备</div>
+            <div v-else class="space-y-2">
+              <div v-for="d in devices" :key="d.tmpId" class="flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <IconifyIcon icon="lucide:monitor" class="size-5 text-gray-400" />
+                  <div>
+                    <div class="text-sm font-medium">{{ d.ip }}</div>
+                    <div class="mt-0.5 max-w-xs truncate text-xs text-gray-400">{{ d.device }}</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-4">
+                  <span class="text-xs text-gray-400">{{ formatUnixTime(d.loginAt) }}</span>
+                  <Tag v-if="d.isCurrent" color="blue">当前</Tag>
+                  <Popconfirm v-else title="确认下线该设备？" @confirm="kickDevice(d.tmpId)">
+                    <Tag color="red" class="cursor-pointer">下线</Tag>
+                  </Popconfirm>
+                </div>
               </div>
             </div>
           </Card>

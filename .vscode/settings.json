@@ -179,7 +179,7 @@
   "cssVariables.lookupFiles": ["packages/core/base/design/src/**/*.css"],
 
   "i18n-ally.localesPaths": ["packages/locales/src/langs", "playground/src/locales/langs", "apps/*/src/locales/langs"],
-  "i18n-ally.pathMatcher": "{locale}/{namespace}.{ext}",
+  "i18n-ally.pathMatcher": "{locale}/{namespaces?}.{ext}",
   "i18n-ally.enabledParsers": ["json"],
   "i18n-ally.sourceLanguage": "zh-CN",
   "i18n-ally.displayLanguage": "zh-CN",
@@ -201,27 +201,12 @@
     "tailwind.config.mjs": "postcss.*"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": [
-    "archiver",
-    "axios",
-    "dotenv",
-    "isequal",
-    "jspm",
-    "napi",
-    "NBPLUS",
-    "nolebase",
-    "rollup",
-    "uppy",
-    "verifition",
-    "vitest"
-  ],
+  "cSpell.words": ["archiver", "axios", "dotenv", "isequal", "jspm", "napi", "NBPLUS", "nolebase", "rollup", "uppy", "verifition", "vitest"],
   "editor.renderWhitespace": "all",
   "editor.rulers": [180],
 
   /* 建议关闭自动检测任务，他会理解自动检测的任务为后台运行，会出现不可控的情况如关闭窗口导致任务还在运行等情况。 */
   "task.autoDetect": "off",
   "window.title": "${folderName}",
-  "prettier.printWidth": 160,
-  "oxc.enable": false,
-  "kiroAgent.configureMCP": "Disabled"
+  "prettier.printWidth": 180
 }

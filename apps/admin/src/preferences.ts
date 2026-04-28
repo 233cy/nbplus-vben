@@ -16,6 +16,9 @@ export const overridesPreferences = defineOverridesPreferences({
   footer: {
     enable: true,
   },
+  theme: {
+    mode: 'light',
+  },
   copyright: {
     enable: true,
     companyName: '233cy · nbplus',

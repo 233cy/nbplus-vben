@@ -40,15 +40,15 @@ export default defineApplicationConfig(async () => {
       server: {
         port: 2300,
         allowedHosts: ['nbplus.233cy.com'],
-        proxy: {
-          '/api': {
-            changeOrigin: true,
-            rewrite: (path) => path.replace(/^\/api/, ''),
-            // mock代理目标地址
-            target: 'http://localhost:2330',
-            ws: true,
-          },
-        },
+        // proxy: {
+        //   '/api': {
+        //     changeOrigin: true,
+        //     rewrite: (path) => path.replace(/^\/api/, ''),
+        //     // mock代理目标地址
+        //     target: 'http://localhost:2330',
+        //     ws: true,
+        //   },
+        // },
       },
     },
   };

@@ -69,7 +69,7 @@ function setupAccessGuard(router: Router) {
     if (!accessStore.accessToken) {
       // 登录过期弹窗模式下，弹窗正在显示，停留在当前页不跳转
       if (accessStore.loginExpired) {
-        return to.fullPath === from.fullPath ? true : false;
+        return to.fullPath === from.fullPath;
       }
 
       // 明确声明忽略权限访问权限，则可以访问
@@ -124,11 +124,10 @@ function setupAccessGuard(router: Router) {
     } else if (to.path === defaultHome) {
       // 正常登录流程：尝试跳 homePath，但要验证路由是否存在
       const homePath = userInfo.homePath;
-      if (homePath && homePath !== defaultHome && router.hasRoute(homePath.replace(/^\//, '') as any) || (homePath && router.resolve(homePath).matched.length > 0)) {
-        redirectPath = homePath;
-      } else {
-        redirectPath = defaultHome;
-      }
+      redirectPath =
+        (homePath && homePath !== defaultHome && router.hasRoute(homePath.replace(/^\//, '') as any)) || (homePath && router.resolve(homePath).matched.length > 0)
+          ? homePath
+          : defaultHome;
     } else {
       redirectPath = to.fullPath;
     }

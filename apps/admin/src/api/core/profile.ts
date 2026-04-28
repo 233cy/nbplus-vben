@@ -56,6 +56,15 @@ export namespace ProfileApi {
   export interface TotpUnbindParams {
     totpCode: string;
   }
+
+  export interface OnlineDevice {
+    tmpId: string;
+    userId: string;
+    ip: string;
+    device: string;
+    loginAt: number;
+    isCurrent?: boolean;
+  }
 }
 
 export async function getProfileInfoApi() {
@@ -92,4 +101,12 @@ export async function totpBindApi(data: ProfileApi.TotpBindParams) {
 
 export async function totpUnbindApi(data: ProfileApi.TotpUnbindParams) {
   return requestClient.post<ProfileApi.ProfileInfo>('/admin/profile/totp/unbind', data);
+}
+
+export async function getMyDevicesApi() {
+  return requestClient.get<ProfileApi.OnlineDevice[]>('/admin/profile/online');
+}
+
+export async function removeMyDeviceApi(tmpId: string) {
+  return requestClient.delete('/admin/profile/online', { data: { tmpId } });
 }

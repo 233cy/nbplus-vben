@@ -18,6 +18,35 @@ const antdLocale = ref<Locale>(antdDefaultLocale);
 const modules = import.meta.glob('./langs/**/*.json');
 
 const localesMap = loadLocalesMapFromDir(/\.\/langs\/([^/]+)\/(.*)\.json$/, modules);
+
+// 🌟 新增：原生手写一个 set 函数，代替 lodash-es
+function setDeep(obj: any, path: string, value: any) {
+  const keys = path.split('.');
+  let current = obj;
+  for (let i = 0; i < keys.length - 1; i++) {
+    if (!current[keys[i]]) {
+      current[keys[i]] = {};
+    }
+    current = current[keys[i]];
+  }
+  current[keys[keys.length - 1]] = value;
+}
+
+/**
+ * 🌟 新增：将带有斜杠的扁平 key 转换为深度嵌套的对象
+ * 例如将 {'system.user': { edit: '编辑' }} 转换为 { system: { user: { edit: '编辑' } } }
+ */
+function transformMessages(messages: Record<string, any> = {}) {
+  const result: Record<string, any> = {};
+  for (const [key, value] of Object.entries(messages)) {
+    // 将 '/' 替换为 '.'
+    const dotKey = key.replaceAll('/', '.');
+    // 使用原生的 setDeep 进行深度对象挂载
+    setDeep(result, dotKey, value);
+  }
+  return result;
+}
+
 /**
  * 加载应用特有的语言包
  * 这里也可以改造为从服务端获取翻译数据
@@ -25,7 +54,10 @@ const localesMap = loadLocalesMapFromDir(/\.\/langs\/([^/]+)\/(.*)\.json$/, modu
  */
 async function loadMessages(lang: SupportedLanguagesType) {
   const [appLocaleMessages] = await Promise.all([localesMap[lang]?.(), loadThirdPartyMessage(lang)]);
-  return appLocaleMessages?.default;
+
+  // 🌟 拦截原始数据，进行清洗转换后再返回
+  const rawMessages = appLocaleMessages?.default || {};
+  return transformMessages(rawMessages);
 }
 
 /**

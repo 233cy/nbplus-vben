@@ -1,8 +1,12 @@
 import type { VbenFormSchema } from '#/adapter/form';
-import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
+import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { UserApi } from '#/api/system/user';
 
-import dayjs from 'dayjs';
+import { useAccess } from '#/composables/use-access';
+
+import { deleteUserApi } from '#/api/system/user';
+import { $t } from '#/locales';
+import { formatUnixTime } from '#/utils/time';
 
 /** 新增/编辑表单 Schema */
 export function useFormSchema(): VbenFormSchema[] {
@@ -10,55 +14,52 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'username',
-      label: '登录账号',
+      label: $t('system.user.fields.username'),
       rules: 'required',
     },
     {
       component: 'Input',
       fieldName: 'password',
-      label: '登录密码',
+      label: $t('system.user.fields.password'),
       rules: 'required',
     },
     {
-      component: 'Switch',
+      component: 'DictRadio',
       fieldName: 'status',
-      label: '帐号状态',
+      label: $t('system.user.fields.status'),
+      rules: 'required',
+      componentProps: {
+        code: 'sys_user_status',
+      },
     },
     {
       component: 'Input',
       fieldName: 'nickname',
-      label: '真实姓名|昵称',
+      label: $t('system.user.fields.nickname'),
       rules: 'required',
     },
     {
       component: 'AvatarUpload',
       fieldName: 'avatar',
-      label: '用户头像路径',
+      label: $t('system.user.fields.avatar'),
     },
     {
       component: 'Input',
       fieldName: 'email',
-      label: '邮箱',
+      label: $t('system.user.fields.email'),
     },
     {
       component: 'Input',
       fieldName: 'phone',
-      label: '手机号码',
+      label: $t('system.user.fields.phone'),
     },
     {
-      component: 'Switch',
-      fieldName: 'totpSecret',
-      label: 'TOTP 密钥',
-    },
-    {
-      component: 'InputNumber',
+      component: 'DictSelect',
       fieldName: 'gender',
-      label: '性别',
-    },
-    {
-      component: 'Input',
-      fieldName: 'lastLoginIp',
-      label: '最后登录IP',
+      label: $t('system.user.fields.gender'),
+      componentProps: {
+        code: 'sys_user_gender',
+      },
     },
   ];
 }
@@ -68,118 +69,203 @@ export function useGridFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
-      fieldName: 'username',
-      label: '登录账号',
+      fieldName: 'keyword',
+      label: $t('common.keyword'),
+      componentProps: { allowClear: true, placeholder: $t('common.keywordPlaceholder') },
     },
     {
-      component: 'Switch',
-      fieldName: 'status',
-      label: '帐号状态',
+      component: 'Input',
+      fieldName: 'username',
+      label: $t('system.user.fields.username'),
+      componentProps: { allowClear: true },
     },
     {
       component: 'Input',
       fieldName: 'nickname',
-      label: '真实姓名|昵称',
+      label: $t('system.user.fields.nickname'),
+      componentProps: { allowClear: true },
     },
     {
       component: 'Input',
       fieldName: 'email',
-      label: '邮箱',
+      label: $t('system.user.fields.email'),
+      componentProps: { allowClear: true },
     },
     {
       component: 'Input',
       fieldName: 'phone',
-      label: '手机号码',
+      label: $t('system.user.fields.phone'),
+      componentProps: { allowClear: true },
+    },
+    {
+      component: 'DictRadio',
+      fieldName: 'status',
+      label: $t('system.user.fields.status'),
+      componentProps: {
+        allowClear: true,
+        code: 'sys_user_status',
+      },
+    },
+    {
+      component: 'DictSelect',
+      fieldName: 'gender',
+      label: $t('system.user.fields.gender'),
+      componentProps: {
+        allowClear: true,
+        code: 'sys_user_gender',
+      },
+    },
+    {
+      component: 'RangePicker',
+      fieldName: 'lastLoginTime',
+      label: $t('system.user.fields.lastLoginTime'),
+      componentProps: { allowClear: true, valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true },
     },
   ];
 }
 
 /** 列表列定义 */
-export function useColumns(onActionClick: OnActionClickFn<UserApi.UserItem>): VxeTableGridOptions['columns'] {
+export function useColumns(
+  formDrawerApi: { open: () => void; setData: (data: any) => any },
+  onRefresh: () => void,
+  onOnlineClick?: (row: UserApi.UserItem) => void,
+): VxeTableGridOptions['columns'] {
+  const { hasAccessByCodes } = useAccess();
+  const canDetail = hasAccessByCodes(['system:user:detail']);
+  const canUpdate = hasAccessByCodes(['system:user:update']);
+  const canDelete = hasAccessByCodes(['system:user:delete']);
   return [
+    { type: 'checkbox', width: 50 },
+    { field: 'id', title: 'ID', visible: false },
     {
       field: 'username',
-      title: '登录账号',
+      title: $t('system.user.fields.username'),
       minWidth: 120,
+      cellRender: {
+        name: 'CellLink',
+        attrs: {
+          hasAccess: canDetail,
+          onClick: (row: UserApi.UserItem) => formDrawerApi.setData({ ...row, readonly: true }).open(),
+        },
+      },
     },
     {
       field: 'status',
-      title: '帐号状态',
-      cellRender: { name: 'CellSwitch' },
-      width: 80,
+      title: $t('system.user.fields.status'),
+      cellRender: {
+        name: 'CellDict',
+        props: { code: 'sys_user_status' },
+      },
+      width: 100,
     },
     {
       field: 'nickname',
-      title: '真实姓名|昵称',
+      title: $t('system.user.fields.nickname'),
       minWidth: 120,
     },
     {
       field: 'avatar',
-      title: '用户头像路径',
+      title: $t('system.user.fields.avatar'),
       cellRender: { name: 'CellImages' },
       width: 80,
     },
     {
       field: 'email',
-      title: '邮箱',
+      title: $t('system.user.fields.email'),
       minWidth: 120,
     },
     {
       field: 'phone',
-      title: '手机号码',
+      title: $t('system.user.fields.phone'),
       minWidth: 120,
     },
     {
       field: 'totpSecret',
-      title: 'TOTP 密钥',
-      cellRender: { name: 'CellTag' },
-      width: 80,
+      title: $t('system.user.fields.totpSecret'),
+      cellRender: {
+        name: 'CellDict',
+        props: { code: 'is_enable' },
+      },
+      width: 100,
     },
     {
       field: 'gender',
-      title: '性别',
-      minWidth: 120,
+      title: $t('system.user.fields.gender'),
+      cellRender: {
+        name: 'CellDict',
+        props: { code: 'sys_user_gender' },
+      },
+      width: 100,
     },
     {
       field: 'deptId',
-      title: '主属部门ID',
+      title: $t('system.user.fields.deptId'),
       minWidth: 120,
     },
     {
       field: 'positionId',
-      title: '主身份职位ID',
+      title: $t('system.user.fields.positionId'),
       minWidth: 120,
     },
     {
       field: 'lastLoginIp',
-      title: '最后登录IP',
+      title: $t('system.user.fields.lastLoginIp'),
       minWidth: 120,
     },
     {
       field: 'lastLoginTime',
-      title: '最后登录时间',
-      formatter: ({ cellValue }: { cellValue: number }) => (cellValue ? dayjs.unix(cellValue).format('YYYY-MM-DD HH:mm:ss') : '-'),
+      title: $t('system.user.fields.lastLoginTime'),
+      formatter: ({ cellValue }: { cellValue: number }) => formatUnixTime(cellValue),
       width: 160,
     },
     {
+      field: 'onlineCount',
+      title: '在线设备',
+      width: 90,
+      cellRender: {
+        name: 'CellLink',
+        attrs: {
+          hasAccess: hasAccessByCodes(['system:user:online']),
+          onClick: (row: UserApi.UserItem) => onOnlineClick?.(row),
+        },
+      },
+    },
+    {
       field: 'createdAt',
-      title: '创建时间',
-      formatter: ({ cellValue }: { cellValue: number }) => (cellValue ? dayjs.unix(cellValue).format('YYYY-MM-DD HH:mm:ss') : '-'),
+      title: $t('common.createdAt'),
+      formatter: ({ cellValue }: { cellValue: number }) => formatUnixTime(cellValue),
       width: 160,
     },
     {
       align: 'center',
-      cellRender: {
-        attrs: {
-          nameField: 'id',
-          onClick: onActionClick,
-        },
-        name: 'CellOperation',
-      },
       field: 'operation',
       fixed: 'right',
-      title: '操作',
-      width: 130,
+      title: $t('common.operation'),
+      width: 160,
+      cellRender: {
+        name: 'CellOperation',
+        attrs: {
+          onRefresh,
+          actions: [
+            {
+              code: 'edit',
+              text: $t('common.edit'),
+              icon: 'lucide:pencil',
+              access: canUpdate,
+              onClick: (row: UserApi.UserItem) => formDrawerApi.setData(row).open(),
+            },
+            {
+              code: 'delete',
+              text: $t('common.delete'),
+              icon: 'lucide:trash-2',
+              actionType: 'delete',
+              labelField: 'username',
+              apiFn: deleteUserApi,
+              access: canDelete,
+            },
+          ],
+        },
+      },
     },
   ];
 }

@@ -291,12 +291,12 @@ $t('common.enabled')
 $t('captcha.slide')
 
 // 模块语言包
-$t('dev/menu.pageTitle')
-$t('system/dict.addDict')
-$t('system/captcha-driver.saveSuccess')
+$t('dev.menu.pageTitle')
+$t('system.dict.addDict')
+$t('system.captcha-driver.saveSuccess')
 
 // 带参数
-$t('system/dict.confirmDeleteContent', { name: '性别' })
+$t('system.dict.confirmDeleteContent', { name: '性别' })
 ```
 
 ### i18n 开发强制要求

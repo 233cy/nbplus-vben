@@ -164,8 +164,8 @@ function getAllowedTypes(parentId: null | string): typeof TYPE_OPTIONS {
 
 const availableTypes = computed(() => getAllowedTypes(form.value.parentId ?? null));
 const STATUS_OPTIONS = [
-  { label: $t('dev/menu.status.enabled'), value: 1 },
-  { label: $t('dev/menu.status.disabled'), value: 2 },
+  { label: $t('dev.menu.status.enabled'), value: 1 },
+  { label: $t('dev.menu.status.disabled'), value: 2 },
 ];
 const BADGE_TYPE_OPTIONS = [
   { label: '不显示', value: '' },
@@ -236,10 +236,10 @@ function findNodeById(nodes: MenuAdminApi.MenuItem[], id: string): MenuAdminApi.
 }
 
 const modalTitle = computed(() => {
-  if (isEdit.value) return $t('dev/menu.edit');
+  if (isEdit.value) return $t('dev.menu.edit');
   const pid = form.value.parentId;
   const pt = pid ? findNodeTitle(treeData.value, pid) : '';
-  return `${pid ? $t('dev/menu.addChild') : $t('dev/menu.addRoot')} - ${pt ? `「${pt}」` : '「顶级」'}`;
+  return `${pid ? $t('dev.menu.addChild') : $t('dev.menu.addRoot')} - ${pt ? `「${pt}」` : '「顶级」'}`;
 });
 
 function openCreate(parentId: null | string = null) {
@@ -285,10 +285,10 @@ async function handleSubmit() {
   try {
     if (isEdit.value && form.value.id) {
       await updateMenuApi(form.value as MenuAdminApi.SaveParams & { id: string });
-      message.success($t('dev/menu.updateSuccess'));
+      message.success($t('dev.menu.updateSuccess'));
     } else {
       await createMenuApi(form.value);
-      message.success($t('dev/menu.createSuccess'));
+      message.success($t('dev.menu.createSuccess'));
     }
     modalVisible.value = false;
     await loadMenus();
@@ -299,7 +299,7 @@ async function handleSubmit() {
 
 async function handleDelete(id: string) {
   await deleteMenuApi(id);
-  message.success($t('dev/menu.deleteSuccess'));
+  message.success($t('dev.menu.deleteSuccess'));
   await loadMenus();
 }
 
@@ -376,7 +376,7 @@ async function handleMove() {
       </Space>
       <Button type="primary" @click="openCreate()">
         <template #icon><IconifyIcon icon="ant-design:plus-outlined" /></template>
-        {{ $t('dev/menu.addRoot') }}
+        {{ $t('dev.menu.addRoot') }}
       </Button>
     </div>
 
@@ -446,7 +446,7 @@ async function handleMove() {
               <Tooltip title="编辑">
                 <Button size="small" type="text" @click.stop="openEdit(item)"><IconifyIcon icon="ant-design:edit-outlined" /></Button>
               </Tooltip>
-              <Popconfirm :title="$t('dev/menu.confirmDelete')" @confirm="handleDelete(item.id)">
+              <Popconfirm :title="$t('dev.menu.confirmDelete')" @confirm="handleDelete(item.id)">
                 <Tooltip title="删除">
                   <Button size="small" type="text" danger @click.stop><IconifyIcon icon="ant-design:delete-outlined" /></Button>
                 </Tooltip>
@@ -467,19 +467,19 @@ async function handleMove() {
               <RadioButton v-for="opt in availableTypes" :key="opt.value" :value="opt.value">{{ opt.label }}</RadioButton>
             </RadioGroup>
           </FormItem>
-          <FormItem :label="$t('dev/menu.fields.status')">
+          <FormItem :label="$t('dev.menu.fields.status')">
             <Select v-model:value="form.status" :options="STATUS_OPTIONS" class="w-full" />
           </FormItem>
         </div>
-        <FormItem :label="$t('dev/menu.fields.title')" required>
+        <FormItem :label="$t('dev.menu.fields.title')" required>
           <Input v-model:value="form.title" />
         </FormItem>
         <template v-if="form.type !== 3">
           <div class="grid grid-cols-2 gap-x-4">
-            <FormItem :label="$t('dev/menu.fields.name')" required>
+            <FormItem :label="$t('dev.menu.fields.name')" required>
               <Input v-model:value="form.name" placeholder="如：SystemUser" />
             </FormItem>
-            <FormItem :label="$t('dev/menu.fields.path')" required>
+            <FormItem :label="$t('dev.menu.fields.path')" required>
               <Input v-model:value="form.path" placeholder="如：/system/user" />
             </FormItem>
           </div>
@@ -489,11 +489,11 @@ async function handleMove() {
           <FormItem v-if="[4, 5].includes(form.type)" label="链接地址" required>
             <Input v-model:value="form.linkSrc" :placeholder="form.type === 4 ? 'iframe 地址' : '外链地址'" />
           </FormItem>
-          <FormItem v-if="form.type === 2" :label="$t('dev/menu.fields.component')" required>
-            <Input v-model:value="form.component" :placeholder="$t('dev/menu.placeholder.component')" />
+          <FormItem v-if="form.type === 2" :label="$t('dev.menu.fields.component')" required>
+            <Input v-model:value="form.component" :placeholder="$t('dev.menu.placeholder.component')" />
           </FormItem>
           <div class="grid grid-cols-2 gap-x-4">
-            <FormItem :label="$t('dev/menu.fields.icon')">
+            <FormItem :label="$t('dev.menu.fields.icon')">
               <IconPicker v-model="form.icon" prefix="lucide" />
             </FormItem>
             <FormItem label="激活图标">
@@ -501,10 +501,10 @@ async function handleMove() {
             </FormItem>
           </div>
         </template>
-        <FormItem v-if="form.type === 3" :label="$t('dev/menu.fields.permission')" required>
-          <Input v-model:value="form.permission" :placeholder="$t('dev/menu.placeholder.permission')" />
+        <FormItem v-if="form.type === 3" :label="$t('dev.menu.fields.permission')" required>
+          <Input v-model:value="form.permission" :placeholder="$t('dev.menu.placeholder.permission')" />
         </FormItem>
-        <FormItem :label="$t('dev/menu.fields.sort')">
+        <FormItem :label="$t('dev.menu.fields.sort')">
           <InputNumber v-model:value="form.sort" class="w-full" :min="0" />
         </FormItem>
         <template v-if="form.type !== 3">

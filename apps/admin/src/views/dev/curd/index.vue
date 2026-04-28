@@ -22,6 +22,7 @@ import {
   updateCurdTableApi,
 } from '#/api/dev/curdAdmin';
 import { getMenuListApi } from '#/api/dev/menuAdmin';
+import { getAllDictsApi } from '#/api/system/dict';
 import { $t } from '#/locales';
 
 defineOptions({ name: 'DevCurdPage' });
@@ -32,14 +33,14 @@ const tableNamesLoading = ref(false);
 
 onMounted(async () => {
   const connections = await getCurdConnectionsApi();
-  connectionOptions.value = connections.map((c) => ({ label: c, value: c }));
+  connectionOptions.value = connections.map(c => ({ label: c, value: c }));
 });
 
 async function loadTableNames(connection: string) {
   tableNamesLoading.value = true;
   try {
     const tables = await getCurdTablesApi(connection);
-    tableNameOptions.value = tables.map((t) => ({ label: t, value: t }));
+    tableNameOptions.value = tables.map(t => ({ label: t, value: t }));
   } finally {
     tableNamesLoading.value = false;
   }
@@ -57,6 +58,8 @@ const COMPONENT_OPTIONS: { label: string; value: CurdAdminApi.ComponentType }[] 
   { label: 'Textarea（多行文本）', value: 'Textarea' },
   { label: 'Select（下拉选择）', value: 'Select' },
   { label: 'ApiSelect（远程下拉）', value: 'ApiSelect' },
+  { label: 'DictSelect（字典下拉）', value: 'DictSelect' },
+  { label: 'DictRadio（字典单选）', value: 'DictRadio' },
   { label: 'Switch（开关）', value: 'Switch' },
   { label: 'Checkbox（复选框）', value: 'Checkbox' },
   { label: 'CheckboxGroup（复选组）', value: 'CheckboxGroup' },
@@ -77,6 +80,32 @@ const COMPONENT_OPTIONS: { label: string; value: CurdAdminApi.ComponentType }[] 
   { label: 'CreatableSelect（可创建下拉）', value: 'CreatableSelect' },
 ];
 
+/** 需要绑定字典 code 的组件类型 */
+const DICT_COMPONENTS = new Set<CurdAdminApi.ComponentType>(['DictRadio', 'DictSelect']);
+
+const dictOptions = ref<{ label: string; value: string }[]>([]);
+
+async function loadDicts() {
+  const list = await getAllDictsApi();
+  dictOptions.value = list.map(d => ({ label: `${d.name}（${d.code}）`, value: d.code }));
+}
+
+function getDictCode(field: CurdAdminApi.CurdField): string {
+  return field.options?.dictCode ?? '';
+}
+
+function setDictCode(field: CurdAdminApi.CurdField, code: string) {
+  if (!field.options) field.options = {};
+  field.options.dictCode = code;
+}
+
+function onComponentChange(field: CurdAdminApi.CurdField) {
+  // 切换到非字典组件时清空 dictCode
+  if (!DICT_COMPONENTS.has(field.component) && field.options?.dictCode) {
+    field.options.dictCode = undefined;
+  }
+}
+
 const loading = ref(false);
 const tableList = ref<CurdAdminApi.CurdTable[]>([]);
 const total = ref(0);
@@ -96,19 +125,19 @@ async function loadTableList() {
 loadTableList();
 
 const tableColumns = [
-  { title: $t('dev/curd.table.fields.title'), dataIndex: 'title', width: 140 },
-  { title: $t('dev/curd.table.fields.tableName'), dataIndex: 'tableName', width: 140 },
+  { title: $t('dev.curd.table.fields.title'), dataIndex: 'title', width: 140 },
+  { title: $t('dev.curd.table.fields.tableName'), dataIndex: 'tableName', width: 140 },
   { title: '数据库连接', dataIndex: 'dbConnection', width: 100 },
-  { title: $t('dev/curd.table.fields.module'), dataIndex: 'module', width: 90 },
-  { title: $t('dev/curd.table.fields.className'), dataIndex: 'className', width: 110 },
-  { title: $t('dev/curd.table.fields.routePrefix'), dataIndex: 'routePrefix', width: 140 },
-  { title: $t('dev/curd.table.fields.status'), dataIndex: 'status', width: 70 },
+  { title: $t('dev.curd.table.fields.module'), dataIndex: 'module', width: 90 },
+  { title: $t('dev.curd.table.fields.className'), dataIndex: 'className', width: 110 },
+  { title: $t('dev.curd.table.fields.routePrefix'), dataIndex: 'routePrefix', width: 140 },
+  { title: $t('dev.curd.table.fields.status'), dataIndex: 'status', width: 70 },
   { title: '操作', key: 'action', width: 180, fixed: 'right' as const },
 ];
 
 const STATUS_OPTIONS = [
-  { label: $t('dev/curd.status.enabled'), value: 1 },
-  { label: $t('dev/curd.status.disabled'), value: 2 },
+  { label: $t('dev.curd.status.enabled'), value: 1 },
+  { label: $t('dev.curd.status.disabled'), value: 2 },
 ];
 
 const tableModalVisible = ref(false);
@@ -169,10 +198,10 @@ async function handleTableSubmit() {
   try {
     if (isEdit.value && tableForm.value.id) {
       await updateCurdTableApi(tableForm.value as CurdAdminApi.TableSaveParams & { id: string });
-      message.success($t('dev/curd.updateSuccess'));
+      message.success($t('dev.curd.updateSuccess'));
     } else {
       await createCurdTableApi(tableForm.value);
-      message.success($t('dev/curd.createSuccess'));
+      message.success($t('dev.curd.createSuccess'));
     }
     tableModalVisible.value = false;
     await loadTableList();
@@ -183,7 +212,7 @@ async function handleTableSubmit() {
 
 async function handleTableDelete(id: string) {
   await deleteCurdTableApi(id);
-  message.success($t('dev/curd.deleteSuccess'));
+  message.success($t('dev.curd.deleteSuccess'));
   await loadTableList();
 }
 
@@ -198,7 +227,12 @@ async function openFieldModal(row: CurdAdminApi.CurdTable) {
   fieldModalVisible.value = true;
   fieldLoading.value = true;
   try {
-    fields.value = await getCurdFieldListApi(row.id);
+    await Promise.all([
+      getCurdFieldListApi(row.id).then(res => {
+        fields.value = res;
+      }),
+      dictOptions.value.length === 0 ? loadDicts() : Promise.resolve(),
+    ]);
   } finally {
     fieldLoading.value = false;
   }
@@ -214,6 +248,7 @@ function addField() {
     isSearch: false,
     isForm: true,
     isRequired: false,
+    isBatchUpdate: false,
     options: null,
     sort: (fields.value.length + 1) * 10,
   });
@@ -229,7 +264,7 @@ async function handleSyncFields() {
   try {
     const synced = await syncCurdFieldsApi(currentTable.value.id);
     fields.value = synced;
-    message.success($t('dev/curd.syncSuccess'));
+    message.success($t('dev.curd.syncSuccess'));
   } finally {
     fieldLoading.value = false;
   }
@@ -240,7 +275,7 @@ async function handleSaveFields() {
   fieldSaving.value = true;
   try {
     await saveCurdFieldsApi(currentTable.value.id, fields.value);
-    message.success($t('dev/curd.updateSuccess'));
+    message.success($t('dev.curd.updateSuccess'));
   } finally {
     fieldSaving.value = false;
   }
@@ -277,7 +312,7 @@ const menuTreeFlat = ref<any[]>([]);
 /** 根据 id 在平铺列表里找节点 */
 function findMenuNode(id: null | string): any {
   if (!id || id === '__root__') return null;
-  return menuTreeFlat.value.find((n) => n.id === id) ?? null;
+  return menuTreeFlat.value.find(n => n.id === id) ?? null;
 }
 
 /** 递归拼接某节点的完整路径（遇到 / 开头的节点截断上级） */
@@ -371,11 +406,13 @@ async function handleMenuSubmit() {
 const fieldColumns = [
   { title: '字段名（camelCase）', dataIndex: 'columnName', width: 150 },
   { title: '组件', dataIndex: 'component', width: 180 },
+  { title: '字典', dataIndex: 'dictCode', width: 160 },
   { title: '标签', dataIndex: 'label', width: 120 },
   { title: '列表', dataIndex: 'isList', width: 50 },
   { title: '搜索', dataIndex: 'isSearch', width: 50 },
   { title: '表单', dataIndex: 'isForm', width: 50 },
   { title: '必填', dataIndex: 'isRequired', width: 50 },
+  { title: '批量改', dataIndex: 'isBatchUpdate', width: 60 },
   { title: '排序', dataIndex: 'sort', width: 70 },
   { title: '操作', key: 'action', width: 60 },
 ];
@@ -396,7 +433,7 @@ const fieldColumns = [
         <template #icon>
           <IconifyIcon icon="ant-design:plus-outlined" />
         </template>
-        {{ $t('dev/curd.table.add') }}
+        {{ $t('dev.curd.table.add') }}
       </Button>
     </div>
 
@@ -408,7 +445,7 @@ const fieldColumns = [
           current: searchParams.page,
           pageSize: searchParams.pageSize,
           total,
-          onChange: (p) => {
+          onChange: p => {
             searchParams.page = p;
             loadTableList();
           },
@@ -420,7 +457,7 @@ const fieldColumns = [
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex === 'status'">
             <Tag :color="record.status === 1 ? 'green' : 'red'">
-              {{ record.status === 1 ? $t('dev/curd.status.enabled') : $t('dev/curd.status.disabled') }}
+              {{ record.status === 1 ? $t('dev.curd.status.enabled') : $t('dev.curd.status.disabled') }}
             </Tag>
           </template>
           <template v-if="column.key === 'action'">
@@ -445,7 +482,7 @@ const fieldColumns = [
                   <IconifyIcon icon="ant-design:edit-outlined" />
                 </Button>
               </Tooltip>
-              <Popconfirm :title="$t('dev/curd.table.confirmDelete')" @confirm="handleTableDelete(record.id)">
+              <Popconfirm :title="$t('dev.curd.table.confirmDelete')" @confirm="handleTableDelete(record.id)">
                 <Tooltip title="删除">
                   <Button size="small" type="text" danger>
                     <IconifyIcon icon="ant-design:delete-outlined" />
@@ -458,70 +495,70 @@ const fieldColumns = [
       </Table>
     </Spin>
 
-    <!-- 新增/编辑表配置弹�?-->
+    <!-- 新增/编辑表配置弹 -->
     <Modal
       v-model:open="tableModalVisible"
-      :title="isEdit ? $t('dev/curd.table.edit') : $t('dev/curd.table.add')"
+      :title="isEdit ? $t('dev.curd.table.edit') : $t('dev.curd.table.add')"
       :confirm-loading="tableModalLoading"
       width="600px"
       @ok="handleTableSubmit"
     >
       <Form :model="tableForm" layout="vertical" class="mt-4">
         <div class="grid grid-cols-2 gap-x-4">
-          <FormItem :label="$t('dev/curd.table.fields.title')" required>
-            <Input v-model:value="tableForm.title" :placeholder="$t('dev/curd.table.placeholder.title')" />
+          <FormItem :label="$t('dev.curd.table.fields.title')" required>
+            <Input v-model:value="tableForm.title" :placeholder="$t('dev.curd.table.placeholder.title')" />
           </FormItem>
           <FormItem label="数据库连接">
-            <Select v-model:value="tableForm.dbConnection" :options="connectionOptions" class="w-full" @change="(v) => onConnectionChange(v as string)" />
+            <Select v-model:value="tableForm.dbConnection" :options="connectionOptions" class="w-full" @change="v => onConnectionChange(v as string)" />
           </FormItem>
-          <FormItem :label="$t('dev/curd.table.fields.tableName')" required>
+          <FormItem :label="$t('dev.curd.table.fields.tableName')" required>
             <Select
               v-model:value="tableForm.tableName"
               :options="tableNameOptions"
               :loading="tableNamesLoading"
               show-search
               class="w-full"
-              :placeholder="$t('dev/curd.table.placeholder.tableName')"
+              :placeholder="$t('dev.curd.table.placeholder.tableName')"
             />
           </FormItem>
-          <FormItem :label="$t('dev/curd.table.fields.module')" required>
-            <Input v-model:value="tableForm.module" :placeholder="$t('dev/curd.table.placeholder.module')" />
+          <FormItem :label="$t('dev.curd.table.fields.module')" required>
+            <Input v-model:value="tableForm.module" :placeholder="$t('dev.curd.table.placeholder.module')" />
           </FormItem>
-          <FormItem :label="$t('dev/curd.table.fields.className')" required>
-            <Input v-model:value="tableForm.className" :placeholder="$t('dev/curd.table.placeholder.className')" />
+          <FormItem :label="$t('dev.curd.table.fields.className')" required>
+            <Input v-model:value="tableForm.className" :placeholder="$t('dev.curd.table.placeholder.className')" />
           </FormItem>
-          <FormItem :label="$t('dev/curd.table.fields.routePrefix')" required>
-            <Input v-model:value="tableForm.routePrefix" :placeholder="$t('dev/curd.table.placeholder.routePrefix')" />
+          <FormItem :label="$t('dev.curd.table.fields.routePrefix')" required>
+            <Input v-model:value="tableForm.routePrefix" :placeholder="$t('dev.curd.table.placeholder.routePrefix')" />
           </FormItem>
-          <FormItem :label="$t('dev/curd.table.fields.author')">
+          <FormItem :label="$t('dev.curd.table.fields.author')">
             <Input v-model:value="tableForm.author" />
           </FormItem>
-          <FormItem :label="$t('dev/curd.table.fields.status')">
+          <FormItem :label="$t('dev.curd.table.fields.status')">
             <Select v-model:value="tableForm.status" :options="STATUS_OPTIONS" class="w-full" />
           </FormItem>
         </div>
-        <FormItem :label="$t('dev/curd.table.fields.remark')">
+        <FormItem :label="$t('dev.curd.table.fields.remark')">
           <Input v-model:value="tableForm.remark" />
         </FormItem>
       </Form>
     </Modal>
 
     <!-- 字段配置弹窗 -->
-    <Modal v-model:open="fieldModalVisible" :title="`${currentTable?.title} - 字段配置`" :confirm-loading="fieldSaving" width="1100px" ok-text="保存字段" @ok="handleSaveFields">
+    <Modal v-model:open="fieldModalVisible" :title="`${currentTable?.title} - 字段配置`" :confirm-loading="fieldSaving" width="1260px" ok-text="保存字段" @ok="handleSaveFields">
       <div class="mb-3 flex items-center gap-2">
-        <Popconfirm :title="$t('dev/curd.field.syncConfirm')" @confirm="handleSyncFields">
+        <Popconfirm :title="$t('dev.curd.field.syncConfirm')" @confirm="handleSyncFields">
           <Button :loading="fieldLoading">
             <template #icon>
               <IconifyIcon icon="ant-design:sync-outlined" />
             </template>
-            {{ $t('dev/curd.field.sync') }}
+            {{ $t('dev.curd.field.sync') }}
           </Button>
         </Popconfirm>
         <Button type="dashed" @click="addField">
           <template #icon>
             <IconifyIcon icon="ant-design:plus-outlined" />
           </template>
-          {{ $t('dev/curd.field.addField') }}
+          {{ $t('dev.curd.field.addField') }}
         </Button>
       </div>
 
@@ -532,7 +569,22 @@ const fieldColumns = [
               <Input v-model:value="record.columnName" size="small" placeholder="如：userName" />
             </template>
             <template v-else-if="column.dataIndex === 'component'">
-              <Select v-model:value="record.component" :options="COMPONENT_OPTIONS" size="small" class="w-full" />
+              <Select v-model:value="record.component" :options="COMPONENT_OPTIONS" size="small" class="w-full" @change="onComponentChange(record)" />
+            </template>
+            <template v-else-if="column.dataIndex === 'dictCode'">
+              <Select
+                v-if="DICT_COMPONENTS.has(record.component)"
+                :value="getDictCode(record)"
+                :options="dictOptions"
+                size="small"
+                class="w-full"
+                show-search
+                option-filter-prop="label"
+                placeholder="选择字典"
+                allow-clear
+                @change="(v: string) => setDictCode(record, v)"
+              />
+              <span v-else class="text-xs text-gray-300">—</span>
             </template>
             <template v-else-if="column.dataIndex === 'label'">
               <Input v-model:value="record.label" size="small" />
@@ -548,6 +600,9 @@ const fieldColumns = [
             </template>
             <template v-else-if="column.dataIndex === 'isRequired'">
               <Checkbox v-model:checked="record.isRequired" />
+            </template>
+            <template v-else-if="column.dataIndex === 'isBatchUpdate'">
+              <Checkbox v-model:checked="record.isBatchUpdate" :disabled="!['DictSelect', 'DictRadio', 'Select', 'RadioGroup'].includes(record.component)" />
             </template>
             <template v-else-if="column.dataIndex === 'sort'">
               <InputNumber v-model:value="record.sort" size="small" :min="0" class="w-full" />

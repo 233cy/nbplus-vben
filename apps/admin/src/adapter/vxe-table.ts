@@ -6,9 +6,8 @@ import type { ComponentType } from './component';
 import { h } from 'vue';
 
 import { IconifyIcon } from '@vben/icons';
-import { $te } from '@vben/locales';
 import { setupVbenVxeTable, useVbenVxeGrid as useGrid } from '@vben/plugins/vxe-table';
-import { get, isFunction, isString } from '@vben/utils';
+import { get, isFunction } from '@vben/utils';
 
 import { objectOmit } from '@vueuse/core';
 import { Button, Image, Popconfirm, Switch, Tag } from 'ant-design-vue';
@@ -16,11 +15,16 @@ import { Button, Image, Popconfirm, Switch, Tag } from 'ant-design-vue';
 import DictTag from '#/components/dict/DictTag.vue';
 import ImgPreview from '#/components/imgPreview/index.vue';
 import { $t } from '#/locales';
+import { useSiteStore } from '#/store/site';
+import { useTableDelete } from '#/utils/table';
 
 import { useVbenForm } from './form';
 
 setupVbenVxeTable({
-  configVxeTable: (vxeUI) => {
+  configVxeTable: vxeUI => {
+    const siteStore = useSiteStore();
+    const pageSizes = siteStore.get('page.sizes', '10,20,50,100').split(',').map(Number).filter(Boolean);
+
     vxeUI.setConfig({
       grid: {
         align: 'center',
@@ -28,12 +32,15 @@ setupVbenVxeTable({
         columnConfig: {
           resizable: true,
         },
-
         formConfig: {
           // 全局禁用vxe-table的表单配置，使用formOptions
           enabled: false,
         },
         minHeight: 180,
+        pagerConfig: {
+          pageSizes,
+          pageSize: pageSizes[1] ?? pageSizes[0],
+        },
         proxyConfig: {
           autoLoad: true,
           response: {
@@ -77,9 +84,28 @@ setupVbenVxeTable({
 
     // 表格配置项可以用 cellRender: { name: 'CellLink' },
     vxeUI.renderer.add('CellLink', {
-      renderTableDefault(renderOpts) {
-        const { props } = renderOpts;
-        return h(Button, { size: 'small', type: 'link' }, { default: () => props?.text });
+      renderTableDefault(renderOpts, params) {
+        const { attrs, props } = renderOpts;
+        const { column, row } = params;
+        const text = get(row, column.field);
+        const onClick = attrs?.onClick ?? props?.onClick;
+        const hasAccess = attrs?.hasAccess ?? props?.hasAccess ?? true;
+        if (!hasAccess || !onClick) {
+          return h('span', text) as any;
+        }
+        return h(
+          Button,
+          {
+            size: 'small',
+            type: 'link',
+            style: 'padding:0;height:auto;',
+            onClick: (e: MouseEvent) => {
+              e.stopPropagation();
+              onClick(row);
+            },
+          },
+          { default: () => text },
+        ) as any;
       },
     });
 
@@ -91,7 +117,7 @@ setupVbenVxeTable({
           { color: 'success', label: $t('common.enabled'), value: 1 },
           { color: 'error', label: $t('common.disabled'), value: 0 },
         ];
-        const tagItem = tagOptions.find((item) => item.value === value);
+        const tagItem = tagOptions.find(item => item.value === value);
         return h(
           Tag,
           {
@@ -133,137 +159,87 @@ setupVbenVxeTable({
 
     /**
      * 注册表格的操作按钮渲染器
+     * 用法：cellRender: { name: 'CellOperation', attrs: { actions: [...], onRefresh } }
+     * actions 每项：{ code, text, icon?, actionType?, access?, onClick?, apiFn?, labelField? }
+     * actionType:
+     *   'default'  → 普通按钮，直接触发 onClick（默认）
+     *   'confirm'  → 带 Popconfirm 确认框，确认后触发 onClick
+     *   'delete'   → 内置删除：自动调用 useTableDelete(apiFn, row.id, row[labelField], onRefresh)
      */
     vxeUI.renderer.add('CellOperation', {
-      renderTableDefault({ attrs, options, props }, { column, row }) {
-        const defaultProps = { size: 'small', type: 'link', ...props };
-        let align = 'end';
-        switch (column.align) {
-          case 'center': {
-            align = 'center';
-            break;
-          }
-          case 'left': {
-            align = 'start';
-            break;
-          }
-          default: {
-            align = 'end';
-            break;
-          }
-        }
-        const presets: Recordable<Recordable<any>> = {
-          delete: {
-            danger: true,
-            text: $t('common.delete'),
-          },
-          edit: {
-            text: $t('common.edit'),
-          },
-        };
-        const operations: Array<Recordable<any>> = (options || ['edit', 'delete'])
-          .map((opt) => {
-            if (isString(opt)) {
-              return presets[opt]
-                ? { code: opt, ...presets[opt], ...defaultProps }
-                : {
-                    code: opt,
-                    text: $te(`common.${opt}`) ? $t(`common.${opt}`) : opt,
-                    ...defaultProps,
-                  };
-            } else {
-              return { ...defaultProps, ...presets[opt.code], ...opt };
-            }
-          })
-          .map((opt) => {
-            const optBtn: Recordable<any> = {};
-            Object.keys(opt).forEach((key) => {
-              optBtn[key] = isFunction(opt[key]) ? opt[key](row) : opt[key];
-            });
-            return optBtn;
-          })
-          .filter((opt) => opt.show !== false);
+      renderTableDefault({ attrs }, { row }) {
+        const onRefresh: () => void = attrs?.onRefresh ?? (() => {});
 
-        function renderBtn(opt: Recordable<any>, listen = true) {
+        const actions: Array<Recordable<any>> = (attrs?.actions ?? [])
+          .filter((a: Recordable<any>) => a.access !== false)
+          .map((a: Recordable<any>) => ({
+            ...a,
+            text: isFunction(a.text) ? a.text(row) : a.text,
+          }));
+
+        function renderBtn(action: Recordable<any>, onClick?: () => void) {
           return h(
             Button,
             {
-              ...props,
-              ...opt,
-              icon: undefined,
-              onClick: listen
-                ? () =>
-                    attrs?.onClick?.({
-                      code: opt.code,
-                      row,
-                    })
-                : undefined,
+              danger: action.actionType === 'confirm' || action.actionType === 'delete',
+              size: 'small',
+              type: 'link',
+              onClick: onClick ?? (() => action.onClick?.(row)),
             },
             {
               default: () => {
-                const content = [];
-                if (opt.icon) {
-                  content.push(h(IconifyIcon, { class: 'size-5', icon: opt.icon }));
-                }
-                content.push(opt.text);
-                return content;
+                const nodes = [];
+                if (action.icon) nodes.push(h(IconifyIcon, { class: 'size-4', icon: action.icon }));
+                nodes.push(action.text);
+                return nodes;
               },
             },
           );
         }
 
-        function renderConfirm(opt: Recordable<any>) {
+        function renderConfirm(action: Recordable<any>) {
           let viewportWrapper: HTMLElement | null = null;
           return h(
             Popconfirm,
             {
-              /**
-               * 当popconfirm用在固定列中时，将固定列作为弹窗的容器时可能会因为固定列较窄而无法容纳弹窗
-               * 将表格主体区域作为弹窗容器时又会因为固定列的层级较高而遮挡弹窗
-               * 将body或者表格视口区域作为弹窗容器时又会导致弹窗无法跟随表格滚动。
-               * 鉴于以上各种情况，一种折中的解决方案是弹出层展示时，禁止操作表格的滚动条。
-               * 这样既解决了弹窗的遮挡问题，又不至于让弹窗随着表格的滚动而跑出视口区域。
-               */
-              getPopupContainer(el) {
+              getPopupContainer(el: HTMLElement) {
                 viewportWrapper = el.closest('.vxe-table--viewport-wrapper');
                 return document.body;
               },
               placement: 'topLeft',
-              title: $t('ui.actionTitle.delete', [attrs?.nameTitle || '']),
-              ...props,
-              ...opt,
-              icon: undefined,
+              title: $t('common.confirmDelete'),
               onOpenChange: (open: boolean) => {
-                // 当弹窗打开时，禁止表格的滚动
-                if (open) {
-                  viewportWrapper?.style.setProperty('pointer-events', 'none');
-                } else {
-                  viewportWrapper?.style.removeProperty('pointer-events');
-                }
+                if (open) viewportWrapper?.style.setProperty('pointer-events', 'none');
+                else viewportWrapper?.style.removeProperty('pointer-events');
               },
-              onConfirm: () => {
-                attrs?.onClick?.({
-                  code: opt.code,
-                  row,
-                });
-              },
+              onConfirm: () => action.onClick?.(row),
             },
             {
-              default: () => renderBtn({ ...opt }, false),
-              description: () => h('div', { class: 'truncate' }, $t('ui.actionMessage.deleteConfirm', [row[attrs?.nameField || 'name']])),
+              default: () => renderBtn(action, () => {}),
+              description: () => h('span', action.confirmText ?? $t('common.confirmDeleteContent', { name: row[action.labelField ?? 'name'] ?? '' })),
             },
           );
         }
 
-        const btns = operations.map((opt) => (opt.code === 'delete' ? renderConfirm(opt) : renderBtn(opt)));
-        return h(
-          'div',
-          {
-            class: 'flex table-operations',
-            style: { justifyContent: align },
-          },
-          btns,
-        );
+        function renderDelete(action: Recordable<any>) {
+          const label = row[action.labelField ?? 'name'] ?? '';
+          return renderBtn(action, () => useTableDelete(action.apiFn, row.id, label, onRefresh));
+        }
+
+        // 按 actionType 分发渲染器，后续扩展直接在此 map 里新增
+        const actionRenderers: Record<string, (action: Recordable<any>) => any> = {
+          default: a => renderBtn(a),
+          confirm: a => renderConfirm(a),
+          delete: a => renderDelete(a),
+        };
+
+        const btns = actions.map(a => {
+          const type = a.actionType ?? 'default';
+          const render = actionRenderers[type] ?? actionRenderers.default;
+          return render?.(a);
+        });
+
+        return h('div', { class: 'flex items-center justify-center gap-1' }, btns);
       },
     });
 
@@ -285,7 +261,7 @@ setupVbenVxeTable({
           return h(
             'div',
             { class: 'flex flex-wrap gap-1' },
-            value.map((v) => h(DictTag, { code, value: v })),
+            value.map(v => h(DictTag, { code, value: v })),
           ) as any;
         }
         return h(DictTag, { code, value }) as any;

@@ -96,7 +96,7 @@ async function handleSave() {
       value: editValues.value[item.key] ?? '',
     }));
     await saveConfigApi(items);
-    message.success($t('system/config.saveSuccess'));
+    message.success($t('system.config.saveSuccess'));
     await loadConfig(activeGroup.value);
   } finally {
     saving.value = false;
@@ -108,7 +108,7 @@ async function handleSave() {
 // =========================================================================
 function copyKey(key: string) {
   navigator.clipboard.writeText(key).then(() => {
-    message.success($t('system/config.copySuccess'));
+    message.success($t('system.config.copySuccess'));
   });
 }
 
@@ -117,7 +117,7 @@ function copyKey(key: string) {
 // =========================================================================
 async function handleMarkAsSys(item: ConfigApi.ConfigItem) {
   await toggleConfigApi(item.id, 'isSys');
-  message.success($t('system/config.markAsSysSuccess'));
+  message.success($t('system.config.markAsSysSuccess'));
   await loadConfig(activeGroup.value);
 }
 
@@ -133,7 +133,7 @@ const COMPONENT_KEYS = ['Input', 'InputPassword', 'Textarea', 'InputNumber', 'Sw
 
 const COMPONENT_OPTIONS = computed(() =>
   COMPONENT_KEYS.map((key) => ({
-    label: `${$t(`system/config.components.${key}` as any)} (${key})`,
+    label: `${$t(`system.config.components.${key}` as any)} (${key})`,
     value: key,
   })),
 );
@@ -194,10 +194,10 @@ async function handleModalOk() {
   try {
     if (modalMode.value === 'create') {
       await createConfigApi(formState.value);
-      message.success($t('system/config.createSuccess'));
+      message.success($t('system.config.createSuccess'));
     } else {
       await updateConfigApi({ id: editingItem.value!.id, ...formState.value });
-      message.success($t('system/config.updateSuccess'));
+      message.success($t('system.config.updateSuccess'));
     }
     modalVisible.value = false;
     await loadConfig(activeGroup.value);
@@ -212,7 +212,7 @@ async function handleModalOk() {
 // =========================================================================
 async function handleDelete(item: ConfigApi.ConfigItem) {
   await deleteConfigApi(item.id);
-  message.success($t('system/config.deleteSuccess'));
+  message.success($t('system.config.deleteSuccess'));
   await loadConfig(activeGroup.value);
   await loadGroups();
 }
@@ -284,7 +284,7 @@ async function handleSortOk() {
       sort: (idx + 1) * 5,
     }));
     await reorderConfigApi(items);
-    message.success($t('system/config.sortSuccess'));
+    message.success($t('system.config.sortSuccess'));
     sortModalVisible.value = false;
     await loadConfig(activeGroup.value);
   } finally {
@@ -312,7 +312,7 @@ function onSwitchChange(key: string, checked: boolean | string) {
     <!-- 左侧分组菜单 -->
     <div class="w-48 shrink-0 rounded-lg bg-white shadow-sm dark:bg-gray-800">
       <div class="border-b px-4 py-3 text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
-        {{ $t('system/config.groupTitle') }}
+        {{ $t('system.config.groupTitle') }}
       </div>
       <Menu :selected-keys="selectedKeys" mode="inline" class="border-none" @click="({ key }) => (activeGroup = key as string)">
         <MenuItem v-for="g in groups" :key="g.groups">
@@ -327,8 +327,8 @@ function onSwitchChange(key: string, checked: boolean | string) {
       <div class="flex items-center justify-between border-b px-6 py-3 dark:border-gray-700">
         <span class="text-base font-medium">{{ activeGroupLabel }}</span>
         <div class="flex gap-2">
-          <Button size="small" @click="openSortModal">⇅ {{ $t('system/config.sortModal') }}</Button>
-          <Button type="primary" size="small" @click="openCreate"> + {{ $t('system/config.addItem') }} </Button>
+          <Button size="small" @click="openSortModal">⇅ {{ $t('system.config.sortModal') }}</Button>
+          <Button type="primary" size="small" @click="openCreate"> + {{ $t('system.config.addItem') }} </Button>
         </div>
       </div>
 
@@ -340,14 +340,14 @@ function onSwitchChange(key: string, checked: boolean | string) {
             <div class="w-56 shrink-0">
               <div class="flex items-center gap-1.5">
                 <span class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ item.label }}</span>
-                <Tag v-if="item.isSys" color="gold" class="ml-1 text-xs">{{ $t('system/config.isSysTag') }}</Tag>
+                <Tag v-if="item.isSys" color="gold" class="ml-1 text-xs">{{ $t('system.config.isSysTag') }}</Tag>
               </div>
               <!-- KEY 放大 + 复制 -->
               <div class="mt-1 flex items-center gap-1">
                 <Text code class="select-all font-mono text-sm font-semibold text-blue-600 dark:text-blue-400">
                   {{ item.key }}
                 </Text>
-                <Tooltip :title="$t('system/config.copySuccess')">
+                <Tooltip :title="$t('system.config.copySuccess')">
                   <Button type="text" size="small" class="flex items-center p-0 text-gray-400 hover:text-blue-500" @click="copyKey(item.key)">
                     <span class="i-ant-design:copy-outlined text-sm"></span>
                   </Button>
@@ -372,7 +372,7 @@ function onSwitchChange(key: string, checked: boolean | string) {
               <Textarea
                 v-else-if="item.component === 'Textarea'"
                 v-model:value="editValues[item.key]"
-                :placeholder="item.isEncrypted ? $t('system/config.encryptedPlaceholder') : ''"
+                :placeholder="item.isEncrypted ? $t('system.config.encryptedPlaceholder') : ''"
                 :rows="3"
               />
               <Select v-else-if="item.component === 'Select'" v-model:value="editValues[item.key]" class="w-full" allow-clear />
@@ -393,7 +393,7 @@ function onSwitchChange(key: string, checked: boolean | string) {
               <InputPassword
                 v-else-if="item.component === 'InputPassword' || item.isEncrypted"
                 v-model:value="editValues[item.key]"
-                :placeholder="item.isEncrypted ? $t('system/config.encryptedPlaceholder') : ''"
+                :placeholder="item.isEncrypted ? $t('system.config.encryptedPlaceholder') : ''"
               />
               <wang-editor v-else-if="item.component === 'Edit'" v-model="editValues[item.key]" />
               <Input v-else v-model:value="editValues[item.key]" />
@@ -402,40 +402,40 @@ function onSwitchChange(key: string, checked: boolean | string) {
             <!-- 操作按钮 -->
             <div class="flex shrink-0 items-center gap-2">
               <!-- 设为系统参数：已是系统参数则禁用 -->
-              <Popconfirm v-if="!item.isSys" :title="$t('system/config.markAsSysConfirm')" @confirm="handleMarkAsSys(item)">
-                <Tooltip :title="$t('system/config.markAsSys')">
+              <Popconfirm v-if="!item.isSys" :title="$t('system.config.markAsSysConfirm')" @confirm="handleMarkAsSys(item)">
+                <Tooltip :title="$t('system.config.markAsSys')">
                   <Button>
                     <IconifyIcon icon="ant-design:lock-outlined" class="text-amber-500" />
                   </Button>
                 </Tooltip>
               </Popconfirm>
-              <Tooltip v-else :title="$t('system/config.isSysTag')">
+              <Tooltip v-else :title="$t('system.config.isSysTag')">
                 <Button disabled>
                   <IconifyIcon icon="ant-design:lock-outlined" />
                 </Button>
               </Tooltip>
 
               <!-- 是否公开访问：始终可点击切换 -->
-              <Tooltip :title="item.isPublic ? $t('system/config.togglePublicOff') : $t('system/config.togglePublicOn')">
+              <Tooltip :title="item.isPublic ? $t('system.config.togglePublicOff') : $t('system.config.togglePublicOn')">
                 <Button :type="item.isPublic ? 'primary' : 'default'" @click="handleTogglePublic(item)">
                   <IconifyIcon :icon="item.isPublic ? 'ant-design:eye-outlined' : 'ant-design:eye-invisible-outlined'" />
                 </Button>
               </Tooltip>
 
               <!-- 编辑：始终可点击 -->
-              <Tooltip :title="$t('system/config.editItem')">
+              <Tooltip :title="$t('system.config.editItem')">
                 <Button @click="openEdit(item)">
                   <IconifyIcon icon="ant-design:edit-outlined" />
                 </Button>
               </Tooltip>
 
               <!-- 删除：isSys 时禁用 -->
-              <Popconfirm v-if="!item.isSys" :title="$t('system/config.confirmDelete')" @confirm="handleDelete(item)">
+              <Popconfirm v-if="!item.isSys" :title="$t('system.config.confirmDelete')" @confirm="handleDelete(item)">
                 <Button danger>
                   <IconifyIcon icon="ant-design:delete-outlined" />
                 </Button>
               </Popconfirm>
-              <Tooltip v-else :title="$t('system/config.isSysTag')">
+              <Tooltip v-else :title="$t('system.config.isSysTag')">
                 <Button danger disabled>
                   <IconifyIcon icon="ant-design:delete-outlined" />
                 </Button>
@@ -444,7 +444,7 @@ function onSwitchChange(key: string, checked: boolean | string) {
           </div>
 
           <div v-if="configItems.length === 0 && !loading" class="py-16 text-center text-gray-400">
-            {{ $t('system/config.empty') }}
+            {{ $t('system.config.empty') }}
           </div>
         </div>
       </Spin>
@@ -452,7 +452,7 @@ function onSwitchChange(key: string, checked: boolean | string) {
       <!-- 底部保存按钮 -->
       <div class="flex justify-end border-t px-6 py-3 dark:border-gray-700">
         <Button type="primary" :loading="saving" @click="handleSave">
-          {{ $t('system/config.save') }}
+          {{ $t('system.config.save') }}
         </Button>
       </div>
     </div>
@@ -460,46 +460,46 @@ function onSwitchChange(key: string, checked: boolean | string) {
     <!-- 新增 / 编辑弹窗 -->
     <Modal
       v-model:open="modalVisible"
-      :title="modalMode === 'create' ? $t('system/config.addItem') : $t('system/config.editItem')"
+      :title="modalMode === 'create' ? $t('system.config.addItem') : $t('system.config.editItem')"
       :confirm-loading="modalLoading"
       @ok="handleModalOk"
     >
       <Form :model="formState" layout="vertical" class="mt-4">
-        <FormItem :label="$t('system/config.fields.groups')" required>
-          <CreatableSelect v-model:value="formState.groups" :options="groupOptions" :disabled="editingIsSys" :add-placeholder="$t('system/config.fields.groups')" />
+        <FormItem :label="$t('system.config.fields.groups')" required>
+          <CreatableSelect v-model:value="formState.groups" :options="groupOptions" :disabled="editingIsSys" :add-placeholder="$t('system.config.fields.groups')" />
         </FormItem>
-        <FormItem v-if="modalMode === 'create'" :label="$t('system/config.fields.key')" required>
+        <FormItem v-if="modalMode === 'create'" :label="$t('system.config.fields.key')" required>
           <Input v-model:value="formState.key" />
         </FormItem>
         <!-- 编辑 只读展示 -->
-        <FormItem v-else :label="$t('system/config.fields.key')">
+        <FormItem v-else :label="$t('system.config.fields.key')">
           <Input :value="formState.key" disabled />
         </FormItem>
-        <FormItem :label="$t('system/config.fields.label')" required>
+        <FormItem :label="$t('system.config.fields.label')" required>
           <Input v-model:value="formState.label" />
         </FormItem>
-        <FormItem :label="$t('system/config.fields.component')">
+        <FormItem :label="$t('system.config.fields.component')">
           <Select v-model:value="formState.component" :options="COMPONENT_OPTIONS" />
         </FormItem>
         <div class="flex gap-6">
-          <FormItem :label="$t('system/config.fields.isEncrypted')">
+          <FormItem :label="$t('system.config.fields.isEncrypted')">
             <Switch v-model:checked="formState.isEncrypted" />
           </FormItem>
-          <FormItem :label="$t('system/config.fields.isPublic')">
+          <FormItem :label="$t('system.config.fields.isPublic')">
             <Switch v-model:checked="formState.isPublic" />
           </FormItem>
-          <FormItem :label="$t('system/config.fields.sort')">
+          <FormItem :label="$t('system.config.fields.sort')">
             <Input v-model:value="formState.sort" type="number" style="width: 80px" />
           </FormItem>
         </div>
-        <FormItem :label="$t('system/config.fields.remark')">
+        <FormItem :label="$t('system.config.fields.remark')">
           <Textarea v-model:value="formState.remark" :rows="2" />
         </FormItem>
       </Form>
     </Modal>
     <!-- 排序弹窗 -->
-    <Modal v-model:open="sortModalVisible" :title="$t('system/config.sortModal')" :confirm-loading="sortLoading" width="520px" @ok="handleSortOk">
-      <p class="mb-4 text-sm text-gray-400">{{ $t('system/config.sortModalTip') }}</p>
+    <Modal v-model:open="sortModalVisible" :title="$t('system.config.sortModal')" :confirm-loading="sortLoading" width="520px" @ok="handleSortOk">
+      <p class="mb-4 text-sm text-gray-400">{{ $t('system.config.sortModalTip') }}</p>
       <Tree :tree-data="sortTreeData" draggable block-node :show-icon="false" :selectable="false" @drop="onTreeDrop">
         <template #title="{ title, _item }">
           <div class="flex items-center gap-3 py-2">
@@ -509,7 +509,7 @@ function onSwitchChange(key: string, checked: boolean | string) {
             />
             <span class="flex-1 text-base font-medium text-gray-800 dark:text-gray-200">{{ title }}</span>
             <code class="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm text-blue-600 dark:bg-gray-700 dark:text-blue-400">{{ _item.key }}</code>
-            <Tag v-if="_item.isSys" color="gold">{{ $t('system/config.isSysTag') }}</Tag>
+            <Tag v-if="_item.isSys" color="gold">{{ $t('system.config.isSysTag') }}</Tag>
           </div>
         </template>
       </Tree>

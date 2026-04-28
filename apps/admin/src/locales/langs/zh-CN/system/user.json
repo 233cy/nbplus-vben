@@ -1,0 +1,23 @@
+{
+  "pageTitle": "用户管理",
+  "create": "新增用户管理",
+  "edit": "编辑用户管理",
+  "detail": "查看用户管理",
+  "confirmDelete": "确认删除该用户管理？",
+  "deleteSuccess": "删除成功",
+  "fields": {
+    "id": "ID",
+    "username": "登录账号",
+    "password": "登录密码",
+    "status": "帐号状态",
+    "nickname": "真实姓名|昵称",
+    "avatar": "用户头像路径",
+    "email": "邮箱",
+    "phone": "手机号码",
+    "totpSecret": "启用TOTP",
+    "gender": "性别",
+    "deptId": "主属部门ID",
+    "positionId": "主身份职位ID",
+    "lastLoginIp": "最后登录IP",
+    "lastLoginTime": "最后登录时间"  }
+}
