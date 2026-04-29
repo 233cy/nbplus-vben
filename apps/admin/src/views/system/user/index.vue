@@ -9,7 +9,7 @@ import { IconifyIcon, Plus } from '@vben/icons';
 import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { batchDeleteUserApi, batchUpdateUserApi, getUserListApi } from '#/api/system/user';
+import { batchDeleteUserApi, batchUpdateUserApi, getUserDetailApi, getUserListApi } from '#/api/system/user';
 import BatchActionDropdown from '#/components/table/BatchActionDropdown.vue';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
@@ -46,16 +46,26 @@ function onOnlineClick(row: UserApi.UserItem) {
   onlineRef.value?.open(row.id);
 }
 
+async function onEditClick(id: string) {
+  const res = await getUserDetailApi(id);
+  formDrawerApi.setData(res).open();
+}
+
+async function onDetailClick(id: string) {
+  const res = await getUserDetailApi(id);
+  formDrawerApi.setData({ ...res, readonly: true }).open();
+}
+
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
     collapsed: true,
     schema: useGridFormSchema(),
     showCollapseButton: true,
     submitOnChange: false,
-    wrapperClass: 'grid-cols-4',
+    wrapperClass: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
   },
   gridOptions: {
-    columns: useColumns(formDrawerApi, onRefresh, onOnlineClick),
+    columns: useColumns(formDrawerApi, onRefresh, onOnlineClick, onEditClick, onDetailClick),
     height: 'auto',
     keepSource: true,
     proxyConfig: {
@@ -104,25 +114,16 @@ function getSelectedIds(): string[] {
         </BatchActionDropdown>
         <BatchActionDropdown
           v-if="canBatchUpdate"
-          class="ml-2"
-          type="dict"
-          :action="$t('common.batchUpdateField', { field: $t('system.user.fields.status') })"
-          field-name="status"
-          dict-code="sys_user_status"
-          :api-fn="batchUpdateUserApi"
-          :get-ids="getSelectedIds"
-          :on-success="onRefresh"
-        />
-        <BatchActionDropdown
-          v-if="canBatchUpdate"
           class="ml-2 mr-2"
-          type="dict"
-          :action="$t('common.batchUpdateField', { field: $t('system.user.fields.gender') })"
-          field-name="gender"
-          dict-code="sys_user_gender"
+          type="multi"
+          :action="$t('common.batchUpdate')"
           :api-fn="batchUpdateUserApi"
           :get-ids="getSelectedIds"
           :on-success="onRefresh"
+          :fields="[
+            { fieldName: 'status', label: $t('system.user.fields.status'), dictCode: 'sys_user_status' },
+            { fieldName: 'gender', label: $t('system.user.fields.gender'), dictCode: 'sys_user_gender' },
+          ]"
         />
         <Button v-if="canCreate" type="primary" @click="formDrawerApi.setData({}).open()">
           <Plus class="size-5" />

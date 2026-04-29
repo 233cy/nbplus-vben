@@ -2,14 +2,13 @@ import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { UserApi } from '#/api/system/user';
 
-import { useAccess } from '#/composables/use-access';
-
 import { deleteUserApi } from '#/api/system/user';
+import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
 
 /** 新增/编辑表单 Schema */
-export function useFormSchema(): VbenFormSchema[] {
+export function useFormSchema(isEdit = false): any {
   return [
     {
       component: 'Input',
@@ -18,10 +17,10 @@ export function useFormSchema(): VbenFormSchema[] {
       rules: 'required',
     },
     {
-      component: 'Input',
+      component: 'PasswordInput',
       fieldName: 'password',
       label: $t('system.user.fields.password'),
-      rules: 'required',
+      rules: isEdit ? undefined : 'required',
     },
     {
       component: 'DictRadio',
@@ -129,6 +128,8 @@ export function useColumns(
   formDrawerApi: { open: () => void; setData: (data: any) => any },
   onRefresh: () => void,
   onOnlineClick?: (row: UserApi.UserItem) => void,
+  onEditClick?: (id: string) => Promise<void>,
+  onDetailClick?: (id: string) => Promise<void>,
 ): VxeTableGridOptions['columns'] {
   const { hasAccessByCodes } = useAccess();
   const canDetail = hasAccessByCodes(['system:user:detail']);
@@ -145,7 +146,13 @@ export function useColumns(
         name: 'CellLink',
         attrs: {
           hasAccess: canDetail,
-          onClick: (row: UserApi.UserItem) => formDrawerApi.setData({ ...row, readonly: true }).open(),
+          onClick: async (row: UserApi.UserItem) => {
+            if (onDetailClick) {
+              await onDetailClick(row.id);
+            } else {
+              formDrawerApi.setData({ ...row, readonly: true }).open();
+            }
+          },
         },
       },
     },
@@ -252,7 +259,13 @@ export function useColumns(
               text: $t('common.edit'),
               icon: 'lucide:pencil',
               access: canUpdate,
-              onClick: (row: UserApi.UserItem) => formDrawerApi.setData(row).open(),
+              onClick: async (row: UserApi.UserItem) => {
+                if (onEditClick) {
+                  await onEditClick(row.id);
+                } else {
+                  formDrawerApi.setData(row).open();
+                }
+              },
             },
             {
               code: 'delete',

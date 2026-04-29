@@ -76,7 +76,6 @@
     "newPasswordPlaceholder": "Enter new password (min 8 characters)",
     "confirmPasswordPlaceholder": "Re-enter new password",
     "oldPasswordRequired": "Please enter old password",
-    "newPasswordMinLength": "New password must be at least 8 characters",
     "confirmPasswordRequired": "Please re-enter new password",
     "passwordMismatch": "Passwords do not match",
     "changePassword": "Change Password",

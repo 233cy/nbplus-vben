@@ -3,11 +3,11 @@ import type { UserApi } from '#/api/system/user';
 
 import { computed, nextTick, ref } from 'vue';
 
-import { useAccess } from '#/composables/use-access';
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { createUserApi, updateUserApi } from '#/api/system/user';
+import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
 import { useFormSchema } from '../data';
@@ -18,9 +18,10 @@ const { hasAccessByCodes } = useAccess();
 const canUpdate = computed(() => hasAccessByCodes(['system:user:update']));
 const rowId = ref<string | undefined>();
 const isReadonly = ref(false);
+const isEdit = computed(() => !!rowId.value);
 
 const [Form, formApi] = useVbenForm({
-  schema: useFormSchema(),
+  schema: computed(() => useFormSchema(isEdit.value)) as any,
   showDefaultActions: false,
 });
 

@@ -31,7 +31,7 @@ const { locale, t } = useI18n();
 const langMap: Record<string, string> = { 'zh-CN': 'zh-CN', 'en-US': 'en', 'zh-TW': 'zh-TW' };
 watch(
   () => locale.value,
-  (lang) => {
+  lang => {
     i18nChangeLanguage(langMap[lang] || 'en');
   },
   { immediate: true },
@@ -71,11 +71,11 @@ const valueHtml = ref('');
 
 watch(
   () => props.modelValue,
-  (v) => {
+  v => {
     if (v !== valueHtml.value) valueHtml.value = v;
   },
 );
-watch(valueHtml, (v) => emit('update:modelValue', v));
+watch(valueHtml, v => emit('update:modelValue', v));
 
 /**
  * 递归查找包含特定文本的节点路径

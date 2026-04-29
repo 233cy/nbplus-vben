@@ -23,9 +23,9 @@ const [Form, formApi] = useVbenForm({
     {
       fieldName: 'newPassword',
       label: $t('profile.password.newPassword'),
-      component: 'InputPassword',
+      component: 'PasswordInput',
       componentProps: { placeholder: $t('profile.password.newPasswordPlaceholder') },
-      rules: z.string().min(8, { message: $t('profile.password.newPasswordMinLength') }),
+      rules: 'required',
     },
     {
       fieldName: 'confirmPassword',
@@ -38,7 +38,7 @@ const [Form, formApi] = useVbenForm({
           return z
             .string({ required_error: $t('profile.password.confirmPasswordRequired') })
             .min(1, { message: $t('profile.password.confirmPasswordRequired') })
-            .refine((value) => value === newPassword, {
+            .refine(value => value === newPassword, {
               message: $t('profile.password.passwordMismatch'),
             });
         },
@@ -49,8 +49,9 @@ const [Form, formApi] = useVbenForm({
 });
 
 async function handleSubmit() {
-  const { valid, values } = await formApi.validate();
-  if (!valid || !values) return;
+  const { valid } = await formApi.validate();
+  if (!valid) return;
+  const values = await formApi.getValues();
 
   await changePasswordApi({
     oldPassword: values.oldPassword as string,
