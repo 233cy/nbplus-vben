@@ -5,23 +5,16 @@ import { ref } from 'vue';
 
 import { IconifyIcon } from '@vben/icons';
 
-import { Button, message, Modal, Popconfirm, Table, Tag } from 'ant-design-vue';
+import { Button, message, Modal, Popconfirm } from 'ant-design-vue';
 
 import { getUserOnlineApi, kickAllUserDevicesApi, kickUserDeviceApi } from '#/api/system/user';
-import { $t } from '#/locales';
-import { formatUnixTime } from '#/utils/time';
+
+import OnlineDevices from '#/components/onlineDevices/index.vue';
 
 const visible = ref(false);
 const loading = ref(false);
 const userId = ref('');
 const devices = ref<UserApi.OnlineDevice[]>([]);
-
-const columns = [
-  { title: 'IP', dataIndex: 'ip', width: 140 },
-  { title: '设备', dataIndex: 'device', ellipsis: true },
-  { title: '登录时间', dataIndex: 'loginAt', width: 160, customRender: ({ text }: { text: number }) => formatUnixTime(text) },
-  { title: '操作', key: 'action', width: 80, fixed: 'right' as const },
-];
 
 async function load() {
   loading.value = true;
@@ -54,12 +47,7 @@ defineExpose({ open });
 </script>
 
 <template>
-  <Modal
-    v-model:open="visible"
-    title="在线设备"
-    :footer="null"
-    width="700px"
-  >
+  <Modal v-model:open="visible" title="在线设备" :footer="null" width="600px">
     <div class="mb-3 flex justify-end">
       <Popconfirm title="确认踢出所有设备？" @confirm="kickAll">
         <Button danger size="small">
@@ -68,22 +56,13 @@ defineExpose({ open });
         </Button>
       </Popconfirm>
     </div>
-    <Table
-      :columns="columns"
-      :data-source="devices"
-      :loading="loading"
-      :pagination="false"
-      row-key="tmpId"
-      size="small"
-      :scroll="{ x: 600 }"
-    >
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'action'">
-          <Popconfirm title="确认下线该设备？" @confirm="kick(record.tmpId)">
-            <Button type="link" danger size="small">下线</Button>
-          </Popconfirm>
-        </template>
+
+    <OnlineDevices :devices="devices" :loading="loading">
+      <template #action="{ device }">
+        <Popconfirm title="确认下线该设备？" @confirm="kick(device.tmpId)">
+          <Button type="link" danger size="small">下线</Button>
+        </Popconfirm>
       </template>
-    </Table>
+    </OnlineDevices>
   </Modal>
 </template>

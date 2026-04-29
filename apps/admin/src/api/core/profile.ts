@@ -61,9 +61,15 @@ export namespace ProfileApi {
     tmpId: string;
     userId: string;
     ip: string;
-    device: string;
     loginAt: number;
     isCurrent?: boolean;
+    deviceInfo?: {
+      deviceType?: string;
+      deviceBrand?: string;
+      deviceModel?: string;
+      os?: string;
+      browser?: string;
+    };
   }
 }
 

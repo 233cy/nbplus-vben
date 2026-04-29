@@ -23,8 +23,15 @@ export namespace UserApi {
     tmpId: string;
     userId: string;
     ip: string;
-    device: string;
     loginAt: number;
+    isCurrent?: boolean;
+    deviceInfo?: {
+      deviceType?: string;
+      deviceBrand?: string;
+      deviceModel?: string;
+      os?: string;
+      browser?: string;
+    };
   }
 
   export interface SaveParams {

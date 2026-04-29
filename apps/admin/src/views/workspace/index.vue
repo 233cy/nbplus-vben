@@ -10,6 +10,7 @@ import { useUserStore } from '@vben/stores';
 import { Avatar, Badge, Card, Col, message, Popconfirm, Row, Spin, Tag, Tooltip } from 'ant-design-vue';
 
 import { getMyDevicesApi, getProfileInfoApi, removeMyDeviceApi } from '#/api/core/profile';
+import OnlineDevices from '#/components/onlineDevices/index.vue';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store/user';
 import { formatUnixTime } from '#/utils/time';
@@ -19,12 +20,22 @@ const userStore = useUserStore();
 const adminUserStore = useAdminUserStore();
 
 const loading = ref(true);
+const devicesLoading = ref(false);
 const profile = ref<null | ProfileApi.ProfileInfo>(null);
 const devices = ref<ProfileApi.OnlineDevice[]>([]);
 
+async function loadDevices() {
+  devicesLoading.value = true;
+  try {
+    devices.value = await getMyDevicesApi();
+  } finally {
+    devicesLoading.value = false;
+  }
+}
+
 onMounted(async () => {
   try {
-    [profile.value, devices.value] = await Promise.all([getProfileInfoApi(), getMyDevicesApi()]);
+    [profile.value] = await Promise.all([getProfileInfoApi(), loadDevices()]);
   } finally {
     loading.value = false;
   }
@@ -33,7 +44,7 @@ onMounted(async () => {
 async function kickDevice(tmpId: string) {
   await removeMyDeviceApi(tmpId);
   message.success('已下线');
-  devices.value = await getMyDevicesApi();
+  await loadDevices();
 }
 
 const greeting = computed(() => {
@@ -59,7 +70,6 @@ const appTitle = import.meta.env.VITE_APP_TITLE;
   <div class="p-4 md:p-6">
     <Spin :spinning="loading">
       <Row :gutter="[16, 16]">
-        <!-- 欢迎语 + 用户信息 -->
         <Col :span="24" :md="14">
           <Card :bordered="false" class="h-full">
             <div class="flex items-center gap-4">
@@ -84,7 +94,6 @@ const appTitle = import.meta.env.VITE_APP_TITLE;
           </Card>
         </Col>
 
-        <!-- 安全状态 -->
         <Col :span="24" :md="10">
           <Card :bordered="false" :title="$t('workspace.securityTitle')" class="h-full">
             <div class="space-y-3">
@@ -110,7 +119,6 @@ const appTitle = import.meta.env.VITE_APP_TITLE;
           </Card>
         </Col>
 
-        <!-- 快捷入口 -->
         <Col :span="24" :md="12">
           <Card :bordered="false" :title="$t('workspace.shortcutTitle')">
             <Row :gutter="[12, 12]">
@@ -129,7 +137,6 @@ const appTitle = import.meta.env.VITE_APP_TITLE;
           </Card>
         </Col>
 
-        <!-- 系统信息 -->
         <Col :span="24" :md="12">
           <Card :bordered="false" :title="$t('workspace.systemTitle')">
             <div class="space-y-3">
@@ -149,28 +156,15 @@ const appTitle = import.meta.env.VITE_APP_TITLE;
           </Card>
         </Col>
 
-        <!-- 在线设备 -->
         <Col :span="24">
           <Card :bordered="false" :title="`在线设备（${devices.length}）`">
-            <div v-if="devices.length === 0" class="py-4 text-center text-sm text-gray-400">暂无在线设备</div>
-            <div v-else class="space-y-2">
-              <div v-for="d in devices" :key="d.tmpId" class="flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3">
-                <div class="flex items-center gap-3">
-                  <IconifyIcon icon="lucide:monitor" class="size-5 text-gray-400" />
-                  <div>
-                    <div class="text-sm font-medium">{{ d.ip }}</div>
-                    <div class="mt-0.5 max-w-xs truncate text-xs text-gray-400">{{ d.device }}</div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-4">
-                  <span class="text-xs text-gray-400">{{ formatUnixTime(d.loginAt) }}</span>
-                  <Tag v-if="d.isCurrent" color="blue">当前</Tag>
-                  <Popconfirm v-else title="确认下线该设备？" @confirm="kickDevice(d.tmpId)">
-                    <Tag color="red" class="cursor-pointer">下线</Tag>
-                  </Popconfirm>
-                </div>
-              </div>
-            </div>
+            <OnlineDevices :devices="devices" :loading="devicesLoading">
+              <template #action="{ device }">
+                <Popconfirm title="确认下线该设备？" @confirm="kickDevice(device.tmpId)">
+                  <Tag color="red" class="cursor-pointer hover:opacity-80">下线</Tag>
+                </Popconfirm>
+              </template>
+            </OnlineDevices>
           </Card>
         </Col>
       </Row>
