@@ -26,11 +26,11 @@ export namespace UserApi {
     loginAt: number;
     isCurrent?: boolean;
     deviceInfo?: {
-      deviceType?: string;
+      browser?: string;
       deviceBrand?: string;
       deviceModel?: string;
+      deviceType?: string;
       os?: string;
-      browser?: string;
     };
   }
 

@@ -41,6 +41,7 @@ export function useFormSchema(isEdit = false): any {
       component: 'AvatarUpload',
       fieldName: 'avatar',
       label: $t('system.user.fields.avatar'),
+      componentProps: { isPrivate: 3 },
     },
     {
       component: 'Input',

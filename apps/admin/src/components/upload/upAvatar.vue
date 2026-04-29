@@ -63,7 +63,7 @@ let skipNextWatch = false;
 
 watch(
   () => props.modelValue,
-  async (logicalPath) => {
+  async logicalPath => {
     if (skipNextWatch) {
       skipNextWatch = false;
       return;
@@ -86,7 +86,7 @@ function handlePreview() {
 function handleBeforeUpload(file: File) {
   // 根据配置验证文件格式
   if (UPLOAD_CONFIG.accept && UPLOAD_CONFIG.accept !== '*') {
-    const acceptList = UPLOAD_CONFIG.accept.split(',').map((t) => t.trim());
+    const acceptList = UPLOAD_CONFIG.accept.split(',').map(t => t.trim());
     if (!acceptList.includes(file.type)) {
       message.error($t('upload.onlySupportImageFormat', { accept: UPLOAD_CONFIG.accept }));
       return false;

@@ -1,6 +1,6 @@
 import type { Recordable, UserInfo } from '@vben/types';
 
-import type { AuthApi } from '#/api';
+import type { AuthApi, ProfileApi } from '#/api';
 
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -12,7 +12,7 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { codeLoginApi, getAccessCodesApi, getUserInfoApi, loginApi, logoutApi, mfaLoginApi, totpLoginApi } from '#/api';
+import { codeLoginApi, getAccessCodesApi, getProfileInfoApi, loginApi, logoutApi, mfaLoginApi, totpLoginApi } from '#/api';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store';
 import { pathToFullUrl } from '#/utils/upload';
@@ -140,8 +140,9 @@ export const useAuthStore = defineStore('auth', () => {
     });
   }
 
-  async function fetchUserInfo() {
-    const result = await getUserInfoApi();
+  async function fetchUserInfo(useResult: ProfileApi.ProfileInfo = null as any) {
+    let result: ProfileApi.ProfileInfo = {} as any;
+    result = useResult === null ? await getProfileInfoApi() : useResult;
     const adminUserStore = useAdminUserStore();
 
     // 框架所需字段映射

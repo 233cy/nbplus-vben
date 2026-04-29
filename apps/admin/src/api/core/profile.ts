@@ -1,15 +1,20 @@
 import { requestClient } from '#/api/request';
+import { useAuthStore } from '#/store/auth';
 
 export namespace ProfileApi {
   export interface ProfileInfo {
+    username: string;
+    id: string;
     nickname: string;
     avatar: string; // logicalPath，存库用
     email: string;
     phone: string;
     gender: number; // 0=未知 1=男 2=女
     totpEnabled: boolean;
+    permissions?: string[];
     lastLoginIp: string;
     lastLoginTime: string;
+    roles?: string[];
   }
 
   export interface UpdateProfileResult {
@@ -64,17 +69,26 @@ export namespace ProfileApi {
     loginAt: number;
     isCurrent?: boolean;
     deviceInfo?: {
-      deviceType?: string;
+      browser?: string;
       deviceBrand?: string;
       deviceModel?: string;
+      deviceType?: string;
       os?: string;
-      browser?: string;
     };
   }
 }
 
 export async function getProfileInfoApi() {
-  return requestClient.get<ProfileApi.ProfileInfo>('/admin/profile/info');
+  // 1. 发起请求获取用户信息
+  const profileInfo = await requestClient.get<ProfileApi.ProfileInfo>('/admin/profile/info');
+
+  // 2. 拿到数据后，扔给 store 去处理更新
+  // 如果 fetchUserInfo 本身是异步的且你需要等它更新完，可以加 await；如果不需要等，去掉 await 即可
+  await useAuthStore().fetchUserInfo(profileInfo);
+
+  // 3. 将数据原封不动返回出去
+  // 这样外部调用 getProfileInfoApi().then(res => ...) 就能完美接住 profileInfo
+  return profileInfo;
 }
 
 export async function updateProfileApi(data: ProfileApi.UpdateProfileParams) {
