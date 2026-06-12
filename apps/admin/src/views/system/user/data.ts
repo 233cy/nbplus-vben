@@ -1,8 +1,8 @@
-import type { VbenFormSchema } from '#/adapter/form';
+﻿import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { UserApi } from '#/api/system/user';
 
-import { deleteUserApi } from '#/api/system/user';
+import { deleteUserApi, inlineUpdateUserApi } from '#/api/system/user';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
@@ -191,8 +191,15 @@ export function useColumns(
       field: 'totpSecret',
       title: $t('system.user.fields.totpSecret'),
       cellRender: {
-        name: 'CellDict',
-        props: { code: 'is_enable' },
+        name: 'CellInlineEdit',
+        attrs: {
+          options: [
+            { label: '已绑定', value: 1, color: 'success' },
+            { label: '未绑定', value: 2, color: 'default' },
+          ],
+          disabled: (row: any) => row.totpSecret === 2,
+          apiFn: (id: string, field: string, value: any) => inlineUpdateUserApi(id, field, value),
+        },
       },
       width: 100,
     },
@@ -200,8 +207,11 @@ export function useColumns(
       field: 'gender',
       title: $t('system.user.fields.gender'),
       cellRender: {
-        name: 'CellDict',
-        props: { code: 'sys_user_gender' },
+        name: 'CellInlineEdit',
+        attrs: {
+          dictCode: 'sys_user_gender',
+          apiFn: (id: string, field: string, value: any) => inlineUpdateUserApi(id, field, value),
+        },
       },
       width: 100,
     },
@@ -283,3 +293,4 @@ export function useColumns(
     },
   ];
 }
+

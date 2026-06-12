@@ -1,4 +1,4 @@
-import { requestClient } from '#/api/request';
+﻿import { requestClient } from '#/api/request';
 
 export namespace UserApi {
   export interface UserItem {
@@ -100,3 +100,10 @@ export function kickUserDeviceApi(id: string, tmpId: string) {
 export function kickAllUserDevicesApi(id: string) {
   return requestClient.delete(`${BASE}/online-kick-all`, { data: { id } });
 }
+
+
+export function inlineUpdateUserApi(id: string, field: string, value: any) {
+  return requestClient.put(`${BASE}/inline-update`, { id, field, value });
+}
+
+

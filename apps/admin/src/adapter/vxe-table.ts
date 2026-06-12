@@ -1,4 +1,4 @@
-import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
+﻿import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
 import type { Recordable } from '@vben/types';
 
 import type { ComponentType } from './component';
@@ -13,6 +13,7 @@ import { objectOmit } from '@vueuse/core';
 import { Button, Image, Popconfirm, Switch, Tag } from 'ant-design-vue';
 
 import DictTag from '#/components/dict/DictTag.vue';
+import CellInlineEdit from '#/components/table/CellInlineEdit.vue';
 import ImgPreview from '#/components/imgPreview/index.vue';
 import { $t } from '#/locales';
 import { useSiteStore } from '#/store/site';
@@ -243,6 +244,23 @@ setupVbenVxeTable({
       },
     });
 
+    /**
+     * 行内编辑渲染器
+     * 用法：cellRender: { name: 'CellInlineEdit', attrs: { field, apiFn, dictCode?, options?, disabled? } }
+     */
+    vxeUI.renderer.add('CellInlineEdit', {
+      renderTableDefault({ attrs }, { column, row }) {
+        return h(CellInlineEdit, {
+          row,
+          field: attrs?.field ?? column.field,
+          dictCode: attrs?.dictCode,
+          options: attrs?.options,
+          apiFn: attrs?.apiFn,
+          disabled: attrs?.disabled,
+        }) as any;
+      },
+    });
+
     // 这里可以自行扩展 vxe-table 的全局配置，比如自定义格式化
     // vxeUI.formats.add
 
@@ -279,3 +297,5 @@ export type OnActionClickParams<T = Recordable<any>> = {
 };
 export type OnActionClickFn<T = Recordable<any>> = (params: OnActionClickParams<T>) => void;
 export type * from '@vben/plugins/vxe-table';
+
+
