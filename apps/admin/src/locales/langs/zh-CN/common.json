@@ -45,5 +45,7 @@
     "special": "建议包含特殊字符",
     "good": "密码强度良好"
   },
-  "passwordPlaceholder": "请输入密码"
+  "passwordPlaceholder": "请输入密码",
+  "collapseAll": "全部折叠",
+  "expandAll": "全部展开"
 }

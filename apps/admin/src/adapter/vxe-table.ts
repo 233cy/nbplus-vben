@@ -19,6 +19,14 @@ import { $t } from '#/locales';
 import { useSiteStore } from '#/store/site';
 import { useTableDelete } from '#/utils/table';
 
+/**
+ * 扩展 proxyConfig.ajax 类型，支持 queryApi 简化模式
+ */
+export interface ProxyAjaxQueryApi {
+  /** 传入 API 函数即可，adapter 自动处理 page/sorts/formValues 拼接 */
+  queryApi?: (params: any) => Promise<any>;
+}
+
 import { useVbenForm } from './form';
 
 setupVbenVxeTable({
@@ -28,6 +36,11 @@ setupVbenVxeTable({
 
     vxeUI.setConfig({
       grid: {
+        sortConfig: {
+          remote: true,
+          trigger: 'cell',
+          multiple: true,
+        },
         align: 'center',
         border: false,
         columnConfig: {
@@ -285,11 +298,63 @@ setupVbenVxeTable({
         return h(DictTag, { code, value }) as any;
       },
     });
+    
+    vxeUI.formats.add('emptyDash', ({ cellValue }) => cellValue ?? '-');
   },
   useVbenForm,
 });
 
-export const useVbenVxeGrid = <T extends Record<string, any>>(...rest: Parameters<typeof useGrid<T, ComponentType>>) => useGrid<T, ComponentType>(...rest);
+
+export const useVbenVxeGrid = <T extends Record<string, any>>(...rest: Parameters<typeof useGrid<T, ComponentType>>) => {
+  const [options, ...others] = rest;
+
+  // ===== 自动给纯文本列补空值占位 =====
+  if (options?.gridOptions?.columns) {
+    options.gridOptions.columns = options.gridOptions.columns.map((col: any) => {
+      if (col.type || col.formatter || col.cellRender || col.slots) return col;
+      return {
+        ...col,
+        formatter: ({ cellValue }: { cellValue: any }) => {
+          if (cellValue === null || cellValue === undefined || cellValue === '') return '-';
+          return cellValue;
+        },
+      };
+    });
+  }
+
+  // ===== queryApi 简化模式：自动包装标准 query 回调 =====
+  const proxyAjax = options?.gridOptions?.proxyConfig?.ajax as any;
+  if (proxyAjax?.queryApi && !proxyAjax.query) {
+    const queryApi = proxyAjax.queryApi;
+    proxyAjax.query = async ({ page, sorts }: any, formValues: any) => {
+      // 过滤有效排序（order 不为空的）
+      const validSorts = (sorts || [])
+        .filter((s: any) => s.order)
+        .map((s: any) => ({ field: s.field, order: s.order }));
+
+      return await queryApi({
+        page: page.currentPage,
+        pageSize: page.pageSize,
+        ...formValues,
+        ...(validSorts.length > 0 ? { sorts: validSorts } : {}),
+      });
+    };
+    delete proxyAjax.queryApi;
+  }
+
+  // ===== 注入 sortChange 事件：排序变化时自动触发远程查询 =====
+  const userGridEvents = options?.gridEvents || {};
+  options.gridEvents = {
+    ...userGridEvents,
+    sortChange: (...args: any[]) => {
+      (userGridEvents as any)?.sortChange?.(...args);
+      gridApi.query();
+    },
+  };
+
+  const [Grid, gridApi] = useGrid<T, ComponentType>(options, ...others);
+  return [Grid, gridApi] as const;
+};
 
 export type OnActionClickParams<T = Recordable<any>> = {
   code: string;

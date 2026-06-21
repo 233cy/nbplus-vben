@@ -15,7 +15,7 @@ export namespace DictApi {
     name: string;
     code: string;
     groups?: string;
-    remark?: string;
+    remark?: string | null;
     status?: number;
   }
 

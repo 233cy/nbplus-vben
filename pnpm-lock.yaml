@@ -221,7 +221,7 @@ catalogs:
       version: 1.12.0
     dayjs:
       specifier: ^1.11.20
-      version: 1.11.19
+      version: 1.11.21
     defu:
       specifier: ^6.1.4
       version: 6.1.4
@@ -746,6 +746,9 @@ importers:
       vue-router:
         specifier: 'catalog:'
         version: 4.6.4(vue@3.5.30(typescript@5.9.3))
+      vuedraggable:
+        specifier: ^4.1.0
+        version: 4.1.0(vue@3.5.30(typescript@5.9.3))
       xe-utils:
         specifier: 'catalog:'
         version: 3.9.1
@@ -828,7 +831,7 @@ importers:
         version: 4.2.6(vue@3.5.29(typescript@5.9.3))
       dayjs:
         specifier: 'catalog:'
-        version: 1.11.19
+        version: 1.11.21
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3))
@@ -891,7 +894,7 @@ importers:
         version: 1.1.0(date-fns@4.1.0)(luxon@3.6.1)(vue@3.5.29(typescript@5.9.3))
       dayjs:
         specifier: 'catalog:'
-        version: 1.11.19
+        version: 1.11.21
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.29(typescript@5.9.3))
@@ -951,7 +954,7 @@ importers:
         version: 14.2.1(vue@3.5.29(typescript@5.9.3))
       dayjs:
         specifier: 'catalog:'
-        version: 1.11.19
+        version: 1.11.21
       element-plus:
         specifier: 'catalog:'
         version: 2.13.3(vue@3.5.29(typescript@5.9.3))
@@ -1078,7 +1081,7 @@ importers:
         version: 14.2.1(vue@3.5.29(typescript@5.9.3))
       dayjs:
         specifier: 'catalog:'
-        version: 1.11.19
+        version: 1.11.21
       es-toolkit:
         specifier: 'catalog:'
         version: 1.45.0
@@ -1318,7 +1321,7 @@ importers:
         version: 3.4.2
       dayjs:
         specifier: 'catalog:'
-        version: 1.11.19
+        version: 1.11.21
       execa:
         specifier: 'catalog:'
         version: 9.6.1
@@ -1449,7 +1452,7 @@ importers:
         version: 5.1.4(vite@7.3.1(@types/node@24.11.0)(jiti@2.6.1)(less@4.5.1)(sass@1.97.3)(terser@5.39.0)(yaml@2.8.2))(vue@3.5.30(typescript@5.9.3))
       dayjs:
         specifier: 'catalog:'
-        version: 1.11.19
+        version: 1.11.21
       dotenv:
         specifier: 'catalog:'
         version: 16.6.1
@@ -1508,7 +1511,7 @@ importers:
         version: 2.1.1
       dayjs:
         specifier: 'catalog:'
-        version: 1.11.19
+        version: 1.11.21
       defu:
         specifier: 'catalog:'
         version: 6.1.4
@@ -2139,7 +2142,7 @@ importers:
         version: 4.2.6(vue@3.5.29(typescript@5.9.3))
       dayjs:
         specifier: 'catalog:'
-        version: 1.11.19
+        version: 1.11.21
       json-bigint:
         specifier: 'catalog:'
         version: 1.0.0
@@ -7171,6 +7174,9 @@ packages:
   dayjs@1.11.20:
     resolution: {integrity: sha512-YbwwqR/uYpeoP4pu043q+LTDLFBLApUP6VxRihdfNTqu4ubqMlGDLd6ErXhEgsyvY0K6nCs7nggYumAN+9uEuQ==}
 
+  dayjs@1.11.21:
+    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
+
   db0@0.3.4:
     resolution: {integrity: sha512-RiXXi4WaNzPTHEOu8UPQKMooIbqOEyqA1t7Z6MsdxSCeb8iUC9ko3LcmsLmeUt2SM5bctfArZKkRQggKZz7JNw==}
     peerDependencies:
@@ -11097,6 +11103,9 @@ packages:
     resolution: {integrity: sha512-W2lHLLw2qR2Vv0DcMmcxXqcfdBaIcoN+y/86SmHv8fn4DazEQSH6KN3TjZcWvwujW56OHiiirsbHWZb4vx/0fg==}
     engines: {node: '>=12.17.0'}
 
+  sortablejs@1.14.0:
+    resolution: {integrity: sha512-pBXvQCs5/33fdN1/39pPL0NZF20LeRbLQ5jtnheIPN9JQAaufGjKdWduZn4U7wCtVuzKhmRkI0DFYHYRbB2H1w==}
+
   sortablejs@1.15.6:
     resolution: {integrity: sha512-aNfiuwMEpfBM/CN6LY0ibyhxPfPbyFeBTYJKCvzkJ2GkUpazIt3H+QIPAMHwqQ7tMKaHz1Qj+rJJCqljnf4p3A==}
 
@@ -12263,6 +12272,11 @@ packages:
       typescript:
         optional: true
 
+  vuedraggable@4.1.0:
+    resolution: {integrity: sha512-FU5HCWBmsf20GpP3eudURW3WdWTKIbEIQxh9/8GE806hydR9qZqRRxRE3RjqX7PkuLuMQG/A7n3cfj9rCEchww==}
+    peerDependencies:
+      vue: ^3.5.27
+
   vueuc@0.4.65:
     resolution: {integrity: sha512-lXuMl+8gsBmruudfxnMF9HW4be8rFziylXFu1VHVNbLVhRTXXV4njvpRuJapD/8q+oFEMSfQMH16E/85VoWRyQ==}
     peerDependencies:
@@ -12300,6 +12314,7 @@ packages:
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
@@ -16308,7 +16323,7 @@ snapshots:
       '@v-c/util': 1.0.17(vue@3.5.29(typescript@5.9.3))
       vue: 3.5.29(typescript@5.9.3)
 
-  '@v-c/picker@1.0.4(date-fns@4.1.0)(dayjs@1.11.19)(luxon@3.6.1)(vue@3.5.29(typescript@5.9.3))':
+  '@v-c/picker@1.0.4(date-fns@4.1.0)(dayjs@1.11.21)(luxon@3.6.1)(vue@3.5.29(typescript@5.9.3))':
     dependencies:
       '@v-c/overflow': 1.0.3(vue@3.5.29(typescript@5.9.3))
       '@v-c/resize-observer': 1.0.8(vue@3.5.29(typescript@5.9.3))
@@ -16317,7 +16332,7 @@ snapshots:
       vue: 3.5.29(typescript@5.9.3)
     optionalDependencies:
       date-fns: 4.1.0
-      dayjs: 1.11.19
+      dayjs: 1.11.21
       luxon: 3.6.1
 
   '@v-c/portal@1.0.7(vue@3.5.29(typescript@5.9.3))':
@@ -17350,7 +17365,7 @@ snapshots:
       '@v-c/mutate-observer': 1.0.1(vue@3.5.29(typescript@5.9.3))
       '@v-c/notification': 1.0.0(vue@3.5.29(typescript@5.9.3))
       '@v-c/pagination': 1.0.0(vue@3.5.29(typescript@5.9.3))
-      '@v-c/picker': 1.0.4(date-fns@4.1.0)(dayjs@1.11.19)(luxon@3.6.1)(vue@3.5.29(typescript@5.9.3))
+      '@v-c/picker': 1.0.4(date-fns@4.1.0)(dayjs@1.11.21)(luxon@3.6.1)(vue@3.5.29(typescript@5.9.3))
       '@v-c/progress': 1.0.0(vue@3.5.29(typescript@5.9.3))
       '@v-c/qrcode': 1.0.0(vue@3.5.29(typescript@5.9.3))
       '@v-c/rate': 1.0.1(vue@3.5.29(typescript@5.9.3))
@@ -17373,7 +17388,7 @@ snapshots:
       '@v-c/util': 1.0.17(vue@3.5.29(typescript@5.9.3))
       '@v-c/virtual-list': 1.0.6(vue@3.5.29(typescript@5.9.3))
       '@vueuse/core': 14.2.1(vue@3.5.29(typescript@5.9.3))
-      dayjs: 1.11.19
+      dayjs: 1.11.21
       es-toolkit: 1.44.0
       scroll-into-view-if-needed: 3.1.0
       throttle-debounce: 5.0.2
@@ -18398,6 +18413,8 @@ snapshots:
 
   dayjs@1.11.20: {}
 
+  dayjs@1.11.21: {}
+
   db0@0.3.4: {}
 
   de-indent@1.0.2: {}
@@ -18642,7 +18659,7 @@ snapshots:
       '@types/lodash-es': 4.17.12
       '@vueuse/core': 10.11.1(vue@3.5.29(typescript@5.9.3))
       async-validator: 4.2.5
-      dayjs: 1.11.19
+      dayjs: 1.11.21
       lodash: 4.17.23
       lodash-es: 4.17.23
       lodash-unified: 1.0.3(@types/lodash-es@4.17.12)(lodash-es@4.17.23)(lodash@4.17.23)
@@ -22678,6 +22695,8 @@ snapshots:
 
   snabbdom@3.6.3: {}
 
+  sortablejs@1.14.0: {}
+
   sortablejs@1.15.6: {}
 
   source-map-js@1.2.1: {}
@@ -23133,7 +23152,7 @@ snapshots:
       '@types/sortablejs': 1.15.8
       '@types/tinycolor2': 1.4.6
       '@types/validator': 13.15.10
-      dayjs: 1.11.19
+      dayjs: 1.11.21
       lodash-es: 4.17.21
       mitt: 3.0.1
       sortablejs: 1.15.6
@@ -24061,6 +24080,11 @@ snapshots:
       '@vue/shared': 3.5.30
     optionalDependencies:
       typescript: 5.9.3
+
+  vuedraggable@4.1.0(vue@3.5.30(typescript@5.9.3)):
+    dependencies:
+      sortablejs: 1.14.0
+      vue: 3.5.30(typescript@5.9.3)
 
   vueuc@0.4.65(vue@3.5.29(typescript@5.9.3)):
     dependencies:

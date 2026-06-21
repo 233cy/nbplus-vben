@@ -53,6 +53,7 @@
     "pinia": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:",
+    "vuedraggable": "^4.1.0",
     "xe-utils": "catalog:"
   },
   "devDependencies": {

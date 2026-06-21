@@ -11,7 +11,7 @@
     "password": "登录密码",
     "status": "帐号状态",
     "nickname": "真实姓名|昵称",
-    "avatar": "用户头像路径",
+    "avatar": "用户头像",
     "email": "邮箱",
     "phone": "手机号码",
     "totpSecret": "启用TOTP",

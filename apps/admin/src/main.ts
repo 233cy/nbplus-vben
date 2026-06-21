@@ -1,5 +1,6 @@
 import { initPreferences } from '@vben/preferences';
-import { unmountGlobalLoading } from '@vben/utils';
+import { setTimezoneHandler } from '@vben/stores';
+import { getSystemTimezone, unmountGlobalLoading } from '@vben/utils';
 
 import { overridesPreferences } from './preferences';
 
@@ -17,6 +18,16 @@ async function initApplication() {
   await initPreferences({
     namespace,
     overrides: overridesPreferences,
+  });
+
+  // 当前关闭手动时区切换，默认强制使用系统时区。
+  // 如需恢复时区切换功能，将 getTimezone 改为调用后端接口即可；
+  // setTimezone 预留用于后续持久化用户选择。
+  setTimezoneHandler({
+    getTimezone: async () => getSystemTimezone(),
+    setTimezone: async () => {
+      // 预留接口，当前不实现持久化
+    },
   });
 
   // 启动应用并挂载

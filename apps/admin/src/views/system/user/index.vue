@@ -18,14 +18,6 @@ import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
 import Online from './modules/online.vue';
 
-interface PageInfo {
-  currentPage: number;
-  pageSize: number;
-}
-interface QueryParams {
-  page: PageInfo;
-}
-
 const { hasAccessByCodes } = useAccess();
 const canCreate = hasAccessByCodes(['system:user:create']);
 const canBatchDelete = hasAccessByCodes(['system:user:batchDelete']);
@@ -70,14 +62,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
     keepSource: true,
     proxyConfig: {
       ajax: {
-        query: async ({ page }: QueryParams, formValues: UserApi.PageParams) => {
-          return await getUserListApi({
-            page: page.currentPage,
-            pageSize: page.pageSize,
-            ...formValues,
-          });
-        },
-      },
+        queryApi: getUserListApi,
+      } as any,
     },
     rowConfig: { keyField: 'id' },
     checkboxConfig: { reserve: true, highlight: true },

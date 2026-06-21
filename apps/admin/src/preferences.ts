@@ -25,4 +25,8 @@ export const overridesPreferences = defineOverridesPreferences({
     companySiteLink: 'https://blog.233cy.com',
     date: '2026',
   },
+  widget: {
+    // ...
+    timezone: false, // → 改为 false
+  },
 });

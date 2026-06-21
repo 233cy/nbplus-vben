@@ -119,7 +119,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
       component: 'RangePicker',
       fieldName: 'lastLoginTime',
       label: $t('system.user.fields.lastLoginTime'),
-      componentProps: { allowClear: true, valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true },
+      componentProps: { allowClear: true, showTime: true, valueFormat: 'X' },
     },
   ];
 }
@@ -143,6 +143,7 @@ export function useColumns(
       field: 'username',
       title: $t('system.user.fields.username'),
       minWidth: 120,
+      sortable: true,
       cellRender: {
         name: 'CellLink',
         attrs: {
@@ -165,11 +166,13 @@ export function useColumns(
         props: { code: 'sys_user_status' },
       },
       width: 100,
+      sortable: true,
     },
     {
       field: 'nickname',
       title: $t('system.user.fields.nickname'),
       minWidth: 120,
+      sortable: true,
     },
     {
       field: 'avatar',
@@ -181,11 +184,13 @@ export function useColumns(
       field: 'email',
       title: $t('system.user.fields.email'),
       minWidth: 120,
+      sortable: true,
     },
     {
       field: 'phone',
       title: $t('system.user.fields.phone'),
       minWidth: 120,
+      sortable: true,
     },
     {
       field: 'totpSecret',
@@ -193,10 +198,7 @@ export function useColumns(
       cellRender: {
         name: 'CellInlineEdit',
         attrs: {
-          options: [
-            { label: '已绑定', value: 1, color: 'success' },
-            { label: '未绑定', value: 2, color: 'default' },
-          ],
+          dictCode: 'is_bind_totp',
           disabled: (row: any) => row.totpSecret === 2,
           apiFn: (id: string, field: string, value: any) => inlineUpdateUserApi(id, field, value),
         },
@@ -214,6 +216,7 @@ export function useColumns(
         },
       },
       width: 100,
+      sortable: true,
     },
     {
       field: 'deptId',
@@ -229,12 +232,14 @@ export function useColumns(
       field: 'lastLoginIp',
       title: $t('system.user.fields.lastLoginIp'),
       minWidth: 120,
+      sortable: true,
     },
     {
       field: 'lastLoginTime',
       title: $t('system.user.fields.lastLoginTime'),
       formatter: ({ cellValue }: { cellValue: number }) => formatUnixTime(cellValue),
       width: 160,
+      sortable: true,
     },
     {
       field: 'onlineCount',
@@ -293,4 +298,3 @@ export function useColumns(
     },
   ];
 }
-

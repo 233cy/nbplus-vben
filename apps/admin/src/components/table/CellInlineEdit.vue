@@ -2,6 +2,7 @@
 import type { DictApi } from '#/api/system/dict';
 import { computed, ref } from 'vue';
 import { message } from 'ant-design-vue';
+import { IconifyIcon } from '@vben/icons';
 import DictTag from '#/components/dict/DictTag.vue';
 import { useDict } from '#/utils/dict';
 
@@ -87,7 +88,7 @@ async function onSelect(newValue: string | number) {
         </div>
       </template>
       <a-button size="small" type="text" class="!px-1 opacity-0 group-hover:opacity-100 transition-opacity" :loading="loading">
-        <template #icon><span class="i-lucide-pencil size-3" /></template>
+        <template #icon><IconifyIcon icon="lucide:pencil" class="size-3" /></template>
       </a-button>
     </a-popover>
   </div>
