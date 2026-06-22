@@ -53,6 +53,8 @@ export enum BizCode {
   /* 职务管理 */
   /** 职务编码已存在 */
   POST_CODE_EXISTS = 40_500,
+  /** 职务编码自动生成失败，请手动填写 */
+  POST_CODE_GENERATE_FAILED = 40_501,
   /** 该联系方式尚未绑定 */
   PROFILE_CONTACT_NOT_BOUND = 30_021,
 

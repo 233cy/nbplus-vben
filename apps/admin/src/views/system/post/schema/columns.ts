@@ -1,7 +1,7 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { PostApi } from '#/api/system/post';
 
-import { deletePostApi } from '#/api/system/post';
+import { deletePostApi, inlineUpdatePostApi } from '#/api/system/post';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
@@ -34,30 +34,59 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     {
       field: 'name',
       title: $t('system.post.fields.name'),
-      minWidth: 140,
+      minWidth: 160,
       sortable: true,
+      cellRender: {
+        name: 'CellInlineEdit',
+        attrs: {
+          type: 'input',
+          disabled: !canUpdate,
+          apiFn: (id: string, field: string, value: any) => inlineUpdatePostApi(id, field, value),
+        },
+      },
     },
     {
       field: 'level',
       title: $t('system.post.fields.level'),
-      width: 110,
+      width: 130,
       sortable: true,
+      cellRender: {
+        name: 'CellInlineEdit',
+        attrs: {
+          type: 'number',
+          disabled: !canUpdate,
+          apiFn: (id: string, field: string, value: any) => inlineUpdatePostApi(id, field, value),
+        },
+      },
     },
     {
       field: 'status',
       title: $t('system.post.fields.status'),
-      width: 100,
+      width: 120,
       sortable: true,
       cellRender: {
-        name: 'CellDict',
-        props: { code: 'sys_post_status' },
+        name: 'CellInlineEdit',
+        attrs: {
+          type: 'select',
+          disabled: !canUpdate,
+          dictCode: 'sys_post_status',
+          apiFn: (id: string, field: string, value: any) => inlineUpdatePostApi(id, field, value),
+        },
       },
     },
     {
       field: 'sort',
       title: $t('system.post.fields.sort'),
-      width: 100,
+      width: 130,
       sortable: true,
+      cellRender: {
+        name: 'CellInlineEdit',
+        attrs: {
+          type: 'number',
+          disabled: !canUpdate,
+          apiFn: (id: string, field: string, value: any) => inlineUpdatePostApi(id, field, value),
+        },
+      },
     },
     {
       field: 'remark',

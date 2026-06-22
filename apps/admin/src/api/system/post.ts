@@ -65,3 +65,7 @@ export function batchDeletePostApi(ids: string[]) {
 export function batchUpdatePostApi(ids: string[], fieldName: string, value: any) {
   return requestClient.put(`${BASE}/batch-update`, { ids, [fieldName]: value });
 }
+
+export function inlineUpdatePostApi(id: string, fieldName: string, value: any) {
+  return requestClient.put(`${BASE}/inline-update`, { id, field: fieldName, value });
+}

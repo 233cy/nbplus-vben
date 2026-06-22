@@ -1,4 +1,4 @@
-﻿import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
+import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
 import type { Recordable } from '@vben/types';
 
 import type { ComponentType } from './component';
@@ -13,11 +13,13 @@ import { objectOmit } from '@vueuse/core';
 import { Button, Image, Popconfirm, Switch, Tag } from 'ant-design-vue';
 
 import DictTag from '#/components/dict/DictTag.vue';
-import CellInlineEdit from '#/components/table/CellInlineEdit.vue';
 import ImgPreview from '#/components/imgPreview/index.vue';
+import CellInlineEdit from '#/components/table/CellInlineEdit.vue';
 import { $t } from '#/locales';
 import { useSiteStore } from '#/store/site';
 import { useTableDelete } from '#/utils/table';
+
+import { useVbenForm } from './form';
 
 /**
  * 扩展 proxyConfig.ajax 类型，支持 queryApi 简化模式
@@ -26,8 +28,6 @@ export interface ProxyAjaxQueryApi {
   /** 传入 API 函数即可，adapter 自动处理 page/sorts/formValues 拼接 */
   queryApi?: (params: any) => Promise<any>;
 }
-
-import { useVbenForm } from './form';
 
 setupVbenVxeTable({
   configVxeTable: vxeUI => {
@@ -259,13 +259,15 @@ setupVbenVxeTable({
 
     /**
      * 行内编辑渲染器
-     * 用法：cellRender: { name: 'CellInlineEdit', attrs: { field, apiFn, dictCode?, options?, disabled? } }
+     * 用法：cellRender: { name: 'CellInlineEdit', attrs: { type, apiFn, dictCode?, options?, disabled?, field? } }
+     * type: 'select' | 'input' | 'number'，默认 'select'
      */
     vxeUI.renderer.add('CellInlineEdit', {
       renderTableDefault({ attrs }, { column, row }) {
         return h(CellInlineEdit, {
           row,
           field: attrs?.field ?? column.field,
+          type: attrs?.type,
           dictCode: attrs?.dictCode,
           options: attrs?.options,
           apiFn: attrs?.apiFn,
@@ -298,14 +300,13 @@ setupVbenVxeTable({
         return h(DictTag, { code, value }) as any;
       },
     });
-    
+
     vxeUI.formats.add('emptyDash', {
       cellFormatMethod: ({ cellValue }: { cellValue: any }) => cellValue ?? '-',
     });
   },
   useVbenForm,
 });
-
 
 export const useVbenVxeGrid = <T extends Record<string, any>>(...rest: Parameters<typeof useGrid<T, ComponentType>>) => {
   const [options, ...others] = rest;
@@ -330,9 +331,7 @@ export const useVbenVxeGrid = <T extends Record<string, any>>(...rest: Parameter
     const queryApi = proxyAjax.queryApi;
     proxyAjax.query = async ({ page, sorts }: any, formValues: any) => {
       // 过滤有效排序（order 不为空的）
-      const validSorts = (sorts || [])
-        .filter((s: any) => s.order)
-        .map((s: any) => ({ field: s.field, order: s.order }));
+      const validSorts = (sorts || []).filter((s: any) => s.order).map((s: any) => ({ field: s.field, order: s.order }));
 
       return await queryApi({
         page: page.currentPage,
@@ -364,5 +363,3 @@ export type OnActionClickParams<T = Recordable<any>> = {
 };
 export type OnActionClickFn<T = Recordable<any>> = (params: OnActionClickParams<T>) => void;
 export type * from '@vben/plugins/vxe-table';
-
-

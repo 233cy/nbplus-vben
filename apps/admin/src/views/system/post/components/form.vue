@@ -18,9 +18,10 @@ const { hasAccessByCodes } = useAccess();
 const canUpdate = computed(() => hasAccessByCodes(['system:post:update']));
 const rowId = ref<string | undefined>();
 const isReadonly = ref(false);
+const isEdit = computed(() => !!rowId.value);
 
 const [Form, formApi] = useVbenForm({
-  schema: useFormSchema(),
+  schema: computed(() => useFormSchema(isEdit.value)) as any,
   showDefaultActions: false,
 });
 
