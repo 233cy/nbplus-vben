@@ -1,5 +1,24 @@
 {
   "pageTitle": "CURD Manager",
+  "generate": "Generate Code",
+  "generateSuccess": "Generated successfully, {count} files",
+  "createMenu": "Create Menu",
+  "menu": {
+    "title": "Create Menu",
+    "parent": "Mount To",
+    "parentPlaceholder": "Select parent node (empty means root)",
+    "path": "Menu Route",
+    "pathPlaceholder": "Starts with / for absolute path, otherwise relative to parent",
+    "parentFullPath": "Parent Full Route",
+    "preview": "Final Route",
+    "absolute": "(absolute)",
+    "relative": "(relative, appended to parent)",
+    "icon": "Menu Icon",
+    "sort": "Sort",
+    "hint": "Will create menu node and permissions: list / create / update / delete.",
+    "root": "Root",
+    "createSuccess": "Menu created successfully"
+  },
   "table": {
     "add": "Add Table",
     "edit": "Edit Table",
@@ -7,6 +26,7 @@
     "fields": {
       "title": "Business Name",
       "tableName": "Table Name",
+      "dbConnection": "DB Connection",
       "module": "Module",
       "className": "Class Name Prefix",
       "routePrefix": "Route Prefix",
@@ -27,14 +47,19 @@
     "sync": "Sync from DB",
     "syncConfirm": "Sync will overwrite unsaved fields, continue?",
     "addField": "Add Field",
+    "saveFields": "Save Fields",
+    "dictPlaceholder": "Select dict",
     "fields": {
       "columnName": "Column",
       "columnType": "Type",
+      "component": "Component",
+      "dictCode": "Dict",
       "label": "Label",
       "isList": "List",
       "isSearch": "Search",
       "isForm": "Form",
       "isRequired": "Required",
+      "isBatchUpdate": "Batch Update",
       "sort": "Sort"
     },
     "columnType": {

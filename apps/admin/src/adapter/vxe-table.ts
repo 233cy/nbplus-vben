@@ -299,7 +299,9 @@ setupVbenVxeTable({
       },
     });
     
-    vxeUI.formats.add('emptyDash', ({ cellValue }) => cellValue ?? '-');
+    vxeUI.formats.add('emptyDash', {
+      cellFormatMethod: ({ cellValue }: { cellValue: any }) => cellValue ?? '-',
+    });
   },
   useVbenForm,
 });

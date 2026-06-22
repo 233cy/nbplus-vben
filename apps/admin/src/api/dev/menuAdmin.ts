@@ -74,8 +74,26 @@ export function deleteMenuApi(id: string) {
   return requestClient.delete('/admin/dev/menu/delete', { data: { id } });
 }
 
+export function batchDeleteMenuApi(ids: string[]) {
+  return requestClient.delete<{ deleted: string[]; skipped: string[] }>('/admin/dev/menu/batch-delete', { data: { ids } });
+}
+
 export function sortMenuApi(items: { id: string; sort: number }[]) {
   return requestClient.put('/admin/dev/menu/sort', { items });
+}
+
+export function batchCreateMenuApi(items: MenuAdminApi.SaveParams[]) {
+  return requestClient.post<{ created: MenuAdminApi.MenuItem[]; skipped: string[] }>('/admin/dev/menu/batch-create', { items });
+}
+
+export interface ControllerMethodItem {
+  title: string;
+  path: string;
+  method: string;
+}
+
+export function getControllerMethodsApi(prefix: string) {
+  return requestClient.post<ControllerMethodItem[]>('/admin/dev/menu/controller-methods', { prefix });
 }
 
 export function toggleMenuApi(id: string, field: 'isAffixTab' | 'isHidden' | 'isKeepAlive' | 'status', value: boolean | number) {

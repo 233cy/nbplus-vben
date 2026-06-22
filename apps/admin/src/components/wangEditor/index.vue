@@ -50,7 +50,7 @@ function initUppy() {
     id: 'wangEditorUppy',
     autoProceed: true,
     // 允许同一个文件多次上传，虽然我们下面通过自定义ID已经解决了，但加上这个双保险
-    onBeforeFileAdded: (currentFile, files) => {
+    onBeforeFileAdded: () => {
       return true;
     },
     restrictions: { maxNumberOfFiles: 20 },
@@ -123,7 +123,7 @@ const replacePlaceholder = (uniqueText: string, content: any, isError = false) =
   }
 };
 
-const customUploadHandler = (file: File, insertFn: any) => {
+const customUploadHandler = (file: File, _insertFn: any) => {
   if (!uppyRef.value) initUppy();
   const uppy = uppyRef.value!;
   const editor = editorRef.value;
@@ -173,7 +173,7 @@ const customUploadHandler = (file: File, insertFn: any) => {
     }
   };
 
-  const onUploadError = (uploadedFile: any, error: Error) => {
+  const onUploadError = (uploadedFile: any, _error: Error) => {
     if (uploadedFile.id === finalFileId) {
       replacePlaceholder(placeholderText, '[❌ 上传失败]', true);
       cleanup();

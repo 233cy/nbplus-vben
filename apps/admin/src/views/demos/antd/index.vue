@@ -288,7 +288,7 @@ const onShow = (type: any) => {
   verify.value.show();
 };
 
-const handleSuccess = (res: any) => {
+const handleSuccess = (_res: any) => {
   console.log('success');
 };
 </script>

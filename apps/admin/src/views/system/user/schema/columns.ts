@@ -1,4 +1,3 @@
-﻿import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { UserApi } from '#/api/system/user';
 
@@ -7,135 +6,20 @@ import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
 
-/** 新增/编辑表单 Schema */
-export function useFormSchema(isEdit = false): any {
-  return [
-    {
-      component: 'Input',
-      fieldName: 'username',
-      label: $t('system.user.fields.username'),
-      rules: 'required',
-    },
-    {
-      component: 'PasswordInput',
-      fieldName: 'password',
-      label: $t('system.user.fields.password'),
-      rules: isEdit ? undefined : 'required',
-    },
-    {
-      component: 'DictRadio',
-      fieldName: 'status',
-      label: $t('system.user.fields.status'),
-      rules: 'required',
-      componentProps: {
-        code: 'sys_user_status',
-      },
-    },
-    {
-      component: 'Input',
-      fieldName: 'nickname',
-      label: $t('system.user.fields.nickname'),
-      rules: 'required',
-    },
-    {
-      component: 'AvatarUpload',
-      fieldName: 'avatar',
-      label: $t('system.user.fields.avatar'),
-      componentProps: { isPrivate: 3 },
-    },
-    {
-      component: 'Input',
-      fieldName: 'email',
-      label: $t('system.user.fields.email'),
-    },
-    {
-      component: 'Input',
-      fieldName: 'phone',
-      label: $t('system.user.fields.phone'),
-    },
-    {
-      component: 'DictSelect',
-      fieldName: 'gender',
-      label: $t('system.user.fields.gender'),
-      componentProps: {
-        code: 'sys_user_gender',
-      },
-    },
-  ];
-}
-
-/** 列表搜索表单 Schema */
-export function useGridFormSchema(): VbenFormSchema[] {
-  return [
-    {
-      component: 'Input',
-      fieldName: 'keyword',
-      label: $t('common.keyword'),
-      componentProps: { allowClear: true, placeholder: $t('common.keywordPlaceholder') },
-    },
-    {
-      component: 'Input',
-      fieldName: 'username',
-      label: $t('system.user.fields.username'),
-      componentProps: { allowClear: true },
-    },
-    {
-      component: 'Input',
-      fieldName: 'nickname',
-      label: $t('system.user.fields.nickname'),
-      componentProps: { allowClear: true },
-    },
-    {
-      component: 'Input',
-      fieldName: 'email',
-      label: $t('system.user.fields.email'),
-      componentProps: { allowClear: true },
-    },
-    {
-      component: 'Input',
-      fieldName: 'phone',
-      label: $t('system.user.fields.phone'),
-      componentProps: { allowClear: true },
-    },
-    {
-      component: 'DictRadio',
-      fieldName: 'status',
-      label: $t('system.user.fields.status'),
-      componentProps: {
-        allowClear: true,
-        code: 'sys_user_status',
-      },
-    },
-    {
-      component: 'DictSelect',
-      fieldName: 'gender',
-      label: $t('system.user.fields.gender'),
-      componentProps: {
-        allowClear: true,
-        code: 'sys_user_gender',
-      },
-    },
-    {
-      component: 'RangePicker',
-      fieldName: 'lastLoginTime',
-      label: $t('system.user.fields.lastLoginTime'),
-      componentProps: { allowClear: true, showTime: true, valueFormat: 'X' },
-    },
-  ];
-}
-
-/** 列表列定义 */
+/**
+ * 用户列表列定义
+ */
 export function useColumns(
-  formDrawerApi: { open: () => void; setData: (data: any) => any },
+  onEditClick: (id: string) => Promise<void>,
+  onDetailClick: (id: string) => Promise<void>,
+  onOnlineClick: (row: UserApi.UserItem) => void,
   onRefresh: () => void,
-  onOnlineClick?: (row: UserApi.UserItem) => void,
-  onEditClick?: (id: string) => Promise<void>,
-  onDetailClick?: (id: string) => Promise<void>,
 ): VxeTableGridOptions['columns'] {
   const { hasAccessByCodes } = useAccess();
   const canDetail = hasAccessByCodes(['system:user:detail']);
   const canUpdate = hasAccessByCodes(['system:user:update']);
   const canDelete = hasAccessByCodes(['system:user:delete']);
+
   return [
     { type: 'checkbox', width: 50 },
     { field: 'id', title: 'ID', visible: false },
@@ -148,13 +32,7 @@ export function useColumns(
         name: 'CellLink',
         attrs: {
           hasAccess: canDetail,
-          onClick: async (row: UserApi.UserItem) => {
-            if (onDetailClick) {
-              await onDetailClick(row.id);
-            } else {
-              formDrawerApi.setData({ ...row, readonly: true }).open();
-            }
-          },
+          onClick: async (row: UserApi.UserItem) => onDetailClick(row.id),
         },
       },
     },
@@ -226,7 +104,8 @@ export function useColumns(
     {
       field: 'positionId',
       title: $t('system.user.fields.positionId'),
-      minWidth: 120,
+      minWidth: 140,
+      formatter: ({ row }: { row: UserApi.UserItem }) => row.positionName || '-',
     },
     {
       field: 'lastLoginIp',
@@ -243,13 +122,13 @@ export function useColumns(
     },
     {
       field: 'onlineCount',
-      title: '在线设备',
+      title: $t('system.user.fields.onlineCount'),
       width: 90,
       cellRender: {
         name: 'CellLink',
         attrs: {
           hasAccess: hasAccessByCodes(['system:user:online']),
-          onClick: (row: UserApi.UserItem) => onOnlineClick?.(row),
+          onClick: (row: UserApi.UserItem) => onOnlineClick(row),
         },
       },
     },
@@ -275,13 +154,7 @@ export function useColumns(
               text: $t('common.edit'),
               icon: 'lucide:pencil',
               access: canUpdate,
-              onClick: async (row: UserApi.UserItem) => {
-                if (onEditClick) {
-                  await onEditClick(row.id);
-                } else {
-                  formDrawerApi.setData(row).open();
-                }
-              },
+              onClick: async (row: UserApi.UserItem) => onEditClick(row.id),
             },
             {
               code: 'delete',

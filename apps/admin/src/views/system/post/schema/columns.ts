@@ -1,0 +1,114 @@
+import type { VxeTableGridOptions } from '#/adapter/vxe-table';
+import type { PostApi } from '#/api/system/post';
+
+import { deletePostApi } from '#/api/system/post';
+import { useAccess } from '#/composables/use-access';
+import { $t } from '#/locales';
+import { formatUnixTime } from '#/utils/time';
+
+/**
+ * 职务列表列定义
+ */
+export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailClick: (id: string) => Promise<void>, onRefresh: () => void): VxeTableGridOptions['columns'] {
+  const { hasAccessByCodes } = useAccess();
+  const canDetail = hasAccessByCodes(['system:post:detail']);
+  const canUpdate = hasAccessByCodes(['system:post:update']);
+  const canDelete = hasAccessByCodes(['system:post:delete']);
+
+  return [
+    { type: 'checkbox', width: 50 },
+    { field: 'id', title: 'ID', visible: false },
+    {
+      field: 'code',
+      title: $t('system.post.fields.code'),
+      minWidth: 120,
+      sortable: true,
+      cellRender: {
+        name: 'CellLink',
+        attrs: {
+          hasAccess: canDetail,
+          onClick: async (row: PostApi.PostItem) => onDetailClick(row.id),
+        },
+      },
+    },
+    {
+      field: 'name',
+      title: $t('system.post.fields.name'),
+      minWidth: 140,
+      sortable: true,
+    },
+    {
+      field: 'level',
+      title: $t('system.post.fields.level'),
+      width: 110,
+      sortable: true,
+    },
+    {
+      field: 'status',
+      title: $t('system.post.fields.status'),
+      width: 100,
+      sortable: true,
+      cellRender: {
+        name: 'CellDict',
+        props: { code: 'sys_post_status' },
+      },
+    },
+    {
+      field: 'sort',
+      title: $t('system.post.fields.sort'),
+      width: 100,
+      sortable: true,
+    },
+    {
+      field: 'remark',
+      title: $t('system.post.fields.remark'),
+      minWidth: 160,
+      showOverflow: 'tooltip',
+    },
+    {
+      field: 'createdAt',
+      title: $t('common.createdAt'),
+      formatter: ({ cellValue }: { cellValue: number }) => formatUnixTime(cellValue),
+      width: 160,
+      sortable: true,
+    },
+    {
+      field: 'updatedAt',
+      title: $t('common.updatedAt'),
+      formatter: ({ cellValue }: { cellValue: number }) => formatUnixTime(cellValue),
+      width: 160,
+      sortable: true,
+    },
+    {
+      align: 'center',
+      field: 'operation',
+      fixed: 'right',
+      title: $t('common.operation'),
+      width: 160,
+      cellRender: {
+        name: 'CellOperation',
+        attrs: {
+          onRefresh,
+          actions: [
+            {
+              code: 'edit',
+              text: $t('common.edit'),
+              icon: 'lucide:pencil',
+              access: canUpdate,
+              onClick: async (row: PostApi.PostItem) => onEditClick(row.id),
+            },
+            {
+              code: 'delete',
+              text: $t('common.delete'),
+              icon: 'lucide:trash-2',
+              actionType: 'delete',
+              labelField: 'name',
+              apiFn: deletePostApi,
+              access: canDelete,
+            },
+          ],
+        },
+      },
+    },
+  ];
+}

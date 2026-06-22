@@ -1,5 +1,6 @@
 {
   "pageTitle": "字典管理",
+  "dictList": "字典列表",
   "addDict": "新增字典",
   "addDictInGroup": "在此分组新增字典",
   "editDict": "编辑字典",
@@ -34,6 +35,24 @@
     "value": "字典值",
     "color": "标签颜色",
     "sort": "排序"
+  },
+  "color": {
+    "default": "默认",
+    "success": "成功",
+    "processing": "进行中",
+    "error": "错误",
+    "warning": "警告",
+    "magenta": "洋红",
+    "red": "红色",
+    "volcano": "火山",
+    "orange": "橙色",
+    "gold": "金色",
+    "lime": "青柠",
+    "green": "绿色",
+    "cyan": "青色",
+    "blue": "蓝色",
+    "geekblue": "极客蓝",
+    "purple": "紫色"
   },
   "defaultGroup": "默认分组",
   "placeholder": {

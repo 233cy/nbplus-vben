@@ -21,6 +21,14 @@ const modelValue = defineModel<null | number | number[] | string | string[] | un
 
 const { items, loading } = useDict(props.code);
 
+// antd Select 的 value 不接受 null，这里做一层转换
+const selectValue = computed({
+  get: () => (modelValue.value === null ? undefined : modelValue.value),
+  set: (val) => {
+    modelValue.value = val ?? null;
+  },
+});
+
 const options = computed(() => {
   const list = props.onlyEnabled === false ? items.value : items.value.filter((i) => i.status === 1);
   // valueType 明确指定时优先使用，否则根据 modelValue 当前类型推断
@@ -53,7 +61,7 @@ watch(loading, (isLoading) => {
 
 <template>
   <Select
-    v-model:value="modelValue"
+    v-model:value="selectValue"
     :options="options"
     :loading="loading"
     :placeholder="placeholder"

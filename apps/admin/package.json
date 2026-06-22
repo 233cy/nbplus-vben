@@ -51,9 +51,10 @@
     "crypto-js": "catalog:",
     "dayjs": "catalog:",
     "pinia": "catalog:",
+    "pinyin-pro": "^3.28.1",
     "vue": "catalog:",
     "vue-router": "catalog:",
-    "vuedraggable": "^4.1.0",
+    "vuedraggable": "catalog:",
     "xe-utils": "catalog:"
   },
   "devDependencies": {

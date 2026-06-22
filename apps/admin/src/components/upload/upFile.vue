@@ -153,7 +153,7 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
     message.success($t('upload.uploadSuccess', { name: file?.name }));
   });
 
-  instance.on('upload-error', (file, error, response) => {
+  instance.on('upload-error', (file, _error, response) => {
     const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
     if (target) {
       target.status = 'error';
@@ -321,7 +321,7 @@ async function handleDownload(file: UIFile) {
 <template>
   <a-upload
     :before-upload="handleBeforeUpload"
-    :file-list="uploadFiles"
+    :file-list="(uploadFiles as any)"
     :show-upload-list="{ showRemoveIcon: false, showDownloadIcon: false, showPreviewIcon: false }"
     :custom-request="() => {}"
   >

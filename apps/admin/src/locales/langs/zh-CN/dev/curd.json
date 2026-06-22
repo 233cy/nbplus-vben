@@ -1,5 +1,24 @@
 {
   "pageTitle": "CURD管理",
+  "generate": "生成代码",
+  "generateSuccess": "生成成功，共 {count} 个文件",
+  "createMenu": "生成菜单",
+  "menu": {
+    "title": "生成菜单",
+    "parent": "挂载到",
+    "parentPlaceholder": "选择父节点（不选则挂到顶级）",
+    "path": "菜单路由",
+    "pathPlaceholder": "/ 开头为绝对路径，否则拼在父节点后",
+    "parentFullPath": "父节点完整路由",
+    "preview": "最终路由",
+    "absolute": "（绝对路径）",
+    "relative": "（相对路径，拼在父节点后）",
+    "icon": "菜单图标",
+    "sort": "排序",
+    "hint": "将自动创建菜单节点及 查询 / 新增 / 编辑 / 删除 四个按钮权限。",
+    "root": "顶级",
+    "createSuccess": "菜单生成成功"
+  },
   "table": {
     "add": "新增表配置",
     "edit": "编辑表配置",
@@ -7,6 +26,7 @@
     "fields": {
       "title": "业务名称",
       "tableName": "数据库表名",
+      "dbConnection": "数据库连接",
       "module": "模块名",
       "className": "类名前缀",
       "routePrefix": "路由前缀",
@@ -27,14 +47,19 @@
     "sync": "从数据库同步",
     "syncConfirm": "同步将覆盖当前未保存的字段，确认继续？",
     "addField": "新增字段",
+    "saveFields": "保存字段",
+    "dictPlaceholder": "选择字典",
     "fields": {
       "columnName": "字段名",
       "columnType": "类型",
+      "component": "组件",
+      "dictCode": "字典",
       "label": "标签",
       "isList": "列表",
       "isSearch": "搜索",
       "isForm": "表单",
       "isRequired": "必填",
+      "isBatchUpdate": "批量改",
       "sort": "排序"
     },
     "columnType": {

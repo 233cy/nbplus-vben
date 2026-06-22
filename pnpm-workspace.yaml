@@ -144,6 +144,7 @@ catalog:
   ora: ^8.2.0
   pinia: ^3.0.4
   pinia-plugin-persistedstate: ^4.7.1
+  pinyin-pro: ^3.28.1
   pkg-types: ^2.3.0
   playwright: ^1.58.2
   postcss: ^8.5.6
@@ -204,6 +205,7 @@ catalog:
   vue-router: ^4.6.4
   vue-tippy: ^6.7.1
   vue-tsc: ^3.2.4
+  vuedraggable: ^4.1.0
   vxe-pc-ui: ^4.12.16
   vxe-table: ^4.17.46
   watermark-js-plus: ^1.6.3

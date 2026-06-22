@@ -44,6 +44,7 @@ export namespace AuthApi {
 
   /** MFA 发送验证码参数 */
   export interface MfaSendParams {
+    captcha: CaptchaPayload;
     mfaChannel: string;
     mfaTarget: string;
     username: string;

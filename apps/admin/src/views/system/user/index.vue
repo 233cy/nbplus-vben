@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import type { UserApi } from '#/api/system/user';
-
-import { ref } from 'vue';
-
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
 
@@ -14,9 +10,11 @@ import BatchActionDropdown from '#/components/table/BatchActionDropdown.vue';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
-import { useColumns, useGridFormSchema } from './data';
-import Form from './modules/form.vue';
-import Online from './modules/online.vue';
+import Form from './components/form.vue';
+import Online from './components/online.vue';
+import { useUser } from './composables/useUser';
+import { useColumns } from './schema/columns';
+import { useGridFormSchema } from './schema/grid';
 
 const { hasAccessByCodes } = useAccess();
 const canCreate = hasAccessByCodes(['system:user:create']);
@@ -27,16 +25,6 @@ const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
   destroyOnClose: true,
 });
-
-const onlineRef = ref<InstanceType<typeof Online>>();
-
-function onRefresh() {
-  gridApi.query();
-}
-
-function onOnlineClick(row: UserApi.UserItem) {
-  onlineRef.value?.open(row.id);
-}
 
 async function onEditClick(id: string) {
   const res = await getUserDetailApi(id);
@@ -57,7 +45,12 @@ const [Grid, gridApi] = useVbenVxeGrid({
     wrapperClass: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
   },
   gridOptions: {
-    columns: useColumns(formDrawerApi, onRefresh, onOnlineClick, onEditClick, onDetailClick),
+    columns: useColumns(
+      onEditClick,
+      onDetailClick,
+      row => user.onlineRef.value?.open(row.id),
+      () => user.onRefresh(),
+    ),
     height: 'auto',
     keepSource: true,
     proxyConfig: {
@@ -71,15 +64,13 @@ const [Grid, gridApi] = useVbenVxeGrid({
   },
 });
 
-function getSelectedIds(): string[] {
-  return (gridApi.grid?.getCheckboxRecords() as UserApi.UserItem[])?.map(r => r.id) ?? [];
-}
+const user = useUser(gridApi);
 </script>
 
 <template>
   <Page auto-content-height>
-    <FormDrawer @success="onRefresh" />
-    <Online ref="onlineRef" />
+    <FormDrawer @success="user.onRefresh" />
+    <Online ref="user.onlineRef" />
     <Grid :table-title="$t('system.user.pageTitle')">
       <template #toolbar-tools>
         <BatchActionDropdown
@@ -87,9 +78,9 @@ function getSelectedIds(): string[] {
           class="ml-2"
           type="direct"
           :action="$t('common.delete')"
-          :api-fn="ids => batchDeleteUserApi(ids)"
-          :get-ids="getSelectedIds"
-          :on-success="onRefresh"
+          :api-fn="(ids: string[]) => batchDeleteUserApi(ids)"
+          :get-ids="user.getSelectedIds"
+          :on-success="user.onRefresh"
         >
           <template #default="{ onClick }">
             <Button danger @click="onClick">
@@ -98,19 +89,21 @@ function getSelectedIds(): string[] {
             </Button>
           </template>
         </BatchActionDropdown>
+
         <BatchActionDropdown
           v-if="canBatchUpdate"
           class="ml-2 mr-2"
           type="multi"
           :action="$t('common.batchUpdate')"
           :api-fn="batchUpdateUserApi"
-          :get-ids="getSelectedIds"
-          :on-success="onRefresh"
+          :get-ids="user.getSelectedIds"
+          :on-success="user.onRefresh"
           :fields="[
             { fieldName: 'status', label: $t('system.user.fields.status'), dictCode: 'sys_user_status' },
             { fieldName: 'gender', label: $t('system.user.fields.gender'), dictCode: 'sys_user_gender' },
           ]"
         />
+
         <Button v-if="canCreate" type="primary" @click="formDrawerApi.setData({}).open()">
           <Plus class="size-5" />
           {{ $t('system.user.create') }}

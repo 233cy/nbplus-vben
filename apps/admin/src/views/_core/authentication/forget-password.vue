@@ -241,7 +241,7 @@ function goLogin() {
 
       <Form layout="vertical">
         <FormItem :label="$t('authentication.forgetPasswordPage.code')" :validate-status="codeError ? 'error' : ''" :help="codeError">
-          <Input v-model:value="code" :placeholder="$t('authentication.forgetPasswordPage.codePlaceholder')" size="large" maxlength="6" @change="codeError = ''" />
+          <Input v-model:value="code" :placeholder="$t('authentication.forgetPasswordPage.codePlaceholder')" size="large" :maxlength="6" @change="codeError = ''" />
         </FormItem>
       </Form>
 

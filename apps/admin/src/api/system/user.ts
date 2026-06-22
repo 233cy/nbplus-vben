@@ -1,4 +1,4 @@
-﻿import { requestClient } from '#/api/request';
+import { requestClient } from '#/api/request';
 
 export namespace UserApi {
   export interface UserItem {
@@ -12,7 +12,8 @@ export namespace UserApi {
     totpSecret: string;
     gender: string;
     deptId: number;
-    positionId: number;
+    positionId: string;
+    positionName: string;
     lastLoginIp: string;
     lastLoginTime: string;
     createdAt: number;
@@ -43,6 +44,7 @@ export namespace UserApi {
     email?: string;
     phone?: string;
     gender?: string;
+    positionId?: string;
   }
 
   export interface PageParams {
@@ -101,9 +103,6 @@ export function kickAllUserDevicesApi(id: string) {
   return requestClient.delete(`${BASE}/online-kick-all`, { data: { id } });
 }
 
-
 export function inlineUpdateUserApi(id: string, field: string, value: any) {
   return requestClient.put(`${BASE}/inline-update`, { id, field, value });
 }
-
-
