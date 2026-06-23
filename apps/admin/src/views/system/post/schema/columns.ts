@@ -69,7 +69,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
         attrs: {
           type: 'select',
           disabled: !canUpdate,
-          dictCode: 'sys_post_status',
+          dictCode: 'is_enable',
           apiFn: (id: string, field: string, value: any) => inlineUpdatePostApi(id, field, value),
         },
       },

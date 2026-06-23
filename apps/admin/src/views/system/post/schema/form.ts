@@ -66,7 +66,7 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
       rules: 'required',
       defaultValue: 1,
       componentProps: {
-        code: 'sys_post_status',
+        code: 'is_enable',
       },
     },
     {

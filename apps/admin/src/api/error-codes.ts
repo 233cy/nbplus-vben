@@ -58,6 +58,14 @@ export enum BizCode {
   /** 该联系方式尚未绑定 */
   PROFILE_CONTACT_NOT_BOUND = 30_021,
 
+  /* 角色管理 */
+  /** 角色编码不能为空 */
+  ROLE_CODE_REQUIRED = 40_600,
+  /** 角色编码已存在 */
+  ROLE_CODE_EXISTS = 40_601,
+  /** 角色不存在或已删除 */
+  ROLE_NOT_FOUND = 40_602,
+
   /* 个人中心 */
   /** 旧密码不正确 */
   PROFILE_OLD_PASSWORD_WRONG = 30_020,

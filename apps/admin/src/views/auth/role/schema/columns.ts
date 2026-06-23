@@ -1,0 +1,170 @@
+import type { VxeTableGridOptions } from '#/adapter/vxe-table';
+import type { RoleApi } from '#/api/system/role';
+
+import { h } from 'vue';
+
+import { deleteRoleApi, inlineUpdateRoleApi } from '#/api/system/role';
+import { useAccess } from '#/composables/use-access';
+import { $t } from '#/locales';
+import { formatUnixTime } from '#/utils/time';
+
+const dataScopeMap: Record<number, string> = {
+  1: 'auth.role.dataScope.all',
+  2: 'auth.role.dataScope.dept',
+  3: 'auth.role.dataScope.deptAndBelow',
+  4: 'auth.role.dataScope.self',
+  5: 'auth.role.dataScope.custom',
+};
+
+/**
+ * 角色列表列定义
+ */
+export function useColumns(
+  onEditClick: (id: string) => Promise<void>,
+  onDetailClick: (id: string) => Promise<void>,
+  onAssignMenus: (row: RoleApi.RoleItem) => void,
+  onAssignDataScope: (row: RoleApi.RoleItem) => void,
+  onRefresh: () => void,
+): VxeTableGridOptions['columns'] {
+  const { hasAccessByCodes } = useAccess();
+  const canDetail = hasAccessByCodes(['system:role:detail']);
+  const canUpdate = hasAccessByCodes(['system:role:update']);
+  const canDelete = hasAccessByCodes(['system:role:delete']);
+  const canAssignMenus = hasAccessByCodes(['system:role:assignMenus']);
+  const canAssignDataScope = hasAccessByCodes(['system:role:assignDataScope']);
+
+  return [
+    { type: 'checkbox', width: 50 },
+    { field: 'id', title: 'ID', visible: false },
+    {
+      field: 'code',
+      title: $t('auth.role.fields.code'),
+      minWidth: 140,
+      sortable: true,
+      cellRender: {
+        name: 'CellLink',
+        attrs: {
+          hasAccess: canDetail,
+          onClick: async (row: RoleApi.RoleItem) => onDetailClick(row.id),
+        },
+      },
+    },
+    {
+      field: 'name',
+      title: $t('auth.role.fields.name'),
+      minWidth: 160,
+      sortable: true,
+      cellRender: {
+        name: 'CellInlineEdit',
+        attrs: {
+          type: 'input',
+          disabled: !canUpdate,
+          apiFn: (id: string, field: string, value: any) => inlineUpdateRoleApi(id, field, value),
+        },
+      },
+    },
+    {
+      field: 'dataScope',
+      title: $t('auth.role.fields.dataScope'),
+      minWidth: 160,
+      slots: {
+        default: ({ row }: any) => h('span', $t(dataScopeMap[row.dataScope] || 'auth.role.dataScope.all')),
+      },
+    },
+    {
+      field: 'status',
+      title: $t('auth.role.fields.status'),
+      width: 100,
+      cellRender: {
+        name: 'CellInlineEdit',
+        attrs: {
+          type: 'select',
+          dictCode: 'is_enable',
+          disabled: !canUpdate,
+          apiFn: (id: string, field: string, value: any) => inlineUpdateRoleApi(id, field, value),
+        },
+      },
+    },
+    {
+      field: 'sort',
+      title: $t('auth.role.fields.sort'),
+      width: 100,
+      sortable: true,
+      cellRender: {
+        name: 'CellInlineEdit',
+        attrs: {
+          type: 'number',
+          disabled: !canUpdate,
+          apiFn: (id: string, field: string, value: any) => inlineUpdateRoleApi(id, field, value),
+        },
+      },
+    },
+    {
+      field: 'remark',
+      title: $t('auth.role.fields.remark'),
+      minWidth: 180,
+      showOverflow: 'tooltip',
+    },
+    {
+      field: 'createdAt',
+      title: $t('common.createdAt'),
+      formatter: ({ cellValue }: { cellValue: number }) => formatUnixTime(cellValue),
+      width: 160,
+      sortable: true,
+    },
+    {
+      field: 'updatedAt',
+      title: $t('common.updatedAt'),
+      formatter: ({ cellValue }: { cellValue: number }) => formatUnixTime(cellValue),
+      width: 160,
+      sortable: true,
+    },
+    {
+      align: 'center',
+      field: 'operation',
+      fixed: 'right',
+      title: $t('common.operation'),
+      width: 140,
+      cellRender: {
+        name: 'CellOperation',
+        attrs: {
+          onRefresh,
+          maxVisible: 2,
+          iconOnly: true,
+          actions: [
+            {
+              code: 'edit',
+              text: $t('common.edit'),
+              icon: 'lucide:pencil',
+              access: canUpdate,
+              onClick: async (row: RoleApi.RoleItem) => onEditClick(row.id),
+            },
+            {
+              code: 'delete',
+              text: $t('common.delete'),
+              icon: 'lucide:trash-2',
+              actionType: 'delete',
+              labelField: 'name',
+              apiFn: deleteRoleApi,
+              access: canDelete,
+            },
+            {
+              code: 'assignMenus',
+              text: $t('auth.role.assignMenus'),
+              icon: 'lucide:shield',
+              access: canAssignMenus,
+              onClick: (row: RoleApi.RoleItem) => onAssignMenus(row),
+            },
+            {
+              code: 'assignDataScope',
+              text: $t('auth.role.assignDataScope'),
+              icon: 'lucide:database',
+              access: canAssignDataScope,
+              onClick: (row: RoleApi.RoleItem) => onAssignDataScope(row),
+            },
+          ],
+        },
+      },
+    },
+  ];
+}

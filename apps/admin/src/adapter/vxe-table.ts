@@ -10,7 +10,7 @@ import { setupVbenVxeTable, useVbenVxeGrid as useGrid } from '@vben/plugins/vxe-
 import { get, isFunction } from '@vben/utils';
 
 import { objectOmit } from '@vueuse/core';
-import { Button, Image, Popconfirm, Switch, Tag } from 'ant-design-vue';
+import { Button, Dropdown, Image, Menu, MenuItem, Popconfirm, Switch, Tag } from 'ant-design-vue';
 
 import DictTag from '#/components/dict/DictTag.vue';
 import ImgPreview from '#/components/imgPreview/index.vue';
@@ -173,16 +173,22 @@ setupVbenVxeTable({
 
     /**
      * 注册表格的操作按钮渲染器
-     * 用法：cellRender: { name: 'CellOperation', attrs: { actions: [...], onRefresh } }
+     * 用法：cellRender: { name: 'CellOperation', attrs: { actions: [...], onRefresh, maxVisible, iconOnly } }
      * actions 每项：{ code, text, icon?, actionType?, access?, onClick?, apiFn?, labelField? }
      * actionType:
      *   'default'  → 普通按钮，直接触发 onClick（默认）
      *   'confirm'  → 带 Popconfirm 确认框，确认后触发 onClick
      *   'delete'   → 内置删除：自动调用 useTableDelete(apiFn, row.id, row[labelField], onRefresh)
+     * maxVisible:
+     *   超过该数量时，后续操作折叠到「更多」下拉菜单中，避免操作列过宽或按钮被截断
+     * iconOnly:
+     *   为 true 时，操作按钮只显示图标（带 title 提示），用于文字过多导致换行的场景
      */
     vxeUI.renderer.add('CellOperation', {
       renderTableDefault({ attrs }, { row }) {
         const onRefresh: () => void = attrs?.onRefresh ?? (() => {});
+        const maxVisible: number = attrs?.maxVisible ?? 0;
+        const iconOnly: boolean = attrs?.iconOnly ?? false;
 
         const actions: Array<Recordable<any>> = (attrs?.actions ?? [])
           .filter((a: Recordable<any>) => a.access !== false)
@@ -191,12 +197,14 @@ setupVbenVxeTable({
             text: isFunction(a.text) ? a.text(row) : a.text,
           }));
 
-        function renderBtn(action: Recordable<any>, onClick?: () => void) {
+        function renderBtn(action: Recordable<any>, onClick?: () => void, forceIconOnly = false) {
+          const showIconOnly = forceIconOnly || iconOnly;
           return h(
             Button,
             {
               danger: action.actionType === 'confirm' || action.actionType === 'delete',
               size: 'small',
+              title: action.text,
               type: 'link',
               onClick: onClick ?? (() => action.onClick?.(row)),
             },
@@ -204,7 +212,7 @@ setupVbenVxeTable({
               default: () => {
                 const nodes = [];
                 if (action.icon) nodes.push(h(IconifyIcon, { class: 'size-4', icon: action.icon }));
-                nodes.push(action.text);
+                if (!showIconOnly) nodes.push(action.text);
                 return nodes;
               },
             },
@@ -240,6 +248,55 @@ setupVbenVxeTable({
           return renderBtn(action, () => useTableDelete(action.apiFn, row.id, label, onRefresh));
         }
 
+        function handleAction(action: Recordable<any>) {
+          const type = action.actionType ?? 'default';
+          if (type === 'delete') {
+            const label = row[action.labelField ?? 'name'] ?? '';
+            useTableDelete(action.apiFn, row.id, label, onRefresh);
+          } else {
+            action.onClick?.(row);
+          }
+        }
+
+        function renderDropdownMenu(moreActions: Recordable<any>[]) {
+          return h(
+            Dropdown,
+            {},
+            {
+              default: () =>
+                h(
+                  Button,
+                  { size: 'small', type: 'link' },
+                  { default: () => h(IconifyIcon, { class: 'size-4', icon: 'lucide:ellipsis' }) },
+                ),
+              overlay: () =>
+                h(
+                  Menu,
+                  {},
+                  {
+                    default: () =>
+                      moreActions.map(action =>
+                        h(
+                          MenuItem,
+                          { key: action.code, onClick: () => handleAction(action) },
+                          {
+                            default: () => {
+                              const nodes = [];
+                              if (action.icon) {
+                                nodes.push(h(IconifyIcon, { class: 'mr-1 size-4', icon: action.icon }));
+                              }
+                              nodes.push(action.text);
+                              return nodes;
+                            },
+                          },
+                        ),
+                      ),
+                  },
+                ),
+            },
+          );
+        }
+
         // 按 actionType 分发渲染器，后续扩展直接在此 map 里新增
         const actionRenderers: Record<string, (action: Recordable<any>) => any> = {
           default: a => renderBtn(a),
@@ -247,13 +304,20 @@ setupVbenVxeTable({
           delete: a => renderDelete(a),
         };
 
-        const btns = actions.map(a => {
+        const visibleActions = maxVisible > 0 && actions.length > maxVisible ? actions.slice(0, maxVisible) : actions;
+        const moreActions = maxVisible > 0 && actions.length > maxVisible ? actions.slice(maxVisible) : [];
+
+        const btns = visibleActions.map(a => {
           const type = a.actionType ?? 'default';
           const render = actionRenderers[type] ?? actionRenderers.default;
           return render?.(a);
         });
 
-        return h('div', { class: 'flex items-center justify-center gap-1' }, btns);
+        if (moreActions.length > 0) {
+          btns.push(renderDropdownMenu(moreActions));
+        }
+
+        return h('div', { class: 'flex items-center justify-center gap-1 flex-wrap' }, btns);
       },
     });
 

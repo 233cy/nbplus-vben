@@ -1,0 +1,61 @@
+{
+  "pageTitle": "角色管理",
+  "create": "新增角色",
+  "edit": "编辑角色",
+  "detail": "查看角色",
+  "assignMenus": "分配菜单权限",
+  "assignDataScope": "分配数据权限",
+  "fields": {
+    "id": "ID",
+    "code": "角色编码",
+    "name": "角色名称",
+    "dataScope": "数据权限",
+    "status": "角色状态",
+    "sort": "显示顺序",
+    "remark": "备注",
+    "menuPermissions": "菜单权限",
+    "dataScopeCustom": "自定义部门"
+  },
+  "placeholders": {
+    "code": "请输入角色编码，如 admin、manager",
+    "name": "请输入角色名称，如系统管理员、普通用户",
+    "sort": "数值越大越靠前",
+    "remark": "请输入备注信息"
+  },
+  "dataScope": {
+    "all": "全部数据",
+    "dept": "本部门数据",
+    "deptAndBelow": "本部门及以下数据",
+    "self": "仅本人数据",
+    "custom": "自定义数据"
+  },
+  "permission": {
+    "title": "分配菜单权限",
+    "expandAll": "展开全部",
+    "collapseAll": "收起全部",
+    "checkAll": "全部勾选",
+    "uncheckAll": "全部取消",
+    "checkCatalog": "勾选目录",
+    "checkMenu": "勾选菜单",
+    "checkButton": "勾选按钮",
+    "selectedCount": "已选 {count} 项"
+  },
+  "dataScopeModal": {
+    "title": "分配数据权限",
+    "scopeLabel": "数据范围",
+    "deptPlaceholder": "请选择自定义部门",
+    "expandAll": "展开全部",
+    "collapseAll": "收起全部",
+    "checkAll": "全部勾选",
+    "uncheckAll": "全部取消"
+  },
+  "msg": {
+    "CREATE_SUCCESS": "角色创建成功",
+    "UPDATE_SUCCESS": "角色更新成功",
+    "DELETE_SUCCESS": "角色删除成功",
+    "BATCH_DELETE_SUCCESS": "批量删除角色成功",
+    "BATCH_UPDATE_SUCCESS": "批量更新角色成功",
+    "ASSIGN_MENUS_SUCCESS": "菜单权限分配成功",
+    "ASSIGN_DATA_SCOPE_SUCCESS": "数据权限分配成功"
+  }
+}
