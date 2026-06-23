@@ -9,6 +9,8 @@ const props = defineProps<{
   allowClear?: boolean;
   code: string;
   disabled?: boolean;
+  /** 下拉菜单是否与选择器等宽，默认 true；传 false 时按选项内容撑开 */
+  dropdownMatchSelectWidth?: boolean | number;
   multiple?: boolean;
   /** 是否只显示启用的字典项，默认 true */
   onlyEnabled?: boolean;
@@ -24,18 +26,18 @@ const { items, loading } = useDict(props.code);
 // antd Select 的 value 不接受 null，这里做一层转换
 const selectValue = computed({
   get: () => (modelValue.value === null ? undefined : modelValue.value),
-  set: (val) => {
+  set: val => {
     modelValue.value = val ?? null;
   },
 });
 
 const options = computed(() => {
-  const list = props.onlyEnabled === false ? items.value : items.value.filter((i) => i.status === 1);
+  const list = props.onlyEnabled === false ? items.value : items.value.filter(i => i.status === 1);
   // valueType 明确指定时优先使用，否则根据 modelValue 当前类型推断
   const asNumber =
     props.valueType === 'number' ||
     (props.valueType !== 'string' && (typeof modelValue.value === 'number' || (Array.isArray(modelValue.value) && typeof modelValue.value[0] === 'number')));
-  return list.map((i) => ({
+  return list.map(i => ({
     label: i.label,
     value: asNumber ? Number(i.value) : i.value,
     color: i.color,
@@ -46,7 +48,7 @@ const options = computed(() => {
  * options 加载完成后，如果 modelValue 已有值，强制触发一次重新赋值
  * 解决：setValues 比字典加载先完成时，Select 拿到 value 但 options 为空导致反显失败
  */
-watch(loading, (isLoading) => {
+watch(loading, isLoading => {
   if (!isLoading && modelValue.value !== null && modelValue.value !== undefined) {
     const current = modelValue.value;
     nextTick(() => {
@@ -66,6 +68,7 @@ watch(loading, (isLoading) => {
     :loading="loading"
     :placeholder="placeholder"
     :allow-clear="allowClear ?? true"
+    :dropdown-match-select-width="dropdownMatchSelectWidth ?? false"
     :mode="multiple ? 'multiple' : undefined"
     :disabled="disabled"
     option-filter-prop="label"
