@@ -118,7 +118,7 @@ function onTypeChange() {
             <Input v-model:value="form.name" placeholder="如：SystemUser" />
           </FormItem>
           <FormItem :label="$t('dev.menu.fields.path')" required>
-            <Input v-model:value="form.path" placeholder="如：/system/user" />
+            <Input v-model:value="form.path" placeholder="如：/org/user" />
           </FormItem>
         </div>
 

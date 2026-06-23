@@ -68,6 +68,7 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
         labelField: 'name',
         valueField: 'id',
         allowClear: true,
+        dropdownMatchSelectWidth: false,
       },
     },
   ];
