@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { RoleApi } from '#/api/system/role';
+import type { RoleApi } from '#/api/auth/role';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { createRoleApi, getRoleDetailApi, updateRoleApi } from '#/api/system/role';
+import { createRoleApi, getRoleDetailApi, updateRoleApi } from '#/api/auth/role';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
@@ -15,7 +15,7 @@ import { useFormSchema } from '../schema/form';
 const emit = defineEmits<{ success: [] }>();
 
 const { hasAccessByCodes } = useAccess();
-const canUpdate = computed(() => hasAccessByCodes(['system:role:update']));
+const canUpdate = computed(() => hasAccessByCodes(['auth:role:update']));
 const rowId = ref<string | undefined>();
 const isReadonly = ref(false);
 const isEdit = computed(() => !!rowId.value);

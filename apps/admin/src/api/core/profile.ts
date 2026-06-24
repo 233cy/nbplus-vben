@@ -92,19 +92,19 @@ export async function getProfileInfoApi() {
 }
 
 export async function updateProfileApi(data: ProfileApi.UpdateProfileParams) {
-  return requestClient.post<ProfileApi.UpdateProfileResult>('/admin/profile/update', data);
+  return requestClient.put<ProfileApi.UpdateProfileResult>('/admin/profile/update', data);
 }
 
 export async function changePasswordApi(data: ProfileApi.ChangePasswordParams) {
-  return requestClient.post('/admin/profile/change-password', data);
+  return requestClient.put('/admin/profile/change-password', data);
 }
 
 export async function bindContactApi(data: ProfileApi.BindContactParams) {
-  return requestClient.post<ProfileApi.ProfileInfo>('/admin/profile/bind-contact', data);
+  return requestClient.put<ProfileApi.ProfileInfo>('/admin/profile/bind-contact', data);
 }
 
 export async function unbindContactApi(data: ProfileApi.UnbindContactParams) {
-  return requestClient.post<ProfileApi.ProfileInfo>('/admin/profile/unbind-contact', data);
+  return requestClient.delete<ProfileApi.ProfileInfo>('/admin/profile/unbind-contact', { data });
 }
 
 export async function sendContactCodeApi(data: { captcha: { token: string; type: string }; channel: 'email' | 'sms'; target: string }) {
@@ -112,11 +112,11 @@ export async function sendContactCodeApi(data: { captcha: { token: string; type:
 }
 
 export async function totpGenerateApi() {
-  return requestClient.post<ProfileApi.TotpGenerateResult>('/admin/profile/totp/generate');
+  return requestClient.get<ProfileApi.TotpGenerateResult>('/admin/profile/totp/generate');
 }
 
 export async function totpBindApi(data: ProfileApi.TotpBindParams) {
-  return requestClient.post<ProfileApi.ProfileInfo>('/admin/profile/totp/bind', data);
+  return requestClient.put<ProfileApi.ProfileInfo>('/admin/profile/totp/bind', data);
 }
 
 export async function totpUnbindApi(data: ProfileApi.TotpUnbindParams) {

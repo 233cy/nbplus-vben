@@ -1,4 +1,4 @@
-import type { RoleApi } from '#/api/system/role';
+import type { RoleApi } from '#/api/auth/role';
 
 /**
  * useRole - 角色管理页面表格操作逻辑

@@ -5,7 +5,7 @@ import { IconifyIcon, Plus } from '@vben/icons';
 import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { batchDeleteRoleApi, batchUpdateRoleApi, getRoleDetailApi, getRoleListApi } from '#/api/system/role';
+import { batchDeleteRoleApi, batchUpdateRoleApi, getRoleDetailApi, getRoleListApi } from '#/api/auth/role';
 import BatchActionDropdown from '#/components/table/BatchActionDropdown.vue';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
@@ -18,9 +18,9 @@ import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
 
 const { hasAccessByCodes } = useAccess();
-const canCreate = hasAccessByCodes(['system:role:create']);
-const canBatchDelete = hasAccessByCodes(['system:role:batchDelete']);
-const canBatchUpdate = hasAccessByCodes(['system:role:batchUpdate']);
+const canCreate = hasAccessByCodes(['auth:role:create']);
+const canBatchDelete = hasAccessByCodes(['auth:role:batchDelete']);
+const canBatchUpdate = hasAccessByCodes(['auth:role:batchUpdate']);
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,

@@ -1,5 +1,5 @@
 export * from '../dev/curdAdmin';
-export * from '../dev/menuAdmin';
+export * from '../auth/menuAdmin';
 export * from '../system/captchaDriver';
 export * from '../system/config';
 export * from './auth';

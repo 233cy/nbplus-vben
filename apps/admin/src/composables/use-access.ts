@@ -5,7 +5,7 @@ import { useAccessStore } from '@vben/stores';
  * 扩展版 useAccess，在原版基础上支持通配符权限码
  * - *:*:*  → 所有权限通过
  * - system:*:* → system 模块下所有权限通过
- * - system:user:* → system:user 下所有操作通过
+ * - org:user:* → org:user 下所有操作通过
  */
 export function useAccess() {
   const base = _useAccess();

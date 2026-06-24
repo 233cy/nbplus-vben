@@ -4,7 +4,7 @@ import { ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { reorderConfigApi } from '#/api/system/config';
+import { sortConfigApi } from '#/api/system/config';
 import { $t } from '#/locales';
 
 export interface SortTreeNode {
@@ -76,7 +76,7 @@ export function useConfigSort(options: UseConfigSortOptions) {
         id: node.key,
         sort: (idx + 1) * 5,
       }));
-      await reorderConfigApi(items);
+      await sortConfigApi(items);
       message.success($t('system.config.sortSuccess'));
       sortModalVisible.value = false;
       await onSuccess();

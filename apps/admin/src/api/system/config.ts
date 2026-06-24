@@ -77,8 +77,8 @@ export function updateConfigApi(data: ConfigApi.UpdateParams) {
   return requestClient.put<ConfigApi.ConfigItem>('/admin/system/config/update', data);
 }
 
-export function reorderConfigApi(items: { id: string; sort: number }[]) {
-  return requestClient.put('/admin/system/config/reorder', { items });
+export function sortConfigApi(items: { id: string; sort: number }[]) {
+  return requestClient.put('/admin/system/config/sort', { items });
 }
 
 export function toggleConfigApi(id: string, field: 'isPublic' | 'isSys') {

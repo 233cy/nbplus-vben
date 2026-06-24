@@ -1,12 +1,12 @@
 import type { CurdAdminApi } from '#/api/dev/curdAdmin';
-import type { MenuAdminApi } from '#/api/dev/menuAdmin';
+import type { MenuAdminApi } from '#/api/auth/menuAdmin';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
 import { createCurdMenuApi } from '#/api/dev/curdAdmin';
-import { getMenuListApi } from '#/api/dev/menuAdmin';
+import { getMenuListApi } from '#/api/auth/menuAdmin';
 import { $t } from '#/locales';
 
 import { buildMenuPath, createDefaultMenuForm } from '../data';

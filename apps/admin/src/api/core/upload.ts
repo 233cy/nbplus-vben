@@ -28,7 +28,7 @@ export function getTusFileInfo(data: uploadType.getTusFileInfo) {
 }
 
 export function deleteOssFile(data: uploadType.deleteOssFile) {
-  return requestClient.delete(`/admin/file/del`, { params: data });
+  return requestClient.delete(`/admin/file/delete`, { params: data });
 }
 
 /**
@@ -37,7 +37,7 @@ export function deleteOssFile(data: uploadType.deleteOssFile) {
  */
 export function pathToFullUrlApi(logicalPath: string | string[]) {
   const paths = Array.isArray(logicalPath) ? logicalPath.join(',') : logicalPath;
-  return requestClient.get<Record<string, string>>('/admin/file/pathToFullUrl', {
+  return requestClient.get<Record<string, string>>('/admin/file/path-to-full-url', {
     params: { logicalPath: paths },
   });
 }

@@ -1,9 +1,9 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { RoleApi } from '#/api/system/role';
+import type { RoleApi } from '#/api/auth/role';
 
 import { h } from 'vue';
 
-import { deleteRoleApi, inlineUpdateRoleApi } from '#/api/system/role';
+import { deleteRoleApi, inlineUpdateRoleApi } from '#/api/auth/role';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
@@ -27,11 +27,11 @@ export function useColumns(
   onRefresh: () => void,
 ): VxeTableGridOptions['columns'] {
   const { hasAccessByCodes } = useAccess();
-  const canDetail = hasAccessByCodes(['system:role:detail']);
-  const canUpdate = hasAccessByCodes(['system:role:update']);
-  const canDelete = hasAccessByCodes(['system:role:delete']);
-  const canAssignMenus = hasAccessByCodes(['system:role:assignMenus']);
-  const canAssignDataScope = hasAccessByCodes(['system:role:assignDataScope']);
+  const canDetail = hasAccessByCodes(['auth:role:detail']);
+  const canUpdate = hasAccessByCodes(['auth:role:update']);
+  const canDelete = hasAccessByCodes(['auth:role:delete']);
+  const canAssignMenus = hasAccessByCodes(['auth:role:assignMenus']);
+  const canAssignDataScope = hasAccessByCodes(['auth:role:assignDataScope']);
 
   return [
     { type: 'checkbox', width: 50 },
