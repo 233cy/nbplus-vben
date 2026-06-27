@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 import { IconPicker, Page } from '@vben/common-ui';
 import { IconifyIcon, SvgBellIcon } from '@vben/icons';
@@ -9,6 +9,28 @@ import { message, notification } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import { getExampleTableApi } from '#/api/examples';
+import { requestClient } from '#/api/request';
+import RichTextView from '#/components/rich-text-view/index.vue';
+import { useSiteStore } from '#/store';
+
+import PreferencesShowcase from './components/preferences-showcase.vue';
+
+/* 富文本展示测试：调取系统参数 site.logotest（入库为 data-logical 形态，readonly 组件自动 rehydrate 渲染） */
+const siteStore = useSiteStore();
+const logoTestHtml = computed(() => siteStore.get('site.logotest', ''));
+onMounted(() => {
+  // 公开配置一般已在路由守卫中加载；为演示稳妥，未加载则补拉一次
+  if (Object.keys(siteStore.config).length === 0) siteStore.fetchPublicConfig();
+});
+
+/* 富文本「服务端处理」演示：后端 RichTextService::render() 处理后直接返回可渲染 HTML（模拟小程序/App 消费） */
+const serverRaw = ref('');
+const serverRendered = ref('');
+onMounted(async () => {
+  const res = await requestClient.get<{ raw: string; rendered: string }>('/demo/rich-text');
+  serverRaw.value = res.raw;
+  serverRendered.value = res.rendered;
+});
 
 type NotificationType = 'error' | 'info' | 'success' | 'warning';
 
@@ -281,20 +303,26 @@ const [BaseForm] = useVbenForm({
 /* 验证器 */
 const verify = ref<any>(null);
 const captchaType = ref('blockPuzzle');
-const avatar = ref('');
+
+/* 上传演示绑定值（均存储逻辑路径 logicalPath） */
+const avatar = ref(''); // 头像
+const singleImg = ref(''); // 单张图片
+const multiImg = ref(''); // 多张图片（逗号分隔的逻辑路径）
+const singleMedia = ref(''); // 单个媒体（音视频）
+const multiMedia = ref(''); // 多个媒体（逗号分隔的逻辑路径）
 
 const onShow = (type: any) => {
   captchaType.value = type;
   verify.value.show();
 };
 
-const handleSuccess = (_res: any) => {
-  console.log('success');
-};
+const handleSuccess = (_res: any) => {};
 </script>
 
 <template>
   <Page description="支持多语言，主题功能集成切换等" title="Ant Design Vue组件使用演示">
+    <PreferencesShowcase />
+
     <a-card class="mb-5" title="按钮">
       <a-space>
         <a-button>Default</a-button>
@@ -320,11 +348,94 @@ const handleSuccess = (_res: any) => {
       </a-space>
     </a-card>
 
+    <a-card class="mb-5" title="富文本展示测试（这里调取的是系统参数的富文本）">
+      <div class="mb-1 text-xs text-gray-500">系统参数 key：site.logotest —— 入库原始形态（data-logical）</div>
+      <pre class="mb-3 max-h-40 overflow-auto rounded-md border border-border bg-muted p-2 text-xs">{{ logoTestHtml || '（该系统参数为空或未配置）' }}</pre>
+      <div class="mb-1 text-xs text-gray-500">↓ 前端处理：RichTextView 组件前端 rehydrate 后用统一样式渲染</div>
+      <RichTextView :html="logoTestHtml" rehydrate />
+    </a-card>
+
+    <a-card class="mb-5" title="富文本展示测试（服务端 RichTextService::render 处理）">
+      <div class="mb-1 text-xs text-gray-500">后端接口：GET /demo/rich-text —— 模拟小程序/App 消费方式</div>
+      <div class="mb-1 text-xs text-gray-500">① 后端读到的入库原始形态（data-logical）</div>
+      <pre class="mb-3 max-h-32 overflow-auto rounded-md border border-border bg-muted p-2 text-xs">{{ serverRaw || '（加载中…）' }}</pre>
+      <div class="mb-1 text-xs text-gray-500">② 后端 render() 输出（rehydrate 还原 fullUrl + sanitize 安全清洗后的 ready HTML）</div>
+      <pre class="mb-3 max-h-32 overflow-auto rounded-md border border-border bg-muted p-2 text-xs">{{ serverRendered || '（加载中…）' }}</pre>
+      <div class="mb-1 text-xs text-gray-500">③ 服务端处理：同一个 RichTextView 组件渲染（不 rehydrate，直接吃后端结果）</div>
+      <RichTextView :html="serverRendered" />
+    </a-card>
+
     <a-card class="mb-5" title="上传插件">
-      <UpFile :is-private="2" />
-      <UpFile :is-private="1" />
-      <div>
-        <UpAvatar v-model="avatar" />
+      <!-- 头像上传：内置裁剪，圆形 / 方形两种形状 -->
+      <a-divider orientation="left">头像上传（UpAvatar）</a-divider>
+      <div class="flex flex-wrap items-start gap-8">
+        <div>
+          <div class="mb-2 text-xs text-gray-500">圆形 · 公开资源（public）</div>
+          <UpAvatar v-model="avatar" access-type="public" shape="circle" />
+        </div>
+        <div>
+          <div class="mb-2 text-xs text-gray-500">方形 · 登录可见（login）</div>
+          <UpAvatar v-model="avatar" access-type="login" shape="square" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="mb-1 text-xs text-gray-500">v-model（logicalPath）：</div>
+          <pre class="max-h-24 overflow-auto rounded-md border border-border bg-muted p-2 text-xs">{{ avatar || '（未上传）' }}</pre>
+        </div>
+      </div>
+
+      <!-- 图片上传：单张 / 多张 -->
+      <a-divider orientation="left">图片上传（UpImg）</a-divider>
+      <div class="flex flex-wrap items-start gap-8">
+        <div>
+          <div class="mb-2 text-xs text-gray-500">单张 · 公开资源（public）</div>
+          <UpImg v-model="singleImg" access-type="public" />
+        </div>
+        <div>
+          <div class="mb-2 text-xs text-gray-500">多张（最多 5 张）· 登录可见（login）</div>
+          <UpImg v-model="multiImg" access-type="login" multiple :max-count="5" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="mb-1 text-xs text-gray-500">单张 v-model：</div>
+          <pre class="mb-2 max-h-24 overflow-auto rounded-md border border-border bg-muted p-2 text-xs">{{ singleImg || '（未上传）' }}</pre>
+          <div class="mb-1 text-xs text-gray-500">多张 v-model：</div>
+          <pre class="max-h-24 overflow-auto rounded-md border border-border bg-muted p-2 text-xs">{{ multiImg || '（未上传）' }}</pre>
+        </div>
+      </div>
+
+      <!-- 文件上传：大文件走 TUS 断点续传，小文件走 XHR；演示三种访问类型 -->
+      <a-divider orientation="left">文件上传（UpFile · 大文件自动断点续传）</a-divider>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div>
+          <div class="mb-2 text-xs text-gray-500">公开资源（public）</div>
+          <UpFile access-type="public" />
+        </div>
+        <div>
+          <div class="mb-2 text-xs text-gray-500">登录可见（login）</div>
+          <UpFile access-type="login" />
+        </div>
+        <div>
+          <div class="mb-2 text-xs text-gray-500">私有资源（authorized）</div>
+          <UpFile access-type="authorized" />
+        </div>
+      </div>
+
+      <!-- 媒体上传：音视频，内联缩略 + 播放 -->
+      <a-divider orientation="left">媒体上传（UpMedia · 音视频内联播放）</a-divider>
+      <div class="flex flex-wrap items-start gap-8">
+        <div>
+          <div class="mb-2 text-xs text-gray-500">单个 · 公开资源（public）</div>
+          <UpMedia v-model="singleMedia" access-type="public" />
+        </div>
+        <div>
+          <div class="mb-2 text-xs text-gray-500">多个（最多 5 个）· 登录可见（login）</div>
+          <UpMedia v-model="multiMedia" access-type="login" multiple :max-count="5" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="mb-1 text-xs text-gray-500">单个 v-model：</div>
+          <pre class="mb-2 max-h-24 overflow-auto rounded-md border border-border bg-muted p-2 text-xs">{{ singleMedia || '（未上传）' }}</pre>
+          <div class="mb-1 text-xs text-gray-500">多个 v-model：</div>
+          <pre class="max-h-24 overflow-auto rounded-md border border-border bg-muted p-2 text-xs">{{ multiMedia || '（未上传）' }}</pre>
+        </div>
       </div>
     </a-card>
 

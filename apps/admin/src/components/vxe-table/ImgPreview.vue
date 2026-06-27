@@ -5,7 +5,7 @@ import { IconifyIcon } from '@vben/icons';
 
 import { Image } from 'ant-design-vue';
 
-import { pathsToFullUrlMap } from '#/utils/upload';
+import { resolveLogicalPaths } from '#/api/core/upload';
 
 const props = defineProps<{
   /** 逻辑路径，字符串（逗号分隔）或数组 */
@@ -25,20 +25,20 @@ async function resolve(raw: null | string | string[] | undefined) {
     ? raw.filter(Boolean)
     : String(raw)
         .split(',')
-        .map((s) => s.trim())
+        .map(s => s.trim())
         .filter(Boolean);
   if (paths.length === 0) {
     urls.value = [];
     return;
   }
-  const map = await pathsToFullUrlMap(paths);
-  urls.value = paths.map((p) => map[p] || p);
+  const map = await resolveLogicalPaths(paths);
+  urls.value = paths.map(p => map[p] || p);
 }
 
 onMounted(() => resolve(props.value));
 watch(
   () => props.value,
-  (v) => resolve(v),
+  v => resolve(v),
 );
 
 function open(i: number) {

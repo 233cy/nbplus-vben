@@ -6,7 +6,7 @@ import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { batchDeleteRoleApi, batchUpdateRoleApi, getRoleDetailApi, getRoleListApi } from '#/api/auth/role';
-import BatchActionDropdown from '#/components/table/BatchActionDropdown.vue';
+import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 

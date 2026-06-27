@@ -9,8 +9,8 @@ import { useVbenForm, z } from '#/adapter/form';
 import { getProfileInfoApi, updateProfileApi } from '#/api';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store/user';
+import { resolveLogicalPath } from '#/api/core/upload';
 import { formatUnixTime } from '#/utils/time';
-import { pathToFullUrl } from '#/utils/upload';
 
 const userStore = useUserStore();
 const adminUserStore = useAdminUserStore();
@@ -27,7 +27,7 @@ const [Form, formApi] = useVbenForm({
       fieldName: 'avatar',
       component: 'AvatarUpload',
       label: $t('profile.basic.avatar'),
-      componentProps: { isPrivate: 3 },
+      componentProps: { accessType: 'login' },
     },
     {
       fieldName: 'nickname',
@@ -73,7 +73,7 @@ async function handleSubmit() {
     userStore.setUserInfo({
       ...current,
       realName: result.nickname,
-      avatar: await pathToFullUrl(result.avatar),
+      avatar: await resolveLogicalPath(result.avatar),
     });
   }
 

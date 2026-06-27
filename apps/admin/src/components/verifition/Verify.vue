@@ -5,9 +5,9 @@ import { $t } from '@vben/locales';
 
 import { reqGet } from '#/api/core/captcha';
 
-import CaptchaWidget from './Verify/CaptchaWidget.vue';
-import VerifyPoints from './Verify/VerifyPoints.vue';
-import VerifySlide from './Verify/VerifySlide.vue';
+import CaptchaWidget from './verify/CaptchaWidget.vue';
+import VerifyPoints from './verify/VerifyPoints.vue';
+import VerifySlide from './verify/VerifySlide.vue';
 
 /**
  * 定义类型接口

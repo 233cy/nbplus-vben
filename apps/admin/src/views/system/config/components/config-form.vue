@@ -3,7 +3,7 @@ import type { ConfigApi } from '#/api/system/config';
 
 import { Form, FormItem, Input, Modal, Select, Switch, Textarea } from 'ant-design-vue';
 
-import CreatableSelect from '#/components/creatableSelect/index.vue';
+import CreatableSelect from '#/components/creatable-select/index.vue';
 import { $t } from '#/locales';
 
 interface Props {

@@ -6,7 +6,7 @@ import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { batchDeleteUserApi, batchUpdateUserApi, getUserDetailApi, getUserListApi } from '#/api/org/user';
-import BatchActionDropdown from '#/components/table/BatchActionDropdown.vue';
+import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
@@ -70,7 +70,7 @@ const user = useUser(gridApi);
 <template>
   <Page auto-content-height>
     <FormDrawer @success="user.onRefresh" />
-    <Online ref="user.onlineRef" />
+    <Online :ref="user.onlineRef" />
     <Grid :table-title="$t('system.user.pageTitle')">
       <template #toolbar-tools>
         <BatchActionDropdown

@@ -5,6 +5,7 @@ import { deletePostApi, inlineUpdatePostApi } from '#/api/org/post';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
+import { useTableDelete } from '#/utils/table';
 
 /**
  * 职务列表列定义
@@ -114,26 +115,26 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
       fixed: 'right',
       title: $t('common.operation'),
       width: 160,
+      showOverflow: false,
       cellRender: {
-        name: 'CellOperation',
+        name: 'TableActions',
         attrs: {
-          onRefresh,
           actions: [
             {
-              code: 'edit',
-              text: $t('common.edit'),
+              key: 'edit',
+              label: $t('common.edit'),
               icon: 'lucide:pencil',
-              access: canUpdate,
-              onClick: async (row: PostApi.PostItem) => onEditClick(row.id),
+              hidden: !canUpdate,
+              onClick: (row: PostApi.PostItem) => onEditClick(row.id),
             },
             {
-              code: 'delete',
-              text: $t('common.delete'),
+              key: 'delete',
+              label: $t('common.delete'),
               icon: 'lucide:trash-2',
-              actionType: 'delete',
-              labelField: 'name',
-              apiFn: deletePostApi,
-              access: canDelete,
+              danger: true,
+              confirmTitle: $t('common.confirmDelete'),
+              hidden: !canDelete,
+              onClick: (row: PostApi.PostItem) => useTableDelete(deletePostApi, row.id, row.name, onRefresh),
             },
           ],
         },

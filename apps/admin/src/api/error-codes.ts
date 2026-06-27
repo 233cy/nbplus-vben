@@ -50,6 +50,10 @@ export enum BizCode {
   /** 上传内容不是文件 */
   OSS_UPLOAD_NOT_FILE = 20_004,
 
+  /* 存储配置 / 文件管理 */
+  /** 存储桶未配置 */
+  STORAGE_BUCKET_NOT_CONFIGURED = 20_056,
+
   /* 职务管理 */
   /** 职务编码已存在 */
   POST_CODE_EXISTS = 40_500,

@@ -19,11 +19,11 @@ import { ColPage } from '@vben/common-ui';
 
 import { $t } from '#/locales';
 
-import { useDict, useDictForm, useDictItems, useItemForm } from './composables';
 import DictForm from './components/dict-form.vue';
 import DictSidebar from './components/dict-sidebar.vue';
 import ItemForm from './components/item-form.vue';
 import ItemList from './components/item-list.vue';
+import { useDict, useDictForm, useDictItems, useItemForm } from './composables';
 
 const dict = useDict({ defaultGroupLabel: $t('system.dict.defaultGroup') });
 const items = useDictItems();
@@ -49,11 +49,6 @@ function onSelectDict(dictItem: any) {
   }
 }
 
-function onSortChange(sortedItems: any[]) {
-  items.list.value = sortedItems;
-  items.saveOrder();
-}
-
 // 页面初始化
 dict.loadDicts();
 </script>
@@ -64,6 +59,7 @@ dict.loadDicts();
       <DictSidebar
         :loading="dict.loading.value"
         :tree-data="dict.treeData.value"
+        :groups="dict.groups.value"
         :keyword="dict.keyword.value"
         :expanded-keys="dict.expandedKeys.value"
         :active-dict="dict.activeDict.value"
@@ -73,6 +69,7 @@ dict.loadDicts();
         @create="dictForm.openCreate($event)"
         @edit="dictForm.openEdit"
         @delete="dictForm.handleDelete"
+        @reload="dict.loadDicts()"
       />
     </template>
 
@@ -85,7 +82,7 @@ dict.loadDicts();
       @add="itemForm.openCreate"
       @edit="itemForm.openEdit"
       @delete="itemForm.handleDelete"
-      @sort-change="onSortChange"
+      @reload="dict.activeDict.value && items.loadItems(dict.activeDict.value.id)"
     />
 
     <DictForm

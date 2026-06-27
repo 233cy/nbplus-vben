@@ -18,6 +18,8 @@
   "publicResource": "Public resource",
   "protectedResource": "Protected resource",
   "waitingAllocation": "(Waiting for resource allocation...)",
+  "pendingUpload": "Pending",
+  "uploadComplete": "Upload complete",
   "progressText": "({uploaded} MB / {total} MB, {speed} MB/s, Remaining: {eta}s)",
   "onlySupportImageFormat": "Only supports image formats: {accept}",
   "imageSizeLimit": "Image must be less than {maxSize}MB!",

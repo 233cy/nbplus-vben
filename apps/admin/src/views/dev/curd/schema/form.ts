@@ -46,6 +46,7 @@ export function useTableFormSchema(options: TableFormSchemaOptions): VbenFormSch
         options: tableNameOptions,
         loading: tableNamesLoading,
         showSearch: true,
+        dropdownMatchSelectWidth: false,
         placeholder: $t('dev.curd.table.placeholder.tableName'),
       },
     },

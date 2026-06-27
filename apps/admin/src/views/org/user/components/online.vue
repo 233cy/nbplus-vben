@@ -8,7 +8,7 @@ import { IconifyIcon } from '@vben/icons';
 import { Button, message, Modal, Popconfirm } from 'ant-design-vue';
 
 import { getUserOnlineApi, kickAllUserDevicesApi, kickUserDeviceApi } from '#/api/org/user';
-import OnlineDevices from '#/components/onlineDevices/index.vue';
+import OnlineDevices from '#/components/online-devices/index.vue';
 
 const visible = ref(false);
 const loading = ref(false);

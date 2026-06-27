@@ -13,9 +13,9 @@ import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 import { codeLoginApi, getAccessCodesApi, getProfileInfoApi, loginApi, logoutApi, mfaLoginApi, totpLoginApi } from '#/api';
+import { resolveLogicalPath } from '#/api/core/upload';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store';
-import { pathToFullUrl } from '#/utils/upload';
 
 export const useAuthStore = defineStore('auth', () => {
   const accessStore = useAccessStore();
@@ -147,7 +147,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     // 框架所需字段映射
     const userInfo: UserInfo = {
-      avatar: await pathToFullUrl(result.avatar),
+      avatar: await resolveLogicalPath(result.avatar),
       desc: '',
       homePath: preferences.app.defaultHomePath,
       realName: result.nickname,

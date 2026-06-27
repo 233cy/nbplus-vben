@@ -48,7 +48,7 @@ export function useDict(options: UseDictOptions) {
     return [...map.entries()].map(([groupName, dicts]) => ({
       key: `group::${groupName}`,
       title: groupName,
-      children: dicts,
+      children: dicts.map(d => ({ ...d, key: d.id })),
     }));
   });
 
@@ -60,15 +60,6 @@ export function useDict(options: UseDictOptions) {
     } finally {
       loading.value = false;
     }
-  }
-
-  function onSelect(selectedKeys: (number | string)[], info: any) {
-    const node = info.node as DictApi.DictItem | DictGroup;
-    if ('children' in node) {
-      activeDict.value = null;
-      return;
-    }
-    activeDict.value = node;
   }
 
   function clearSelection() {
@@ -85,7 +76,6 @@ export function useDict(options: UseDictOptions) {
     filteredDicts,
     treeData,
     loadDicts,
-    onSelect,
     clearSelection,
   };
 }

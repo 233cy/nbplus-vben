@@ -10,7 +10,7 @@ import { useUserStore } from '@vben/stores';
 import { Avatar, Badge, Card, Col, message, Popconfirm, Row, Spin, Tag, Tooltip } from 'ant-design-vue';
 
 import { getMyDevicesApi, getProfileInfoApi, removeMyDeviceApi } from '#/api/core/profile';
-import OnlineDevices from '#/components/onlineDevices/index.vue';
+import OnlineDevices from '#/components/online-devices/index.vue';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store/user';
 import { formatUnixTime } from '#/utils/time';

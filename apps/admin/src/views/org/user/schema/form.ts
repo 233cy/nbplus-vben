@@ -39,7 +39,7 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
       component: 'AvatarUpload',
       fieldName: 'avatar',
       label: $t('system.user.fields.avatar'),
-      componentProps: { isPrivate: 3 },
+      componentProps: { accessType: 'login' },
     },
     {
       component: 'Input',

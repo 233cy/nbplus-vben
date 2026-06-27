@@ -1,12 +1,12 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { RoleApi } from '#/api/auth/role';
 
-import { h } from 'vue';
-
 import { deleteRoleApi, inlineUpdateRoleApi } from '#/api/auth/role';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
+import { useTableDelete } from '#/utils/table';
+import { h } from 'vue';
 
 const dataScopeMap: Record<number, string> = {
   1: 'auth.role.dataScope.all',
@@ -124,42 +124,40 @@ export function useColumns(
       field: 'operation',
       fixed: 'right',
       title: $t('common.operation'),
-      width: 140,
+      width: 180,
+      showOverflow: false,
       cellRender: {
-        name: 'CellOperation',
+        name: 'TableActions',
         attrs: {
-          onRefresh,
-          maxVisible: 2,
-          iconOnly: true,
           actions: [
             {
-              code: 'edit',
-              text: $t('common.edit'),
+              key: 'edit',
+              label: $t('common.edit'),
               icon: 'lucide:pencil',
-              access: canUpdate,
-              onClick: async (row: RoleApi.RoleItem) => onEditClick(row.id),
+              hidden: !canUpdate,
+              onClick: (row: RoleApi.RoleItem) => onEditClick(row.id),
             },
             {
-              code: 'delete',
-              text: $t('common.delete'),
+              key: 'delete',
+              label: $t('common.delete'),
               icon: 'lucide:trash-2',
-              actionType: 'delete',
-              labelField: 'name',
-              apiFn: deleteRoleApi,
-              access: canDelete,
+              danger: true,
+              confirmTitle: $t('common.confirmDelete'),
+              hidden: !canDelete,
+              onClick: (row: RoleApi.RoleItem) => useTableDelete(deleteRoleApi, row.id, row.name, onRefresh),
             },
             {
-              code: 'assignMenus',
-              text: $t('auth.role.assignMenus'),
+              key: 'assignMenus',
+              label: $t('auth.role.assignMenus'),
               icon: 'lucide:shield',
-              access: canAssignMenus,
+              hidden: !canAssignMenus,
               onClick: (row: RoleApi.RoleItem) => onAssignMenus(row),
             },
             {
-              code: 'assignDataScope',
-              text: $t('auth.role.assignDataScope'),
+              key: 'assignDataScope',
+              label: $t('auth.role.assignDataScope'),
               icon: 'lucide:database',
-              access: canAssignDataScope,
+              hidden: !canAssignDataScope,
               onClick: (row: RoleApi.RoleItem) => onAssignDataScope(row),
             },
           ],

@@ -4,7 +4,9 @@ import type { UploadFile } from 'ant-design-vue';
 
 import { markRaw, onBeforeUnmount, ref } from 'vue'; // 🌟 引入了 markRaw
 
+import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
+import { useAccessStore } from '@vben/stores';
 
 import Uppy from '@uppy/core';
 import Tus from '@uppy/tus';
@@ -13,18 +15,42 @@ import { message } from 'ant-design-vue';
 
 import { deleteOssFile, getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/core/upload';
 
+import { getChunkSizeMB, getChunkThresholdMB, resolveUploadErrorMsg, validateFileBySystem } from './composables/useFileUpload';
+
 const props = withDefaults(
   defineProps<{
-    isPrivate?: number;
+    /** 访问策略: owner | public | login，为空时按 accessType 默认 */
+    accessPolicy?: 'login' | 'owner' | 'public';
+    /** 访问类型: authorized | public | login，默认 public */
+    accessType?: 'authorized' | 'login' | 'public';
   }>(),
   {
-    isPrivate: 2, // 默认公开资源
+    accessType: undefined,
+    accessPolicy: undefined,
   },
 );
 
+/** 从 accessType 推算实际的访问类型 */
+function resolveAccessType(): string {
+  return props.accessType ?? 'public';
+}
+
+/** 从 accessPolicy 推算实际的访问策略 */
+function resolveAccessPolicy(): string {
+  return props.accessPolicy ?? 'public';
+}
+
 const TUS_ENDPOINT = getTusUrl();
 const SIMPLE_ENDPOINT = getUploadUrl();
-const BIG_FILE_THRESHOLD = 5 * 1024 * 1024; // 🌟 你的 10MB 限制保留
+// 切片大小取自系统参数 storage.chunk_size_mb（Uppy 初始化时读取，调整后需刷新页面生效）
+const CHUNK_SIZE = getChunkSizeMB() * 1024 * 1024;
+
+/** 动态获取认证头，解决 Uppy 绕过 requestClient 导致 401 的问题 */
+function getAuthHeaders(): Record<string, string> {
+  const accessStore = useAccessStore();
+  const token = accessStore.accessToken;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
 
 type Meta = Record<string, unknown>;
 
@@ -45,8 +71,11 @@ interface UIFile extends Omit<UploadFile, 'status'> {
   uploadedMB: number;
   uppyId: string;
   logicalPath?: string;
+  uploadKey: string;
   rawFile?: any; // 🌟 用于暂存未交给 Uppy 的原始文件对象
   isAddedToUppy?: boolean; // 🌟 标记是否已经正式塞进 Uppy 引擎
+  errorMsg?: string; // 上传失败原因（展示在列表「上传失败」后）
+  preFailed?: boolean; // 选择文件时即被前端校验拦截（体积/类型），不可重试
 }
 
 const uploadFiles = ref<UIFile[]>([]);
@@ -56,10 +85,11 @@ const uploadFiles = ref<UIFile[]>([]);
 // =================================
 const uppyTus = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-tus' }).use(Tus, {
   endpoint: TUS_ENDPOINT,
-  chunkSize: BIG_FILE_THRESHOLD,
+  chunkSize: CHUNK_SIZE,
   limit: 1, // 大文件强制排队，单线程稳健上传
-  retryDelays: [1000, 3000],
+  retryDelays: [5000, 10_000],
   removeFingerprintOnSuccess: true,
+  headers: getAuthHeaders, // 注入认证头（函数引用，每次请求时动态获取最新 token），防止 401
 });
 
 const uppyXhr = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-xhr' }).use(XHRUpload, {
@@ -68,6 +98,7 @@ const uppyXhr = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-xhr' }).
   formData: true,
   bundle: false,
   limit: 5, // 🌟 小文件也强制排队，配合延迟注入实现精准控制
+  headers: getAuthHeaders, // 注入认证头（函数引用，每次请求时动态获取最新 token），防止 401
 });
 
 // =============================
@@ -76,14 +107,14 @@ const uppyXhr = new Uppy<Meta, TusBody>({ autoProceed: false, id: 'uppy-xhr' }).
 const progressData = new Map<string, { lastBytes: number; lastTime: number }>();
 
 function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
-  instance.on('file-added', (file) => {
-    const target = uploadFiles.value.find((f) => f.uid === file.meta.uid);
+  instance.on('file-added', file => {
+    const target = uploadFiles.value.find(f => f.uid === file.meta.uid);
     if (target) target.uppyId = file.id;
   });
 
   // 🌟 【关键修复 1】：监听正式启动瞬间，解决按钮点了没反应（假死）的 Bug
   instance.on('upload-started' as any, (file: any) => {
-    const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
+    const target = uploadFiles.value.find(f => f.uppyId === file?.id);
     if (target) {
       target.isStart = true;
       target.status = 'uploading';
@@ -92,7 +123,7 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
   });
 
   instance.on('upload-progress', (file, progress) => {
-    const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
+    const target = uploadFiles.value.find(f => f.uppyId === file?.id);
     if (!target || !progress.bytesTotal) return;
 
     // 突破排队，UI 状态更新
@@ -127,7 +158,7 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
   });
 
   instance.on('upload-success', (file, response: any) => {
-    const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
+    const target = uploadFiles.value.find(f => f.uppyId === file?.id);
     if (!target) return;
 
     target.status = 'done';
@@ -154,21 +185,22 @@ function bindEvents(instance: Uppy<Meta, TusBody>, engineType: 'tus' | 'xhr') {
   });
 
   instance.on('upload-error', (file, _error, response) => {
-    const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
+    const target = uploadFiles.value.find(f => f.uppyId === file?.id);
     if (target) {
       target.status = 'error';
+      target.errorMsg = resolveUploadErrorMsg(_error, response);
       if (engineType === 'tus' && !target.fileId) {
         const url = (file as any)?.tus?.uploadUrl || (file as any)?.response?.uploadURL || (response as any)?.uploadURL;
         if (url) {
           target.fileId = url.split('/').pop();
-          console.log('✅ 在报错瞬间成功抢救到 fileId:', target.fileId);
+          console.warn('✅ 在报错瞬间成功抢救到 fileId:', target.fileId);
         }
       }
     }
   });
 
-  instance.on('upload-pause', (file) => {
-    const target = uploadFiles.value.find((f) => f.uppyId === file?.id);
+  instance.on('upload-pause', file => {
+    const target = uploadFiles.value.find(f => f.uppyId === file?.id);
     if (target) {
       target.paused = true;
       target.status = 'paused';
@@ -195,7 +227,7 @@ function handleBeforeUpload(raw: any) {
   const baseName = lastDotIndex === -1 ? finalName : finalName.slice(0, Math.max(0, lastDotIndex));
   const ext = lastDotIndex === -1 ? '' : finalName.slice(Math.max(0, lastDotIndex));
 
-  while (uploadFiles.value.some((f) => f.name === finalName)) {
+  while (uploadFiles.value.some(f => f.name === finalName)) {
     finalName = `${baseName}(${count})${ext}`;
     count++;
   }
@@ -206,27 +238,37 @@ function handleBeforeUpload(raw: any) {
   }) as any;
   renamedRaw.uid = raw.uid;
 
-  const isBigFile = renamedRaw.size > BIG_FILE_THRESHOLD;
+  const isBigFile = renamedRaw.size > getChunkThresholdMB() * 1024 * 1024;
   const targetEngine = isBigFile ? 'tus' : 'xhr';
 
   const absoluteFileId = `tus-${renamedRaw.name}-${renamedRaw.size}-${renamedRaw.lastModified}`;
+  const uploadKey = crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+
+  // 前端预校验：体积/类型不合规时即时拦截，直接以失败态进入列表，避免发起注定失败的上传
+  const preError = validateFileBySystem(renamedRaw);
+  if (preError) {
+    message.error(preError);
+  }
 
   // 🌟 【关键修复 2】：仅仅存入 Vue，绝不触发 addFile，实现延迟精准注入
   uploadFiles.value.push({
     uid: renamedRaw.uid,
     name: renamedRaw.name,
-    status: 'wait',
+    status: preError ? 'error' : 'wait',
     percent: 0,
     uppyId: absoluteFileId,
     speed: 0,
     eta: 0,
-    isStart: false,
+    isStart: !!preError,
     paused: false,
     engine: targetEngine,
     totalMB: renamedRaw.size / 1024 / 1024,
     uploadedMB: 0,
     rawFile: markRaw(renamedRaw), // 🌟 暂存文件对象
     isAddedToUppy: false, // 🌟 标记未注入
+    uploadKey,
+    errorMsg: preError || undefined,
+    preFailed: !!preError,
   });
 
   return false;
@@ -247,7 +289,7 @@ async function handleRemove(file: UIFile) {
     const tusDeleteUrl = `${TUS_ENDPOINT}/${file.fileId}`;
     fetch(tusDeleteUrl, {
       method: 'DELETE',
-      headers: { 'Tus-Resumable': '1.0.0' },
+      headers: { 'Tus-Resumable': '1.0.0', ...getAuthHeaders() },
     }).catch(() => console.warn('TUS 临时文件清理失败'));
   }
 
@@ -256,7 +298,7 @@ async function handleRemove(file: UIFile) {
     const currentUppy = file.engine === 'tus' ? uppyTus : uppyXhr;
     currentUppy.removeFile(file.uppyId);
   }
-  uploadFiles.value = uploadFiles.value.filter((f) => f.uid !== file.uid);
+  uploadFiles.value = uploadFiles.value.filter(f => f.uid !== file.uid);
 }
 
 function handleToggleAction(file: UIFile) {
@@ -272,7 +314,9 @@ function handleToggleAction(file: UIFile) {
         type: file.rawFile.type,
         meta: {
           uid: file.uid,
-          isPrivate: props.isPrivate,
+          accessType: resolveAccessType(),
+          accessPolicy: resolveAccessPolicy(),
+          uploadKey: file.uploadKey,
         },
       });
       file.isAddedToUppy = true;
@@ -282,6 +326,7 @@ function handleToggleAction(file: UIFile) {
     file.status = 'queued';
     currentUppy.upload();
   } else if (file.status === 'error') {
+    file.errorMsg = undefined;
     if (file.engine === 'tus' && file.fileId) {
       const uppyFile = currentUppy.getFile(file.uppyId);
       currentUppy.setFileState(file.uppyId, {
@@ -321,19 +366,79 @@ async function handleDownload(file: UIFile) {
 <template>
   <a-upload
     :before-upload="handleBeforeUpload"
-    :file-list="(uploadFiles as any)"
+    :file-list="uploadFiles as any"
     :show-upload-list="{ showRemoveIcon: false, showDownloadIcon: false, showPreviewIcon: false }"
     :custom-request="() => {}"
+    class="w-full"
   >
-    <a-button type="primary">{{ $t('upload.selectFile') }}</a-button>
+    <a-button type="primary" block>{{ $t('upload.selectFile') }}</a-button>
 
     <template #itemRender="{ file: rawFile }">
       <a-list item-layout="horizontal" :data-source="[rawFile as UIFile]" class="hover:text-regular mt-2 rounded-md border border-border bg-card transition-all hover:bg-muted">
         <template #renderItem="{ item: file }">
-          <a-list-item>
-            <template #actions>
+          <a-list-item class="!flex-col !items-start">
+            <a-list-item-meta class="w-full">
+              <template #title>
+                <div class="flex items-center gap-1" style="min-width: 0">
+                  <a-tooltip :title="file.name" placement="topLeft">
+                    <span class="inline-block truncate" style="max-width: 200px">{{ file.name }}</span>
+                  </a-tooltip>
+                  <a-tag class="shrink-0" :color="file.engine === 'tus' ? 'blue' : 'green'">
+                    {{ file.engine === 'tus' ? $t('upload.largeFileSpeedUp') : $t('upload.standardSpeed') }}
+                  </a-tag>
+                  <a-tag class="shrink-0" :color="resolveAccessType() === 'authorized' ? 'red' : resolveAccessType() === 'public' ? 'cyan' : 'purple'">
+                    <span v-if="resolveAccessType() === 'authorized'">{{ $t('upload.privateResource') }}</span>
+                    <span v-else-if="resolveAccessType() === 'public'">{{ $t('upload.publicResource') }}</span>
+                    <span v-else-if="resolveAccessType() === 'login'">{{ $t('upload.protectedResource') }}</span>
+                  </a-tag>
+                </div>
+              </template>
+
+              <template #description>
+                <a-progress
+                  :percent="file.percent"
+                  :status="file.status === 'error' ? 'exception' : file.status === 'done' ? 'success' : file.status === 'queued' ? 'normal' : 'active'"
+                  :stroke-color="file.status === 'queued' ? '#d9d9d9' : file.paused ? '#faad14' : '#1677ff'"
+                  class="mb-1"
+                />
+                <!-- 状态文字固定占位，避免进度出现时撑开布局 -->
+                <div class="text-xs text-gray-500" style="min-height: 16px; line-height: 16px">
+                  <template v-if="!file.isStart">
+                    {{ $t('upload.pendingUpload') }}
+                  </template>
+                  <template v-else-if="file.status === 'queued'">
+                    {{ $t('upload.waitingAllocation') }}
+                  </template>
+                  <template v-else-if="['uploading', 'paused'].includes(file.status)">
+                    {{
+                      $t('upload.progressText', {
+                        uploaded: file.uploadedMB?.toFixed(2),
+                        total: file.totalMB?.toFixed(2),
+                        speed: file.speed?.toFixed(2),
+                        eta: file.eta?.toFixed(1),
+                      })
+                    }}
+                  </template>
+                  <template v-else-if="file.status === 'done'">
+                    {{ $t('upload.uploadComplete') }}
+                  </template>
+                  <template v-else-if="file.status === 'error'">
+                    <span class="text-red-500">
+                      {{ file.errorMsg ? $t('upload.uploadFailedReason', { reason: file.errorMsg }) : $t('upload.uploadFailed') }}
+                    </span>
+                  </template>
+                </div>
+              </template>
+
+              <template #avatar>
+                <IconifyIcon icon="ant-design:file-outlined" :style="{ fontSize: '24px', color: '#8c8c8c' }" />
+              </template>
+            </a-list-item-meta>
+
+            <!-- 操作按钮：纵向排列，避免挤压 -->
+            <div class="mt-2 flex w-full flex-wrap gap-1">
               <a-button v-if="!file.isStart" type="link" size="small" @click.stop="handleToggleAction(file)"> {{ $t('upload.uploadAction') }} </a-button>
-              <a-button v-else-if="file.status === 'error'" type="link" size="small" @click.stop="handleToggleAction(file)"> {{ $t('upload.retry') }} </a-button>
+              <a-button v-else-if="file.status === 'error' && !file.preFailed" type="link" size="small" @click.stop="handleToggleAction(file)"> {{ $t('upload.retry') }} </a-button>
               <template v-else-if="file.status !== 'done'">
                 <a-button v-if="file.engine === 'tus'" type="link" size="small" :disabled="file.status === 'queued'" @click.stop="handleToggleAction(file)">
                   {{ file.status === 'queued' ? $t('upload.waiting') : file.paused ? $t('upload.resume') : $t('upload.pause') }}
@@ -346,47 +451,7 @@ async function handleDownload(file: UIFile) {
 
               <a-button type="link" size="small" :disabled="file.status !== 'done'" @click.stop="handleDownload(file)"> {{ $t('upload.download') }} </a-button>
               <a-button type="link" danger size="small" @click.stop="handleRemove(file)"> {{ $t('upload.delete') }} </a-button>
-            </template>
-
-            <a-list-item-meta>
-              <template #title>
-                {{ file.name }}
-                <a-tag class="ml-2" :color="file.engine === 'tus' ? 'blue' : 'green'">
-                  {{ file.engine === 'tus' ? $t('upload.largeFileSpeedUp') : $t('upload.standardSpeed') }}
-                </a-tag>
-                <a-tag class="ml-2" :color="props.isPrivate === 1 ? 'red' : props.isPrivate === 2 ? 'cyan' : 'purple'">
-                  <span v-if="props.isPrivate === 1">{{ $t('upload.privateResource') }}</span>
-                  <span v-else-if="props.isPrivate === 2">{{ $t('upload.publicResource') }}</span>
-                  <span v-else-if="props.isPrivate === 3">{{ $t('upload.protectedResource') }}</span>
-                </a-tag>
-
-                <span v-if="['uploading', 'paused', 'queued'].includes(file.status)" class="ml-1 text-gray-500">
-                  <template v-if="file.status === 'queued'"> {{ $t('upload.waitingAllocation') }} </template>
-                  <template v-else>
-                    {{
-                      $t('upload.progressText', {
-                        uploaded: file.uploadedMB?.toFixed(2),
-                        total: file.totalMB?.toFixed(2),
-                        speed: file.speed?.toFixed(2),
-                        eta: file.eta?.toFixed(1),
-                      })
-                    }}
-                  </template>
-                </span>
-              </template>
-
-              <template #description>
-                <a-progress
-                  :percent="file.percent"
-                  :status="file.status === 'error' ? 'exception' : file.status === 'done' ? 'success' : file.status === 'queued' ? 'normal' : 'active'"
-                  :stroke-color="file.status === 'queued' ? '#d9d9d9' : file.paused ? '#faad14' : '#1677ff'"
-                />
-              </template>
-
-              <template #avatar>
-                <a-avatar src="https://joeschmoe.io/api/v1/random" />
-              </template>
-            </a-list-item-meta>
+            </div>
           </a-list-item>
         </template>
       </a-list>

@@ -1,11 +1,31 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
+import type { CurdAdminApi } from '#/api/dev/curdAdmin';
+
 import { $t } from '#/locales';
+
+export interface CurdColumnOptions {
+  onEditClick: (row: CurdAdminApi.CurdTable) => void;
+  onDeleteClick: (row: CurdAdminApi.CurdTable) => void;
+  onFieldConfigClick: (row: CurdAdminApi.CurdTable) => void;
+  onCreateMenuClick: (row: CurdAdminApi.CurdTable) => void;
+  onGenerateClick: (row: CurdAdminApi.CurdTable) => void;
+  getGenerateLoading: (row: CurdAdminApi.CurdTable) => boolean;
+}
 
 /**
  * CURD 表配置列表列定义
  */
-export function useColumns(): VxeTableGridOptions['columns'] {
+export function useColumns(options: CurdColumnOptions): VxeTableGridOptions['columns'] {
+  const {
+    onEditClick,
+    onDeleteClick,
+    onFieldConfigClick,
+    onCreateMenuClick,
+    onGenerateClick,
+    getGenerateLoading,
+  } = options;
+
   return [
     { field: 'id', title: 'ID', visible: false },
     {
@@ -65,8 +85,48 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       field: 'operation',
       fixed: 'right',
       title: $t('common.operation'),
-      width: 240,
-      slots: { default: 'operation' },
+      width: 180,
+      showOverflow: false,
+      cellRender: {
+        name: 'TableActions',
+        attrs: {
+          actions: [
+            {
+              key: 'field',
+              label: $t('dev.curd.field.title'),
+              icon: 'ant-design:table-outlined',
+              onClick: onFieldConfigClick,
+            },
+            {
+              key: 'generate',
+              label: $t('dev.curd.generate'),
+              icon: 'ant-design:code-outlined',
+              loading: getGenerateLoading,
+              onClick: onGenerateClick,
+            },
+            {
+              key: 'menu',
+              label: $t('dev.curd.createMenu'),
+              icon: 'ant-design:menu-outlined',
+              onClick: onCreateMenuClick,
+            },
+            {
+              key: 'edit',
+              label: $t('common.edit'),
+              icon: 'ant-design:edit-outlined',
+              onClick: onEditClick,
+            },
+            {
+              key: 'delete',
+              label: $t('common.delete'),
+              icon: 'ant-design:delete-outlined',
+              danger: true,
+              confirmTitle: $t('dev.curd.table.confirmDelete'),
+              onClick: onDeleteClick,
+            },
+          ],
+        },
+      },
     },
   ];
 }

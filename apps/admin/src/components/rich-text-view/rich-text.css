@@ -1,0 +1,188 @@
+/**
+ * 富文本内容统一样式（唯一真相）.
+ *
+ * 同时作用于：
+ *   1. RichTextView 展示容器（.rich-text-content）
+ *   2. wangEditor 可编辑区（.rich-text-content.is-editor，规则靠后代选择器命中编辑器内容）
+ * 编辑所见 = 展示所得。宽度由 CSS 变量 --rt-page-width 驱动（见 preset.ts）。
+ *
+ * 注意：本文件需在 @wangeditor/editor 的 style.css 之后引入，
+ * 以便同特异度规则覆盖编辑器默认内容样式。
+ */
+
+.rich-text-content {
+  --rt-page-width: 800px;
+
+  max-width: var(--rt-page-width);
+  margin: 0 auto;
+  font-size: var(--font-size-base, 14px);
+  line-height: 1.75;
+  color: hsl(var(--foreground));
+  word-break: break-word;
+}
+
+/* ============ 编辑器：可编辑区做成居中固定宽度白页，灰底衬托 ============ */
+.rich-text-content.is-editor {
+  max-width: none;
+  margin: 0;
+}
+
+.rich-text-content.is-editor .w-e-text-container {
+  background-color: hsl(var(--muted) / 40%);
+}
+
+.rich-text-content.is-editor .w-e-text-container [data-slate-editor] {
+  max-width: var(--rt-page-width);
+  min-height: 100%;
+  padding: 24px 28px;
+  margin: 16px auto;
+  background-color: hsl(var(--background));
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%), 0 0 0 1px hsl(var(--border));
+}
+
+/* ============ 内容标签：展示 div 与编辑器内容共用 ============ */
+.rich-text-content p {
+  margin: 0 0 12px;
+}
+
+.rich-text-content h1,
+.rich-text-content h2,
+.rich-text-content h3,
+.rich-text-content h4,
+.rich-text-content h5,
+.rich-text-content h6 {
+  margin: 20px 0 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.rich-text-content h1 {
+  font-size: 1.75em;
+}
+
+.rich-text-content h2 {
+  font-size: 1.5em;
+}
+
+.rich-text-content h3 {
+  font-size: 1.25em;
+}
+
+.rich-text-content h4 {
+  font-size: 1.1em;
+}
+
+.rich-text-content ul,
+.rich-text-content ol {
+  padding-left: 1.6em;
+  margin: 0 0 12px;
+}
+
+.rich-text-content ul {
+  list-style: disc;
+}
+
+.rich-text-content ol {
+  list-style: decimal;
+}
+
+.rich-text-content li {
+  margin: 4px 0;
+}
+
+.rich-text-content a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
+
+.rich-text-content a:hover {
+  text-decoration: underline;
+}
+
+.rich-text-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.rich-text-content video {
+  max-width: 100%;
+}
+
+.rich-text-content blockquote {
+  padding: 8px 14px;
+  margin: 0 0 12px;
+  color: hsl(var(--muted-foreground));
+  background-color: hsl(var(--muted) / 40%);
+  border-left: 4px solid hsl(var(--border));
+}
+
+.rich-text-content pre {
+  padding: 12px 14px;
+  margin: 0 0 12px;
+  overflow-x: auto;
+  font-family: ui-monospace, monospace;
+  font-size: 0.9em;
+  background-color: hsl(var(--muted));
+  border-radius: 6px;
+}
+
+.rich-text-content code {
+  padding: 2px 5px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.9em;
+  background-color: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+.rich-text-content pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.rich-text-content hr {
+  margin: 16px 0;
+  border: none;
+  border-top: 1px solid hsl(var(--border));
+}
+
+.rich-text-content table {
+  width: 100%;
+  margin: 0 0 12px;
+  border-collapse: collapse;
+}
+
+.rich-text-content th,
+.rich-text-content td {
+  padding: 6px 10px;
+  text-align: left;
+  border: 1px solid hsl(var(--border));
+}
+
+.rich-text-content th {
+  font-weight: 600;
+  background-color: hsl(var(--muted) / 60%);
+}
+
+/* 附件：图标由 wangEditor 渲染层注入、不在 HTML，这里用 CSS 还原成统一的「附件胶囊」 */
+.rich-text-content a[data-w-e-type='attachment'] {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  margin: 0 2px;
+  font-size: 0.92em;
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+}
+
+.rich-text-content a[data-w-e-type='attachment']::before {
+  margin-right: 4px;
+  content: '📎';
+}
+
+.rich-text-content a[data-w-e-type='attachment']:hover {
+  text-decoration: none;
+  border-color: hsl(var(--primary));
+}

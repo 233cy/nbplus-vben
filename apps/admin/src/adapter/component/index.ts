@@ -36,14 +36,15 @@ const Textarea = defineAsyncComponent(() => import('ant-design-vue/es/input').th
 const TimePicker = defineAsyncComponent(() => import('ant-design-vue/es/time-picker'));
 const TreeSelect = defineAsyncComponent(() => import('ant-design-vue/es/tree-select'));
 const Upload = defineAsyncComponent(() => import('ant-design-vue/es/upload'));
-const Edit = defineAsyncComponent(() => import('#/components/wangEditor/index.vue'));
+const Edit = defineAsyncComponent(() => import('#/components/wang-editor/index.vue'));
 const AvatarUpload = defineAsyncComponent(() => import('#/components/upload/upAvatar.vue'));
 const ImageUpload = defineAsyncComponent(() => import('#/components/upload/upImg.vue'));
-const CreatableSelect = defineAsyncComponent(() => import('#/components/creatableSelect/index.vue'));
+const MediaUpload = defineAsyncComponent(() => import('#/components/upload/upMedia.vue'));
+const CreatableSelect = defineAsyncComponent(() => import('#/components/creatable-select/index.vue'));
 const DictSelect = defineAsyncComponent(() => import('#/components/dict/DictSelect.vue'));
 const DictRadio = defineAsyncComponent(() => import('#/components/dict/DictRadio.vue'));
-const CaptchaPinInput = defineAsyncComponent(() => import('#/components/captchaPinInput/index.vue'));
-const PasswordInput = defineAsyncComponent(() => import('#/components/passwordInput/index.vue'));
+const CaptchaPinInput = defineAsyncComponent(() => import('#/components/captcha-pin-input/index.vue'));
+const PasswordInput = defineAsyncComponent(() => import('#/components/password-input/index.vue'));
 
 const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select', componentProps: Recordable<any> = {}) => {
   return defineComponent({
@@ -88,6 +89,7 @@ export type ComponentType =
   | 'Input'
   | 'InputNumber'
   | 'InputPassword'
+  | 'MediaUpload'
   | 'Mentions'
   | 'PasswordInput'
   | 'PrimaryButton'
@@ -160,6 +162,7 @@ async function initComponentAdapter() {
     Edit,
     AvatarUpload,
     ImageUpload,
+    MediaUpload,
     CreatableSelect,
     DictSelect,
     DictRadio,

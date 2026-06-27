@@ -8,8 +8,7 @@ import { $t } from '#/locales';
 import ConfigForm from './components/config-form.vue';
 import ConfigItemList from './components/config-item-list.vue';
 import GroupMenu from './components/group-menu.vue';
-import SortModal from './components/sort-modal.vue';
-import { useConfigForm, useConfigGroups, useConfigItems, useConfigSort } from './composables';
+import { useConfigForm, useConfigGroups, useConfigItems } from './composables';
 
 defineOptions({ name: 'ConfigPage' });
 
@@ -17,8 +16,13 @@ const groups = useConfigGroups();
 const items = useConfigItems(groups.activeGroup);
 
 const activeGroupLabel = computed(() => {
-  const found = groups.groups.value.find(g => g.groups === groups.activeGroup.value);
+  const found = groups.groups.value.find((g) => g.groups === groups.activeGroup.value);
   return found ? groups.groupsLabel(found) : groups.activeGroup.value;
+});
+
+/** 当前分组在所有分组中的索引位置 */
+const activeGroupIndex = computed(() => {
+  return groups.groups.value.findIndex((g) => g.groups === groups.activeGroup.value);
 });
 
 function copyKey(key: string) {
@@ -34,8 +38,6 @@ const form = useConfigForm({
   onGroupsChange: groups.loadGroups,
 });
 
-const sort = useConfigSort({ onSuccess: items.loadConfig });
-
 onMounted(() => {
   groups.loadGroups();
 });
@@ -43,14 +45,18 @@ onMounted(() => {
 
 <template>
   <div class="flex h-full gap-4 p-4">
-    <GroupMenu :groups="groups.groups.value" :active-group="groups.activeGroup.value" @update:active-group="groups.activeGroup.value = $event" />
+    <GroupMenu
+      :groups="groups.groups.value"
+      :active-group="groups.activeGroup.value"
+      @update:active-group="groups.activeGroup.value = $event"
+      @reload="groups.loadGroups()"
+    />
 
     <div class="flex flex-1 flex-col overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
       <!-- 顶部操作 -->
       <div class="flex items-center justify-between border-b px-6 py-3 dark:border-gray-700">
         <span class="text-base font-medium">{{ activeGroupLabel }}</span>
         <div class="flex gap-2">
-          <Button size="small" @click="sort.openSortModal(items.configItems.value)"> ⇅ {{ $t('system.config.sortModal') }} </Button>
           <Button type="primary" size="small" @click="form.openCreate"> + {{ $t('system.config.addItem') }} </Button>
         </div>
       </div>
@@ -60,6 +66,7 @@ onMounted(() => {
         <ConfigItemList
           :items="items.configItems.value"
           :edit-values="items.editValues.value"
+          :group-index="activeGroupIndex"
           :loading="items.loading.value"
           @update:edit-value="items.updateEditValue"
           @mark-as-sys="items.handleMarkAsSys"
@@ -67,6 +74,7 @@ onMounted(() => {
           @edit="form.openEdit"
           @delete="items.handleDelete"
           @copy-key="copyKey"
+          @reload="items.loadConfig()"
         />
       </Spin>
 
@@ -87,14 +95,6 @@ onMounted(() => {
       :component-options="form.componentOptions.value"
       :group-options="form.groupOptions.value"
       @submit="form.handleSubmit"
-    />
-
-    <SortModal
-      v-model:visible="sort.sortModalVisible.value"
-      :loading="sort.sortLoading.value"
-      :tree-data="sort.sortTreeData.value"
-      @drop="sort.onTreeDrop"
-      @submit="sort.handleSortOk"
     />
   </div>
 </template>

@@ -4,9 +4,9 @@ import type { CurdAdminApi } from '#/api/dev/curdAdmin';
 import { ref } from 'vue';
 
 import { Page, useVbenModal } from '@vben/common-ui';
-import { IconifyIcon, Plus } from '@vben/icons';
+import { Plus } from '@vben/icons';
 
-import { Button, message, Popconfirm, Space, Tooltip } from 'ant-design-vue';
+import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteCurdTableApi, getCurdTableListApi } from '#/api/dev/curdAdmin';
@@ -37,7 +37,14 @@ const [Grid, gridApi] = useVbenVxeGrid({
     wrapperClass: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
   },
   gridOptions: {
-    columns: useColumns(),
+    columns: useColumns({
+      onEditClick,
+      onDeleteClick,
+      onFieldConfigClick,
+      onCreateMenuClick,
+      onGenerateClick,
+      getGenerateLoading: (row) => curd.generateLoading.value[row.id],
+    }),
     height: 'auto',
     proxyConfig: {
       ajax: {
@@ -91,38 +98,6 @@ function onGenerateClick(row: CurdAdminApi.CurdTable) {
           <Plus class="size-5" />
           {{ $t('dev.curd.table.add') }}
         </Button>
-      </template>
-
-      <template #operation="{ row }">
-        <Space>
-          <Tooltip :title="$t('dev.curd.field.title')">
-            <Button size="small" type="text" @click="onFieldConfigClick(row as CurdAdminApi.CurdTable)">
-              <IconifyIcon icon="ant-design:table-outlined" />
-            </Button>
-          </Tooltip>
-          <Tooltip :title="$t('dev.curd.generate')">
-            <Button size="small" type="text" :loading="curd.generateLoading.value[row.id]" @click="onGenerateClick(row as CurdAdminApi.CurdTable)">
-              <IconifyIcon icon="ant-design:code-outlined" />
-            </Button>
-          </Tooltip>
-          <Tooltip :title="$t('dev.curd.createMenu')">
-            <Button size="small" type="text" @click="onCreateMenuClick(row as CurdAdminApi.CurdTable)">
-              <IconifyIcon icon="ant-design:menu-outlined" />
-            </Button>
-          </Tooltip>
-          <Tooltip :title="$t('common.edit')">
-            <Button size="small" type="text" @click="onEditClick(row as CurdAdminApi.CurdTable)">
-              <IconifyIcon icon="ant-design:edit-outlined" />
-            </Button>
-          </Tooltip>
-          <Popconfirm :title="$t('dev.curd.table.confirmDelete')" @confirm="onDeleteClick(row as CurdAdminApi.CurdTable)">
-            <Tooltip :title="$t('common.delete')">
-              <Button size="small" type="text" danger>
-                <IconifyIcon icon="ant-design:delete-outlined" />
-              </Button>
-            </Tooltip>
-          </Popconfirm>
-        </Space>
       </template>
     </Grid>
   </Page>

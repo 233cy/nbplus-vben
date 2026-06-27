@@ -5,23 +5,23 @@ import { VCropper } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import Uppy from '@uppy/core';
-import Tus from '@uppy/tus';
 import { message } from 'ant-design-vue';
 
-import { getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/core/upload';
-import { requestClient } from '#/api/request';
-import { pathToFullUrl } from '#/utils/upload';
+import { resolveLogicalPath } from '#/api/core/upload';
+
+import { resolveAccessType, useFileUpload, validateFileBySystem } from './composables/useFileUpload';
 
 const props = withDefaults(
   defineProps<{
+    /** 访问策略: owner | public | login，为空时按 accessType 默认 */
+    accessPolicy?: 'login' | 'owner' | 'public';
+    /** 访问类型: authorized | public | login，默认 public */
+    accessType?: 'authorized' | 'login' | 'public';
     /** 裁剪比例，默认 1:1 */
     aspectRatio?: string;
-    /** 是否私有资源：1私有 2公开 3登录可查阅 */
-    isPrivate?: number;
     /**
      * v-model 绑定值，存储逻辑路径（logicalPath）。
-     * 组件内部自动调用 pathToFullUrl 接口将其转换为 fullUrl 用于回显，
+     * 组件内部自动调用 resolveLogicalPath 接口将其转换为 fullUrl 用于回显，
      * 上传成功后同样自动更新显示，外部无需关心 fullUrl。
      */
     modelValue?: string;
@@ -30,7 +30,8 @@ const props = withDefaults(
   }>(),
   {
     aspectRatio: '1:1',
-    isPrivate: 2,
+    accessType: undefined,
+    accessPolicy: undefined,
     modelValue: '',
     shape: 'circle',
   },
@@ -41,10 +42,15 @@ const emit = defineEmits<{
   'update:modelValue': [logicalPath: string];
 }>();
 
+const { uploadFile } = useFileUpload();
+
+function currentAccessType(): string {
+  return resolveAccessType({ accessType: props.accessType, accessPolicy: props.accessPolicy });
+}
+
 const UPLOAD_CONFIG = {
   accept: 'image/png, image/jpeg, image/jpg, image/gif, image/webp',
   maxSize: 10, // MB
-  tusThreshold: 2, // 超过此值走 TUS 分片上传
 };
 
 const previewVisible = ref(false);
@@ -68,7 +74,7 @@ watch(
       skipNextWatch = false;
       return;
     }
-    internalDisplayUrl.value = await pathToFullUrl(logicalPath);
+    internalDisplayUrl.value = await resolveLogicalPath(logicalPath);
   },
   { immediate: true },
 );
@@ -93,10 +99,10 @@ function handleBeforeUpload(file: File) {
     }
   }
 
-  // 验证大小
-  const isLtMaxSize = file.size / 1024 / 1024 < UPLOAD_CONFIG.maxSize;
-  if (!isLtMaxSize) {
-    message.error($t('upload.imageSizeLimit', { maxSize: UPLOAD_CONFIG.maxSize }));
+  // 验证大小 + 扩展名白名单（取系统参数与 maxSize 的较严值，与后端兜底一致）
+  const preError = validateFileBySystem(file, UPLOAD_CONFIG.maxSize);
+  if (preError) {
+    message.error(preError);
     return false;
   }
 
@@ -118,95 +124,36 @@ function handleBeforeUpload(file: File) {
 async function handleCropOk() {
   if (!cropperRef.value || !originalFile.value) return;
 
+  const fileName = originalFile.value.name || 'avatar.jpg';
+
+  uploading.value = true;
+
+  // 1) 生成裁剪后的图片 blob（裁剪类异常单独提示）
+  let blob: Blob | null = null;
   try {
-    uploading.value = true;
-    // 调用 VCropper 实例方法获取裁剪后的 blob
-    const blob = await cropperRef.value.getCropImage('image/jpeg', 0.92, 'blob');
-    if (!blob) {
-      message.error($t('upload.cropFailed'));
-      return;
-    }
-
-    const fileName = originalFile.value.name || 'avatar.jpg';
-
-    // === 动态判定上传引擎 ===
-    // blob.size 单位是 byte，转换为 MB
-    const isBigFile = blob.size / 1024 / 1024 > UPLOAD_CONFIG.tusThreshold;
-
-    isBigFile ? await uploadWithTus(blob, fileName) : await uploadWithXhr(blob, fileName);
+    blob = await cropperRef.value.getCropImage('image/jpeg', 0.92, 'blob');
   } catch {
-    message.error($t('upload.uploadFailed'));
+    blob = null;
+  }
+  if (!blob) {
+    uploading.value = false;
+    message.error($t('upload.cropFailed'));
+    return;
+  }
+
+  // 2) 上传（失败原因已由全局拦截器（XHR）或 composable（TUS）统一提示）
+  try {
+    const file = new File([blob], fileName, { type: blob.type });
+    const { logicalPath, fullUrl } = await uploadFile(file, {
+      accessType: props.accessType,
+      accessPolicy: props.accessPolicy,
+    });
+    handleUploadSuccess(logicalPath, fullUrl);
+  } catch {
+    // 上传失败提示已在上游统一弹出，这里无需重复
   } finally {
     uploading.value = false;
   }
-}
-
-/**
- * XHR 普通表单直传
- */
-async function uploadWithXhr(blob: Blob, fileName: string) {
-  const formData = new FormData();
-  formData.append('file', blob, fileName);
-  formData.append('isPrivate', props.isPrivate.toString());
-
-  const res: any = await requestClient.post(getUploadUrl(), formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-
-  handleUploadSuccess(res.logicalPath, res.fullUrl);
-}
-
-/**
- * TUS 分片断点续传
- */
-function uploadWithTus(blob: Blob, fileName: string) {
-  return new Promise<void>((resolve, reject) => {
-    // 将 Blob 伪装成 File 对象交给 Uppy
-    const fileForUppy = new File([blob], fileName, { type: blob.type });
-
-    const uppy = new Uppy({
-      autoProceed: true,
-      allowMultipleUploadBatches: true,
-    }).use(Tus, {
-      endpoint: getTusUrl(),
-      retryDelays: [1000, 3000],
-      removeFingerprintOnSuccess: true,
-    });
-
-    uppy.addFile({
-      name: fileName,
-      type: fileForUppy.type,
-      data: fileForUppy,
-      meta: {
-        isPrivate: props.isPrivate,
-      },
-    });
-
-    uppy.on('upload-success', async (file, response: any) => {
-      try {
-        const tusUrl = response?.uploadURL || (file as any).uploadURL;
-        if (tusUrl) {
-          const fileId = tusUrl.split('/').pop();
-          const infoRes: any = await getTusFileInfo({ uploadKey: fileId });
-          handleUploadSuccess(infoRes.logicalPath, infoRes.fullUrl);
-          resolve();
-        } else {
-          throw new Error('未获取到 Tus 上传地址');
-        }
-      } catch (error) {
-        reject(error);
-      } finally {
-        uppy.destroy();
-      }
-    });
-
-    uppy.on('upload-error', (_file, error) => {
-      uppy.destroy();
-      reject(error);
-    });
-  });
 }
 
 /**
@@ -273,10 +220,10 @@ function handleModalCancel() {
       </slot>
     </a-upload>
     <div class="mt-2">
-      <a-tag :color="isPrivate === 1 ? 'red' : isPrivate === 2 ? 'cyan' : 'purple'">
-        <span v-if="isPrivate === 1">{{ $t('upload.privateResource') }}</span>
-        <span v-else-if="isPrivate === 2">{{ $t('upload.publicResource') }}</span>
-        <span v-else-if="isPrivate === 3">{{ $t('upload.protectedResource') }}</span>
+      <a-tag :color="currentAccessType() === 'authorized' ? 'red' : currentAccessType() === 'public' ? 'cyan' : 'purple'">
+        <span v-if="currentAccessType() === 'authorized'">{{ $t('upload.privateResource') }}</span>
+        <span v-else-if="currentAccessType() === 'public'">{{ $t('upload.publicResource') }}</span>
+        <span v-else-if="currentAccessType() === 'login'">{{ $t('upload.protectedResource') }}</span>
       </a-tag>
     </div>
 

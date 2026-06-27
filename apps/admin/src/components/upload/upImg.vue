@@ -4,20 +4,20 @@ import { computed, ref, watch } from 'vue';
 import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import Uppy from '@uppy/core';
-import Tus from '@uppy/tus';
 import { message } from 'ant-design-vue';
 
-import { getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/core/upload';
-import { requestClient } from '#/api/request';
-import { pathToFullUrl } from '#/utils/upload';
+import { resolveLogicalPath } from '#/api/core/upload';
+
+import { resolveAccessType, useFileUpload, validateFileBySystem } from './composables/useFileUpload';
 
 const props = withDefaults(
   defineProps<{
     /** 允许的图片格式 */
     accept?: string;
-    /** 是否私有资源：1私有 2公开 3登录可查阅 */
-    isPrivate?: number;
+    /** 访问策略: owner | public | login，为空时按 accessType 默认 */
+    accessPolicy?: 'login' | 'owner' | 'public';
+    /** 访问类型: authorized | public | login，默认 public */
+    accessType?: 'authorized' | 'login' | 'public';
     /** 多张模式下最大数量，默认不限制 */
     maxCount?: number;
     /** 最大文件大小（MB），默认 10 */
@@ -32,7 +32,8 @@ const props = withDefaults(
     multiple?: boolean;
   }>(),
   {
-    isPrivate: 2,
+    accessType: undefined,
+    accessPolicy: undefined,
     modelValue: '',
     multiple: false,
     maxCount: 0,
@@ -46,7 +47,11 @@ const emit = defineEmits<{
   'update:modelValue': [value: string];
 }>();
 
-const TUS_THRESHOLD_MB = 2;
+const { uploadFile } = useFileUpload();
+
+function currentAccessType(): string {
+  return resolveAccessType({ accessType: props.accessType, accessPolicy: props.accessPolicy });
+}
 
 // =========================================================================
 // 内部图片列表：{ logicalPath, fullUrl }
@@ -64,18 +69,18 @@ const previewVisible = ref(false);
 // 将 modelValue（逗号分隔的逻辑路径）解析并转换为完整 URL
 watch(
   () => props.modelValue,
-  async (val) => {
+  async val => {
     const paths = val ? val.split(',').filter(Boolean) : [];
     // 只处理新增的路径，避免重复请求
-    const existing = new Set(items.value.map((i) => i.logicalPath));
-    const toAdd = paths.filter((p) => !existing.has(p));
-    const toRemove = items.value.filter((i) => !paths.includes(i.logicalPath));
+    const existing = new Set(items.value.map(i => i.logicalPath));
+    const toAdd = paths.filter(p => !existing.has(p));
+    const toRemove = items.value.filter(i => !paths.includes(i.logicalPath));
 
     for (const item of toRemove) {
-      items.value = items.value.filter((i) => i.logicalPath !== item.logicalPath);
+      items.value = items.value.filter(i => i.logicalPath !== item.logicalPath);
     }
     for (const path of toAdd) {
-      const fullUrl = await pathToFullUrl(path);
+      const fullUrl = await resolveLogicalPath(path);
       items.value.push({ logicalPath: path, fullUrl });
     }
   },
@@ -92,13 +97,15 @@ const canAdd = computed(() => {
 // 文件选择
 // =========================================================================
 function handleBeforeUpload(file: File) {
-  const acceptList = props.accept.split(',').map((t) => t.trim());
+  const acceptList = props.accept.split(',').map(t => t.trim());
   if (!acceptList.includes(file.type)) {
     message.error($t('upload.onlySupportImageFormat', { accept: props.accept }));
     return false;
   }
-  if (file.size / 1024 / 1024 > props.maxSize) {
-    message.error($t('upload.imageSizeLimit', { maxSize: props.maxSize }));
+  // 体积 + 扩展名白名单：取系统参数与组件 maxSize 的较严值，与后端兜底一致
+  const preError = validateFileBySystem(file, props.maxSize);
+  if (preError) {
+    message.error(preError);
     return false;
   }
 
@@ -107,74 +114,20 @@ function handleBeforeUpload(file: File) {
   items.value.push(placeholder);
   const idx = items.value.length - 1;
 
-  const isBig = file.size / 1024 / 1024 > TUS_THRESHOLD_MB;
-  const task = isBig ? uploadWithTus(file) : uploadWithXhr(file);
-
-  task
+  uploadFile(file, {
+    accessType: props.accessType,
+    accessPolicy: props.accessPolicy,
+  })
     .then(({ logicalPath, fullUrl }) => {
       items.value[idx] = { logicalPath, fullUrl, uploading: false };
       emitChange();
     })
     .catch(() => {
+      // 失败原因已由全局拦截器（XHR）或 composable（TUS）统一提示，这里只清理占位
       items.value.splice(idx, 1);
-      message.error($t('upload.uploadFailed'));
     });
 
   return false;
-}
-
-// =========================================================================
-// XHR 上传
-// =========================================================================
-async function uploadWithXhr(file: File): Promise<{ fullUrl: string; logicalPath: string }> {
-  const formData = new FormData();
-  formData.append('file', file, file.name);
-  formData.append('isPrivate', props.isPrivate.toString());
-
-  const res: any = await requestClient.post(getUploadUrl(), formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
-
-  return { logicalPath: res.logicalPath, fullUrl: res.fullUrl };
-}
-
-// =========================================================================
-// TUS 上传
-// =========================================================================
-function uploadWithTus(file: File): Promise<{ fullUrl: string; logicalPath: string }> {
-  return new Promise((resolve, reject) => {
-    const uppy = new Uppy({ autoProceed: true, allowMultipleUploadBatches: true }).use(Tus, {
-      endpoint: getTusUrl(),
-      retryDelays: [1000, 3000],
-      removeFingerprintOnSuccess: true,
-    });
-
-    uppy.addFile({
-      name: file.name,
-      type: file.type,
-      data: file,
-      meta: { isPrivate: props.isPrivate },
-    });
-
-    uppy.on('upload-success', async (_file, response: any) => {
-      try {
-        const tusUrl = response?.uploadURL;
-        if (!tusUrl) throw new Error('no uploadURL');
-        const fileId = tusUrl.split('/').pop();
-        const infoRes: any = await getTusFileInfo({ uploadKey: fileId });
-        resolve({ logicalPath: infoRes.logicalPath, fullUrl: infoRes.fullUrl });
-      } catch (error) {
-        reject(error);
-      } finally {
-        uppy.destroy();
-      }
-    });
-
-    uppy.on('upload-error', (_file, error) => {
-      uppy.destroy();
-      reject(error);
-    });
-  });
 }
 
 // =========================================================================
@@ -191,8 +144,8 @@ function handlePreview(url: string) {
 }
 
 function emitChange() {
-  const paths = items.value.filter((i) => i.logicalPath).map((i) => i.logicalPath);
-  const urls = items.value.filter((i) => i.fullUrl).map((i) => i.fullUrl);
+  const paths = items.value.filter(i => i.logicalPath).map(i => i.logicalPath);
+  const urls = items.value.filter(i => i.fullUrl).map(i => i.fullUrl);
   emit('update:modelValue', paths.join(','));
   emit('change', paths, urls);
 }
@@ -201,10 +154,10 @@ function emitChange() {
 <template>
   <div class="up-img-container">
     <div class="mb-2">
-      <a-tag :color="isPrivate === 1 ? 'red' : isPrivate === 2 ? 'cyan' : 'purple'">
-        <span v-if="isPrivate === 1">{{ $t('upload.privateResource') }}</span>
-        <span v-else-if="isPrivate === 2">{{ $t('upload.publicResource') }}</span>
-        <span v-else-if="isPrivate === 3">{{ $t('upload.protectedResource') }}</span>
+      <a-tag :color="currentAccessType() === 'authorized' ? 'red' : currentAccessType() === 'public' ? 'cyan' : 'purple'">
+        <span v-if="currentAccessType() === 'authorized'">{{ $t('upload.privateResource') }}</span>
+        <span v-else-if="currentAccessType() === 'public'">{{ $t('upload.publicResource') }}</span>
+        <span v-else-if="currentAccessType() === 'login'">{{ $t('upload.protectedResource') }}</span>
       </a-tag>
     </div>
     <div class="img-list">

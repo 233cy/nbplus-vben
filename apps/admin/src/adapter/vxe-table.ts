@@ -10,14 +10,14 @@ import { setupVbenVxeTable, useVbenVxeGrid as useGrid } from '@vben/plugins/vxe-
 import { get, isFunction } from '@vben/utils';
 
 import { objectOmit } from '@vueuse/core';
-import { Button, Dropdown, Image, Menu, MenuItem, Popconfirm, Switch, Tag } from 'ant-design-vue';
+import { Button, Image, Switch, Tag } from 'ant-design-vue';
 
 import DictTag from '#/components/dict/DictTag.vue';
-import ImgPreview from '#/components/imgPreview/index.vue';
-import CellInlineEdit from '#/components/table/CellInlineEdit.vue';
+import ImgPreview from '#/components/vxe-table/ImgPreview.vue';
+import CellInlineEdit from '#/components/vxe-table/CellInlineEdit.vue';
+import TableActions from '#/components/vxe-table/TableActions.vue';
 import { $t } from '#/locales';
 import { useSiteStore } from '#/store/site';
-import { useTableDelete } from '#/utils/table';
 
 import { useVbenForm } from './form';
 
@@ -172,152 +172,29 @@ setupVbenVxeTable({
     });
 
     /**
-     * 注册表格的操作按钮渲染器
-     * 用法：cellRender: { name: 'CellOperation', attrs: { actions: [...], onRefresh, maxVisible, iconOnly } }
-     * actions 每项：{ code, text, icon?, actionType?, access?, onClick?, apiFn?, labelField? }
-     * actionType:
-     *   'default'  → 普通按钮，直接触发 onClick（默认）
-     *   'confirm'  → 带 Popconfirm 确认框，确认后触发 onClick
-     *   'delete'   → 内置删除：自动调用 useTableDelete(apiFn, row.id, row[labelField], onRefresh)
-     * maxVisible:
-     *   超过该数量时，后续操作折叠到「更多」下拉菜单中，避免操作列过宽或按钮被截断
-     * iconOnly:
-     *   为 true 时，操作按钮只显示图标（带 title 提示），用于文字过多导致换行的场景
+     * 表格行内操作按钮渲染器
+     * 内部封装 TableActions 组件，统一操作列视觉与交互
+     * 用法：cellRender: { name: 'TableActions', attrs: { actions: [...], maxVisible, showLabel, moreShowLabel } }
+     * actions 每项：{ key, label, icon?, danger?, hidden?, disabled?, loading?, confirmTitle?, onClick }
+     *   - hidden / disabled / loading 支持 boolean 或 (row) => boolean
+     *   - onClick 接收当前行参数 (row) => void
      */
-    vxeUI.renderer.add('CellOperation', {
+    vxeUI.renderer.add('TableActions', {
       renderTableDefault({ attrs }, { row }) {
-        const onRefresh: () => void = attrs?.onRefresh ?? (() => {});
-        const maxVisible: number = attrs?.maxVisible ?? 0;
-        const iconOnly: boolean = attrs?.iconOnly ?? false;
-
-        const actions: Array<Recordable<any>> = (attrs?.actions ?? [])
-          .filter((a: Recordable<any>) => a.access !== false)
-          .map((a: Recordable<any>) => ({
-            ...a,
-            text: isFunction(a.text) ? a.text(row) : a.text,
-          }));
-
-        function renderBtn(action: Recordable<any>, onClick?: () => void, forceIconOnly = false) {
-          const showIconOnly = forceIconOnly || iconOnly;
-          return h(
-            Button,
-            {
-              danger: action.actionType === 'confirm' || action.actionType === 'delete',
-              size: 'small',
-              title: action.text,
-              type: 'link',
-              onClick: onClick ?? (() => action.onClick?.(row)),
-            },
-            {
-              default: () => {
-                const nodes = [];
-                if (action.icon) nodes.push(h(IconifyIcon, { class: 'size-4', icon: action.icon }));
-                if (!showIconOnly) nodes.push(action.text);
-                return nodes;
-              },
-            },
-          );
-        }
-
-        function renderConfirm(action: Recordable<any>) {
-          let viewportWrapper: HTMLElement | null = null;
-          return h(
-            Popconfirm,
-            {
-              getPopupContainer(el: HTMLElement) {
-                viewportWrapper = el.closest('.vxe-table--viewport-wrapper');
-                return document.body;
-              },
-              placement: 'topLeft',
-              title: $t('common.confirmDelete'),
-              onOpenChange: (open: boolean) => {
-                if (open) viewportWrapper?.style.setProperty('pointer-events', 'none');
-                else viewportWrapper?.style.removeProperty('pointer-events');
-              },
-              onConfirm: () => action.onClick?.(row),
-            },
-            {
-              default: () => renderBtn(action, () => {}),
-              description: () => h('span', action.confirmText ?? $t('common.confirmDeleteContent', { name: row[action.labelField ?? 'name'] ?? '' })),
-            },
-          );
-        }
-
-        function renderDelete(action: Recordable<any>) {
-          const label = row[action.labelField ?? 'name'] ?? '';
-          return renderBtn(action, () => useTableDelete(action.apiFn, row.id, label, onRefresh));
-        }
-
-        function handleAction(action: Recordable<any>) {
-          const type = action.actionType ?? 'default';
-          if (type === 'delete') {
-            const label = row[action.labelField ?? 'name'] ?? '';
-            useTableDelete(action.apiFn, row.id, label, onRefresh);
-          } else {
-            action.onClick?.(row);
-          }
-        }
-
-        function renderDropdownMenu(moreActions: Recordable<any>[]) {
-          return h(
-            Dropdown,
-            {},
-            {
-              default: () =>
-                h(
-                  Button,
-                  { size: 'small', type: 'link' },
-                  { default: () => h(IconifyIcon, { class: 'size-4', icon: 'lucide:ellipsis' }) },
-                ),
-              overlay: () =>
-                h(
-                  Menu,
-                  {},
-                  {
-                    default: () =>
-                      moreActions.map(action =>
-                        h(
-                          MenuItem,
-                          { key: action.code, onClick: () => handleAction(action) },
-                          {
-                            default: () => {
-                              const nodes = [];
-                              if (action.icon) {
-                                nodes.push(h(IconifyIcon, { class: 'mr-1 size-4', icon: action.icon }));
-                              }
-                              nodes.push(action.text);
-                              return nodes;
-                            },
-                          },
-                        ),
-                      ),
-                  },
-                ),
-            },
-          );
-        }
-
-        // 按 actionType 分发渲染器，后续扩展直接在此 map 里新增
-        const actionRenderers: Record<string, (action: Recordable<any>) => any> = {
-          default: a => renderBtn(a),
-          confirm: a => renderConfirm(a),
-          delete: a => renderDelete(a),
-        };
-
-        const visibleActions = maxVisible > 0 && actions.length > maxVisible ? actions.slice(0, maxVisible) : actions;
-        const moreActions = maxVisible > 0 && actions.length > maxVisible ? actions.slice(maxVisible) : [];
-
-        const btns = visibleActions.map(a => {
-          const type = a.actionType ?? 'default';
-          const render = actionRenderers[type] ?? actionRenderers.default;
-          return render?.(a);
-        });
-
-        if (moreActions.length > 0) {
-          btns.push(renderDropdownMenu(moreActions));
-        }
-
-        return h('div', { class: 'flex items-center justify-center gap-1 flex-wrap' }, btns);
+        const resolveBool = (val: any) => (isFunction(val) ? val(row) : val);
+        const actions = (attrs?.actions ?? []).map((action: Recordable<any>) => ({
+          ...action,
+          hidden: resolveBool(action.hidden),
+          disabled: resolveBool(action.disabled),
+          loading: resolveBool(action.loading),
+          onClick: () => (action.onClick as (row: any) => void)?.(row),
+        }));
+        return h(TableActions, {
+          actions,
+          maxVisible: attrs?.maxVisible,
+          showLabel: attrs?.showLabel,
+          moreShowLabel: attrs?.moreShowLabel,
+        }) as any;
       },
     });
 
