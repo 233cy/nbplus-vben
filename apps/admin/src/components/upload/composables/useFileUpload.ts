@@ -45,6 +45,20 @@ export function getAllowedExtensions(): string[] {
   return [...new Set(exts)];
 }
 
+/**
+ * 允许上传的文件扩展名白名单（小写，去重）。
+ * 仅取系统参数 storage.allowed_file_types，供文件上传组件直接复用。
+ * 为空时返回空数组，表示不做前端类型限制（仍由后端兜底校验）。
+ */
+export function getAllowedFileExtensions(): string[] {
+  const raw = useSiteStore().get('storage.allowed_file_types') ?? '';
+  const exts = raw
+    .split(',')
+    .map(ext => ext.trim().replace(/^\./, '').toLowerCase())
+    .filter(Boolean);
+  return [...new Set(exts)];
+}
+
 /** 提取文件扩展名（小写，不含点） */
 export function getFileExt(filename: string): string {
   const idx = filename.lastIndexOf('.');
@@ -58,6 +72,20 @@ export function getFileExt(filename: string): string {
  */
 export function getAllowedMediaExtensions(): string[] {
   const raw = useSiteStore().get('storage.allowed_media_types') ?? '';
+  const exts = raw
+    .split(',')
+    .map(ext => ext.trim().replace(/^\./, '').toLowerCase())
+    .filter(Boolean);
+  return [...new Set(exts)];
+}
+
+/**
+ * 允许上传的图片扩展名白名单（小写，去重）。
+ * 仅取系统参数 storage.allowed_image_types，供图片 / 头像上传组件直接复用。
+ * 为空时返回空数组，表示不做前端类型限制（仍由后端兜底校验）。
+ */
+export function getAllowedImageExtensions(): string[] {
+  const raw = useSiteStore().get('storage.allowed_image_types') ?? '';
   const exts = raw
     .split(',')
     .map(ext => ext.trim().replace(/^\./, '').toLowerCase())

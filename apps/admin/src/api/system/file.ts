@@ -18,7 +18,7 @@ export namespace FileApi {
     status: number;
     refCount: number;
     fullUrl: string;
-    createdBy: string;
+    creator: string;
     createdAt: number;
     updatedAt: number;
   }

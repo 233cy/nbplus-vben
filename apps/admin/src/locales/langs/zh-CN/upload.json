@@ -41,5 +41,7 @@
   "preview": "查看",
   "modify": "修改",
   "cropAndUpload": "裁剪并上传",
-  "previewAvatar": "查看头像"
+  "previewAvatar": "查看头像",
+  "limitHintCount": "最多 {count} 个",
+  "limitHintSize": "单个不超过 {size}MB"
 }

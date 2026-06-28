@@ -31,5 +31,7 @@
   "preview": "Preview",
   "modify": "Modify",
   "cropAndUpload": "Crop and Upload",
-  "previewAvatar": "Preview Avatar"
+  "previewAvatar": "Preview Avatar",
+  "limitHintCount": "Up to {count} files",
+  "limitHintSize": "Each file up to {size}MB"
 }

@@ -392,7 +392,7 @@ const handleSuccess = (_res: any) => {};
         </div>
         <div>
           <div class="mb-2 text-xs text-gray-500">多张（最多 5 张）· 登录可见（login）</div>
-          <UpImg v-model="multiImg" access-type="login" multiple :max-count="5" />
+          <UpImg v-model="multiImg" access-type="login" :max-count="5" />
         </div>
         <div class="min-w-0 flex-1">
           <div class="mb-1 text-xs text-gray-500">单张 v-model：</div>
@@ -407,15 +407,15 @@ const handleSuccess = (_res: any) => {};
       <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
         <div>
           <div class="mb-2 text-xs text-gray-500">公开资源（public）</div>
-          <UpFile access-type="public" />
+          <UpFile access-type="public" :max-count="3" />
         </div>
         <div>
           <div class="mb-2 text-xs text-gray-500">登录可见（login）</div>
-          <UpFile access-type="login" />
+          <UpFile access-type="login" :max-count="3" />
         </div>
         <div>
           <div class="mb-2 text-xs text-gray-500">私有资源（authorized）</div>
-          <UpFile access-type="authorized" />
+          <UpFile access-type="authorized" :max-count="3" />
         </div>
       </div>
 
@@ -428,7 +428,7 @@ const handleSuccess = (_res: any) => {};
         </div>
         <div>
           <div class="mb-2 text-xs text-gray-500">多个（最多 5 个）· 登录可见（login）</div>
-          <UpMedia v-model="multiMedia" access-type="login" multiple :max-count="5" />
+          <UpMedia v-model="multiMedia" access-type="login" :max-count="5" />
         </div>
         <div class="min-w-0 flex-1">
           <div class="mb-1 text-xs text-gray-500">单个 v-model：</div>

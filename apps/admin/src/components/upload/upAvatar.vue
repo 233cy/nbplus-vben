@@ -9,7 +9,8 @@ import { message } from 'ant-design-vue';
 
 import { resolveLogicalPath } from '#/api/core/upload';
 
-import { resolveAccessType, useFileUpload, validateFileBySystem } from './composables/useFileUpload';
+import { validateFileBySystem } from './composables/useFileUpload';
+import { useUploadQueue } from './composables/useUploadQueue';
 
 const props = withDefaults(
   defineProps<{
@@ -19,11 +20,7 @@ const props = withDefaults(
     accessType?: 'authorized' | 'login' | 'public';
     /** 裁剪比例，默认 1:1 */
     aspectRatio?: string;
-    /**
-     * v-model 绑定值，存储逻辑路径（logicalPath）。
-     * 组件内部自动调用 resolveLogicalPath 接口将其转换为 fullUrl 用于回显，
-     * 上传成功后同样自动更新显示，外部无需关心 fullUrl。
-     */
+    /** v-model：存逻辑路径，组件自动解析为 fullUrl 回显 */
     modelValue?: string;
     /** 头像框形状 */
     shape?: 'circle' | 'square';
@@ -42,71 +39,80 @@ const emit = defineEmits<{
   'update:modelValue': [logicalPath: string];
 }>();
 
-const { uploadFile } = useFileUpload();
+const queue = useUploadQueue({
+  type: 'avatar',
+  accessType: props.accessType,
+  accessPolicy: props.accessPolicy,
+  multiple: false,
+  maxCount: 1,
+});
+const { retry } = queue;
 
-function currentAccessType(): string {
-  return resolveAccessType({ accessType: props.accessType, accessPolicy: props.accessPolicy });
-}
-
-const UPLOAD_CONFIG = {
-  accept: 'image/png, image/jpeg, image/jpg, image/gif, image/webp',
-  maxSize: 10, // MB
-};
+const ACCEPT = 'image/png, image/jpeg, image/jpg, image/gif, image/webp';
 
 const previewVisible = ref(false);
 const cropperVisible = ref(false);
 const tempImage = ref('');
 const originalFile = ref<File | null>(null);
-const uploading = ref(false);
 const cropperRef = ref<any>(null);
 
-// 回显用的完整访问 URL，由 modelValue（logicalPath）自动解析得到
-const internalDisplayUrl = ref('');
-// 只有合法的 http(s) URL 才渲染到 img src，避免 public:// 等逻辑路径触发无效网络请求
-const displaySrc = computed(() => (internalDisplayUrl.value.startsWith('http') ? internalDisplayUrl.value : ''));
-// 标记是否刚刚完成上传（上传成功后 fullUrl 已知，跳过 watch 里的转换请求）
-let skipNextWatch = false;
+const current = computed(() => queue.files.value[0]);
+const displaySrc = computed(() => {
+  const url = current.value?.thumbUrl || current.value?.downloadUrl || '';
+  return url.startsWith('http') || url.startsWith('blob:') ? url : '';
+});
+const uploading = computed(() => {
+  const s = current.value?.status;
+  return s === 'queued' || s === 'uploading' || s === 'wait';
+});
+const isError = computed(() => current.value?.status === 'error');
+const percent = computed(() => current.value?.percent ?? 0);
 
+const currentAccessType = computed(() => props.accessType ?? 'public');
+
+// 回显：modelValue（逻辑路径）→ fullUrl
 watch(
   () => props.modelValue,
-  async logicalPath => {
-    if (skipNextWatch) {
-      skipNextWatch = false;
-      return;
+  async val => {
+    if (val === (current.value?.logicalPath ?? '')) return;
+    queue.clear();
+    if (val) {
+      const url = await resolveLogicalPath(val);
+      queue.addResolved(val, url);
     }
-    internalDisplayUrl.value = await resolveLogicalPath(logicalPath);
   },
   { immediate: true },
 );
 
-/**
- * 查看头像大图
- */
+// 同步：上传完成后回写逻辑路径（值相同不 emit 避免回环）
+watch(
+  queue.files,
+  () => {
+    const f = current.value;
+    if (f?.status === 'done' && f.logicalPath && f.logicalPath !== props.modelValue) {
+      emit('update:modelValue', f.logicalPath);
+      emit('change', f.logicalPath, f.downloadUrl || '');
+    }
+  },
+  { deep: true },
+);
+
 function handlePreview() {
   previewVisible.value = true;
 }
 
-/**
- * 文件选择前拦截
- */
 function handleBeforeUpload(file: File) {
-  // 根据配置验证文件格式
-  if (UPLOAD_CONFIG.accept && UPLOAD_CONFIG.accept !== '*') {
-    const acceptList = UPLOAD_CONFIG.accept.split(',').map(t => t.trim());
-    if (!acceptList.includes(file.type)) {
-      message.error($t('upload.onlySupportImageFormat', { accept: UPLOAD_CONFIG.accept }));
-      return false;
-    }
+  const acceptList = ACCEPT.split(',').map(t => t.trim());
+  if (!acceptList.includes(file.type)) {
+    message.error($t('upload.onlySupportImageFormat', { accept: ACCEPT }));
+    return false;
   }
-
-  // 验证大小 + 扩展名白名单（取系统参数与 maxSize 的较严值，与后端兜底一致）
-  const preError = validateFileBySystem(file, UPLOAD_CONFIG.maxSize);
+  const preError = validateFileBySystem(file);
   if (preError) {
     message.error(preError);
     return false;
   }
 
-  // 读取本地文件为 base64 以便放入弹窗预览和裁剪
   const reader = new FileReader();
   reader.readAsDataURL(file);
   reader.addEventListener('load', () => {
@@ -114,21 +120,11 @@ function handleBeforeUpload(file: File) {
     originalFile.value = file;
     cropperVisible.value = true;
   });
-
-  return false; // 阻止 a-upload 默认的自动上传行为
+  return false; // 阻止默认上传，先裁剪
 }
 
-/**
- * 确认裁剪并上传
- */
 async function handleCropOk() {
   if (!cropperRef.value || !originalFile.value) return;
-
-  const fileName = originalFile.value.name || 'avatar.jpg';
-
-  uploading.value = true;
-
-  // 1) 生成裁剪后的图片 blob（裁剪类异常单独提示）
   let blob: Blob | null = null;
   try {
     blob = await cropperRef.value.getCropImage('image/jpeg', 0.92, 'blob');
@@ -136,47 +132,16 @@ async function handleCropOk() {
     blob = null;
   }
   if (!blob) {
-    uploading.value = false;
     message.error($t('upload.cropFailed'));
     return;
   }
-
-  // 2) 上传（失败原因已由全局拦截器（XHR）或 composable（TUS）统一提示）
-  try {
-    const file = new File([blob], fileName, { type: blob.type });
-    const { logicalPath, fullUrl } = await uploadFile(file, {
-      accessType: props.accessType,
-      accessPolicy: props.accessPolicy,
-    });
-    handleUploadSuccess(logicalPath, fullUrl);
-  } catch {
-    // 上传失败提示已在上游统一弹出，这里无需重复
-  } finally {
-    uploading.value = false;
-  }
+  const file = new File([blob], originalFile.value.name || 'avatar.jpg', { type: blob.type });
+  queue.clear(); // 头像为替换语义，先清旧再传新
+  queue.addFiles([file]);
+  queue.start();
+  cropperVisible.value = false;
 }
 
-/**
- * 统一处理上传成功逻辑
- * @param logicalPath 逻辑路径，用于存库（emit 给父组件）
- * @param fullUrl 完整访问 URL，用于回显
- */
-function handleUploadSuccess(logicalPath: string, fullUrl: string) {
-  if (logicalPath && fullUrl) {
-    skipNextWatch = true; // 上传成功，fullUrl 已知，跳过 watch 里的转换请求
-    internalDisplayUrl.value = fullUrl;
-    emit('update:modelValue', logicalPath);
-    emit('change', logicalPath, fullUrl);
-    message.success($t('upload.avatarUploadSuccess'));
-    cropperVisible.value = false;
-  } else {
-    message.error($t('upload.uploadFailedNoUrl'));
-  }
-}
-
-/**
- * 弹窗关闭时清理临时图片
- */
 function handleModalCancel() {
   cropperVisible.value = false;
   setTimeout(() => {
@@ -188,31 +153,34 @@ function handleModalCancel() {
 
 <template>
   <div class="avatar-upload-container">
-    <a-upload :accept="UPLOAD_CONFIG.accept" :before-upload="handleBeforeUpload" :show-upload-list="false" name="file">
-      <!-- 【核心】暴露默认插槽，允许外部完全自定义触发器和回显内容 -->
+    <a-upload :accept="ACCEPT" :before-upload="handleBeforeUpload" :show-upload-list="false" name="file">
       <slot :image="displaySrc" :loading="uploading" name="default">
-        <!-- 如果外部没有传入插槽，就渲染默认的 Antd 头像上传样式 -->
-        <div :class="shape" class="default-avatar-trigger group">
+        <div :class="[shape, { 'avatar-error': isError }]" class="default-avatar-trigger group">
           <img v-if="displaySrc" :src="displaySrc" alt="avatar" class="avatar-image" />
           <div v-else class="avatar-placeholder">
-            <IconifyIcon v-if="uploading" icon="ant-design:loading-outlined" class="animate-spin text-xl text-gray-400" />
-            <IconifyIcon v-else icon="ant-design:plus-outlined" class="text-xl text-gray-400" />
+            <IconifyIcon icon="ant-design:plus-outlined" class="text-xl text-gray-400" />
             <div class="mt-2 text-sm text-gray-500">{{ $t('upload.uploadAvatar') }}</div>
           </div>
 
-          <!-- 悬浮遮罩 (仅在有图片时显示操作按钮) -->
-          <div v-if="displaySrc" class="avatar-mask">
-            <IconifyIcon v-if="uploading" icon="ant-design:loading-outlined" class="animate-spin text-2xl text-white" />
-            <div v-else class="flex w-full items-center justify-center gap-4 text-white">
-              <!-- 查看大图 (阻止冒泡避免触发上传) -->
+          <!-- 上传中圆圈进度 -->
+          <div v-if="uploading" class="avatar-progress">
+            <a-progress type="circle" :percent="percent" :width="72" stroke-color="hsl(var(--primary))" trail-color="rgba(255,255,255,0.3)" />
+          </div>
+
+          <!-- 悬浮遮罩（有图且非上传中时） -->
+          <div v-if="displaySrc && !uploading" class="avatar-mask" :class="{ 'avatar-mask-error': isError }">
+            <div class="flex w-full items-center justify-center gap-4 text-white">
               <div class="group/preview flex cursor-pointer flex-col items-center transition-colors hover:text-blue-400" @click.stop="handlePreview">
                 <IconifyIcon icon="ant-design:eye-outlined" class="text-xl" />
-                <span class="mt-1 text-xs opacity-90 group-hover/preview:opacity-100">{{ $t('upload.preview') }}</span>
+                <span class="mt-1 text-xs opacity-90">{{ $t('upload.preview') }}</span>
               </div>
-              <!-- 修改头像 (允许冒泡以触发 a-upload) -->
-              <div class="group/edit flex cursor-pointer flex-col items-center transition-colors hover:text-blue-400">
+              <div v-if="isError" class="group/retry flex cursor-pointer flex-col items-center transition-colors hover:text-blue-400" @click.stop="current && retry(current)">
+                <IconifyIcon icon="ant-design:reload-outlined" class="text-xl" />
+                <span class="mt-1 text-xs opacity-90">{{ $t('upload.retry') }}</span>
+              </div>
+              <div v-else class="group/edit flex cursor-pointer flex-col items-center transition-colors hover:text-blue-400">
                 <IconifyIcon icon="ant-design:camera-outlined" class="text-xl" />
-                <span class="mt-1 text-xs opacity-90 group-hover/edit:opacity-100">{{ $t('upload.modify') }}</span>
+                <span class="mt-1 text-xs opacity-90">{{ $t('upload.modify') }}</span>
               </div>
             </div>
           </div>
@@ -220,23 +188,15 @@ function handleModalCancel() {
       </slot>
     </a-upload>
     <div class="mt-2">
-      <a-tag :color="currentAccessType() === 'authorized' ? 'red' : currentAccessType() === 'public' ? 'cyan' : 'purple'">
-        <span v-if="currentAccessType() === 'authorized'">{{ $t('upload.privateResource') }}</span>
-        <span v-else-if="currentAccessType() === 'public'">{{ $t('upload.publicResource') }}</span>
-        <span v-else-if="currentAccessType() === 'login'">{{ $t('upload.protectedResource') }}</span>
+      <a-tag :color="currentAccessType === 'authorized' ? 'red' : currentAccessType === 'public' ? 'cyan' : 'purple'">
+        <span v-if="currentAccessType === 'authorized'">{{ $t('upload.privateResource') }}</span>
+        <span v-else-if="currentAccessType === 'public'">{{ $t('upload.publicResource') }}</span>
+        <span v-else>{{ $t('upload.protectedResource') }}</span>
       </a-tag>
     </div>
 
     <!-- 裁剪弹窗 -->
-    <a-modal
-      v-model:open="cropperVisible"
-      :confirm-loading="uploading"
-      destroy-on-close
-      :title="$t('upload.cropAndUpload')"
-      width="700px"
-      @cancel="handleModalCancel"
-      @ok="handleCropOk"
-    >
+    <a-modal v-model:open="cropperVisible" destroy-on-close :title="$t('upload.cropAndUpload')" width="700px" @cancel="handleModalCancel" @ok="handleCropOk">
       <div class="flex justify-center p-4">
         <VCropper v-if="cropperVisible && tempImage" ref="cropperRef" :width="600" :height="600" :aspect-ratio="aspectRatio" :img="tempImage" />
       </div>
@@ -273,6 +233,10 @@ function handleModalCancel() {
   border-color: #1677ff;
 }
 
+.default-avatar-trigger.avatar-error {
+  border-color: #ff4d4f;
+}
+
 .default-avatar-trigger.circle {
   border-radius: 50%;
 }
@@ -294,25 +258,35 @@ function handleModalCancel() {
   justify-content: center;
 }
 
-.avatar-mask {
+.avatar-progress {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  background-color: rgb(0 0 0 / 45%);
+}
+
+.avatar-mask {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: rgb(0 0 0 / 40%);
   opacity: 0;
   transition: opacity 0.3s;
+}
+
+.avatar-mask-error {
+  background-color: rgb(220 38 38 / 55%);
+  opacity: 1;
 }
 
 .default-avatar-trigger:hover .avatar-mask {
   opacity: 1;
 }
 
-/* 适配暗黑模式 */
 .dark .default-avatar-trigger {
   background-color: rgb(255 255 255 / 4%);
   border-color: #434343;
