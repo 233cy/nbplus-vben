@@ -12,7 +12,7 @@ import { message } from 'ant-design-vue';
 
 import { useAuthStore } from '#/store';
 
-import { refreshTokenApi } from './core';
+import { refreshTokenApi } from './admin/core';
 
 const { apiURL } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
@@ -73,7 +73,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 
   // 请求头处理
   client.addRequestInterceptor({
-    fulfilled: async (config) => {
+    fulfilled: async config => {
       const accessStore = useAccessStore();
 
       if (isSystemDown && !accessStore.loginExpired) {

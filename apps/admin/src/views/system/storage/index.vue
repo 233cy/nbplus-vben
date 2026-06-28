@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { StorageApi } from '#/api/system/storage';
+import type { StorageApi } from '#/api/admin/sys/storage';
 
 import { onMounted } from 'vue';
 
@@ -9,7 +9,7 @@ import { IconifyIcon, Plus } from '@vben/icons';
 import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { batchDeleteStorageApi } from '#/api/system/storage';
+import { batchDeleteStorageApi } from '#/api/admin/sys/storage';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { $t } from '#/locales';
 

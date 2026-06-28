@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { UserApi } from '#/api/org/user';
+import type { UserApi } from '#/api/admin/sys/user';
 
 import { ref } from 'vue';
 
@@ -7,7 +7,7 @@ import { IconifyIcon } from '@vben/icons';
 
 import { Button, message, Modal, Popconfirm } from 'ant-design-vue';
 
-import { getUserOnlineApi, kickAllUserDevicesApi, kickUserDeviceApi } from '#/api/org/user';
+import { getUserOnlineApi, kickAllUserDevicesApi, kickUserDeviceApi } from '#/api/admin/sys/user';
 import OnlineDevices from '#/components/online-devices/index.vue';
 
 const visible = ref(false);

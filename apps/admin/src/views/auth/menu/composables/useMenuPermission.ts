@@ -7,13 +7,13 @@
  * 3. 批量创建按钮权限菜单
  */
 
-import type { ControllerMethodItem, MenuAdminApi } from '#/api/auth/menuAdmin';
+import type { ControllerMethodItem, MenuAdminApi } from '#/api/admin/sys/menuAdmin';
 
 import { ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { batchCreateMenuApi, getControllerMethodsApi } from '#/api/auth/menuAdmin';
+import { batchCreateMenuApi, getControllerMethodsApi } from '#/api/admin/sys/menuAdmin';
 
 import { buildMethodOptions, buildPermissionSuffix, createPermissionOptions } from '../data';
 

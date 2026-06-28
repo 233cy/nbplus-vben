@@ -32,7 +32,7 @@ export namespace PostApi {
   }
 }
 
-const BASE = '/admin/org/post';
+const BASE = '/admin/sys/post';
 
 export function getPostListApi(params: PostApi.PageParams) {
   return requestClient.get<{ items: PostApi.PostItem[]; meta: { currentPage: number; perPage: number; total: number } }>(`${BASE}/list`, { params });

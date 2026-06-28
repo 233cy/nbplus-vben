@@ -1,5 +1,5 @@
 import type { VbenFormSchema } from '#/adapter/form';
-import type { CurdAdminApi } from '#/api/dev/curdAdmin';
+import type { CurdAdminApi } from '#/api/admin/dev/curdAdmin';
 
 import { $t } from '#/locales';
 

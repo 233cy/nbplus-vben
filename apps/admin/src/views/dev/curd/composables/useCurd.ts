@@ -1,10 +1,10 @@
-import type { CurdAdminApi } from '#/api/dev/curdAdmin';
+import type { CurdAdminApi } from '#/api/admin/dev/curdAdmin';
 
 import { ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { generateCurdApi } from '#/api/dev/curdAdmin';
+import { generateCurdApi } from '#/api/admin/dev/curdAdmin';
 import { $t } from '#/locales';
 
 /**

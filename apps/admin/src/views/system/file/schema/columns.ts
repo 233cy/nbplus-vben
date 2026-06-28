@@ -1,5 +1,5 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { FileApi } from '#/api/system/file';
+import type { FileApi } from '#/api/admin/sys/file';
 
 import { h } from 'vue';
 

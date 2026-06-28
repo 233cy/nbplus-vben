@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { RoleApi } from '#/api/auth/role';
+import type { RoleApi } from '#/api/admin/sys/role';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { createRoleApi, getRoleDetailApi, updateRoleApi } from '#/api/auth/role';
+import { createRoleApi, getRoleDetailApi, updateRoleApi } from '#/api/admin/sys/role';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 

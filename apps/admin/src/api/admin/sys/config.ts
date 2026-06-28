@@ -58,35 +58,35 @@ export namespace ConfigApi {
 }
 
 export function getConfigGroupsApi() {
-  return requestClient.get<ConfigApi.GroupItem[]>('/admin/system/config/groups');
+  return requestClient.get<ConfigApi.GroupItem[]>('/admin/sys/config/groups');
 }
 
 export function getConfigListApi(groups: string) {
-  return requestClient.get<ConfigApi.ConfigItem[]>('/admin/system/config/list', { params: { groups } });
+  return requestClient.get<ConfigApi.ConfigItem[]>('/admin/sys/config/list', { params: { groups } });
 }
 
 export function saveConfigApi(items: ConfigApi.SaveItem[]) {
-  return requestClient.post('/admin/system/config/save', { items });
+  return requestClient.post('/admin/sys/config/save', { items });
 }
 
 export function createConfigApi(data: ConfigApi.CreateParams) {
-  return requestClient.post<ConfigApi.ConfigItem>('/admin/system/config/create', data);
+  return requestClient.post<ConfigApi.ConfigItem>('/admin/sys/config/create', data);
 }
 
 export function updateConfigApi(data: ConfigApi.UpdateParams) {
-  return requestClient.put<ConfigApi.ConfigItem>('/admin/system/config/update', data);
+  return requestClient.put<ConfigApi.ConfigItem>('/admin/sys/config/update', data);
 }
 
 export function sortConfigApi(items: { id: string; sort: number }[]) {
-  return requestClient.put('/admin/system/config/sort', { items });
+  return requestClient.put('/admin/sys/config/sort', { items });
 }
 
 export function toggleConfigApi(id: string, field: 'isPublic' | 'isSys') {
-  return requestClient.put<ConfigApi.ConfigItem>('/admin/system/config/toggle', { id, field });
+  return requestClient.put<ConfigApi.ConfigItem>('/admin/sys/config/toggle', { id, field });
 }
 
 export function deleteConfigApi(id: string) {
-  return requestClient.delete('/admin/system/config/delete', { data: { id } });
+  return requestClient.delete('/admin/sys/config/delete', { data: { id } });
 }
 
 /** 获取公开配置（无需登录） */

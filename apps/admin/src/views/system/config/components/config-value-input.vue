@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ComponentType } from '#/adapter/component';
-import type { ConfigApi } from '#/api/system/config';
+import type { ConfigApi } from '#/api/admin/sys/config';
 
 import { computed } from 'vue';
 

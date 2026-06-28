@@ -1,4 +1,4 @@
-import type { CaptchaDriverApi } from '#/api/system/captchaDriver';
+import type { CaptchaDriverApi } from '#/api/admin/sys/captchaDriver';
 
 import { computed, nextTick, reactive, ref } from 'vue';
 

@@ -1,10 +1,10 @@
-import type { DeptApi } from '#/api/org/dept';
+import type { DeptApi } from '#/api/admin/sys/dept';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { createDeptApi, updateDeptApi } from '#/api/org/dept';
+import { createDeptApi, updateDeptApi } from '#/api/admin/sys/dept';
 
 import { createDefaultForm, findDeptTitle } from '../data';
 

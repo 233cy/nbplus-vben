@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { StorageApi } from '#/api/system/storage';
+import type { StorageApi } from '#/api/admin/sys/storage';
 
 import { ref } from 'vue';
 

@@ -7,13 +7,13 @@
  * 3. 提交移动并刷新
  */
 
-import type { MenuAdminApi } from '#/api/auth/menuAdmin';
+import type { MenuAdminApi } from '#/api/admin/sys/menuAdmin';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { updateMenuApi } from '#/api/auth/menuAdmin';
+import { updateMenuApi } from '#/api/admin/sys/menuAdmin';
 
 import { buildParentTreeData, ROOT_PARENT } from '../data';
 

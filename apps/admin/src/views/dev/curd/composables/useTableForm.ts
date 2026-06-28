@@ -1,10 +1,10 @@
-import type { CurdAdminApi } from '#/api/dev/curdAdmin';
+import type { CurdAdminApi } from '#/api/admin/dev/curdAdmin';
 
 import { computed, onMounted, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { createCurdTableApi, getCurdConnectionsApi, getCurdTablesApi, updateCurdTableApi } from '#/api/dev/curdAdmin';
+import { createCurdTableApi, getCurdConnectionsApi, getCurdTablesApi, updateCurdTableApi } from '#/api/admin/dev/curdAdmin';
 import { $t } from '#/locales';
 
 import { createDefaultTableForm } from '../data';

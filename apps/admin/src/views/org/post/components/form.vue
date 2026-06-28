@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { PostApi } from '#/api/org/post';
+import type { PostApi } from '#/api/admin/sys/post';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { createPostApi, getPostDetailApi, updatePostApi } from '#/api/org/post';
+import { createPostApi, getPostDetailApi, updatePostApi } from '#/api/admin/sys/post';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 

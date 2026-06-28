@@ -35,21 +35,21 @@ export namespace CaptchaDriverApi {
 }
 
 export function getCaptchaDriversApi() {
-  return requestClient.get<CaptchaDriverApi.DriverItem[]>('/admin/system/captcha-driver/list');
+  return requestClient.get<CaptchaDriverApi.DriverItem[]>('/admin/sys/captcha-driver/list');
 }
 
 export function updateCaptchaDriverApi(data: CaptchaDriverApi.UpdateParams) {
-  return requestClient.put('/admin/system/captcha-driver/update', data);
+  return requestClient.put('/admin/sys/captcha-driver/update', data);
 }
 
 export function getCaptchaWatermarkApi() {
-  return requestClient.get<CaptchaDriverApi.WatermarkConfig>('/admin/system/captcha-driver/watermark');
+  return requestClient.get<CaptchaDriverApi.WatermarkConfig>('/admin/sys/captcha-driver/watermark');
 }
 
 export function saveCaptchaWatermarkApi(data: Partial<CaptchaDriverApi.WatermarkConfig>) {
-  return requestClient.post('/admin/system/captcha-driver/watermark', data);
+  return requestClient.post('/admin/sys/captcha-driver/watermark', data);
 }
 
 export function previewCaptchaDriverApi(type: string) {
-  return requestClient.get<Record<string, any>>('/admin/system/captcha-driver/preview', { params: { type } });
+  return requestClient.get<Record<string, any>>('/admin/sys/captcha-driver/preview', { params: { type } });
 }

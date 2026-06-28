@@ -1,6 +1,6 @@
 import type { VbenFormSchema } from '#/adapter/form';
 
-import { getPostAllApi } from '#/api/org/post';
+import { getPostAllApi } from '#/api/admin/sys/post';
 import { $t } from '#/locales';
 
 /**

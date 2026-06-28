@@ -8,11 +8,11 @@
  * 4. 当前选中的字典管理
  */
 
-import type { DictApi } from '#/api/system/dict';
+import type { DictApi } from '#/api/admin/sys/dict';
 
 import { computed, ref } from 'vue';
 
-import { getAllDictsApi } from '#/api/system/dict';
+import { getAllDictsApi } from '#/api/admin/sys/dict';
 
 import { extractGroups, groupByGroups } from '../data';
 

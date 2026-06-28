@@ -1,7 +1,7 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { PostApi } from '#/api/org/post';
+import type { PostApi } from '#/api/admin/sys/post';
 
-import { deletePostApi, inlineUpdatePostApi } from '#/api/org/post';
+import { deletePostApi, inlineUpdatePostApi } from '#/api/admin/sys/post';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';

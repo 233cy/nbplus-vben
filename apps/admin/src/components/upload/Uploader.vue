@@ -3,7 +3,7 @@ import type { QueueFile, UploadType } from './composables/useUploadQueue';
 
 import { computed, provide, ref, watch } from 'vue';
 
-import { resolveLogicalPaths } from '#/api/core/upload';
+import { resolveLogicalPaths } from '#/api/admin/core/upload';
 
 import MediaPreviewModal from './components/MediaPreviewModal.vue';
 import { getAllowedFileExtensions, getAllowedImageExtensions, getAllowedMediaExtensions } from './composables/useFileUpload';

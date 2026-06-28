@@ -1,5 +1,5 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { StorageApi } from '#/api/system/storage';
+import type { StorageApi } from '#/api/admin/sys/storage';
 
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';

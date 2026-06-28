@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CurdAdminApi } from '#/api/dev/curdAdmin';
+import type { CurdAdminApi } from '#/api/admin/dev/curdAdmin';
 
 import { IconifyIcon } from '@vben/icons';
 

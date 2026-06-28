@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ConfigApi } from '#/api/system/config';
+import type { ConfigApi } from '#/api/admin/sys/config';
 
 import { Form, FormItem, Input, Modal, Select, Switch, Textarea } from 'ant-design-vue';
 

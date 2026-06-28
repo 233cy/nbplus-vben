@@ -48,41 +48,41 @@ export namespace DictApi {
 }
 
 export function getAllDictsApi() {
-  return requestClient.get<DictApi.DictItem[]>('/admin/system/dict/all');
+  return requestClient.get<DictApi.DictItem[]>('/admin/sys/dict/all');
 }
 
 export function createDictApi(data: DictApi.DictSaveParams) {
-  return requestClient.post<DictApi.DictItem>('/admin/system/dict/create', data);
+  return requestClient.post<DictApi.DictItem>('/admin/sys/dict/create', data);
 }
 
 export function updateDictApi(data: DictApi.DictSaveParams & { id: string }) {
-  return requestClient.put<DictApi.DictItem>('/admin/system/dict/update', data);
+  return requestClient.put<DictApi.DictItem>('/admin/sys/dict/update', data);
 }
 
 export function deleteDictApi(id: string) {
-  return requestClient.delete('/admin/system/dict/delete', { data: { id } });
+  return requestClient.delete('/admin/sys/dict/delete', { data: { id } });
 }
 
 export function sortDictApi(items: DictApi.SortItem[]) {
-  return requestClient.put('/admin/system/dict/sort', { items });
+  return requestClient.put('/admin/sys/dict/sort', { items });
 }
 
 export function getDictItemsApi(id: string) {
-  return requestClient.get<DictApi.DictItemData[]>('/admin/system/dict/items', { params: { id } });
+  return requestClient.get<DictApi.DictItemData[]>('/admin/sys/dict/items', { params: { id } });
 }
 
 export function createDictItemApi(data: DictApi.DictItemSaveParams) {
-  return requestClient.post<DictApi.DictItemData>('/admin/system/dict/item/create', data);
+  return requestClient.post<DictApi.DictItemData>('/admin/sys/dict/item/create', data);
 }
 
 export function updateDictItemApi(data: DictApi.DictItemSaveParams & { id: string }) {
-  return requestClient.put<DictApi.DictItemData>('/admin/system/dict/item/update', data);
+  return requestClient.put<DictApi.DictItemData>('/admin/sys/dict/item/update', data);
 }
 
 export function deleteDictItemApi(id: string) {
-  return requestClient.delete('/admin/system/dict/item/delete', { data: { id } });
+  return requestClient.delete('/admin/sys/dict/item/delete', { data: { id } });
 }
 
 export function sortDictItemApi(items: DictApi.SortItem[]) {
-  return requestClient.put('/admin/system/dict/item/sort', { items });
+  return requestClient.put('/admin/sys/dict/item/sort', { items });
 }

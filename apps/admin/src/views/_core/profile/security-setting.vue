@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { AuthApi } from '#/api/core/auth';
-import type { ProfileApi } from '#/api/core/profile';
+import type { AuthApi } from '#/api/admin/core/auth';
+import type { ProfileApi } from '#/api/admin/core/profile';
 
 import { computed, onMounted, ref, useTemplateRef } from 'vue';
 

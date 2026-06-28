@@ -53,7 +53,7 @@ export namespace StorageApi {
   }
 }
 
-const BASE = '/admin/system/storage';
+const BASE = '/admin/sys/storage';
 
 export function getStorageListApi(params: StorageApi.PageParams) {
   return requestClient.get<{ items: StorageApi.StorageItem[]; meta: { currentPage: number; perPage: number; total: number } }>(`${BASE}/list`, { params });

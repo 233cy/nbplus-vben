@@ -1,4 +1,4 @@
-import type { CurdAdminApi } from '#/api/dev/curdAdmin';
+import type { CurdAdminApi } from '#/api/admin/dev/curdAdmin';
 
 /**
  * CURD 管理模块共享常量、类型与工具函数

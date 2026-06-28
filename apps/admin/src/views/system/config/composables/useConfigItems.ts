@@ -1,12 +1,12 @@
 import type { Ref } from 'vue';
 
-import type { ConfigApi } from '#/api/system/config';
+import type { ConfigApi } from '#/api/admin/sys/config';
 
 import { ref, watch } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { deleteConfigApi, getConfigListApi, saveConfigApi, toggleConfigApi } from '#/api/system/config';
+import { deleteConfigApi, getConfigListApi, saveConfigApi, toggleConfigApi } from '#/api/admin/sys/config';
 import { $t } from '#/locales';
 
 /**

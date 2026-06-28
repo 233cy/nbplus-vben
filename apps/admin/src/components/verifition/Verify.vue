@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { reqGet } from '#/api/core/captcha';
+import { reqGet } from '#/api/admin/core/captcha';
 
 import CaptchaWidget from './verify/CaptchaWidget.vue';
 import VerifyPoints from './verify/VerifyPoints.vue';

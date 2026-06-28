@@ -10,11 +10,11 @@
  *   const items = await getDictItems('gender')     // 非响应式，直接拿数组
  */
 
-import type { DictApi } from '#/api/system/dict';
+import type { DictApi } from '#/api/admin/sys/dict';
 
 import { computed, ref } from 'vue';
 
-import { getDictItemsApi, getAllDictsApi } from '#/api/system/dict';
+import { getDictItemsApi, getAllDictsApi } from '#/api/admin/sys/dict';
 
 // =========================================================================
 // 全局缓存

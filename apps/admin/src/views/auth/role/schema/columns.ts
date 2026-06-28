@@ -1,7 +1,7 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { RoleApi } from '#/api/auth/role';
+import type { RoleApi } from '#/api/admin/sys/role';
 
-import { deleteRoleApi, inlineUpdateRoleApi } from '#/api/auth/role';
+import { deleteRoleApi, inlineUpdateRoleApi } from '#/api/admin/sys/role';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';

@@ -2,13 +2,13 @@
  * useItemForm - 字典项新增/编辑/删除逻辑
  */
 
-import type { DictApi } from '#/api/system/dict';
+import type { DictApi } from '#/api/admin/sys/dict';
 
 import { ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { createDictItemApi, deleteDictItemApi, updateDictItemApi } from '#/api/system/dict';
+import { createDictItemApi, deleteDictItemApi, updateDictItemApi } from '#/api/admin/sys/dict';
 import { $t } from '#/locales';
 
 import { calcNextSort, createDefaultItemForm } from '../data';

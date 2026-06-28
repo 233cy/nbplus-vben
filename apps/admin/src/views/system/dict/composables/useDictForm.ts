@@ -2,13 +2,13 @@
  * useDictForm - 字典类型新增/编辑/删除逻辑
  */
 
-import type { DictApi } from '#/api/system/dict';
+import type { DictApi } from '#/api/admin/sys/dict';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { createDictApi, deleteDictApi, updateDictApi } from '#/api/system/dict';
+import { createDictApi, deleteDictApi, updateDictApi } from '#/api/admin/sys/dict';
 import { $t } from '#/locales';
 
 import { createDefaultDictForm } from '../data';

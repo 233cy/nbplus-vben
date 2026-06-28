@@ -13,7 +13,7 @@ import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 import { codeLoginApi, getAccessCodesApi, getProfileInfoApi, loginApi, logoutApi, mfaLoginApi, totpLoginApi } from '#/api';
-import { resolveLogicalPath } from '#/api/core/upload';
+import { resolveLogicalPath } from '#/api/admin/core/upload';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store';
 

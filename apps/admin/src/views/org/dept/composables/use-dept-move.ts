@@ -1,10 +1,10 @@
-import type { DeptApi } from '#/api/org/dept';
+import type { DeptApi } from '#/api/admin/sys/dept';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { updateDeptApi } from '#/api/org/dept';
+import { updateDeptApi } from '#/api/admin/sys/dept';
 
 import { buildParentTreeData, ROOT_PARENT } from '../data';
 

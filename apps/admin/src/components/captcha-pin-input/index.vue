@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AuthApi } from '#/api/core/auth';
+import type { AuthApi } from '#/api/admin/core/auth';
 
 import { ref, useAttrs } from 'vue';
 

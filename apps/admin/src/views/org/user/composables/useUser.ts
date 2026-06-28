@@ -1,4 +1,4 @@
-import type { UserApi } from '#/api/org/user';
+import type { UserApi } from '#/api/admin/sys/user';
 
 import { ref } from 'vue';
 

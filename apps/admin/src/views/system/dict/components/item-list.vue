@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DictApi } from '#/api/system/dict';
+import type { DictApi } from '#/api/admin/sys/dict';
 
 import { computed, ref, watch } from 'vue';
 
@@ -7,7 +7,7 @@ import { Button, Card, Empty, Input, Spin, Tag } from 'ant-design-vue';
 import { IconifyIcon } from '@vben/icons';
 import vuedraggable from 'vuedraggable';
 
-import { sortDictItemApi } from '#/api/system/dict';
+import { sortDictItemApi } from '#/api/admin/sys/dict';
 import TableActions, { type TableActionItem } from '#/components/vxe-table/TableActions.vue';
 import { $t } from '#/locales';
 

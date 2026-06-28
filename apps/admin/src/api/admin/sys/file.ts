@@ -1,4 +1,4 @@
-import type { ConfigApi } from '#/api/system/config';
+import type { ConfigApi } from '#/api/admin/sys/config';
 
 import { requestClient } from '#/api/request';
 
@@ -34,7 +34,7 @@ export namespace FileApi {
   }
 }
 
-const BASE = '/admin/system/file';
+const BASE = '/admin/sys/file';
 
 export function getFileListApi(params: FileApi.PageParams) {
   return requestClient.get<{ items: FileApi.FileItem[]; meta: { currentPage: number; perPage: number; total: number } }>(`${BASE}/list`, { params });

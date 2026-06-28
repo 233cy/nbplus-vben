@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ConfigApi } from '#/api/system/config';
+import type { ConfigApi } from '#/api/admin/sys/config';
 
 import { computed, ref, watch } from 'vue';
 
@@ -7,7 +7,7 @@ import { IconifyIcon } from '@vben/icons';
 
 import { Button, Drawer, Form, FormItem, message, Spin } from 'ant-design-vue';
 
-import { getConfigListApi, saveConfigApi } from '#/api/system/config';
+import { getConfigListApi, saveConfigApi } from '#/api/admin/sys/config';
 import { $t } from '#/locales';
 
 import ConfigValueInput from '../components/config-value-input.vue';

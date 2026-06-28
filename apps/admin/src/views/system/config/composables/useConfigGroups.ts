@@ -1,8 +1,8 @@
-import type { ConfigApi } from '#/api/system/config';
+import type { ConfigApi } from '#/api/admin/sys/config';
 
 import { ref } from 'vue';
 
-import { getConfigGroupsApi } from '#/api/system/config';
+import { getConfigGroupsApi } from '#/api/admin/sys/config';
 
 /**
  * 配置分组加载与当前选中分组.

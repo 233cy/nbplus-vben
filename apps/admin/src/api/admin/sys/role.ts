@@ -56,7 +56,7 @@ export namespace RoleApi {
   }
 }
 
-const BASE = '/admin/auth/role';
+const BASE = '/admin/sys/role';
 
 export function getRoleListApi(params: RoleApi.PageParams) {
   return requestClient.get<{ items: RoleApi.RoleItem[]; meta: { currentPage: number; perPage: number; total: number } }>(`${BASE}/list`, { params });

@@ -5,7 +5,7 @@ import { IconifyIcon, Plus } from '@vben/icons';
 import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { batchDeletePostApi, batchUpdatePostApi, getPostDetailApi, getPostListApi } from '#/api/org/post';
+import { batchDeletePostApi, batchUpdatePostApi, getPostDetailApi, getPostListApi } from '#/api/admin/sys/post';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';

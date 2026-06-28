@@ -1,5 +1,5 @@
 import type { ComponentType } from '#/adapter/component';
-import type { ConfigApi } from '#/api/system/config';
+import type { ConfigApi } from '#/api/admin/sys/config';
 
 /** 历史别名映射：后端存储的组件名可能与适配器注册名不一致 */
 export const componentAliasMap: Record<string, ComponentType> = {

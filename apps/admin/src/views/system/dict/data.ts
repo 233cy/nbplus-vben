@@ -2,7 +2,7 @@
  * 字典管理模块共享常量、类型与工具函数
  */
 
-import type { DictApi } from '#/api/system/dict';
+import type { DictApi } from '#/api/admin/sys/dict';
 
 /** 字典项颜色选项 */
 export function createColorOptions(t: (key: string) => string) {

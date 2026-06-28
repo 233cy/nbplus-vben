@@ -7,11 +7,11 @@
  * 3. 排序变更后同步到后端
  */
 
-import type { DictApi } from '#/api/system/dict';
+import type { DictApi } from '#/api/admin/sys/dict';
 
 import { ref } from 'vue';
 
-import { getDictItemsApi } from '#/api/system/dict';
+import { getDictItemsApi } from '#/api/admin/sys/dict';
 
 export function useDictItems() {
   const loading = ref(false);

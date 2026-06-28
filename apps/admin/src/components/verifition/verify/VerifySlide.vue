@@ -5,7 +5,7 @@ import { $t } from '@vben/locales';
 
 import { useDebounceFn } from '@vueuse/core';
 
-import { reqCheck, reqGet } from '#/api/core/captcha';
+import { reqCheck, reqGet } from '#/api/admin/core/captcha';
 
 import { aesEncrypt } from './../utils/ase';
 import { resetSize } from './../utils/util';

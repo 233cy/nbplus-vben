@@ -61,7 +61,7 @@ export namespace UserApi {
   }
 }
 
-const BASE = '/admin/org/user';
+const BASE = '/admin/sys/user';
 
 export function getUserListApi(params: UserApi.PageParams) {
   return requestClient.get<{ items: UserApi.UserItem[]; meta: { currentPage: number; perPage: number; total: number } }>(`${BASE}/list`, { params });

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CaptchaDriverApi } from '#/api/system/captchaDriver';
+import type { CaptchaDriverApi } from '#/api/admin/sys/captchaDriver';
 
 import { IconifyIcon } from '@vben/icons';
 

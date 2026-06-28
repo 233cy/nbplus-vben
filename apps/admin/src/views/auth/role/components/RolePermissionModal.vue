@@ -6,10 +6,10 @@ import { useVbenModal } from '@vben/common-ui';
 import { Button, Space, Tree } from 'ant-design-vue';
 import { message } from 'ant-design-vue';
 
-import { assignRoleMenusApi, getRoleMenuTreeApi } from '#/api/auth/role';
+import { assignRoleMenusApi, getRoleMenuTreeApi } from '#/api/admin/sys/role';
 import { $t } from '#/locales';
 
-import type { RoleApi } from '#/api/auth/role';
+import type { RoleApi } from '#/api/admin/sys/role';
 
 const emit = defineEmits<{
   success: [];

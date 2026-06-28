@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FileApi } from '#/api/system/file';
+import type { FileApi } from '#/api/admin/sys/file';
 
 import { onMounted, ref } from 'vue';
 
@@ -9,7 +9,7 @@ import { IconifyIcon } from '@vben/icons';
 import { Button, message, Space } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { batchDeleteFileApi, previewFileApi, saveFileConfigApi } from '#/api/system/file';
+import { batchDeleteFileApi, previewFileApi, saveFileConfigApi } from '#/api/admin/sys/file';
 import QuickConfigDrawer from '#/views/system/config/shared/quick-config-drawer.vue';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { $t } from '#/locales';

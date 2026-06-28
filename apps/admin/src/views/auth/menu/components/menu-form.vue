@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MenuAdminApi } from '#/api/auth/menuAdmin';
+import type { MenuAdminApi } from '#/api/admin/sys/menuAdmin';
 
 import { computed } from 'vue';
 

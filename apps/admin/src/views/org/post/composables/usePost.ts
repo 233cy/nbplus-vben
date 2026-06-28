@@ -1,4 +1,4 @@
-import type { PostApi } from '#/api/org/post';
+import type { PostApi } from '#/api/admin/sys/post';
 
 /**
  * usePost - 职务管理页面表格操作逻辑

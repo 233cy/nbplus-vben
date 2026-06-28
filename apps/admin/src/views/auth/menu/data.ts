@@ -5,7 +5,7 @@
  * 避免这些逻辑散落在页面和 composables 中。
  */
 
-import type { ControllerMethodItem, MenuAdminApi } from '#/api/auth/menuAdmin';
+import type { ControllerMethodItem, MenuAdminApi } from '#/api/admin/sys/menuAdmin';
 
 /** 菜单类型选项 */
 export const TYPE_OPTIONS: { label: string; value: MenuAdminApi.MenuType }[] = [

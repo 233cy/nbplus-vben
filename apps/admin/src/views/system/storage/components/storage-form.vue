@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { StorageApi } from '#/api/system/storage';
+import type { StorageApi } from '#/api/admin/sys/storage';
 
 import { computed, ref } from 'vue';
 
@@ -7,7 +7,7 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { Form, FormItem, Input, InputNumber, InputPassword, Select, Switch, message } from 'ant-design-vue';
 
-import { createStorageApi, updateStorageApi } from '#/api/system/storage';
+import { createStorageApi, updateStorageApi } from '#/api/admin/sys/storage';
 import { $t } from '#/locales';
 
 const emit = defineEmits<{ success: [] }>();

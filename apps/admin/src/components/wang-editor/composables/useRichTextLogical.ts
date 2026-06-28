@@ -1,4 +1,4 @@
-import { resolveLogicalPaths } from '#/api/core/upload';
+import { resolveLogicalPaths } from '#/api/admin/core/upload';
 
 /**
  * 富文本「逻辑路径 ↔ 完整 URL」转换器。

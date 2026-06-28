@@ -1,4 +1,4 @@
-import type { StorageApi } from '#/api/system/storage';
+import type { StorageApi } from '#/api/admin/sys/storage';
 
 import { message } from 'ant-design-vue';
 import { ref } from 'vue';
@@ -10,7 +10,7 @@ import {
   getStorageListApi,
   setDefaultStorageApi,
   toggleStorageApi,
-} from '#/api/system/storage';
+} from '#/api/admin/sys/storage';
 import { $t } from '#/locales';
 
 export function useStorage() {

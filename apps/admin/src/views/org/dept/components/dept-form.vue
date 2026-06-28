@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DeptApi } from '#/api/org/dept';
+import type { DeptApi } from '#/api/admin/sys/dept';
 
 import { computed } from 'vue';
 

@@ -5,7 +5,7 @@ import { IconifyIcon, Plus } from '@vben/icons';
 import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { batchDeleteRoleApi, batchUpdateRoleApi, getRoleDetailApi, getRoleListApi } from '#/api/auth/role';
+import { batchDeleteRoleApi, batchUpdateRoleApi, getRoleDetailApi, getRoleListApi } from '#/api/admin/sys/role';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';

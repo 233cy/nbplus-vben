@@ -12,13 +12,13 @@
 
 import type { DeptTreeNode } from '../data';
 
-import type { DeptApi } from '#/api/org/dept';
+import type { DeptApi } from '#/api/admin/sys/dept';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { batchDeleteDeptApi, deleteDeptApi, getDeptTreeApi, sortDeptApi, toggleDeptApi } from '#/api/org/dept';
+import { batchDeleteDeptApi, deleteDeptApi, getDeptTreeApi, sortDeptApi, toggleDeptApi } from '#/api/admin/sys/dept';
 
 import { buildGlobalSortItems, buildTreeNodes, collectAllKeys, filterDeptTree, findParentId } from '../data';
 

@@ -40,7 +40,7 @@ export namespace DeptApi {
   }
 }
 
-const BASE = '/admin/org/dept';
+const BASE = '/admin/sys/dept';
 
 export function getDeptTreeApi() {
   return requestClient.get<DeptApi.DeptItem[]>(`${BASE}/tree`);

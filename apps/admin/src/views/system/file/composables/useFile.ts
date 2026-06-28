@@ -1,8 +1,8 @@
-import type { FileApi } from '#/api/system/file';
-import type { StorageApi } from '#/api/system/storage';
+import type { FileApi } from '#/api/admin/sys/file';
+import type { StorageApi } from '#/api/admin/sys/storage';
 
-import { batchDeleteFileApi, batchMoveFileApi, getFileListApi, moveFileApi } from '#/api/system/file';
-import { getStorageOptionsApi } from '#/api/system/storage';
+import { batchDeleteFileApi, batchMoveFileApi, getFileListApi, moveFileApi } from '#/api/admin/sys/file';
+import { getStorageOptionsApi } from '#/api/admin/sys/storage';
 import { $t } from '#/locales';
 import { message } from 'ant-design-vue';
 import { ref } from 'vue';

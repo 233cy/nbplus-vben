@@ -1,11 +1,11 @@
-import type { CurdAdminApi } from '#/api/dev/curdAdmin';
+import type { CurdAdminApi } from '#/api/admin/dev/curdAdmin';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { getCurdFieldListApi, saveCurdFieldsApi, syncCurdFieldsApi } from '#/api/dev/curdAdmin';
-import { getAllDictsApi } from '#/api/system/dict';
+import { getCurdFieldListApi, saveCurdFieldsApi, syncCurdFieldsApi } from '#/api/admin/dev/curdAdmin';
+import { getAllDictsApi } from '#/api/admin/sys/dict';
 import { $t } from '#/locales';
 
 import { createDefaultField } from '../data';

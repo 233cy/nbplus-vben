@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RoleApi } from '#/api/auth/role';
+import type { RoleApi } from '#/api/admin/sys/role';
 
 import { computed, ref } from 'vue';
 
@@ -7,7 +7,7 @@ import { useVbenModal } from '@vben/common-ui';
 
 import { Button, message, RadioGroup, Space, Tree } from 'ant-design-vue';
 
-import { assignRoleDataScopeApi, getRoleDataScopeApi, getRoleDeptTreeApi } from '#/api/auth/role';
+import { assignRoleDataScopeApi, getRoleDataScopeApi, getRoleDeptTreeApi } from '#/api/admin/sys/role';
 import { $t } from '#/locales';
 
 const emit = defineEmits<{

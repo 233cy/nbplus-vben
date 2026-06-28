@@ -59,31 +59,31 @@ export namespace MenuAdminApi {
 }
 
 export function getMenuListApi() {
-  return requestClient.get<MenuAdminApi.MenuItem[]>('/admin/auth/menu/list');
+  return requestClient.get<MenuAdminApi.MenuItem[]>('/admin/sys/menu/list');
 }
 
 export function createMenuApi(data: MenuAdminApi.SaveParams) {
-  return requestClient.post<MenuAdminApi.MenuItem>('/admin/auth/menu/create', data);
+  return requestClient.post<MenuAdminApi.MenuItem>('/admin/sys/menu/create', data);
 }
 
 export function updateMenuApi(data: MenuAdminApi.SaveParams & { id: string }) {
-  return requestClient.put<MenuAdminApi.MenuItem>('/admin/auth/menu/update', data);
+  return requestClient.put<MenuAdminApi.MenuItem>('/admin/sys/menu/update', data);
 }
 
 export function deleteMenuApi(id: string) {
-  return requestClient.delete('/admin/auth/menu/delete', { data: { id } });
+  return requestClient.delete('/admin/sys/menu/delete', { data: { id } });
 }
 
 export function batchDeleteMenuApi(ids: string[]) {
-  return requestClient.delete<{ deleted: string[]; skipped: string[] }>('/admin/auth/menu/batch-delete', { data: { ids } });
+  return requestClient.delete<{ deleted: string[]; skipped: string[] }>('/admin/sys/menu/batch-delete', { data: { ids } });
 }
 
 export function sortMenuApi(items: { id: string; sort: number }[]) {
-  return requestClient.put('/admin/auth/menu/sort', { items });
+  return requestClient.put('/admin/sys/menu/sort', { items });
 }
 
 export function batchCreateMenuApi(items: MenuAdminApi.SaveParams[]) {
-  return requestClient.post<{ created: MenuAdminApi.MenuItem[]; skipped: string[] }>('/admin/auth/menu/batch-create', { items });
+  return requestClient.post<{ created: MenuAdminApi.MenuItem[]; skipped: string[] }>('/admin/sys/menu/batch-create', { items });
 }
 
 export interface ControllerMethodItem {
@@ -93,9 +93,9 @@ export interface ControllerMethodItem {
 }
 
 export function getControllerMethodsApi(prefix: string) {
-  return requestClient.post<ControllerMethodItem[]>('/admin/auth/menu/controller-methods', { prefix });
+  return requestClient.post<ControllerMethodItem[]>('/admin/sys/menu/controller-methods', { prefix });
 }
 
 export function toggleMenuApi(id: string, field: 'isAffixTab' | 'isHidden' | 'isKeepAlive' | 'status', value: boolean | number) {
-  return requestClient.put('/admin/auth/menu/toggle', { id, [field]: value });
+  return requestClient.put('/admin/sys/menu/toggle', { id, [field]: value });
 }

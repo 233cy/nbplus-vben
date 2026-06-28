@@ -10,7 +10,7 @@
  * 6. 状态/缓存开关切换
  */
 
-import type { MenuAdminApi } from '#/api/auth/menuAdmin';
+import type { MenuAdminApi } from '#/api/admin/sys/menuAdmin';
 
 import { computed, ref } from 'vue';
 
@@ -22,7 +22,7 @@ import {
   getMenuListApi,
   sortMenuApi,
   toggleMenuApi,
-} from '#/api/auth/menuAdmin';
+} from '#/api/admin/sys/menuAdmin';
 import { $t } from '#/locales';
 
 import { buildGlobalSortItems, collectAllKeys, findParentId } from '../data';

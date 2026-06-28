@@ -1,7 +1,7 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { UserApi } from '#/api/org/user';
+import type { UserApi } from '#/api/admin/sys/user';
 
-import { deleteUserApi, inlineUpdateUserApi } from '#/api/org/user';
+import { deleteUserApi, inlineUpdateUserApi } from '#/api/admin/sys/user';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';

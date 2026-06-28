@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ConfigApi } from '#/api/system/config';
+import type { ConfigApi } from '#/api/admin/sys/config';
 
 import { ref, watch } from 'vue';
 
@@ -8,7 +8,7 @@ import { IconifyIcon } from '@vben/icons';
 import { Button, Popconfirm, Spin, Tag, Tooltip } from 'ant-design-vue';
 import vuedraggable from 'vuedraggable';
 
-import { sortConfigApi } from '#/api/system/config';
+import { sortConfigApi } from '#/api/admin/sys/config';
 import { $t } from '#/locales';
 
 import ConfigValueInput from './config-value-input.vue';

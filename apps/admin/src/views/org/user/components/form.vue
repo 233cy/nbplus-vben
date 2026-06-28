@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { UserApi } from '#/api/org/user';
+import type { UserApi } from '#/api/admin/sys/user';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { createUserApi, updateUserApi } from '#/api/org/user';
+import { createUserApi, updateUserApi } from '#/api/admin/sys/user';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 

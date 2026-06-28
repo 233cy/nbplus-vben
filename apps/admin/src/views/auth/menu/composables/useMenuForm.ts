@@ -8,13 +8,13 @@
  * 4. 提交成功后刷新菜单树
  */
 
-import type { MenuAdminApi } from '#/api/auth/menuAdmin';
+import type { MenuAdminApi } from '#/api/admin/sys/menuAdmin';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { createMenuApi, updateMenuApi } from '#/api/auth/menuAdmin';
+import { createMenuApi, updateMenuApi } from '#/api/admin/sys/menuAdmin';
 import { $t } from '#/locales';
 
 import { createDefaultForm, findNodeTitle, getAllowedTypes } from '../data';

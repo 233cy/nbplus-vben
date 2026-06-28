@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DictGroup } from '../composables/useDict';
 
-import type { DictApi } from '#/api/system/dict';
+import type { DictApi } from '#/api/admin/sys/dict';
 
 import { computed, ref } from 'vue';
 
@@ -9,7 +9,7 @@ import { IconifyIcon } from '@vben/icons';
 
 import { Button, Input, Spin, Tag, Tooltip, Tree } from 'ant-design-vue';
 
-import { sortDictApi } from '#/api/system/dict';
+import { sortDictApi } from '#/api/admin/sys/dict';
 import { $t } from '#/locales';
 
 const props = defineProps<{

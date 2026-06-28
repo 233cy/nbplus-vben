@@ -7,7 +7,7 @@ import Uppy from '@uppy/core';
 import Tus from '@uppy/tus';
 import { message } from 'ant-design-vue';
 
-import { getTusFileInfo, getTusUrl, uploadFileApi } from '#/api/core/upload';
+import { getTusFileInfo, getTusUrl, uploadFileApi } from '#/api/admin/core/upload';
 import { useSiteStore } from '#/store/site';
 
 /** 分片阈值/切片大小的兜底默认值（MB），系统参数缺失时使用 */

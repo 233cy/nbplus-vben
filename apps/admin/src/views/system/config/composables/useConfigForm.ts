@@ -1,12 +1,12 @@
 import type { Ref } from 'vue';
 
-import type { ConfigApi } from '#/api/system/config';
+import type { ConfigApi } from '#/api/admin/sys/config';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { createConfigApi, updateConfigApi } from '#/api/system/config';
+import { createConfigApi, updateConfigApi } from '#/api/admin/sys/config';
 import { $t } from '#/locales';
 
 export const COMPONENT_KEYS = ['Input', 'InputPassword', 'Textarea', 'InputNumber', 'Switch', 'UpImg', 'Edit'] as const;
