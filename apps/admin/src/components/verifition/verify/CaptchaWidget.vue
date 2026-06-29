@@ -11,7 +11,7 @@ import { $t } from '@vben/locales';
 
 import { useDebounceFn } from '@vueuse/core';
 
-import { reqGet } from '#/api/admin/core/captcha';
+import { reqGet } from '#/api/core/captcha';
 
 interface Props {
   captchaType: 'imageText' | 'math';

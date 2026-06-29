@@ -1,4 +1,4 @@
-import { resolveLogicalPaths } from '#/api/admin/core/upload';
+import { resolveLogicalPaths } from '#/api/core/upload';
 
 /**
  * 富文本「逻辑路径 ↔ 完整 URL」转换器。
@@ -46,7 +46,7 @@ export function useRichTextLogical() {
       const src = el.getAttribute('src');
       const logicalPath = src ? urlToLogical.get(src) : undefined;
       if (logicalPath) {
-        el.setAttribute('data-logical', logicalPath);
+        el.dataset.logical = logicalPath;
         el.removeAttribute('src');
       }
     }
@@ -55,7 +55,7 @@ export function useRichTextLogical() {
       const href = el.getAttribute('href');
       const logicalPath = href ? urlToLogical.get(href) : undefined;
       if (logicalPath) {
-        el.setAttribute('data-logical', logicalPath);
+        el.dataset.logical = logicalPath;
         el.removeAttribute('href');
       }
     }
@@ -73,11 +73,11 @@ export function useRichTextLogical() {
     const nodes = [...doc.body.querySelectorAll('[data-logical]')];
     if (nodes.length === 0) return html;
 
-    const paths = [...new Set(nodes.map(n => n.getAttribute('data-logical')).filter(Boolean) as string[])];
+    const paths = [...new Set(nodes.map(n => n.dataset.logical).filter(Boolean) as string[])];
     const urlMap = await resolveLogicalPaths(paths);
 
     for (const node of nodes) {
-      const logicalPath = node.getAttribute('data-logical');
+      const logicalPath = node.dataset.logical;
       const fullUrl = logicalPath ? urlMap[logicalPath] : '';
       if (!logicalPath || !fullUrl) continue;
 

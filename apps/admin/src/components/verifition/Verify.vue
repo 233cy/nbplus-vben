@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { reqGet } from '#/api/admin/core/captcha';
+import { reqGet } from '#/api/core/captcha';
 
 import CaptchaWidget from './verify/CaptchaWidget.vue';
 import VerifyPoints from './verify/VerifyPoints.vue';
@@ -465,7 +465,7 @@ defineExpose({
   left: -1px;
   box-sizing: content-box;
   cursor: pointer;
-  background: hsl(var(--primary) / 0.1);
+  background: hsl(var(--primary) / 10%);
   border: 1px solid hsl(var(--border));
 }
 

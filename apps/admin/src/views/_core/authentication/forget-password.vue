@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { AuthApi } from '#/api/admin/core/auth';
+import type { AuthApi } from '#/api/core/auth';
 
 import { ref, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';

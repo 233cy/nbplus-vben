@@ -130,9 +130,9 @@ const kindIcon = computed(() => (props.file.kind === 'video' ? 'ant-design:play-
   inset: 0;
   display: flex;
   flex-direction: column;
+  gap: 6px;
   align-items: center;
   justify-content: center;
-  gap: 6px;
   padding: 0 12px;
   background-color: rgb(0 0 0 / 55%);
 }
@@ -158,9 +158,9 @@ const kindIcon = computed(() => (props.file.kind === 'video' ? 'ant-design:play-
   position: absolute;
   inset: 0;
   display: flex;
+  gap: 10px;
   align-items: center;
   justify-content: center;
-  gap: 10px;
   color: #fff;
   background-color: rgb(0 0 0 / 55%);
   opacity: 0;

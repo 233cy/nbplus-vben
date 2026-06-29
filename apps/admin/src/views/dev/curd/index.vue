@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CurdAdminApi } from '#/api/admin/dev/curdAdmin';
+import type { CurdAdminApi } from '#/api/dev/curdAdmin.js';
 
 import { ref } from 'vue';
 
@@ -9,7 +9,7 @@ import { Plus } from '@vben/icons';
 import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteCurdTableApi, getCurdTableListApi } from '#/api/admin/dev/curdAdmin';
+import { deleteCurdTableApi, getCurdTableListApi } from '#/api/dev/curdAdmin.js';
 import { $t } from '#/locales';
 
 import FieldForm from './components/field-form.vue';

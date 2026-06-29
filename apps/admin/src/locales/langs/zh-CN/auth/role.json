@@ -38,7 +38,11 @@
     "checkCatalog": "勾选目录",
     "checkMenu": "勾选菜单",
     "checkButton": "勾选按钮",
-    "selectedCount": "已选 {count} 项"
+    "selectedCount": "已选 {count} 项",
+    "menuPkg": "权限包",
+    "selectPkg": "请选择权限包",
+    "applyPkg": "应用",
+    "applyPkgSuccess": "已应用权限包"
   },
   "dataScopeModal": {
     "title": "分配数据权限",

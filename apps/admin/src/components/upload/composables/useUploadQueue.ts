@@ -23,7 +23,7 @@ import Tus from '@uppy/tus';
 import XHRUpload from '@uppy/xhr-upload';
 import { message } from 'ant-design-vue';
 
-import { deleteOssFile, getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/admin/core/upload';
+import { deleteOssFile, getTusFileInfo, getTusUrl, getUploadUrl } from '#/api/core/upload';
 
 import {
   getAllowedImageExtensions,

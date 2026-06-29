@@ -3,7 +3,7 @@ import type { QueueFile, UploadType } from './composables/useUploadQueue';
 
 import { computed, provide, ref, watch } from 'vue';
 
-import { resolveLogicalPaths } from '#/api/admin/core/upload';
+import { resolveLogicalPaths } from '#/api/core/upload';
 
 import MediaPreviewModal from './components/MediaPreviewModal.vue';
 import { getAllowedFileExtensions, getAllowedImageExtensions, getAllowedMediaExtensions } from './composables/useFileUpload';
@@ -126,7 +126,7 @@ defineExpose({ files, addFiles, start, togglePause, retry, remove, download, pic
 
 <template>
   <div>
-    <input ref="inputRef" type="file" :accept="acceptAttr" :multiple="isMultiple" class="hidden" @change="onInputChange" />
+    <input ref="inputRef" type="file" :accept="acceptAttr" :multiple="isMultiple" class="hidden" style="display: none;" @change="onInputChange" />
     <slot
       :files="files"
       :can-add="canAddMore()"

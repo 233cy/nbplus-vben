@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DictApi } from '#/api/admin/sys/dict';
+import type { DictApi } from '#/api/sys/dict';
 
 import { computed, nextTick, ref } from 'vue';
 

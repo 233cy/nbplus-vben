@@ -9,7 +9,7 @@ import { useVbenForm, z } from '#/adapter/form';
 import { getProfileInfoApi, updateProfileApi } from '#/api';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store/user';
-import { resolveLogicalPath } from '#/api/admin/core/upload';
+import { resolveLogicalPath } from '#/api/core/upload';
 import { formatUnixTime } from '#/utils/time';
 
 const userStore = useUserStore();

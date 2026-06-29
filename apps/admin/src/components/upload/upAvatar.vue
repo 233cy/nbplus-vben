@@ -7,7 +7,7 @@ import { $t } from '@vben/locales';
 
 import { message } from 'ant-design-vue';
 
-import { resolveLogicalPath } from '#/api/admin/core/upload';
+import { resolveLogicalPath } from '#/api/core/upload';
 
 import { validateFileBySystem } from './composables/useFileUpload';
 import { useUploadQueue } from './composables/useUploadQueue';

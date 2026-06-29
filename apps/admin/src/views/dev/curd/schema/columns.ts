@@ -1,6 +1,6 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
-import type { CurdAdminApi } from '#/api/admin/dev/curdAdmin';
+import type { CurdAdminApi } from '#/api/dev/curdAdmin';
 
 import { $t } from '#/locales';
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ProfileApi } from '#/api/admin/core/profile';
+import type { ProfileApi } from '#/api/core';
 
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -9,7 +9,7 @@ import { useUserStore } from '@vben/stores';
 
 import { Avatar, Badge, Card, Col, message, Popconfirm, Row, Spin, Tag, Tooltip } from 'ant-design-vue';
 
-import { getMyDevicesApi, getProfileInfoApi, removeMyDeviceApi } from '#/api/admin/core/profile';
+import { getMyDevicesApi, getProfileInfoApi, removeMyDeviceApi } from '#/api/core';
 import OnlineDevices from '#/components/online-devices/index.vue';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store/user';

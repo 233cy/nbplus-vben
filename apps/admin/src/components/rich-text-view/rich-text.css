@@ -37,7 +37,9 @@
   padding: 24px 28px;
   margin: 16px auto;
   background-color: hsl(var(--background));
-  box-shadow: 0 1px 4px rgb(0 0 0 / 8%), 0 0 0 1px hsl(var(--border));
+  box-shadow:
+    0 1px 4px rgb(0 0 0 / 8%),
+    0 0 0 1px hsl(var(--border));
 }
 
 /* ============ 内容标签：展示 div 与编辑器内容共用 ============ */

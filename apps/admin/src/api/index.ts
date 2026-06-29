@@ -1,1 +1,1 @@
-export * from './admin/core';
+export * from './core';

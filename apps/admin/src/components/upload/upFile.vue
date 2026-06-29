@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { QueueFile } from './composables/useUploadQueue';
 
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 
 import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
@@ -31,6 +31,10 @@ const props = withDefaults(
   },
 );
 
+const emit = defineEmits<{
+  change: [logicalPaths: string[], fullUrls: string[]];
+}>();
+
 const isMultiple = computed(() => props.maxCount > 1);
 
 const limitText = computed(() => {
@@ -53,6 +57,21 @@ const { files, addFiles, start, togglePause, retry, remove, download } = useUplo
   maxCount: props.maxCount,
   maxSize: props.maxSize,
 });
+
+// 上传完成后统一抛出 change 事件，方便调用方刷新列表
+watch(
+  files,
+  () => {
+    const done = files.value.filter(f => f.status === 'done' && f.logicalPath);
+    if (done.length === 0) return;
+    emit(
+      'change',
+      done.map(f => f.logicalPath as string),
+      done.map(f => f.downloadUrl || ''),
+    );
+  },
+  { deep: true },
+);
 
 const acceptAttr = computed(() => {
   const exts = getAllowedFileExtensions();

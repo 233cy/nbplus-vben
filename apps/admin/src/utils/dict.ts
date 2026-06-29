@@ -10,11 +10,11 @@
  *   const items = await getDictItems('gender')     // 非响应式，直接拿数组
  */
 
-import type { DictApi } from '#/api/admin/sys/dict';
+import type { DictApi } from '#/api/sys/dict';
 
 import { computed, ref } from 'vue';
 
-import { getDictItemsApi, getAllDictsApi } from '#/api/admin/sys/dict';
+import { getAllDictsApi, getDictItemsApi } from '#/api/sys/dict';
 
 // =========================================================================
 // 全局缓存
@@ -84,7 +84,7 @@ export function useDict(code: string) {
   const loading = ref(!dictCache.has(code));
 
   if (!dictCache.has(code)) {
-    fetchByCode(code).then((data) => {
+    fetchByCode(code).then(data => {
       items.value = data;
       loading.value = false;
     });
@@ -97,11 +97,11 @@ export function useDict(code: string) {
  * 根据 value 获取 label（响应式 computed）
  * @example const label = useDictLabel('gender', row.gender)
  */
-export function useDictLabel(code: string, value: string | number | null | undefined) {
+export function useDictLabel(code: string, value: null | number | string | undefined) {
   const { items } = useDict(code);
   return computed(() => {
     if (value === null || value === undefined) return '-';
-    const item = items.value.find((i) => String(i.value) === String(value));
+    const item = items.value.find(i => String(i.value) === String(value));
     return item?.label ?? String(value);
   });
 }
@@ -110,11 +110,11 @@ export function useDictLabel(code: string, value: string | number | null | undef
  * 根据 value 获取 color（响应式 computed）
  * @example const color = useDictColor('gender', row.gender)
  */
-export function useDictColor(code: string, value: string | number | null | undefined) {
+export function useDictColor(code: string, value: null | number | string | undefined) {
   const { items } = useDict(code);
   return computed(() => {
     if (value === null || value === undefined) return undefined;
-    const item = items.value.find((i) => String(i.value) === String(value));
+    const item = items.value.find(i => String(i.value) === String(value));
     return item?.color ?? undefined;
   });
 }
@@ -131,10 +131,10 @@ export function getDictItems(code: string): Promise<DictApi.DictItemData[]> {
  * 非响应式：直接 await 拿某个 value 对应的 label
  * @example const label = await getDictLabel('gender', 1)
  */
-export async function getDictLabel(code: string, value: string | number | null | undefined): Promise<string> {
+export async function getDictLabel(code: string, value: null | number | string | undefined): Promise<string> {
   if (value === null || value === undefined) return '-';
   const items = await fetchByCode(code);
-  const item = items.find((i) => String(i.value) === String(value));
+  const item = items.find(i => String(i.value) === String(value));
   return item?.label ?? String(value);
 }
 
@@ -142,9 +142,7 @@ export async function getDictLabel(code: string, value: string | number | null |
  * 将字典项转换为 Select options 格式
  * @example const options = await getDictOptions('gender')
  */
-export async function getDictOptions(code: string): Promise<{ label: string; value: string; color?: string | null }[]> {
+export async function getDictOptions(code: string): Promise<{ color?: null | string; label: string; value: string }[]> {
   const items = await fetchByCode(code);
-  return items
-    .filter((i) => i.status === 1)
-    .map((i) => ({ label: i.label, value: i.value, color: i.color }));
+  return items.filter(i => i.status === 1).map(i => ({ label: i.label, value: i.value, color: i.color }));
 }

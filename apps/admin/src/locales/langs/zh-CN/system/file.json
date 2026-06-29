@@ -12,6 +12,12 @@
     "logicalPath": "逻辑路径",
     "accessType": "访问类型",
     "accessPolicy": "访问策略",
+    "uploadType": "上传类型",
+    "maxCount": "最大数量",
+    "maxSize": "最大大小",
+    "aspectRatio": "裁剪比例",
+    "shape": "头像形状",
+    "uploadTarget": "上传目标",
     "status": "状态",
     "refCount": "引用计数",
     "createdBy": "上传人",
@@ -28,6 +34,16 @@
       "owner": "仅所有者",
       "public": "公开",
       "login": "登录用户"
+    },
+    "uploadType": {
+      "file": "文件",
+      "image": "图片",
+      "media": "媒体",
+      "avatar": "头像"
+    },
+    "avatarShape": {
+      "circle": "圆形",
+      "square": "方形"
     },
     "status": {
       "1": "已完成",

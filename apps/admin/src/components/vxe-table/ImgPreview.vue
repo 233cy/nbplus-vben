@@ -5,7 +5,7 @@ import { IconifyIcon } from '@vben/icons';
 
 import { Image } from 'ant-design-vue';
 
-import { resolveLogicalPaths } from '#/api/admin/core/upload';
+import { resolveLogicalPaths } from '#/api/core/upload';
 
 const props = defineProps<{
   /** 逻辑路径，字符串（逗号分隔）或数组 */

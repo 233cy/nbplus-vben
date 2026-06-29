@@ -2,7 +2,7 @@
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
-import type { AuthApi } from '#/api/admin/core/auth';
+import type { AuthApi } from '#/api/core/auth';
 
 import { computed, markRaw, onMounted, ref, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
