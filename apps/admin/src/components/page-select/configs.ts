@@ -35,6 +35,7 @@ export function deptPageSelectConfig(): PageSelectConfig {
     columns: [{ field: 'name', title: $t('common.name') }],
     labelField: 'name',
     valueField: 'id',
+    parentField: 'parentId',
     title: $t('common.selectData'),
     checkStrictly: true,
   };

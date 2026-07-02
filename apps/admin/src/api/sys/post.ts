@@ -42,10 +42,6 @@ export function getPostDetailApi(id: string) {
   return requestClient.get<PostApi.PostItem>(`${BASE}/detail`, { params: { id } });
 }
 
-export function getPostAllApi() {
-  return requestClient.get<PostApi.PostItem[]>(`${BASE}/all`);
-}
-
 export function createPostApi(data: PostApi.SaveParams) {
   return requestClient.post<PostApi.PostItem>(`${BASE}/create`, data);
 }

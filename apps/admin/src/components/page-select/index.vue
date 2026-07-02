@@ -58,6 +58,7 @@ const pageSize = computed(() => resolvedConfig.value.pageSize ?? 10);
 const title = computed(() => resolvedConfig.value.title ?? $t('common.selectData'));
 const tree = computed(() => resolvedConfig.value.type === 'tree');
 const checkStrictly = computed(() => resolvedConfig.value.checkStrictly ?? false);
+const parentField = computed(() => (resolvedConfig.value.parentField as string) ?? 'parentId');
 
 /* ============================================================
    状态
@@ -67,6 +68,7 @@ const loading = ref(false);
 const echoLoading = ref(false);
 const showSelectedOnly = ref(false);
 const echoPage = ref(1);
+const treeRows = ref<any[]>([]);
 
 const selectedMap = ref(new Map());
 const tempSelectedMap = ref(new Map());
@@ -112,7 +114,7 @@ const [Modal, modalApi] = useVbenModal({
 /* ============================================================
    API
    ============================================================ */
-async function fetchData(params: Record<string, any>): Promise<{ items: any[]; total: number } | any[]> {
+async function fetchData(params: Record<string, any>): Promise<any[] | { items: any[]; total: number }> {
   const res = await api.value(params);
   if (Array.isArray(res)) {
     return { items: res, total: res.length };
@@ -203,10 +205,14 @@ const gridOptions: VxeGridProps<RowType> = {
           ...params,
           page: tree.value ? null : params.page,
           pageSize: tree.value ? null : params.pageSize,
-          keyword: showSelectedOnly.value ? '' : keyword.value,
-          ids: showSelectedOnly.value ? Array.from(processedSelectedIds.value).join(',') : undefined,
+          keyword: tree.value || showSelectedOnly.value ? '' : keyword.value,
+          ids: showSelectedOnly.value ? [...processedSelectedIds.value].join(',') : undefined,
           selectedOnly: showSelectedOnly.value ? 1 : undefined,
         });
+        if (tree.value) {
+          const rows = Array.isArray(result) ? result : result.items || [];
+          treeRows.value = rows;
+        }
         return result;
       },
     } as any,
@@ -283,8 +289,75 @@ function flattenTree(rows: any[]): any[] {
    搜索
    ============================================================ */
 async function handleSearch() {
+  if (tree.value) {
+    const filtered = filterTreeRows(treeRows.value, keyword.value);
+    await gridApi.grid?.loadData(filtered);
+    await handleQuerySuccess();
+    return;
+  }
   await gridApi.query();
   await handleQuerySuccess();
+}
+
+function filterTreeRows(rows: any[], keyword: string): any[] {
+  const trimmed = keyword.trim();
+  if (!trimmed) {
+    return rows;
+  }
+  const kw = trimmed.toLowerCase();
+  const valueKey = valueField.value;
+  const parentKey = parentField.value;
+  const searchFields = (columns.value || []).map((col: any) => col.field).filter(Boolean) as string[];
+  if (searchFields.length === 0) {
+    searchFields.push(labelField.value);
+  }
+
+  const matchedIds = new Set<number | string>();
+  const rowMap = new Map<number | string, any>();
+  rows.forEach(row => {
+    rowMap.set(row[valueKey], row);
+    if (
+      searchFields.some(field =>
+        String(row[field] ?? '')
+          .toLowerCase()
+          .includes(kw),
+      )
+    ) {
+      matchedIds.add(row[valueKey]);
+    }
+  });
+
+  if (matchedIds.size === 0) {
+    return [];
+  }
+
+  const resultIds = new Set<number | string>();
+  function addWithAncestors(id: number | string) {
+    const row = rowMap.get(id);
+    if (!row || resultIds.has(id)) return;
+    resultIds.add(id);
+    const parentId = row[parentKey];
+    if (parentId && rowMap.has(parentId)) {
+      addWithAncestors(parentId);
+    }
+  }
+  function addWithDescendants(id: number | string) {
+    const row = rowMap.get(id);
+    if (!row || resultIds.has(id)) return;
+    resultIds.add(id);
+    rows.forEach(child => {
+      if (String(child[parentKey]) === String(id)) {
+        addWithDescendants(child[valueKey]);
+      }
+    });
+  }
+
+  matchedIds.forEach(id => {
+    addWithAncestors(id);
+    addWithDescendants(id);
+  });
+
+  return rows.filter(row => resultIds.has(row[valueKey]));
 }
 
 /* ============================================================
@@ -303,7 +376,7 @@ async function handleQuerySuccess() {
   // 勾选依据与 showSelectedOnly 查询依据保持一致：
   // - 全部数据模式：以默认 modelValue 的 IDS 为准
   // - 只看已选模式：以用户操作后的 processedSelectedIds 为准
-  const baseIds = showSelectedOnly.value ? Array.from(processedSelectedIds.value) : allSelectedIds.value;
+  const baseIds = showSelectedOnly.value ? [...processedSelectedIds.value] : allSelectedIds.value;
   const selectedIds = new Set(baseIds.map(String).filter(id => !uncheckedInSession.value.has(id)));
 
   rows.forEach((row: any) => {
@@ -524,9 +597,9 @@ onMounted(async () => {
           {{ item[labelField] }}
         </Tag>
 
-        <Button v-if="hasMoreEcho" size="small" :loading="echoLoading" :disabled="echoLoading" @click="loadMoreEcho"
-          >{{ $t('common.loadMore') }} ({{ allSelectedIds.length - tempSelectedMap.size }})</Button
-        >
+        <Button v-if="hasMoreEcho" size="small" :loading="echoLoading" :disabled="echoLoading" @click="loadMoreEcho">
+          {{ $t('common.loadMore') }} ({{ allSelectedIds.length - tempSelectedMap.size }})
+        </Button>
       </div>
     </Modal>
   </div>

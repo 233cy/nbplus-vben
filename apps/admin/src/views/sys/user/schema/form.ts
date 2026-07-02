@@ -1,6 +1,5 @@
 import type { VbenFormSchema } from '#/adapter/form';
 
-import { getPostAllApi } from '#/api/sys/post';
 import { $t } from '#/locales';
 
 /**
@@ -64,11 +63,15 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
       fieldName: 'positionId',
       label: $t('sys.user.fields.positionId'),
       componentProps: {
-        api: getPostAllApi,
-        labelField: 'name',
-        valueField: 'id',
-        allowClear: true,
-        dropdownMatchSelectWidth: false,
+        config: 'post',
+      },
+    },
+    {
+      component: 'ApiSelect',
+      fieldName: 'deptId',
+      label: $t('sys.user.fields.deptId'),
+      componentProps: {
+        config: 'dept',
       },
     },
   ];

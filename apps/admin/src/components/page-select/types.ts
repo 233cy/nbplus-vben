@@ -31,6 +31,12 @@ export interface PageSelectConfig<T = any> {
   /** 分页大小，list 模式下生效 */
   pageSize?: number;
 
+  /** 树形平级数据转树时的父节点字段，默认 parentId */
+  parentField?: string;
+
+  /** 树形模式下是否默认展开全部节点，默认 true */
+  treeDefaultExpandAll?: boolean;
+
   /** 树形模式下父子节点是否独立勾选，默认 false（父子联动） */
   checkStrictly?: boolean;
 }
