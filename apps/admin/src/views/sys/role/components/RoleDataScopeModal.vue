@@ -21,11 +21,11 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 const dataScopeOptions = computed(() => [
-  { label: $t('auth.role.dataScope.all'), value: 1 },
-  { label: $t('auth.role.dataScope.dept'), value: 2 },
-  { label: $t('auth.role.dataScope.deptAndBelow'), value: 3 },
-  { label: $t('auth.role.dataScope.self'), value: 4 },
-  { label: $t('auth.role.dataScope.custom'), value: 5 },
+  { label: $t('sys.role.dataScope.all'), value: 1 },
+  { label: $t('sys.role.dataScope.dept'), value: 2 },
+  { label: $t('sys.role.dataScope.deptAndBelow'), value: 3 },
+  { label: $t('sys.role.dataScope.self'), value: 4 },
+  { label: $t('sys.role.dataScope.custom'), value: 5 },
 ]);
 
 const dataScope = ref(1);
@@ -106,7 +106,7 @@ async function handleSubmit() {
   modalApi.setState({ loading: true });
   try {
     await assignRoleDataScopeApi(roleId.value, dataScope.value, isCustom.value ? checkedDeptKeys.value : []);
-    message.success($t('auth.role.msg.ASSIGN_DATA_SCOPE_SUCCESS'));
+    message.success($t('sys.role.msg.ASSIGN_DATA_SCOPE_SUCCESS'));
     emit('success');
     modalApi.close();
   } finally {
@@ -116,19 +116,19 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <Modal :title="$t('auth.role.dataScopeModal.title')" width="640px">
+  <Modal :title="$t('sys.role.dataScopeModal.title')" width="640px">
     <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">{{ $t('auth.role.dataScopeModal.scopeLabel') }}</label>
+      <label class="mb-2 block text-sm font-medium">{{ $t('sys.role.dataScopeModal.scopeLabel') }}</label>
       <RadioGroup v-model:value="dataScope" :options="dataScopeOptions" />
     </div>
 
     <div class="mb-2 flex items-center justify-between">
-      <span class="text-sm font-medium">{{ $t('auth.role.fields.dataScopeCustom') }}</span>
+      <span class="text-sm font-medium">{{ $t('sys.role.fields.dataScopeCustom') }}</span>
       <Space v-if="isCustom">
-        <Button size="small" @click="handleExpandAll">{{ $t('auth.role.dataScopeModal.expandAll') }}</Button>
-        <Button size="small" @click="handleCollapseAll">{{ $t('auth.role.dataScopeModal.collapseAll') }}</Button>
-        <Button size="small" @click="handleCheckAll">{{ $t('auth.role.dataScopeModal.checkAll') }}</Button>
-        <Button size="small" @click="handleUncheckAll">{{ $t('auth.role.dataScopeModal.uncheckAll') }}</Button>
+        <Button size="small" @click="handleExpandAll">{{ $t('sys.role.dataScopeModal.expandAll') }}</Button>
+        <Button size="small" @click="handleCollapseAll">{{ $t('sys.role.dataScopeModal.collapseAll') }}</Button>
+        <Button size="small" @click="handleCheckAll">{{ $t('sys.role.dataScopeModal.checkAll') }}</Button>
+        <Button size="small" @click="handleUncheckAll">{{ $t('sys.role.dataScopeModal.uncheckAll') }}</Button>
       </Space>
     </div>
 

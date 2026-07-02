@@ -35,7 +35,7 @@ function setDeep(obj: any, path: string, value: any) {
 
 /**
  * 🌟 新增：将带有斜杠的扁平 key 转换为深度嵌套的对象
- * 例如将 {'system.user': { edit: '编辑' }} 转换为 { system: { user: { edit: '编辑' } } }
+ * 例如将 {'sys.user': { edit: '编辑' }} 转换为 { sys: { user: { edit: '编辑' } } }
  */
 function transformMessages(messages: Record<string, any> = {}) {
   const result: Record<string, any> = {};

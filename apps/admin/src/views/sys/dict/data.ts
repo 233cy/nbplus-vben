@@ -7,22 +7,22 @@ import type { DictApi } from '#/api/sys/dict';
 /** 字典项颜色选项 */
 export function createColorOptions(t: (key: string) => string) {
   return [
-    { label: t('system.dict.color.default'), value: '' },
-    { label: t('system.dict.color.success'), value: 'success' },
-    { label: t('system.dict.color.processing'), value: 'processing' },
-    { label: t('system.dict.color.error'), value: 'error' },
-    { label: t('system.dict.color.warning'), value: 'warning' },
-    { label: t('system.dict.color.magenta'), value: 'magenta' },
-    { label: t('system.dict.color.red'), value: 'red' },
-    { label: t('system.dict.color.volcano'), value: 'volcano' },
-    { label: t('system.dict.color.orange'), value: 'orange' },
-    { label: t('system.dict.color.gold'), value: 'gold' },
-    { label: t('system.dict.color.lime'), value: 'lime' },
-    { label: t('system.dict.color.green'), value: 'green' },
-    { label: t('system.dict.color.cyan'), value: 'cyan' },
-    { label: t('system.dict.color.blue'), value: 'blue' },
-    { label: t('system.dict.color.geekblue'), value: 'geekblue' },
-    { label: t('system.dict.color.purple'), value: 'purple' },
+    { label: t('sys.dict.color.default'), value: '' },
+    { label: t('sys.dict.color.success'), value: 'success' },
+    { label: t('sys.dict.color.processing'), value: 'processing' },
+    { label: t('sys.dict.color.error'), value: 'error' },
+    { label: t('sys.dict.color.warning'), value: 'warning' },
+    { label: t('sys.dict.color.magenta'), value: 'magenta' },
+    { label: t('sys.dict.color.red'), value: 'red' },
+    { label: t('sys.dict.color.volcano'), value: 'volcano' },
+    { label: t('sys.dict.color.orange'), value: 'orange' },
+    { label: t('sys.dict.color.gold'), value: 'gold' },
+    { label: t('sys.dict.color.lime'), value: 'lime' },
+    { label: t('sys.dict.color.green'), value: 'green' },
+    { label: t('sys.dict.color.cyan'), value: 'cyan' },
+    { label: t('sys.dict.color.blue'), value: 'blue' },
+    { label: t('sys.dict.color.geekblue'), value: 'geekblue' },
+    { label: t('sys.dict.color.purple'), value: 'purple' },
   ];
 }
 

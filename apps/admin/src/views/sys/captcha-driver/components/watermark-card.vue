@@ -33,18 +33,18 @@ function updateFontsize(value: number) {
 </script>
 
 <template>
-  <Card :title="$t('system.captcha-driver.watermarkTitle')">
+  <Card :title="$t('sys.captcha-driver.watermarkTitle')">
     <Form layout="vertical">
-      <FormItem :label="$t('system.captcha-driver.watermarkText')">
-        <Input :value="config.text" :placeholder="$t('system.captcha-driver.watermarkTextPlaceholder')" @change="e => updateText(e.target.value || '')" />
+      <FormItem :label="$t('sys.captcha-driver.watermarkText')">
+        <Input :value="config.text" :placeholder="$t('sys.captcha-driver.watermarkTextPlaceholder')" @change="e => updateText(e.target.value || '')" />
       </FormItem>
-      <FormItem :label="$t('system.captcha-driver.watermarkColor')">
+      <FormItem :label="$t('sys.captcha-driver.watermarkColor')">
         <div class="flex items-center gap-2">
           <input :value="config.color" type="color" class="h-8 w-10 cursor-pointer rounded border" @input="e => updateColor((e.target as HTMLInputElement).value || '')" />
           <Input :value="config.color" class="flex-1" placeholder="#ffffff" @change="e => updateColor(e.target.value || '')" />
         </div>
       </FormItem>
-      <FormItem :label="$t('system.captcha-driver.watermarkFontsize')">
+      <FormItem :label="$t('sys.captcha-driver.watermarkFontsize')">
         <InputNumber :value="config.fontsize" :min="8" :max="32" class="w-full" @change="val => updateFontsize(val as number)" />
       </FormItem>
     </Form>
@@ -53,7 +53,7 @@ function updateFontsize(value: number) {
         <template #icon>
           <IconifyIcon icon="ant-design:save-outlined" />
         </template>
-        {{ $t('system.config.save') }}
+        {{ $t('sys.config.save') }}
       </Button>
     </div>
   </Card>

@@ -71,7 +71,7 @@ const user = useUser(gridApi);
   <Page auto-content-height>
     <FormDrawer @success="user.onRefresh" />
     <Online :ref="user.onlineRef" />
-    <Grid :table-title="$t('system.user.pageTitle')">
+    <Grid :table-title="$t('sys.user.pageTitle')">
       <template #toolbar-tools>
         <BatchActionDropdown
           v-if="canBatchDelete"
@@ -99,14 +99,14 @@ const user = useUser(gridApi);
           :get-ids="user.getSelectedIds"
           :on-success="user.onRefresh"
           :fields="[
-            { fieldName: 'status', label: $t('system.user.fields.status'), dictCode: 'sys_user_status' },
-            { fieldName: 'gender', label: $t('system.user.fields.gender'), dictCode: 'sys_user_gender' },
+            { fieldName: 'status', label: $t('sys.user.fields.status'), dictCode: 'sys_user_status' },
+            { fieldName: 'gender', label: $t('sys.user.fields.gender'), dictCode: 'sys_user_gender' },
           ]"
         />
 
         <Button v-if="canCreate" type="primary" @click="formDrawerApi.setData({}).open()">
           <Plus class="size-5" />
-          {{ $t('system.user.create') }}
+          {{ $t('sys.user.create') }}
         </Button>
       </template>
     </Grid>

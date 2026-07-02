@@ -5,6 +5,7 @@ import type { Ref } from 'vue';
 import type { PageWidth } from '#/components/rich-text-view/preset';
 
 import { Boot } from '@wangeditor/editor';
+import { $t } from '@vben/locales';
 
 import { PAGE_WIDTH_OPTIONS } from '#/components/rich-text-view/preset';
 
@@ -19,7 +20,7 @@ export function registerPageWidthEditor(editor: IDomEditor, widthRef: Ref<PageWi
 class PageWidthDropMenu implements IDropPanelMenu {
   readonly showDropPanel = true;
   readonly tag = 'button';
-  readonly title = '页面宽度';
+  readonly title = $t('components.wang-editor.pageWidthTitle');
 
   exec() {
     // 实际逻辑在面板点击中处理，这里不需要操作

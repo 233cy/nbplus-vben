@@ -14,7 +14,7 @@ export interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  placeholder: $t('profile.password.newPasswordPlaceholder'),
+  placeholder: $t('core.profile.password.newPasswordPlaceholder'),
   disabled: false,
 });
 

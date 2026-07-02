@@ -25,7 +25,7 @@ import ItemForm from './components/item-form.vue';
 import ItemList from './components/item-list.vue';
 import { useDict, useDictForm, useDictItems, useItemForm } from './composables';
 
-const dict = useDict({ defaultGroupLabel: $t('system.dict.defaultGroup') });
+const dict = useDict({ defaultGroupLabel: $t('sys.dict.defaultGroup') });
 const items = useDictItems();
 const dictForm = useDictForm({
   allDicts: dict.allDicts,

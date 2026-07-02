@@ -65,7 +65,7 @@ async function onDragEnd() {
     <Spin :spinning="!!sorting" />
 
     <div v-if="items.length === 0 && !loading" class="py-16 text-center text-gray-400">
-      {{ $t('system.config.empty') }}
+      {{ $t('sys.config.empty') }}
     </div>
 
     <vuedraggable v-else v-model="sortableItems" item-key="id" handle=".drag-handle" @end="onDragEnd">
@@ -85,14 +85,14 @@ async function onDragEnd() {
                   {{ item.label }}
                 </span>
                 <Tag v-if="item.isSys" color="gold" class="ml-1 text-xs">
-                  {{ $t('system.config.isSysTag') }}
+                  {{ $t('sys.config.isSysTag') }}
                 </Tag>
               </div>
               <div class="mt-1 flex items-center gap-1">
                 <code class="select-all truncate font-mono text-sm font-semibold text-blue-600 dark:text-blue-400">
                   {{ item.key }}
                 </code>
-                <Tooltip :title="$t('system.config.copySuccess')">
+                <Tooltip :title="$t('sys.config.copySuccess')">
                   <Button type="text" size="small" class="flex shrink-0 items-center p-0 text-gray-400 hover:text-blue-500" @click="emit('copyKey', item.key)">
                     <span class="i-ant-design:copy-outlined text-sm"></span>
                   </Button>
@@ -107,37 +107,37 @@ async function onDragEnd() {
 
             <!-- 操作按钮 -->
             <div class="flex shrink-0 items-center gap-2">
-              <Popconfirm v-if="!item.isSys" :title="$t('system.config.markAsSysConfirm')" @confirm="emit('markAsSys', item)">
-                <Tooltip :title="$t('system.config.markAsSys')">
+              <Popconfirm v-if="!item.isSys" :title="$t('sys.config.markAsSysConfirm')" @confirm="emit('markAsSys', item)">
+                <Tooltip :title="$t('sys.config.markAsSys')">
                   <Button>
                     <IconifyIcon icon="ant-design:lock-outlined" class="text-amber-500" />
                   </Button>
                 </Tooltip>
               </Popconfirm>
-              <Tooltip v-else :title="$t('system.config.isSysTag')">
+              <Tooltip v-else :title="$t('sys.config.isSysTag')">
                 <Button disabled>
                   <IconifyIcon icon="ant-design:lock-outlined" />
                 </Button>
               </Tooltip>
 
-              <Tooltip :title="item.isPublic ? $t('system.config.togglePublicOff') : $t('system.config.togglePublicOn')">
+              <Tooltip :title="item.isPublic ? $t('sys.config.togglePublicOff') : $t('sys.config.togglePublicOn')">
                 <Button :type="item.isPublic ? 'primary' : 'default'" @click="emit('togglePublic', item)">
                   <IconifyIcon :icon="item.isPublic ? 'ant-design:eye-outlined' : 'ant-design:eye-invisible-outlined'" />
                 </Button>
               </Tooltip>
 
-              <Tooltip :title="$t('system.config.editItem')">
+              <Tooltip :title="$t('sys.config.editItem')">
                 <Button @click="emit('edit', item)">
                   <IconifyIcon icon="ant-design:edit-outlined" />
                 </Button>
               </Tooltip>
 
-              <Popconfirm v-if="!item.isSys" :title="$t('system.config.confirmDelete')" @confirm="emit('delete', item)">
+              <Popconfirm v-if="!item.isSys" :title="$t('sys.config.confirmDelete')" @confirm="emit('delete', item)">
                 <Button danger>
                   <IconifyIcon icon="ant-design:delete-outlined" />
                 </Button>
               </Popconfirm>
-              <Tooltip v-else :title="$t('system.config.isSysTag')">
+              <Tooltip v-else :title="$t('sys.config.isSysTag')">
                 <Button danger disabled>
                   <IconifyIcon icon="ant-design:delete-outlined" />
                 </Button>

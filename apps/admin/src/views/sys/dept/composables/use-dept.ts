@@ -19,6 +19,7 @@ import { computed, ref } from 'vue';
 import { message } from 'ant-design-vue';
 
 import { batchDeleteDeptApi, deleteDeptApi, getDeptTreeApi, sortDeptApi, toggleDeptApi } from '#/api/sys/dept';
+import { useTableBatchAction } from '#/utils/table';
 
 import { buildGlobalSortItems, buildTreeNodes, collectAllKeys, filterDeptTree, findParentId } from '../data';
 
@@ -101,29 +102,25 @@ export function useDeptTree(options: UseDeptTreeOptions) {
 
   async function handleDelete(id: string) {
     await deleteDeptApi(id);
-    message.success(t('system.dept.deleteSuccess'));
+    message.success(t('sys.dept.deleteSuccess'));
     await loadDepts();
   }
 
-  async function handleBatchDelete() {
+  function handleBatchDelete() {
     if (checkedKeys.value.length === 0) {
-      message.warning(t('system.dept.batchDeleteEmpty'));
+      message.warning(t('sys.dept.batchDeleteEmpty'));
       return;
     }
-    const result = await batchDeleteDeptApi(checkedKeys.value);
-    const deletedCount = result.deleted.length;
-    const skippedCount = result.skipped.length;
 
-    if (deletedCount === 0) {
-      message.warning(t('system.dept.batchDeleteWarning'));
-    } else if (skippedCount === 0) {
-      message.success(t('system.dept.batchDeleteSuccess'));
-    } else {
-      message.success(t('system.dept.batchDeletePartial'));
-    }
-
-    checkedKeys.value = [];
-    await loadDepts();
+    useTableBatchAction(
+      batchDeleteDeptApi,
+      checkedKeys.value,
+      t('common.delete'),
+      async () => {
+        checkedKeys.value = [];
+        await loadDepts();
+      },
+    );
   }
 
   const toggleLoading = ref<Record<string, boolean>>({});

@@ -39,7 +39,7 @@ export function useDictForm(options: UseDictFormOptions) {
     editing.value = null;
     form.value = {
       ...createDefaultDictForm(),
-      groups: groupName && groupName !== $t('system.dict.defaultGroup') ? groupName : '',
+      groups: groupName && groupName !== $t('sys.dict.defaultGroup') ? groupName : '',
     };
     visible.value = true;
   }
@@ -61,13 +61,13 @@ export function useDictForm(options: UseDictFormOptions) {
     try {
       if (editing.value) {
         await updateDictApi({ id: editing.value.id, ...form.value });
-        message.success($t('system.dict.updateSuccess'));
+        message.success($t('sys.dict.updateSuccess'));
         if (activeDict.value?.id === editing.value.id) {
           activeDict.value = { ...activeDict.value, ...form.value };
         }
       } else {
         await createDictApi(form.value);
-        message.success($t('system.dict.createSuccess'));
+        message.success($t('sys.dict.createSuccess'));
       }
       visible.value = false;
       await reload();
@@ -78,7 +78,7 @@ export function useDictForm(options: UseDictFormOptions) {
 
   async function handleDelete(dict: DictApi.DictItem) {
     await deleteDictApi(dict.id);
-    message.success($t('system.dict.deleteSuccess'));
+    message.success($t('sys.dict.deleteSuccess'));
     if (activeDict.value?.id === dict.id) {
       clearSelection();
     }

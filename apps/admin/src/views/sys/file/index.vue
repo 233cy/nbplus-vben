@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FileApi } from '#/api/sys/file.js';
 
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
@@ -71,14 +71,14 @@ function onRefresh() {
 }
 
 function openMove(record: FileApi.FileItem) {
-  moveDrawerApi.setData({ options: file.storageOptions.value, ids: [record.id] }).open();
+  moveDrawerApi.setData({ ids: [record.id] }).open();
 }
 
 function openBatchMove() {
   const ids = getSelectedIds();
   if (ids.length > 0) {
     // 勾选了文件 → 移动指定文件
-    moveDrawerApi.setData({ options: file.storageOptions.value, ids: [...ids] }).open();
+    moveDrawerApi.setData({ ids: [...ids] }).open();
   } else {
     // 未勾选 → 移动当前页全部文件
     const allIds = getCurrentPageIds();
@@ -86,7 +86,7 @@ function openBatchMove() {
       message.warning($t('common.batchActionNoSelection'));
       return;
     }
-    moveDrawerApi.setData({ options: file.storageOptions.value, ids: [...allIds] }).open();
+    moveDrawerApi.setData({ ids: [...allIds] }).open();
   }
 }
 
@@ -104,10 +104,6 @@ async function handleSingleDelete(record: FileApi.FileItem) {
   await file.batchDelete([record.id]);
   onRefresh();
 }
-
-onMounted(() => {
-  file.loadStorageOptions();
-});
 </script>
 
 <template>
@@ -116,17 +112,17 @@ onMounted(() => {
     <UploadDrawerComp @success="onRefresh" />
     <QuickConfigDrawer v-model:open="configDrawerVisible" group="storage" :title="$t('common.paramConfig')" :save-api="saveFileConfigApi" />
 
-    <Grid :table-title="$t('system.file.pageTitle')">
+    <Grid :table-title="$t('sys.file.pageTitle')">
       <template #toolbar-tools>
         <Space>
           <Button type="primary" @click="uploadDrawerApi.open()">
             <IconifyIcon icon="lucide:upload" class="size-4" />
-            {{ $t('system.file.upload') }}
+            {{ $t('sys.file.upload') }}
           </Button>
 
           <Button @click="openBatchMove">
             <IconifyIcon icon="lucide:move" class="size-4" />
-            {{ $t('system.file.batchMove') }}
+            {{ $t('sys.file.batchMove') }}
           </Button>
 
           <BatchActionDropdown type="direct" :action="$t('common.delete')" :api-fn="(ids: string[]) => batchDeleteFileApi(ids)" :get-ids="getSelectedIds" :on-success="onRefresh">

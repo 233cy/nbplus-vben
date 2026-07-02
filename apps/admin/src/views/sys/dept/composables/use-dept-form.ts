@@ -23,10 +23,10 @@ export function useDeptForm(options: UseDeptFormOptions) {
   const form = ref<DeptApi.SaveParams & { id?: string }>(createDefaultForm());
 
   const title = computed(() => {
-    if (isEdit.value) return t('system.dept.edit');
+    if (isEdit.value) return t('sys.dept.edit');
     const parentId = form.value.parentId;
     const parentTitle = parentId ? findDeptTitle(treeData.value, parentId) : '';
-    const actionKey = parentId ? 'system.dept.addChild' : 'system.dept.addRoot';
+    const actionKey = parentId ? 'sys.dept.addChild' : 'sys.dept.addRoot';
     return `${t(actionKey)}${parentTitle ? `「${parentTitle}」` : ''}`;
   });
 
@@ -45,7 +45,7 @@ export function useDeptForm(options: UseDeptFormOptions) {
 
   function validate(): boolean {
     if (!form.value.name?.trim()) {
-      message.warning(t('system.dept.placeholder.name'));
+      message.warning(t('sys.dept.placeholder.name'));
       return false;
     }
     return true;
@@ -68,11 +68,11 @@ export function useDeptForm(options: UseDeptFormOptions) {
         // 编辑时不允许修改编码
         delete (data as any).code;
         await updateDeptApi(data as DeptApi.SaveParams & { id: string });
-        message.success(t('system.dept.updateSuccess'));
+        message.success(t('sys.dept.updateSuccess'));
       } else {
         data.code = form.value.code?.trim();
         await createDeptApi(data);
-        message.success(t('system.dept.createSuccess'));
+        message.success(t('sys.dept.createSuccess'));
       }
       await reload();
       visible.value = false;

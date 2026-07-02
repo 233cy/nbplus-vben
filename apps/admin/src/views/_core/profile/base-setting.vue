@@ -26,31 +26,31 @@ const [Form, formApi] = useVbenForm({
     {
       fieldName: 'avatar',
       component: 'AvatarUpload',
-      label: $t('profile.basic.avatar'),
+      label: $t('core.profile.basic.avatar'),
       componentProps: { accessType: 'login' },
     },
     {
       fieldName: 'nickname',
       component: 'Input',
-      label: $t('profile.basic.nickname'),
-      rules: z.string().min(1, { message: $t('profile.basic.nicknameRequired') }),
+      label: $t('core.profile.basic.nickname'),
+      rules: z.string().min(1, { message: $t('core.profile.basic.nicknameRequired') }),
     },
     {
       fieldName: 'gender',
       component: 'DictRadio',
-      label: $t('profile.basic.gender'),
+      label: $t('core.profile.basic.gender'),
       componentProps: { code: 'sys_user_gender', valueType: 'number' },
     },
     {
       fieldName: 'lastLoginIp',
       component: 'Input',
-      label: $t('profile.basic.lastLoginIp'),
+      label: $t('core.profile.basic.lastLoginIp'),
       componentProps: { disabled: true },
     },
     {
       fieldName: 'lastLoginTime',
       component: 'Input',
-      label: $t('profile.basic.lastLoginTime'),
+      label: $t('core.profile.basic.lastLoginTime'),
       componentProps: { disabled: true },
     },
   ],
@@ -82,7 +82,7 @@ async function handleSubmit() {
     phone: adminUserStore.phone,
   });
 
-  message.success($t('profile.basic.updateSuccess'));
+  message.success($t('core.profile.basic.updateSuccess'));
 }
 
 onMounted(async () => {
@@ -97,7 +97,7 @@ onMounted(async () => {
   <div>
     <Form />
     <a-button class="mt-4" type="primary" @click="handleSubmit">
-      {{ $t('profile.saveChanges') }}
+      {{ $t('core.profile.saveChanges') }}
     </a-button>
   </div>
 </template>

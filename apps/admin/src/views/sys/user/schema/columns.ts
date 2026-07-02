@@ -26,7 +26,7 @@ export function useColumns(
     { field: 'id', title: 'ID', visible: false },
     {
       field: 'username',
-      title: $t('system.user.fields.username'),
+      title: $t('sys.user.fields.username'),
       minWidth: 120,
       sortable: true,
       cellRender: {
@@ -39,7 +39,7 @@ export function useColumns(
     },
     {
       field: 'status',
-      title: $t('system.user.fields.status'),
+      title: $t('sys.user.fields.status'),
       cellRender: {
         name: 'CellDict',
         props: { code: 'sys_user_status' },
@@ -49,31 +49,31 @@ export function useColumns(
     },
     {
       field: 'nickname',
-      title: $t('system.user.fields.nickname'),
+      title: $t('sys.user.fields.nickname'),
       minWidth: 120,
       sortable: true,
     },
     {
       field: 'avatar',
-      title: $t('system.user.fields.avatar'),
+      title: $t('sys.user.fields.avatar'),
       cellRender: { name: 'CellImages' },
       width: 80,
     },
     {
       field: 'email',
-      title: $t('system.user.fields.email'),
+      title: $t('sys.user.fields.email'),
       minWidth: 120,
       sortable: true,
     },
     {
       field: 'phone',
-      title: $t('system.user.fields.phone'),
+      title: $t('sys.user.fields.phone'),
       minWidth: 120,
       sortable: true,
     },
     {
       field: 'totpSecret',
-      title: $t('system.user.fields.totpSecret'),
+      title: $t('sys.user.fields.totpSecret'),
       cellRender: {
         name: 'CellInlineEdit',
         attrs: {
@@ -86,7 +86,7 @@ export function useColumns(
     },
     {
       field: 'gender',
-      title: $t('system.user.fields.gender'),
+      title: $t('sys.user.fields.gender'),
       cellRender: {
         name: 'CellInlineEdit',
         attrs: {
@@ -99,31 +99,31 @@ export function useColumns(
     },
     {
       field: 'deptId',
-      title: $t('system.user.fields.deptId'),
+      title: $t('sys.user.fields.deptId'),
       minWidth: 120,
     },
     {
       field: 'positionId',
-      title: $t('system.user.fields.positionId'),
+      title: $t('sys.user.fields.positionId'),
       minWidth: 140,
       formatter: ({ row }: { row: UserApi.UserItem }) => row.positionName || '-',
     },
     {
       field: 'lastLoginIp',
-      title: $t('system.user.fields.lastLoginIp'),
+      title: $t('sys.user.fields.lastLoginIp'),
       minWidth: 120,
       sortable: true,
     },
     {
       field: 'lastLoginTime',
-      title: $t('system.user.fields.lastLoginTime'),
+      title: $t('sys.user.fields.lastLoginTime'),
       formatter: ({ cellValue }: { cellValue: number }) => formatUnixTime(cellValue),
       width: 160,
       sortable: true,
     },
     {
       field: 'onlineCount',
-      title: $t('system.user.fields.onlineCount'),
+      title: $t('sys.user.fields.onlineCount'),
       width: 90,
       cellRender: {
         name: 'CellLink',

@@ -4,5 +4,6 @@ export * from '../sys/config';
 export * from '../sys/menuAdmin';
 export * from './auth';
 export * from './menu';
+export * from './options';
 export * from './profile';
 export * from './upload';

@@ -54,7 +54,7 @@ const nativeValue = computed({
   },
 });
 
-const placeholder = computed(() => (props.item.isEncrypted ? $t('system.config.encryptedPlaceholder') : ''));
+const placeholder = computed(() => (props.item.isEncrypted ? $t('sys.config.encryptedPlaceholder') : ''));
 
 const showOptions = computed(() => isOptionsComponent(componentType.value));
 

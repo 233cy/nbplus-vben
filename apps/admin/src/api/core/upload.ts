@@ -7,7 +7,7 @@ const { apiURL } = useAppConfig(import.meta.env, import.meta.env.PROD);
 export namespace uploadType {
   /** 获取tus文件 */
   export interface getTusFileInfo {
-    uploadKey?: string;
+    fileId?: string;
   }
   /** 删除OSS文件 */
   export interface deleteOssFile {
@@ -17,6 +17,22 @@ export namespace uploadType {
   export interface resolveLogicalPath {
     fullUrl: string;
     logicalPath: string;
+  }
+  /** 秒传预检 */
+  export interface rapidCheck {
+    hash: string;
+    sizeByte: number;
+    originalName: string;
+    accessType: string;
+    accessPolicy?: string;
+  }
+  /** 秒传复制 */
+  export interface rapidCopy {
+    hash: string;
+    sizeByte: number;
+    originalName: string;
+    accessType: string;
+    accessPolicy?: string;
   }
 }
 
@@ -45,7 +61,7 @@ export function getUploadUrl() {
  * @param accessType  访问类型 (authorized|public|login)，默认 public
  * @param accessPolicy  访问策略 (owner|public|login)，可选
  */
-export function uploadFileApi(file: Blob | File, accessType = 'public', accessPolicy?: string, uploadKey?: string) {
+export function uploadFileApi(file: Blob | File, accessType = 'public', accessPolicy?: string) {
   return requestClient.upload<{
     accessType: string;
     extension: string;
@@ -55,15 +71,36 @@ export function uploadFileApi(file: Blob | File, accessType = 'public', accessPo
     mimeType: string;
     originalName: string;
     sizeByte: string;
-  }>('/admin/upload/file', { file, accessType, ...(accessPolicy ? { accessPolicy } : {}), ...(uploadKey ? { uploadKey } : {}) });
+  }>('/admin/upload/file', { file, accessType, ...(accessPolicy ? { accessPolicy } : {}) });
 }
 
 export function getTusFileInfo(data: uploadType.getTusFileInfo) {
-  return requestClient.get(`/admin/upload/tus/${data.uploadKey}`);
+  return requestClient.get(`/admin/upload/tus/${data.fileId}`);
 }
 
 export function deleteOssFile(data: uploadType.deleteOssFile) {
   return requestClient.delete(`/admin/upload/delete`, { params: data });
+}
+
+/**
+ * 秒传预检：根据 hash + sizeByte 查询后端是否已有相同文件。
+ */
+export function rapidCheck(data: uploadType.rapidCheck) {
+  return requestClient.post<{
+    fullUrl?: string;
+    hit: boolean;
+    logicalPath?: string;
+  }>('/admin/upload/rapid-check', data);
+}
+
+/**
+ * 秒传复制：命中后调用后端复制生成独立的新文件记录。
+ */
+export function rapidCopy(data: uploadType.rapidCopy) {
+  return requestClient.post<{
+    fullUrl: string;
+    logicalPath: string;
+  }>('/admin/upload/rapid-copy', data);
 }
 
 /**

@@ -200,7 +200,7 @@ defineExpose({
           <svg class="mr-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span class="text-sm font-medium">{{ $t('captcha.verifySuccess') }}</span>
+          <span class="text-sm font-medium">{{ $t('core.captcha.verifySuccess') }}</span>
         </div>
         <!-- 验证中 -->
         <div v-else-if="clickShow" class="flex items-center text-primary">
@@ -208,7 +208,7 @@ defineExpose({
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
-          <span class="text-sm font-medium">{{ $t('captcha.loading') || '验证中...' }}</span>
+          <span class="text-sm font-medium">{{ $t('core.captcha.loading') || '验证中...' }}</span>
         </div>
         <!-- 待验证 -->
         <div v-else class="flex items-center text-muted-foreground transition-colors group-hover:text-primary">
@@ -220,7 +220,7 @@ defineExpose({
               d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7a4 4 0 00-8 0v4h8z"
             />
           </svg>
-          <span class="text-sm font-medium">{{ $t('captcha.clickToVerify') }}</span>
+          <span class="text-sm font-medium">{{ $t('core.captcha.clickToVerify') }}</span>
         </div>
       </div>
       <!-- 右侧引导图标 -->
@@ -250,14 +250,14 @@ defineExpose({
             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
           />
         </svg>
-        {{ $t('captcha.reVerify') || '重新验证' }}
+        {{ $t('core.captcha.reVerify') || '重新验证' }}
       </button>
     </div>
     <Teleport to="body">
       <div :class="mode === 'pop' ? 'mask' : ''" v-show="showBox">
         <div :class="mode === 'pop' ? 'verifybox' : ''" :style="boxWidthStyle">
           <div class="verifybox-top" v-if="mode === 'pop'">
-            {{ $t('captcha.pleaseCompleteSecurityVerification') }}
+            {{ $t('core.captcha.pleaseCompleteSecurityVerification') }}
             <span class="verifybox-close" @click="closeBox">
               <i class="iconfont icon-close"></i>
             </span>

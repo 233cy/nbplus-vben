@@ -80,11 +80,11 @@ function buildTreeData(
     @cancel="handleCancel"
   >
     <Form :model="form" layout="vertical" class="mt-4">
-      <FormItem :label="$t('system.dept.fields.parentId')">
+      <FormItem :label="$t('sys.dept.fields.parentId')">
         <TreeSelect
           :value="form.parentId || ''"
-          :tree-data="[{ label: $t('system.dept.rootLevel'), value: '', children: treeSelectData }]"
-          :placeholder="$t('system.dept.placeholder.parentId')"
+          :tree-data="[{ label: $t('sys.dept.rootLevel'), value: '', children: treeSelectData }]"
+          :placeholder="$t('sys.dept.placeholder.parentId')"
           allow-clear
           tree-default-expand-all
           class="w-full"
@@ -92,39 +92,39 @@ function buildTreeData(
         />
       </FormItem>
 
-      <FormItem :label="$t('system.dept.fields.name')" required>
-        <Input v-model:value="form.name" :placeholder="$t('system.dept.placeholder.name')" />
+      <FormItem :label="$t('sys.dept.fields.name')" required>
+        <Input v-model:value="form.name" :placeholder="$t('sys.dept.placeholder.name')" />
       </FormItem>
 
-      <FormItem :label="$t('system.dept.fields.code')">
+      <FormItem :label="$t('sys.dept.fields.code')">
         <Input
           v-model:value="form.code"
-          :placeholder="$t('system.dept.placeholder.code')"
+          :placeholder="$t('sys.dept.placeholder.code')"
           :disabled="isEdit"
         >
           <template v-if="!isEdit" #addonAfter>
             <Button type="link" size="small" @click="generateCodeFromName">
-              {{ $t('system.dept.generateCode') }}
+              {{ $t('sys.dept.generateCode') }}
             </Button>
           </template>
         </Input>
       </FormItem>
 
       <div class="grid grid-cols-2 gap-x-4">
-        <FormItem :label="$t('system.dept.fields.leaderId')">
-          <Input v-model:value="form.leaderId" :placeholder="$t('system.dept.placeholder.leaderId')" />
+        <FormItem :label="$t('sys.dept.fields.leaderId')">
+          <Input v-model:value="form.leaderId" :placeholder="$t('sys.dept.placeholder.leaderId')" />
         </FormItem>
-        <FormItem :label="$t('system.dept.fields.status')">
+        <FormItem :label="$t('sys.dept.fields.status')">
           <Select v-model:value="form.status" :options="statusOptions" class="w-full" />
         </FormItem>
       </div>
 
       <div class="grid grid-cols-2 gap-x-4">
-        <FormItem :label="$t('system.dept.fields.phone')">
-          <Input v-model:value="form.phone" :placeholder="$t('system.dept.placeholder.phone')" />
+        <FormItem :label="$t('sys.dept.fields.phone')">
+          <Input v-model:value="form.phone" :placeholder="$t('sys.dept.placeholder.phone')" />
         </FormItem>
-        <FormItem :label="$t('system.dept.fields.email')">
-          <Input v-model:value="form.email" :placeholder="$t('system.dept.placeholder.email')" />
+        <FormItem :label="$t('sys.dept.fields.email')">
+          <Input v-model:value="form.email" :placeholder="$t('sys.dept.placeholder.email')" />
         </FormItem>
       </div>
     </Form>

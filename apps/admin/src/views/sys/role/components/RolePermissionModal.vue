@@ -144,7 +144,7 @@ async function handleSubmit() {
   try {
     const keys = panelRef.value.getCheckedKeys();
     await assignRoleMenusApi(roleId.value, keys);
-    message.success($t('auth.role.msg.ASSIGN_MENUS_SUCCESS'));
+    message.success($t('sys.role.msg.ASSIGN_MENUS_SUCCESS'));
     emit('success');
     modalApi.close();
   } finally {
@@ -212,7 +212,7 @@ function handleApplyPack(pack: MenuPkgOption) {
 </script>
 
 <template>
-  <Modal :title="$t('auth.role.permission.title')" class="!w-[1400px] max-w-[95vw]">
+  <Modal :title="$t('sys.role.permission.title')" class="!w-[1400px] max-w-[95vw]">
     <div class="flex h-[70vh] flex-col overflow-hidden rounded-lg border bg-card">
       <div class="flex flex-1 overflow-hidden">
         <!-- Left: Permission Packs -->

@@ -64,7 +64,7 @@ async function onDragEnd() {
     <div v-if="!activeDict" class="flex h-full items-center justify-center text-gray-400">
       <div class="text-center">
         <IconifyIcon icon="lucide:book-marked" class="mx-auto mb-2 text-gray-300" style="font-size: 2.5rem" />
-        <p>{{ $t('system.dict.selectDictTip') }}</p>
+        <p>{{ $t('sys.dict.selectDictTip') }}</p>
       </div>
     </div>
 
@@ -77,13 +77,13 @@ async function onDragEnd() {
             {{ activeDict.code }}
           </code>
         </div>
-        <Button type="primary" @click="$emit('add')"> + {{ $t('system.dict.addItem') }} </Button>
+        <Button type="primary" @click="$emit('add')"> + {{ $t('sys.dict.addItem') }} </Button>
       </div>
 
       <div class="mb-2">
         <Input
           :value="keyword"
-          :placeholder="$t('system.dict.itemSearchPlaceholder')"
+          :placeholder="$t('sys.dict.itemSearchPlaceholder')"
           allow-clear
           style="max-width: 260px"
           @update:value="$emit('update:keyword', $event)"
@@ -103,10 +103,10 @@ async function onDragEnd() {
               <thead>
                 <tr class="border-b text-left text-gray-500">
                   <th class="w-8 py-2" />
-                  <th class="py-2">{{ $t('system.dict.itemFields.label') }}</th>
-                  <th class="py-2">{{ $t('system.dict.itemFields.value') }}</th>
-                  <th class="py-2 text-center">{{ $t('system.dict.fields.status') }}</th>
-                  <th class="py-2">{{ $t('system.dict.fields.remark') }}</th>
+                  <th class="py-2">{{ $t('sys.dict.itemFields.label') }}</th>
+                  <th class="py-2">{{ $t('sys.dict.itemFields.value') }}</th>
+                  <th class="py-2 text-center">{{ $t('sys.dict.fields.status') }}</th>
+                  <th class="py-2">{{ $t('sys.dict.fields.remark') }}</th>
                   <th class="py-2 text-center">{{ $t('common.operation') }}</th>
                 </tr>
               </thead>
@@ -160,10 +160,10 @@ async function onDragEnd() {
             <table v-else class="w-full text-sm">
               <thead>
                 <tr class="border-b text-left text-gray-500">
-                  <th class="py-2">{{ $t('system.dict.itemFields.label') }}</th>
-                  <th class="py-2">{{ $t('system.dict.itemFields.value') }}</th>
-                  <th class="py-2 text-center">{{ $t('system.dict.fields.status') }}</th>
-                  <th class="py-2">{{ $t('system.dict.fields.remark') }}</th>
+                  <th class="py-2">{{ $t('sys.dict.itemFields.label') }}</th>
+                  <th class="py-2">{{ $t('sys.dict.itemFields.value') }}</th>
+                  <th class="py-2 text-center">{{ $t('sys.dict.fields.status') }}</th>
+                  <th class="py-2">{{ $t('sys.dict.fields.remark') }}</th>
                   <th class="py-2 text-center">{{ $t('common.operation') }}</th>
                 </tr>
               </thead>
@@ -207,8 +207,8 @@ async function onDragEnd() {
           </template>
 
           <div v-else class="flex h-full items-center justify-center">
-            <Empty :description="$t('system.dict.itemsEmpty')">
-              <Button type="primary" @click="$emit('add')">{{ $t('system.dict.addItem') }}</Button>
+            <Empty :description="$t('sys.dict.itemsEmpty')">
+              <Button type="primary" @click="$emit('add')">{{ $t('sys.dict.addItem') }}</Button>
             </Empty>
           </div>
         </Spin>

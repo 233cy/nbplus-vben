@@ -13,6 +13,8 @@ const props = withDefaults(
     accessPolicy?: 'login' | 'owner' | 'public';
     /** 访问类型: authorized | public | login，默认 public */
     accessType?: 'authorized' | 'login' | 'public';
+    /** 是否启用秒传，默认 true */
+    enableFastUpload?: boolean;
     /** 最大数量，默认 1（单张）；大于 1 时自动开启多选 */
     maxCount?: number;
     /** 最大文件大小（MB），默认 0 仅由系统参数兜底 */
@@ -25,6 +27,7 @@ const props = withDefaults(
   {
     accessType: undefined,
     accessPolicy: undefined,
+    enableFastUpload: true,
     modelValue: '',
     maxCount: 1,
     maxSize: 0,
@@ -43,10 +46,10 @@ const limitText = computed(() => {
   if (!props.showLimit) return '';
   const parts: string[] = [];
   if (props.maxCount > 1) {
-    parts.push($t('upload.limitHintCount', { count: props.maxCount }));
+    parts.push($t('core.upload.limitHintCount', { count: props.maxCount }));
   }
   if (props.maxSize > 0) {
-    parts.push($t('upload.limitHintSize', { size: props.maxSize }));
+    parts.push($t('core.upload.limitHintSize', { size: props.maxSize }));
   }
   return parts.join('，');
 });
@@ -56,9 +59,9 @@ const limitText = computed(() => {
   <div class="up-img-container">
     <div class="mb-2">
       <a-tag :color="currentAccessType === 'authorized' ? 'red' : currentAccessType === 'public' ? 'cyan' : 'purple'">
-        <span v-if="currentAccessType === 'authorized'">{{ $t('upload.privateResource') }}</span>
-        <span v-else-if="currentAccessType === 'public'">{{ $t('upload.publicResource') }}</span>
-        <span v-else>{{ $t('upload.protectedResource') }}</span>
+        <span v-if="currentAccessType === 'authorized'">{{ $t('core.upload.privateResource') }}</span>
+        <span v-else-if="currentAccessType === 'public'">{{ $t('core.upload.publicResource') }}</span>
+        <span v-else>{{ $t('core.upload.protectedResource') }}</span>
       </a-tag>
       <span v-if="limitText" class="ml-2 text-xs text-gray-400">{{ limitText }}</span>
     </div>
@@ -67,6 +70,7 @@ const limitText = computed(() => {
       :model-value="modelValue"
       :access-type="accessType"
       :access-policy="accessPolicy"
+      :enable-fast-upload="enableFastUpload"
       :max-count="maxCount"
       :max-size="maxSize"
       @update:model-value="$emit('update:modelValue', $event)"
@@ -77,7 +81,7 @@ const limitText = computed(() => {
           <ThumbCard v-for="f in files" :key="f.uid" :file="f" />
           <div v-if="canAdd" class="add-btn" @click="pick">
             <IconifyIcon icon="ant-design:plus-outlined" class="text-xl text-gray-400" />
-            <div class="mt-1 text-xs text-gray-500">{{ $t('upload.uploadAction') }}</div>
+            <div class="mt-1 text-xs text-gray-500">{{ $t('core.upload.uploadAction') }}</div>
           </div>
         </div>
       </template>

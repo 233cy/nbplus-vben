@@ -31,7 +31,7 @@ function handleCancel() {
 <template>
   <Modal
     v-model:open="showVisible"
-    :title="$t('system.dept.moveTitle', { title: moveItem?.name ?? '' })"
+    :title="$t('sys.dept.moveTitle', { title: moveItem?.name ?? '' })"
     :confirm-loading="loading"
     width="400px"
     @ok="handleOk"

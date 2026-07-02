@@ -27,7 +27,7 @@ const activeGroupIndex = computed(() => {
 
 function copyKey(key: string) {
   navigator.clipboard.writeText(key).then(() => {
-    message.success($t('system.config.copySuccess'));
+    message.success($t('sys.config.copySuccess'));
   });
 }
 
@@ -57,7 +57,7 @@ onMounted(() => {
       <div class="flex items-center justify-between border-b px-6 py-3 dark:border-gray-700">
         <span class="text-base font-medium">{{ activeGroupLabel }}</span>
         <div class="flex gap-2">
-          <Button type="primary" size="small" @click="form.openCreate"> + {{ $t('system.config.addItem') }} </Button>
+          <Button type="primary" size="small" @click="form.openCreate"> + {{ $t('sys.config.addItem') }} </Button>
         </div>
       </div>
 
@@ -81,7 +81,7 @@ onMounted(() => {
       <!-- 底部保存按钮 -->
       <div class="flex justify-end border-t px-6 py-3 dark:border-gray-700">
         <Button type="primary" :loading="items.saving.value" @click="items.handleSave">
-          {{ $t('system.config.save') }}
+          {{ $t('sys.config.save') }}
         </Button>
       </div>
     </div>

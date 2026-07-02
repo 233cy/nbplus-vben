@@ -19,7 +19,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'code',
-      label: $t('system.post.fields.code'),
+      label: $t('sys.post.fields.code'),
       componentProps: {
         allowClear: true,
       },
@@ -27,7 +27,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('system.post.fields.name'),
+      label: $t('sys.post.fields.name'),
       componentProps: {
         allowClear: true,
       },
@@ -35,7 +35,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('system.post.fields.status'),
+      label: $t('sys.post.fields.status'),
       componentProps: {
         allowClear: true,
         code: 'sys_post_status',

@@ -19,7 +19,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'code',
-      label: $t('system.menuPkg.fields.code'),
+      label: $t('sys.menu-pkg.fields.code'),
       componentProps: {
         allowClear: true,
       },
@@ -27,7 +27,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('system.menuPkg.fields.name'),
+      label: $t('sys.menu-pkg.fields.name'),
       componentProps: {
         allowClear: true,
       },
@@ -35,7 +35,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('system.menuPkg.fields.status'),
+      label: $t('sys.menu-pkg.fields.status'),
       componentProps: {
         allowClear: true,
         code: 'is_enable',

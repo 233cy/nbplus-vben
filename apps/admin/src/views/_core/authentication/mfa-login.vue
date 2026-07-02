@@ -90,7 +90,7 @@ const formSchema = computed((): VbenFormSchema[] => {
       component: 'CaptchaPinInput',
       componentProps: {
         codeLength: CODE_LENGTH,
-        createText: (countdown: number) => (countdown > 0 ? `${countdown}s 后重新发送` : $t('authentication.sendCode')),
+        createText: (countdown: number) => (countdown > 0 ? `${countdown}s 后重新发送` : $t('core.authentication.sendCode')),
         beforeSend,
         sendApi,
       },

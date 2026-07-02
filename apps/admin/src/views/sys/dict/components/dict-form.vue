@@ -42,31 +42,31 @@ function handleCancel() {
 <template>
   <Modal
     v-model:open="visible"
-    :title="isEdit ? $t('system.dict.editDict') : $t('system.dict.addDict')"
+    :title="isEdit ? $t('sys.dict.editDict') : $t('sys.dict.addDict')"
     :confirm-loading="loading"
     @ok="handleOk"
     @cancel="handleCancel"
   >
     <Form :model="form" layout="vertical" class="mt-4">
-      <FormItem :label="$t('system.dict.fields.name')" required>
-        <Input v-model:value="form.name" :placeholder="$t('system.dict.placeholder.name')" />
+      <FormItem :label="$t('sys.dict.fields.name')" required>
+        <Input v-model:value="form.name" :placeholder="$t('sys.dict.placeholder.name')" />
       </FormItem>
-      <FormItem :label="$t('system.dict.fields.code')" required>
-        <Input v-model:value="form.code" :disabled="isEdit" :placeholder="$t('system.dict.placeholder.code')" />
+      <FormItem :label="$t('sys.dict.fields.code')" required>
+        <Input v-model:value="form.code" :disabled="isEdit" :placeholder="$t('sys.dict.placeholder.code')" />
       </FormItem>
-      <FormItem :label="$t('system.dict.fields.groups')">
+      <FormItem :label="$t('sys.dict.fields.groups')">
         <Select
           v-model:value="form.groups"
           :options="groupOptions"
-          :placeholder="$t('system.dict.placeholder.groups')"
+          :placeholder="$t('sys.dict.placeholder.groups')"
           allow-clear
           show-search
         />
       </FormItem>
-      <FormItem :label="$t('system.dict.fields.status')">
+      <FormItem :label="$t('sys.dict.fields.status')">
         <Select v-model:value="form.status" :options="statusOptions" />
       </FormItem>
-      <FormItem :label="$t('system.dict.fields.remark')">
+      <FormItem :label="$t('sys.dict.fields.remark')">
         <Textarea v-model:value="form.remark" :rows="2" />
       </FormItem>
     </Form>

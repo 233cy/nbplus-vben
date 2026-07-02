@@ -53,7 +53,7 @@ const coreRoutes: RouteRecordRaw[] = [
         path: 'login',
         component: () => import('#/views/_core/authentication/login.vue'),
         meta: {
-          title: $t('authentication.login'),
+          title: $t('core.authentication.login'),
         },
       },
       {
@@ -61,7 +61,7 @@ const coreRoutes: RouteRecordRaw[] = [
         path: 'code-login',
         component: () => import('#/views/_core/authentication/code-login.vue'),
         meta: {
-          title: $t('authentication.codeLogin.title'),
+          title: $t('core.authentication.codeLogin.title'),
         },
       },
       {
@@ -69,7 +69,7 @@ const coreRoutes: RouteRecordRaw[] = [
         path: 'qrcode-login',
         component: () => import('#/views/_core/authentication/qrcode-login.vue'),
         meta: {
-          title: $t('authentication.qrcodeLogin'),
+          title: $t('core.authentication.qrcodeLogin'),
         },
       },
       {
@@ -77,7 +77,7 @@ const coreRoutes: RouteRecordRaw[] = [
         path: 'forget-password',
         component: () => import('#/views/_core/authentication/forget-password.vue'),
         meta: {
-          title: $t('authentication.forgetPasswordTitle'),
+          title: $t('core.authentication.forgetPasswordTitle'),
         },
       },
       {
@@ -85,7 +85,7 @@ const coreRoutes: RouteRecordRaw[] = [
         path: 'register',
         component: () => import('#/views/_core/authentication/register.vue'),
         meta: {
-          title: $t('authentication.register'),
+          title: $t('core.authentication.register'),
         },
       },
       {
@@ -93,7 +93,7 @@ const coreRoutes: RouteRecordRaw[] = [
         path: 'mfa-login',
         component: () => import('#/views/_core/authentication/mfa-login.vue'),
         meta: {
-          title: $t('authentication.mfaLogin') || 'MFA 验证',
+          title: $t('core.authentication.mfaLogin') || 'MFA 验证',
         },
       },
       {
@@ -101,7 +101,7 @@ const coreRoutes: RouteRecordRaw[] = [
         path: 'totp-login',
         component: () => import('#/views/_core/authentication/totp-login.vue'),
         meta: {
-          title: $t('authentication.totpLogin') || 'TOTP 验证',
+          title: $t('core.authentication.totpLogin') || 'TOTP 验证',
         },
       },
     ],

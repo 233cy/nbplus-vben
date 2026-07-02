@@ -15,6 +15,8 @@ const props = withDefaults(
     accessPolicy?: 'login' | 'owner' | 'public';
     accessType?: 'authorized' | 'login' | 'public';
     autoStart?: boolean;
+    /** 是否启用秒传，默认 true */
+    enableFastUpload?: boolean;
     maxCount?: number;
     maxSize?: number;
     /** v-model：逗号分隔的逻辑路径 */
@@ -25,6 +27,7 @@ const props = withDefaults(
     accessType: undefined,
     accessPolicy: undefined,
     autoStart: true,
+    enableFastUpload: true,
     maxCount: 1,
     maxSize: 0,
     modelValue: '',
@@ -42,11 +45,13 @@ const queue = useUploadQueue({
   type: props.type,
   accessType: props.accessType,
   accessPolicy: props.accessPolicy,
+  enableFastUpload: props.enableFastUpload,
   multiple: isMultiple.value,
   maxCount: props.maxCount,
   maxSize: props.maxSize,
 });
-const { files, addFiles, addResolved, canAddMore, start, togglePause, retry, remove, download } = queue;
+const { files, addFiles, addResolved, canAddMore, start, togglePause, retry, remove, download, fastUploadEnabled, toggleFastUpload, cancelHashCheck } =
+  queue;
 
 const inputRef = ref<HTMLInputElement>();
 
@@ -119,9 +124,17 @@ watch(
 );
 
 // 给缩略卡片子组件注入操作上下文
-provide(UPLOAD_CTX, { start, togglePause, retry, remove, download, openPreview });
+provide(UPLOAD_CTX, {
+  start,
+  togglePause,
+  retry,
+  remove,
+  download,
+  openPreview,
+  cancelHashCheck,
+});
 
-defineExpose({ files, addFiles, start, togglePause, retry, remove, download, pick, canAddMore });
+defineExpose({ files, addFiles, start, togglePause, retry, remove, download, pick, canAddMore, fastUploadEnabled, toggleFastUpload, cancelHashCheck });
 </script>
 
 <template>
@@ -137,6 +150,9 @@ defineExpose({ files, addFiles, start, togglePause, retry, remove, download, pic
       :remove="remove"
       :download="download"
       :open-preview="openPreview"
+      :fast-upload-enabled="fastUploadEnabled"
+      :toggle-fast-upload="toggleFastUpload"
+      :cancel-hash-check="cancelHashCheck"
     ></slot>
     <MediaPreviewModal v-model:open="previewVisible" :file="previewFile" />
   </div>

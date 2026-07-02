@@ -58,7 +58,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 <template>
   <Drawer
-    :title="isReadonly ? $t('system.user.detail') : rowId ? $t('system.user.edit') : $t('system.user.create')"
+    :title="isReadonly ? $t('sys.user.detail') : rowId ? $t('sys.user.edit') : $t('sys.user.create')"
     :show-confirm-button="!isReadonly && (!!rowId ? canUpdate : true)"
   >
     <Form :disabled="isReadonly" />

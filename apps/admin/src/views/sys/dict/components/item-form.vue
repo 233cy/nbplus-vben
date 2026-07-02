@@ -46,19 +46,19 @@ function handleCancel() {
 <template>
   <Modal
     v-model:open="visible"
-    :title="isEdit ? $t('system.dict.editItem') : $t('system.dict.addItem')"
+    :title="isEdit ? $t('sys.dict.editItem') : $t('sys.dict.addItem')"
     :confirm-loading="loading"
     @ok="handleOk"
     @cancel="handleCancel"
   >
     <Form :model="form" layout="vertical" class="mt-4">
-      <FormItem :label="$t('system.dict.itemFields.label')" required>
+      <FormItem :label="$t('sys.dict.itemFields.label')" required>
         <Input v-model:value="form.label" />
       </FormItem>
-      <FormItem :label="$t('system.dict.itemFields.value')" required>
+      <FormItem :label="$t('sys.dict.itemFields.value')" required>
         <Input v-model:value="form.value" />
       </FormItem>
-      <FormItem :label="$t('system.dict.itemFields.color')">
+      <FormItem :label="$t('sys.dict.itemFields.color')">
         <Select v-model:value="form.color" :options="colorOptions" allow-clear>
           <template #option="{ label, value: val }">
             <span v-if="val"><Tag :color="val">{{ label }}</Tag></span>
@@ -66,13 +66,13 @@ function handleCancel() {
           </template>
         </Select>
       </FormItem>
-      <FormItem :label="$t('system.dict.fields.status')">
+      <FormItem :label="$t('sys.dict.fields.status')">
         <Select v-model:value="form.status" :options="statusOptions" />
       </FormItem>
-      <FormItem :label="$t('system.dict.fields.remark')">
+      <FormItem :label="$t('sys.dict.fields.remark')">
         <Input v-model:value="form.remark" />
       </FormItem>
-      <FormItem :label="$t('system.dict.itemFields.sort')">
+      <FormItem :label="$t('sys.dict.itemFields.sort')">
         <Input v-model:value="form.sort" type="number" />
       </FormItem>
     </Form>

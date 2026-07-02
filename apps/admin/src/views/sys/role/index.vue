@@ -85,7 +85,7 @@ const [DataScopeModal, dataScopeModalApi] = useVbenModal({
     <PermissionModal @success="role.onRefresh" />
     <DataScopeModal @success="role.onRefresh" />
 
-    <Grid :table-title="$t('auth.role.pageTitle')">
+    <Grid :table-title="$t('sys.role.pageTitle')">
       <template #toolbar-tools>
         <BatchActionDropdown
           v-if="canBatchDelete"
@@ -112,12 +112,12 @@ const [DataScopeModal, dataScopeModalApi] = useVbenModal({
           :api-fn="batchUpdateRoleApi"
           :get-ids="role.getSelectedIds"
           :on-success="role.onRefresh"
-          :fields="[{ fieldName: 'status', label: $t('auth.role.fields.status'), dictCode: 'is_enable' }]"
+          :fields="[{ fieldName: 'status', label: $t('sys.role.fields.status'), dictCode: 'is_enable' }]"
         />
 
         <Button v-if="canCreate" type="primary" @click="formDrawerApi.setData({}).open()">
           <Plus class="size-5" />
-          {{ $t('auth.role.create') }}
+          {{ $t('sys.role.create') }}
         </Button>
       </template>
     </Grid>

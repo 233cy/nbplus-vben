@@ -46,10 +46,6 @@ export function getDeptTreeApi() {
   return requestClient.get<DeptApi.DeptItem[]>(`${BASE}/tree`);
 }
 
-export function getDeptOptionsApi() {
-  return requestClient.get<DeptApi.DeptOption[]>(`${BASE}/options`);
-}
-
 export function createDeptApi(data: DeptApi.SaveParams) {
   return requestClient.post<DeptApi.DeptItem>(`${BASE}/create`, data);
 }

@@ -82,7 +82,7 @@ const formSchema = computed((): VbenFormSchema[] => {
     {
       component: 'VbenInput',
       componentProps: {
-        placeholder: $t('authentication.usernameTip'),
+        placeholder: $t('core.authentication.usernameTip'),
         onBlur: (e: FocusEvent) => {
           const username = (e.target as HTMLInputElement).value;
           checkLoginStatus(username);
@@ -90,18 +90,18 @@ const formSchema = computed((): VbenFormSchema[] => {
       },
       fieldName: 'username',
       defaultValue: 'admin',
-      label: $t('authentication.username'),
-      rules: z.string().min(1, { message: $t('authentication.usernameTip') }),
+      label: $t('core.authentication.username'),
+      rules: z.string().min(1, { message: $t('core.authentication.usernameTip') }),
     },
     {
       component: 'VbenInputPassword',
       componentProps: {
-        placeholder: $t('authentication.password'),
+        placeholder: $t('core.authentication.password'),
       },
       fieldName: 'password',
       defaultValue: 'xiaogui1',
-      label: $t('authentication.password'),
-      rules: z.string().min(1, { message: $t('authentication.passwordTip') }),
+      label: $t('core.authentication.password'),
+      rules: z.string().min(1, { message: $t('core.authentication.passwordTip') }),
     },
   ];
 
@@ -109,9 +109,9 @@ const formSchema = computed((): VbenFormSchema[] => {
     schema.push({
       component: markRaw(Verify),
       componentProps: {},
-      label: $t('captcha.title') || '验证码',
+      label: $t('core.captcha.title') || '验证码',
       fieldName: 'captcha',
-      rules: z.any().refine((value) => value !== null && value !== undefined && value !== '', { message: $t('captcha.required') || '请先完成安全验证' }),
+      rules: z.any().refine((value) => value !== null && value !== undefined && value !== '', { message: $t('core.captcha.required') || '请先完成安全验证' }),
     });
   }
 

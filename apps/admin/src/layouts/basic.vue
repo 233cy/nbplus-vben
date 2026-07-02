@@ -82,7 +82,7 @@ const menus = computed(() => [
       router.push({ name: 'Profile' });
     },
     icon: 'lucide:user',
-    text: $t('authentication.profile'),
+    text: $t('core.authentication.profile'),
   },
 ]);
 

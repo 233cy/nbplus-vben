@@ -27,7 +27,7 @@ export function useColumns(
     { field: 'id', title: 'ID', visible: false },
     {
       field: 'code',
-      title: $t('system.menuPkg.fields.code'),
+      title: $t('sys.menu-pkg.fields.code'),
       minWidth: 140,
       sortable: true,
       cellRender: {
@@ -40,7 +40,7 @@ export function useColumns(
     },
     {
       field: 'name',
-      title: $t('system.menuPkg.fields.name'),
+      title: $t('sys.menu-pkg.fields.name'),
       minWidth: 160,
       sortable: true,
       cellRender: {
@@ -54,7 +54,7 @@ export function useColumns(
     },
     {
       field: 'status',
-      title: $t('system.menuPkg.fields.status'),
+      title: $t('sys.menu-pkg.fields.status'),
       width: 120,
       sortable: true,
       cellRender: {
@@ -69,7 +69,7 @@ export function useColumns(
     },
     {
       field: 'sort',
-      title: $t('system.menuPkg.fields.sort'),
+      title: $t('sys.menu-pkg.fields.sort'),
       width: 120,
       sortable: true,
       cellRender: {
@@ -83,7 +83,7 @@ export function useColumns(
     },
     {
       field: 'remark',
-      title: $t('system.menuPkg.fields.remark'),
+      title: $t('sys.menu-pkg.fields.remark'),
       minWidth: 180,
       showOverflow: 'tooltip',
     },
@@ -130,7 +130,7 @@ export function useColumns(
             },
             {
               key: 'assignMenus',
-              label: $t('system.menuPkg.assignMenus'),
+              label: $t('sys.menu-pkg.assignMenus'),
               icon: 'lucide:shield',
               hidden: !canAssignMenus,
               onClick: (row: MenuPkgApi.MenuPkgItem) => onAssignMenus(row),

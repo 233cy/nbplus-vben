@@ -84,7 +84,7 @@ const [Form, formApi] = useTableForm({
   },
   showCollapseButton: true,
   submitButtonOptions: {
-    content: computed(() => $t('common.search')),
+    content: computed(() => $t('common.search.button')),
   },
   wrapperClass: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
 });
@@ -196,7 +196,7 @@ const delegatedFormSlots = computed(() => {
       resultSlots.push(key);
     }
   }
-  return resultSlots.map((key) => key.replace(FORM_SLOT_PREFIX, ''));
+  return resultSlots.map(key => key.replace(FORM_SLOT_PREFIX, ''));
 });
 
 const showDefaultEmpty = computed(() => {
@@ -237,7 +237,7 @@ async function init() {
 watch(
   formOptions,
   () => {
-    formApi.setState((prev) => {
+    formApi.setState(prev => {
       const finalFormOptions: VbenFormProps = mergeWithArrayOverride({}, formOptions.value, prev);
       return {
         ...finalFormOptions,
@@ -306,7 +306,7 @@ onUnmounted(() => {
           class="ml-2"
           v-if="gridOptions?.toolbarConfig?.search && !!formOptions"
           :status="showSearchForm ? 'primary' : undefined"
-          :title="$t('common.search')"
+          :title="$t('common.search.button')"
           @click="onSearchBtnClick"
         />
       </template>

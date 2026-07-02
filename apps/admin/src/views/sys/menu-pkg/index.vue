@@ -76,7 +76,7 @@ const menuPkg = useMenuPkg(gridApi);
     <FormDrawer @success="menuPkg.onRefresh" />
     <AssignMenusModal @success="menuPkg.onRefresh" />
 
-    <Grid :table-title="$t('system.menuPkg.pageTitle')">
+    <Grid :table-title="$t('sys.menu-pkg.pageTitle')">
       <template #toolbar-tools>
         <BatchActionDropdown
           v-if="canBatchDelete"
@@ -103,12 +103,12 @@ const menuPkg = useMenuPkg(gridApi);
           :api-fn="batchUpdateMenuPkgApi"
           :get-ids="menuPkg.getSelectedIds"
           :on-success="menuPkg.onRefresh"
-          :fields="[{ fieldName: 'status', label: $t('system.menuPkg.fields.status'), dictCode: 'is_enable' }]"
+          :fields="[{ fieldName: 'status', label: $t('sys.menu-pkg.fields.status'), dictCode: 'is_enable' }]"
         />
 
         <Button v-if="canCreate" type="primary" @click="formDrawerApi.setData({}).open()">
           <Plus class="size-5" />
-          {{ $t('system.menuPkg.create') }}
+          {{ $t('sys.menu-pkg.create') }}
         </Button>
       </template>
     </Grid>

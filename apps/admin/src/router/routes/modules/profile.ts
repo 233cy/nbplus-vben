@@ -10,7 +10,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       hideInMenu: true,
       hideInTab: false,
-      title: $t('profile.title'),
+      title: $t('core.profile.title'),
     },
   },
 ];

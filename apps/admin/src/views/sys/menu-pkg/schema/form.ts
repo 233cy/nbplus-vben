@@ -15,20 +15,20 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('system.menuPkg.fields.name'),
+      label: $t('sys.menu-pkg.fields.name'),
       rules: 'required',
       componentProps: {
-        placeholder: $t('system.menuPkg.placeholders.name'),
+        placeholder: $t('sys.menu-pkg.placeholders.name'),
       },
     },
     {
       component: 'Input',
       fieldName: 'code',
-      label: $t('system.menuPkg.fields.code'),
+      label: $t('sys.menu-pkg.fields.code'),
       rules: 'required',
       disabled: isEdit,
       componentProps: {
-        placeholder: $t('system.menuPkg.placeholders.code'),
+        placeholder: $t('sys.menu-pkg.placeholders.code'),
       },
       renderComponentContent: isEdit
         ? undefined
@@ -53,7 +53,7 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('system.menuPkg.fields.status'),
+      label: $t('sys.menu-pkg.fields.status'),
       rules: 'required',
       defaultValue: 1,
       componentProps: {
@@ -63,18 +63,18 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'InputNumber',
       fieldName: 'sort',
-      label: $t('system.menuPkg.fields.sort'),
+      label: $t('sys.menu-pkg.fields.sort'),
       componentProps: {
-        placeholder: $t('system.menuPkg.placeholders.sort'),
+        placeholder: $t('sys.menu-pkg.placeholders.sort'),
         min: 0,
       },
     },
     {
       component: 'Textarea',
       fieldName: 'remark',
-      label: $t('system.menuPkg.fields.remark'),
+      label: $t('sys.menu-pkg.fields.remark'),
       componentProps: {
-        placeholder: $t('system.menuPkg.placeholders.remark'),
+        placeholder: $t('sys.menu-pkg.placeholders.remark'),
         rows: 3,
       },
     },

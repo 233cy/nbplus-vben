@@ -81,7 +81,7 @@ async function handleSave() {
 
     const api = props.saveApi || saveConfigApi;
     await api(payload);
-    message.success($t('system.config.saveSuccess'));
+    message.success($t('sys.config.saveSuccess'));
     emit('saved');
     open.value = false;
   } finally {
@@ -125,7 +125,7 @@ watch(
       </Button>
       <Button type="primary" :loading="saving" @click="handleSave">
         <IconifyIcon icon="ant-design:save-outlined" class="mr-1 size-4" />
-        {{ $t('system.config.save') }}
+        {{ $t('sys.config.save') }}
       </Button>
     </template>
   </Drawer>

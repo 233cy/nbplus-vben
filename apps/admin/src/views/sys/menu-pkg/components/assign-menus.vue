@@ -70,7 +70,7 @@ async function handleSubmit() {
   try {
     const keys = panelRef.value.getCheckedKeys();
     await assignMenuPkgMenusApi(pkgId.value, keys);
-    message.success($t('system.menuPkg.msg.ASSIGN_MENUS_SUCCESS'));
+    message.success($t('sys.menu-pkg.msg.ASSIGN_MENUS_SUCCESS'));
     emit('success');
     modalApi.close();
   } finally {
@@ -91,7 +91,7 @@ function handleReset() {
 </script>
 
 <template>
-  <Modal :title="$t('system.menuPkg.assignMenus') + (pkgName ? ` - ${pkgName}` : '')" class="!w-[1200px] max-w-[95vw]">
+  <Modal :title="$t('sys.menu-pkg.assignMenus') + (pkgName ? ` - ${pkgName}` : '')" class="!w-[1200px] max-w-[95vw]">
     <div class="flex h-[70vh] flex-col overflow-hidden rounded-lg border bg-card p-5">
       <div v-if="pkgName" class="mb-4 rounded-lg border bg-muted/30 p-4">
         <div class="text-sm font-bold uppercase tracking-wider text-muted-foreground">正在操作的权限包</div>

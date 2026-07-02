@@ -109,7 +109,7 @@ onMounted(() => {
   <Page auto-content-height>
     <FormDrawer @success="gridApi.query" />
 
-    <Grid :table-title="$t('system.storage.pageTitle')">
+    <Grid :table-title="$t('sys.storage.pageTitle')">
       <template #toolbar-tools>
         <BatchActionDropdown
           type="direct"
@@ -128,7 +128,7 @@ onMounted(() => {
 
         <Button type="primary" class="ml-2" @click="openCreate">
           <Plus class="size-5" />
-          {{ $t('system.storage.create') }}
+          {{ $t('sys.storage.create') }}
         </Button>
       </template>
     </Grid>

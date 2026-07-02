@@ -46,7 +46,7 @@ export function useConfigForm(options: UseConfigFormOptions) {
 
   const componentOptions = computed(() =>
     COMPONENT_KEYS.map(key => ({
-      label: `${$t(`system.config.components.${key}` as any)} (${key})`,
+      label: `${$t(`sys.config.components.${key}` as any)} (${key})`,
       value: key,
     })),
   );
@@ -95,11 +95,11 @@ export function useConfigForm(options: UseConfigFormOptions) {
     try {
       if (modalMode.value === 'create') {
         await createConfigApi(formState.value);
-        message.success($t('system.config.createSuccess'));
+        message.success($t('sys.config.createSuccess'));
       } else {
         if (!editingItem.value) return;
         await updateConfigApi({ id: editingItem.value.id, ...formState.value });
-        message.success($t('system.config.updateSuccess'));
+        message.success($t('sys.config.updateSuccess'));
       }
       modalVisible.value = false;
       await onSuccess();

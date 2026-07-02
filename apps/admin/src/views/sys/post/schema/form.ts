@@ -15,20 +15,20 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('system.post.fields.name'),
+      label: $t('sys.post.fields.name'),
       rules: 'required',
       componentProps: {
-        placeholder: $t('system.post.placeholders.name'),
+        placeholder: $t('sys.post.placeholders.name'),
       },
     },
     {
       component: 'Input',
       fieldName: 'code',
-      label: $t('system.post.fields.code'),
+      label: $t('sys.post.fields.code'),
       rules: 'required',
       disabled: isEdit,
       componentProps: {
-        placeholder: $t('system.post.placeholders.code'),
+        placeholder: $t('sys.post.placeholders.code'),
       },
       renderComponentContent: isEdit
         ? undefined
@@ -53,16 +53,16 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'InputNumber',
       fieldName: 'level',
-      label: $t('system.post.fields.level'),
+      label: $t('sys.post.fields.level'),
       componentProps: {
-        placeholder: $t('system.post.placeholders.level'),
+        placeholder: $t('sys.post.placeholders.level'),
         min: 0,
       },
     },
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('system.post.fields.status'),
+      label: $t('sys.post.fields.status'),
       rules: 'required',
       defaultValue: 1,
       componentProps: {
@@ -72,18 +72,18 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'InputNumber',
       fieldName: 'sort',
-      label: $t('system.post.fields.sort'),
+      label: $t('sys.post.fields.sort'),
       componentProps: {
-        placeholder: $t('system.post.placeholders.sort'),
+        placeholder: $t('sys.post.placeholders.sort'),
         min: 0,
       },
     },
     {
       component: 'Textarea',
       fieldName: 'remark',
-      label: $t('system.post.fields.remark'),
+      label: $t('sys.post.fields.remark'),
       componentProps: {
-        placeholder: $t('system.post.placeholders.remark'),
+        placeholder: $t('sys.post.placeholders.remark'),
         rows: 3,
       },
     },

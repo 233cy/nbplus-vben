@@ -10,11 +10,11 @@ import { useTableDelete } from '#/utils/table';
 import { formatUnixTime } from '#/utils/time';
 
 const dataScopeMap: Record<number, string> = {
-  1: 'auth.role.dataScope.all',
-  2: 'auth.role.dataScope.dept',
-  3: 'auth.role.dataScope.deptAndBelow',
-  4: 'auth.role.dataScope.self',
-  5: 'auth.role.dataScope.custom',
+  1: 'sys.role.dataScope.all',
+  2: 'sys.role.dataScope.dept',
+  3: 'sys.role.dataScope.deptAndBelow',
+  4: 'sys.role.dataScope.self',
+  5: 'sys.role.dataScope.custom',
 };
 
 /**
@@ -28,18 +28,18 @@ export function useColumns(
   onRefresh: () => void,
 ): VxeTableGridOptions['columns'] {
   const { hasAccessByCodes } = useAccess();
-  const canDetail = hasAccessByCodes(['auth:role:detail']);
-  const canUpdate = hasAccessByCodes(['auth:role:update']);
-  const canDelete = hasAccessByCodes(['auth:role:delete']);
-  const canAssignMenus = hasAccessByCodes(['auth:role:assignMenus']);
-  const canAssignDataScope = hasAccessByCodes(['auth:role:assignDataScope']);
+  const canDetail = hasAccessByCodes(['sys:role:detail']);
+  const canUpdate = hasAccessByCodes(['sys:role:update']);
+  const canDelete = hasAccessByCodes(['sys:role:delete']);
+  const canAssignMenus = hasAccessByCodes(['sys:role:assignMenus']);
+  const canAssignDataScope = hasAccessByCodes(['sys:role:assignDataScope']);
 
   return [
     { type: 'checkbox', width: 50 },
     { field: 'id', title: 'ID', visible: false },
     {
       field: 'code',
-      title: $t('auth.role.fields.code'),
+      title: $t('sys.role.fields.code'),
       minWidth: 140,
       sortable: true,
       cellRender: {
@@ -52,7 +52,7 @@ export function useColumns(
     },
     {
       field: 'name',
-      title: $t('auth.role.fields.name'),
+      title: $t('sys.role.fields.name'),
       minWidth: 160,
       sortable: true,
       cellRender: {
@@ -66,15 +66,15 @@ export function useColumns(
     },
     {
       field: 'dataScope',
-      title: $t('auth.role.fields.dataScope'),
+      title: $t('sys.role.fields.dataScope'),
       minWidth: 160,
       slots: {
-        default: ({ row }: any) => h('span', $t(dataScopeMap[row.dataScope] || 'auth.role.dataScope.all')),
+        default: ({ row }: any) => h('span', $t(dataScopeMap[row.dataScope] || 'sys.role.dataScope.all')),
       },
     },
     {
       field: 'status',
-      title: $t('auth.role.fields.status'),
+      title: $t('sys.role.fields.status'),
       width: 100,
       cellRender: {
         name: 'CellInlineEdit',
@@ -88,7 +88,7 @@ export function useColumns(
     },
     {
       field: 'sort',
-      title: $t('auth.role.fields.sort'),
+      title: $t('sys.role.fields.sort'),
       width: 100,
       sortable: true,
       cellRender: {
@@ -102,7 +102,7 @@ export function useColumns(
     },
     {
       field: 'remark',
-      title: $t('auth.role.fields.remark'),
+      title: $t('sys.role.fields.remark'),
       minWidth: 180,
       showOverflow: 'tooltip',
     },
@@ -149,14 +149,14 @@ export function useColumns(
             },
             {
               key: 'assignMenus',
-              label: $t('auth.role.assignMenus'),
+              label: $t('sys.role.assignMenus'),
               icon: 'lucide:shield',
               hidden: !canAssignMenus,
               onClick: (row: RoleApi.RoleItem) => onAssignMenus(row),
             },
             {
               key: 'assignDataScope',
-              label: $t('auth.role.assignDataScope'),
+              label: $t('sys.role.assignDataScope'),
               icon: 'lucide:database',
               hidden: !canAssignDataScope,
               onClick: (row: RoleApi.RoleItem) => onAssignDataScope(row),

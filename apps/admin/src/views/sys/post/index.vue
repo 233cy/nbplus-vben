@@ -64,7 +64,7 @@ const post = usePost(gridApi);
 <template>
   <Page auto-content-height>
     <FormDrawer @success="post.onRefresh" />
-    <Grid :table-title="$t('system.post.pageTitle')">
+    <Grid :table-title="$t('sys.post.pageTitle')">
       <template #toolbar-tools>
         <BatchActionDropdown
           v-if="canBatchDelete"
@@ -91,12 +91,12 @@ const post = usePost(gridApi);
           :api-fn="batchUpdatePostApi"
           :get-ids="post.getSelectedIds"
           :on-success="post.onRefresh"
-          :fields="[{ fieldName: 'status', label: $t('system.post.fields.status'), dictCode: 'sys_post_status' }]"
+          :fields="[{ fieldName: 'status', label: $t('sys.post.fields.status'), dictCode: 'sys_post_status' }]"
         />
 
         <Button v-if="canCreate" type="primary" @click="formDrawerApi.setData({}).open()">
           <Plus class="size-5" />
-          {{ $t('system.post.create') }}
+          {{ $t('sys.post.create') }}
         </Button>
       </template>
     </Grid>

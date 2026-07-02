@@ -16,31 +16,31 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'username',
-      label: $t('system.user.fields.username'),
+      label: $t('sys.user.fields.username'),
       componentProps: { allowClear: true },
     },
     {
       component: 'Input',
       fieldName: 'nickname',
-      label: $t('system.user.fields.nickname'),
+      label: $t('sys.user.fields.nickname'),
       componentProps: { allowClear: true },
     },
     {
       component: 'Input',
       fieldName: 'email',
-      label: $t('system.user.fields.email'),
+      label: $t('sys.user.fields.email'),
       componentProps: { allowClear: true },
     },
     {
       component: 'Input',
       fieldName: 'phone',
-      label: $t('system.user.fields.phone'),
+      label: $t('sys.user.fields.phone'),
       componentProps: { allowClear: true },
     },
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('system.user.fields.status'),
+      label: $t('sys.user.fields.status'),
       componentProps: {
         allowClear: true,
         code: 'sys_user_status',
@@ -49,7 +49,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'DictSelect',
       fieldName: 'gender',
-      label: $t('system.user.fields.gender'),
+      label: $t('sys.user.fields.gender'),
       componentProps: {
         allowClear: true,
         code: 'sys_user_gender',
@@ -58,7 +58,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'RangePicker',
       fieldName: 'lastLoginTime',
-      label: $t('system.user.fields.lastLoginTime'),
+      label: $t('sys.user.fields.lastLoginTime'),
       componentProps: { allowClear: true, showTime: true, valueFormat: 'X' },
     },
   ];

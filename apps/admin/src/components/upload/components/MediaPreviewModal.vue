@@ -26,7 +26,7 @@ function onClose() {
 </script>
 
 <template>
-  <a-modal :open="open" :footer="null" :title="$t('upload.preview')" width="800px" centered destroy-on-close @cancel="onClose">
+  <a-modal :open="open" :footer="null" :title="$t('core.upload.preview')" width="800px" centered destroy-on-close @cancel="onClose">
     <img v-if="file?.kind === 'image'" :src="src" alt="preview" class="w-full" />
     <video v-else-if="file?.kind === 'video'" :src="src" class="w-full" controls autoplay></video>
     <audio v-else-if="file?.kind === 'audio'" :src="src" class="w-full" controls autoplay></audio>

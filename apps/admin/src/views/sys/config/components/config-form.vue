@@ -24,40 +24,40 @@ const form = defineModel<ConfigApi.CreateParams>('form', { required: true });
 </script>
 
 <template>
-  <Modal v-model:open="visible" :title="mode === 'create' ? $t('system.config.addItem') : $t('system.config.editItem')" :confirm-loading="loading" @ok="emit('submit')">
+  <Modal v-model:open="visible" :title="mode === 'create' ? $t('sys.config.addItem') : $t('sys.config.editItem')" :confirm-loading="loading" @ok="emit('submit')">
     <Form :model="form" layout="vertical" class="mt-4">
-      <FormItem :label="$t('system.config.fields.groups')" required>
-        <CreatableSelect v-model:value="form.groups" :options="groupOptions" :disabled="editingIsSys" :add-placeholder="$t('system.config.fields.groups')" />
+      <FormItem :label="$t('sys.config.fields.groups')" required>
+        <CreatableSelect v-model:value="form.groups" :options="groupOptions" :disabled="editingIsSys" :add-placeholder="$t('sys.config.fields.groups')" />
       </FormItem>
 
-      <FormItem v-if="mode === 'create'" :label="$t('system.config.fields.key')" required>
+      <FormItem v-if="mode === 'create'" :label="$t('sys.config.fields.key')" required>
         <Input v-model:value="form.key" />
       </FormItem>
-      <FormItem v-else :label="$t('system.config.fields.key')">
+      <FormItem v-else :label="$t('sys.config.fields.key')">
         <Input v-model:value="form.key" disabled />
       </FormItem>
 
-      <FormItem :label="$t('system.config.fields.label')" required>
+      <FormItem :label="$t('sys.config.fields.label')" required>
         <Input v-model:value="form.label" />
       </FormItem>
 
-      <FormItem :label="$t('system.config.fields.component')">
+      <FormItem :label="$t('sys.config.fields.component')">
         <Select v-model:value="form.component" :options="componentOptions" />
       </FormItem>
 
       <div class="flex gap-6">
-        <FormItem :label="$t('system.config.fields.isEncrypted')">
+        <FormItem :label="$t('sys.config.fields.isEncrypted')">
           <Switch v-model:checked="form.isEncrypted" />
         </FormItem>
-        <FormItem :label="$t('system.config.fields.isPublic')">
+        <FormItem :label="$t('sys.config.fields.isPublic')">
           <Switch v-model:checked="form.isPublic" />
         </FormItem>
-        <FormItem :label="$t('system.config.fields.sort')">
+        <FormItem :label="$t('sys.config.fields.sort')">
           <Input v-model:value="form.sort" type="number" style="width: 80px" />
         </FormItem>
       </div>
 
-      <FormItem :label="$t('system.config.fields.remark')">
+      <FormItem :label="$t('sys.config.fields.remark')">
         <Textarea v-model:value="form.remark" :rows="2" />
       </FormItem>
     </Form>

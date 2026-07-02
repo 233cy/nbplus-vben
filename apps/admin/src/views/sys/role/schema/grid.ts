@@ -19,7 +19,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('auth.role.fields.status'),
+      label: $t('sys.role.fields.status'),
       componentProps: {
         code: 'is_enable',
         allowClear: true,

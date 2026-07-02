@@ -23,7 +23,7 @@ export function useDeptMove(options: UseDeptMoveOptions) {
   const moveParentId = ref<string>(ROOT_PARENT);
 
   const treeSelectData = computed(() => [
-    { label: t('system.dept.rootLevel'), value: ROOT_PARENT, children: [] },
+    { label: t('sys.dept.rootLevel'), value: ROOT_PARENT, children: [] },
     ...buildParentTreeData(treeData.value, moveItem.value?.id),
   ]);
 
@@ -40,7 +40,7 @@ export function useDeptMove(options: UseDeptMoveOptions) {
     try {
       const parentId = moveParentId.value === ROOT_PARENT ? null : moveParentId.value;
       await updateDeptApi({ ...moveItem.value, parentId });
-      message.success(t('system.dept.moveSuccess'));
+      message.success(t('sys.dept.moveSuccess'));
       visible.value = false;
       await reload();
     } finally {

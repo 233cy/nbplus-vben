@@ -63,10 +63,6 @@ export function getStorageDetailApi(id: string) {
   return requestClient.get<StorageApi.StorageItem>(`${BASE}/detail`, { params: { id } });
 }
 
-export function getStorageOptionsApi() {
-  return requestClient.get<StorageApi.StorageOptions[]>(`${BASE}/options`);
-}
-
 export function getStorageDriverSchemasApi() {
   return requestClient.get<StorageApi.DriverSchema[]>(`${BASE}/driver-schemas`);
 }

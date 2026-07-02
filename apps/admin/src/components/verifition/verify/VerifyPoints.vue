@@ -123,9 +123,9 @@ async function doGetPicture(initial?: any) {
     secretKey.value = res.secretKey;
     poinTextList.value = res.wordList;
     // 图片加载完成后再更新提示文字
-    text.value = $t('captcha.pointClickOrder', { text: poinTextList.value.join(',') });
+    text.value = $t('core.captcha.pointClickOrder', { text: poinTextList.value.join(',') });
   } catch {
-    text.value = $t('captcha.loadFailed');
+    text.value = $t('core.captcha.loadFailed');
   } finally {
     isLoad.value = false;
   }
@@ -200,7 +200,7 @@ const verify = () => {
 const handleSuccess = (captchaVerification: string) => {
   barAreaColor.value = '#4cae4c';
   barAreaBorderColor.value = '#5cb85c';
-  text.value = $t('captcha.verifySuccess');
+  text.value = $t('core.captcha.verifySuccess');
   bindingClick.value = false;
   showRefresh.value = false;
 
@@ -219,7 +219,7 @@ const handleError = () => {
   emit('error', proxy);
   barAreaColor.value = '#d9534f';
   barAreaBorderColor.value = '#d9534f';
-  text.value = $t('captcha.verifyFailed');
+  text.value = $t('core.captcha.verifyFailed');
 
   setTimeout(() => {
     refresh();
@@ -332,7 +332,7 @@ defineExpose({
         }"
       >
         <span v-if="text" class="verify-msg">{{ text }}</span>
-        <span v-else class="verify-msg">{{ $t('captcha.loading') }}</span>
+        <span v-else class="verify-msg">{{ $t('core.captcha.loading') }}</span>
       </div>
     </a-spin>
   </div>

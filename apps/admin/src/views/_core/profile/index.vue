@@ -16,14 +16,14 @@ const userStore = useUserStore();
 const tabsValue = ref<string>('basic');
 
 const tabs = ref([
-  { label: $t('profile.basicTab'), value: 'basic' },
-  { label: $t('profile.securityTab'), value: 'security' },
-  { label: $t('profile.passwordTab'), value: 'password' },
-  { label: $t('profile.noticeTab'), value: 'notice' },
+  { label: $t('core.profile.basicTab'), value: 'basic' },
+  { label: $t('core.profile.securityTab'), value: 'security' },
+  { label: $t('core.profile.passwordTab'), value: 'password' },
+  { label: $t('core.profile.noticeTab'), value: 'notice' },
 ]);
 </script>
 <template>
-  <Profile v-model:model-value="tabsValue" :title="$t('profile.title')" :user-info="userStore.userInfo" :tabs="tabs">
+  <Profile v-model:model-value="tabsValue" :title="$t('core.profile.title')" :user-info="userStore.userInfo" :tabs="tabs">
     <template #content>
       <ProfileBase v-if="tabsValue === 'basic'" />
       <ProfileSecuritySetting v-if="tabsValue === 'security'" />

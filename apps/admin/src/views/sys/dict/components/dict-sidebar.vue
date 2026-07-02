@@ -211,8 +211,8 @@ async function handleItemDrop(info: any) {
   <div class="mr-2 flex h-full flex-col rounded-[var(--radius)] border border-border bg-card">
     <!-- 标题栏 -->
     <div class="flex items-center justify-between border-b px-3 py-2.5">
-      <span class="font-medium">{{ $t('system.dict.dictList') }}</span>
-      <Tooltip :title="$t('system.dict.addDict')">
+      <span class="font-medium">{{ $t('sys.dict.dictList') }}</span>
+      <Tooltip :title="$t('sys.dict.addDict')">
         <Button type="primary" @click="$emit('create')">
           <IconifyIcon icon="ant-design:plus-outlined" />
         </Button>
@@ -221,7 +221,7 @@ async function handleItemDrop(info: any) {
 
     <!-- 搜索框 -->
     <div class="px-3 py-2">
-      <Input :value="keyword" :placeholder="$t('system.dict.searchPlaceholder')" allow-clear @update:value="$emit('update:keyword', $event)">
+      <Input :value="keyword" :placeholder="$t('sys.dict.searchPlaceholder')" allow-clear @update:value="$emit('update:keyword', $event)">
         <template #prefix>
           <IconifyIcon icon="ant-design:search-outlined" class="text-gray-400" />
         </template>
@@ -249,7 +249,7 @@ async function handleItemDrop(info: any) {
             <IconifyIcon icon="ant-design:folder-outlined" />
             <span class="flex-1">{{ node.title }}</span>
             <span class="text-gray-400">({{ node.children?.length ?? 0 }})</span>
-            <Tooltip :title="$t('system.dict.addDictInGroup')">
+            <Tooltip :title="$t('sys.dict.addDictInGroup')">
               <Button type="text" @click.stop="$emit('create', node.title)">
                 <IconifyIcon icon="ant-design:plus-outlined" />
               </Button>
@@ -278,7 +278,7 @@ async function handleItemDrop(info: any) {
       </Tree>
 
       <div v-else-if="!loading" class="py-10 text-center text-gray-400">
-        {{ $t('system.dict.empty') }}
+        {{ $t('sys.dict.empty') }}
       </div>
     </Spin>
   </div>

@@ -171,7 +171,7 @@ function selectPlaceholder(uniqueText: string): boolean {
 
 function makePlaceholder(): string {
   const uid = Math.random().toString(36).slice(2, 8);
-  return `[⏳上传中-${uid}]`;
+  return t('components.wang-editor.uploadingPlaceholder', { uid });
 }
 
 /** 删除占位文本（上传失败时清理，避免残留垃圾文字） */
@@ -183,7 +183,7 @@ function removePlaceholder(uniqueText: string) {
    上传处理
 ------------------------- */
 async function handleUpload(file: File, placeholderText: string) {
-  const hide = message.loading(t('upload.uploadingFile', { name: file.name }), 0);
+  const hide = message.loading(t('core.upload.uploadingFile', { name: file.name }), 0);
   try {
     const { fullUrl, logicalPath } = await uploadFile(file, {
       accessType: props.accessType,
@@ -191,7 +191,7 @@ async function handleUpload(file: File, placeholderText: string) {
     });
     register(fullUrl, logicalPath);
     hide();
-    message.success(t('upload.uploadSuccess', { name: file.name }));
+    message.success(t('core.upload.uploadSuccess', { name: file.name }));
     return fullUrl;
   } catch {
     hide();
@@ -257,7 +257,7 @@ async function customAttachmentUpload(file: File, insertFn: (fileName: string, l
 const finalEditorConfig = computed(() => ({
   ...props.editorConfig,
   readOnly: props.readonly,
-  placeholder: props.readonly ? '' : (props.editorConfig?.placeholder ?? '请输入内容...'),
+  placeholder: props.readonly ? '' : (props.editorConfig?.placeholder ?? t('components.wang-editor.placeholder')),
   MENU_CONF: {
     ...props.editorConfig?.MENU_CONF,
     uploadImage: { customUpload: customImageUpload },

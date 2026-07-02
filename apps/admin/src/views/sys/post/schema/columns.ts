@@ -21,7 +21,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     { field: 'id', title: 'ID', visible: false },
     {
       field: 'code',
-      title: $t('system.post.fields.code'),
+      title: $t('sys.post.fields.code'),
       minWidth: 120,
       sortable: true,
       cellRender: {
@@ -34,7 +34,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     },
     {
       field: 'name',
-      title: $t('system.post.fields.name'),
+      title: $t('sys.post.fields.name'),
       minWidth: 160,
       sortable: true,
       cellRender: {
@@ -48,7 +48,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     },
     {
       field: 'level',
-      title: $t('system.post.fields.level'),
+      title: $t('sys.post.fields.level'),
       width: 130,
       sortable: true,
       cellRender: {
@@ -62,7 +62,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     },
     {
       field: 'status',
-      title: $t('system.post.fields.status'),
+      title: $t('sys.post.fields.status'),
       width: 120,
       sortable: true,
       cellRender: {
@@ -77,7 +77,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     },
     {
       field: 'sort',
-      title: $t('system.post.fields.sort'),
+      title: $t('sys.post.fields.sort'),
       width: 130,
       sortable: true,
       cellRender: {
@@ -91,7 +91,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     },
     {
       field: 'remark',
-      title: $t('system.post.fields.remark'),
+      title: $t('sys.post.fields.remark'),
       minWidth: 160,
       showOverflow: 'tooltip',
     },

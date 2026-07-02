@@ -25,6 +25,8 @@ const strokeColor = computed(() => (props.file.paused ? '#faad14' : 'hsl(var(--p
 /** TUS 大文件进行中才允许暂停 / 继续 */
 const canPause = computed(() => props.file.engine === 'tus' && props.file.status !== 'queued' && ['paused', 'uploading'].includes(props.file.status));
 
+const isChecking = computed(() => props.file.status === 'checking');
+
 const kindIcon = computed(() => (props.file.kind === 'video' ? 'ant-design:play-circle-outlined' : 'ant-design:audio-outlined'));
 </script>
 
@@ -47,16 +49,26 @@ const kindIcon = computed(() => (props.file.kind === 'video' ? 'ant-design:play-
       <IconifyIcon :icon="kindIcon" />
     </span>
 
+    <!-- 秒传角标 -->
+    <span v-if="file.status === 'done' && file.rapidCopied" class="badge badge-fast">
+      {{ $t('core.upload.fastUpload') }}
+    </span>
+
     <!-- 进度 / 状态遮罩：未完成时常驻 -->
     <div v-if="file.status !== 'done'" class="overlay">
       <template v-if="file.status !== 'error'">
         <div class="progress-percent">{{ Math.floor(file.percent) }}%</div>
         <a-progress :percent="file.percent" :show-info="false" :stroke-color="strokeColor" :stroke-width="6" trail-color="rgba(255,255,255,0.3)" class="progress-bar" />
-        <div class="progress-label">{{ file.status === 'paused' ? $t('upload.pause') : file.status === 'queued' ? $t('upload.waiting') : $t('upload.uploading') }}</div>
+        <div class="progress-label">
+          <template v-if="isChecking">{{ $t('core.upload.checkingFile') }}</template>
+          <template v-else-if="file.status === 'paused'">{{ $t('core.upload.pause') }}</template>
+          <template v-else-if="file.status === 'queued'">{{ $t('core.upload.waiting') }}</template>
+          <template v-else>{{ $t('core.upload.uploading') }}</template>
+        </div>
       </template>
       <div v-else class="flex flex-col items-center text-red-400">
         <IconifyIcon icon="ant-design:exclamation-circle-outlined" class="text-2xl" />
-        <span class="mt-1 px-1 text-center text-xs">{{ file.errorMsg || $t('upload.uploadFailed') }}</span>
+        <span class="mt-1 px-1 text-center text-xs">{{ file.errorMsg || $t('core.upload.uploadFailed') }}</span>
       </div>
     </div>
 
@@ -64,19 +76,23 @@ const kindIcon = computed(() => (props.file.kind === 'video' ? 'ant-design:play-
     <div class="actions">
       <div v-if="file.status === 'done'" class="act" @click="ctx?.openPreview(file)">
         <IconifyIcon icon="ant-design:eye-outlined" class="text-lg" />
-        <span class="text-xs">{{ $t('upload.preview') }}</span>
+        <span class="text-xs">{{ $t('core.upload.preview') }}</span>
       </div>
       <div v-if="canPause" class="act" @click="ctx?.togglePause(file)">
         <IconifyIcon :icon="file.paused ? 'ant-design:play-circle-outlined' : 'ant-design:pause-circle-outlined'" class="text-lg" />
-        <span class="text-xs">{{ file.paused ? $t('upload.resume') : $t('upload.pause') }}</span>
+        <span class="text-xs">{{ file.paused ? $t('core.upload.resume') : $t('core.upload.pause') }}</span>
       </div>
       <div v-if="file.status === 'error' && !file.preFailed" class="act" @click="ctx?.retry(file)">
         <IconifyIcon icon="ant-design:reload-outlined" class="text-lg" />
-        <span class="text-xs">{{ $t('upload.retry') }}</span>
+        <span class="text-xs">{{ $t('core.upload.retry') }}</span>
+      </div>
+      <div v-if="isChecking" class="act" @click="ctx?.cancelHashCheck(file)">
+        <IconifyIcon icon="ant-design:close-circle-outlined" class="text-lg" />
+        <span class="text-xs">{{ $t('core.upload.cancelHashCheck') }}</span>
       </div>
       <div class="act act-danger" @click="ctx?.remove(file)">
         <IconifyIcon icon="ant-design:delete-outlined" class="text-lg" />
-        <span class="text-xs">{{ $t('upload.delete') }}</span>
+        <span class="text-xs">{{ $t('core.upload.delete') }}</span>
       </div>
     </div>
   </div>
@@ -123,6 +139,15 @@ const kindIcon = computed(() => (props.file.kind === 'video' ? 'ant-design:play-
   color: #fff;
   background-color: rgb(0 0 0 / 55%);
   border-radius: 4px;
+}
+
+.badge-fast {
+  top: auto;
+  right: 4px;
+  bottom: 4px;
+  left: auto;
+  color: #f0f0f0;
+  background-color: #722ed1;
 }
 
 .overlay {

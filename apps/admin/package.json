@@ -50,6 +50,7 @@
     "@wangeditor/plugin-upload-attachment": "1.1.0",
     "ant-design-vue": "catalog:",
     "crypto-js": "catalog:",
+    "spark-md5": "catalog:",
     "dayjs": "catalog:",
     "pinia": "catalog:",
     "pinyin-pro": "catalog:",
@@ -59,6 +60,7 @@
     "xe-utils": "catalog:"
   },
   "devDependencies": {
+    "@types/spark-md5": "catalog:",
     "unplugin-auto-import": "catalog:",
     "unplugin-vue-components": "catalog:"
   }

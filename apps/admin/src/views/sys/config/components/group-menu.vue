@@ -4,6 +4,7 @@ import type { ConfigApi } from '#/api/sys/config';
 import { ref, watch } from 'vue';
 
 import { IconifyIcon } from '@vben/icons';
+
 import { Spin } from 'ant-design-vue';
 import vuedraggable from 'vuedraggable';
 
@@ -17,13 +18,19 @@ interface Props {
 
 const props = defineProps<Props>();
 const emit = defineEmits<{
-  'update:activeGroup': [value: string];
   reload: [];
+  'update:activeGroup': [value: string];
 }>();
 
 /** 拖拽用的可变副本，跟随 props.groups 同步 */
 const sortableGroups = ref<ConfigApi.GroupItem[]>([]);
-watch(() => props.groups, (val) => { sortableGroups.value = [...val]; }, { immediate: true });
+watch(
+  () => props.groups,
+  val => {
+    sortableGroups.value = [...val];
+  },
+  { immediate: true },
+);
 
 const sorting = ref(false);
 
@@ -41,9 +48,9 @@ async function onGroupDragEnd() {
       const items = await getConfigListApi(group.groups);
       // 组内按当前 sort 排序，保持原有顺序
       const sorted = [...items].sort((a, b) => a.sort - b.sort);
-      for (let ii = 0; ii < sorted.length; ii++) {
+      for (const [ii, element] of sorted.entries()) {
         // 分组序号 * 1000 + 组内序号 + 1 → 1001, 1002, 2001, 2002...
-        payload.push({ id: sorted[ii]!.id, sort: (gi + 1) * 1000 + ii + 1 });
+        payload.push({ id: element!.id, sort: (gi + 1) * 1000 + ii + 1 });
       }
     }
     if (payload.length > 0) {
@@ -60,7 +67,7 @@ async function onGroupDragEnd() {
   <div class="flex w-48 shrink-0 flex-col overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
     <Spin :spinning="sorting" />
     <div class="shrink-0 border-b px-4 py-3 text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400">
-      {{ $t('system.config.groupTitle') }}
+      {{ $t('sys.config.groupTitle') }}
     </div>
 
     <vuedraggable

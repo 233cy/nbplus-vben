@@ -45,6 +45,7 @@ const DictSelect = defineAsyncComponent(() => import('#/components/dict/DictSele
 const DictRadio = defineAsyncComponent(() => import('#/components/dict/DictRadio.vue'));
 const CaptchaPinInput = defineAsyncComponent(() => import('#/components/captcha-pin-input/index.vue'));
 const PasswordInput = defineAsyncComponent(() => import('#/components/password-input/index.vue'));
+const ApiSelect = defineAsyncComponent(() => import('#/components/page-select/api-select.vue'));
 
 const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select', componentProps: Recordable<any> = {}) => {
   return defineComponent({
@@ -111,12 +112,7 @@ async function initComponentAdapter() {
     // 如果你的组件体积比较大，可以使用异步加载
     // Button: () =>
     // import('xxx').then((res) => res.Button),
-    ApiSelect: withDefaultPlaceholder(ApiComponent, 'select', {
-      component: Select,
-      loadingSlot: 'suffixIcon',
-      visibleEvent: 'onDropdownVisibleChange',
-      modelPropName: 'value',
-    }),
+    ApiSelect: withDefaultPlaceholder(ApiSelect, 'select'),
     ApiTreeSelect: withDefaultPlaceholder(ApiComponent, 'select', {
       component: TreeSelect,
       fieldNames: { label: 'label', value: 'value', children: 'children' },

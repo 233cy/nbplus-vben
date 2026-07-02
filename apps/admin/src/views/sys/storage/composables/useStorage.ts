@@ -41,7 +41,7 @@ export function useStorage() {
 
   async function setDefault(id: string) {
     await setDefaultStorageApi(id);
-    message.success($t('system.storage.defaultSuccess'));
+    message.success($t('sys.storage.defaultSuccess'));
   }
 
   async function batchDelete(ids: string[]) {

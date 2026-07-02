@@ -89,7 +89,7 @@ async function handleSubmit() {
     } else {
       await createStorageApi(form.value as StorageApi.SaveParams);
     }
-    message.success($t('system.storage.saveSuccess'));
+    message.success($t('sys.storage.saveSuccess'));
     drawerApi.close();
     emit('success');
   } finally {
@@ -99,23 +99,23 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <Drawer :title="isEdit ? $t('system.storage.edit') : $t('system.storage.create')">
+  <Drawer :title="isEdit ? $t('sys.storage.edit') : $t('sys.storage.create')">
     <Form ref="formRef" layout="vertical" :model="form">
-      <FormItem :label="$t('system.storage.fields.name')" name="name" :rules="[{ required: true, message: $t('system.storage.fields.name') + '必填' }]">
-        <Input v-model:value="form.name" :placeholder="$t('system.storage.fields.name')" />
+      <FormItem :label="$t('sys.storage.fields.name')" name="name" :rules="[{ required: true, message: $t('sys.storage.fields.name') + '必填' }]">
+        <Input v-model:value="form.name" :placeholder="$t('sys.storage.fields.name')" />
       </FormItem>
-      <FormItem :label="$t('system.storage.fields.code')" name="code" :rules="[{ required: true, message: $t('system.storage.fields.code') + '必填' }]">
-        <Input v-model:value="form.code" :disabled="isEdit" :placeholder="$t('system.storage.fields.code')" />
+      <FormItem :label="$t('sys.storage.fields.code')" name="code" :rules="[{ required: true, message: $t('sys.storage.fields.code') + '必填' }]">
+        <Input v-model:value="form.code" :disabled="isEdit" :placeholder="$t('sys.storage.fields.code')" />
       </FormItem>
-      <FormItem :label="$t('system.storage.fields.engine')" name="engine" :rules="[{ required: true, message: $t('system.storage.fields.engine') + '必填' }]">
+      <FormItem :label="$t('sys.storage.fields.engine')" name="engine" :rules="[{ required: true, message: $t('sys.storage.fields.engine') + '必填' }]">
         <Select :value="form.engine" :options="engineOptions" class="w-full" @change="(value: any) => onEngineChange(value as string)" />
       </FormItem>
-      <FormItem :label="$t('system.storage.fields.sort')" name="sort">
+      <FormItem :label="$t('sys.storage.fields.sort')" name="sort">
         <InputNumber v-model:value="form.sort" class="w-full" :min="0" />
       </FormItem>
 
       <div class="mt-4 border-t pt-4">
-        <h4 class="mb-2 font-medium">{{ $t('system.storage.configForm') }}</h4>
+        <h4 class="mb-2 font-medium">{{ $t('sys.storage.configForm') }}</h4>
         <FormItem v-for="field in activeSchema" :key="field.key" :label="field.label">
           <Switch
             v-if="field.component === 'Switch'"

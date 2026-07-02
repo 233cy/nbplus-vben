@@ -51,7 +51,7 @@ async function doLoadCaptcha(initial?: any) {
     imageBase64.value = res.imageBase64 ?? '';
     token.value = res.token ?? '';
   } catch {
-    errorMsg.value = $t('captcha.loadFailed') || '加载失败，请刷新';
+    errorMsg.value = $t('core.captcha.loadFailed') || '加载失败，请刷新';
   } finally {
     loading.value = false;
   }
@@ -67,7 +67,7 @@ function refresh() {
 function submit() {
   const input = userInput.value.trim();
   if (!input) {
-    errorMsg.value = $t('captcha.inputRequired') || '请输入验证码';
+    errorMsg.value = $t('core.captcha.inputRequired') || '请输入验证码';
     return;
   }
   const captchaVerification = `${token.value}:${input}`;
@@ -91,7 +91,7 @@ defineExpose({ refresh });
   <div class="captcha-widget flex flex-col items-center gap-3 p-2">
     <!-- 图片区域 -->
     <div class="relative flex h-10 w-full items-center justify-center overflow-hidden rounded border">
-      <span v-if="loading" class="text-sm text-muted-foreground">{{ $t('captcha.loading') || '加载中...' }}</span>
+      <span v-if="loading" class="text-sm text-muted-foreground">{{ $t('core.captcha.loading') || '加载中...' }}</span>
       <img v-else-if="imageBase64" :src="imageBase64" alt="captcha" class="h-full w-auto cursor-pointer select-none" @click="refresh" />
     </div>
 
@@ -100,11 +100,11 @@ defineExpose({ refresh });
       <input
         v-model="userInput"
         class="h-9 flex-1 rounded border px-3 text-sm outline-none focus:border-primary"
-        :placeholder="captchaType === 'math' ? $t('captcha.mathPlaceholder') || '请输入计算结果' : $t('captcha.imageTextPlaceholder') || '请输入图中字符'"
+        :placeholder="captchaType === 'math' ? $t('core.captcha.mathPlaceholder') || '请输入计算结果' : $t('core.captcha.imageTextPlaceholder') || '请输入图中字符'"
         @keyup.enter="submit"
       />
       <button type="button" class="h-9 rounded bg-primary px-3 text-sm text-white hover:opacity-90" @click="submit">
-        {{ $t('captcha.confirm') || '确认' }}
+        {{ $t('core.captcha.confirm') || '确认' }}
       </button>
     </div>
 
@@ -113,7 +113,7 @@ defineExpose({ refresh });
 
     <!-- 刷新提示 -->
     <p class="w-full cursor-pointer text-xs text-muted-foreground hover:text-primary" @click="refresh">
-      {{ $t('captcha.clickImageToRefresh') || '点击图片可刷新' }}
+      {{ $t('core.captcha.clickImageToRefresh') || '点击图片可刷新' }}
     </p>
   </div>
 </template>

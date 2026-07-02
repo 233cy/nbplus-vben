@@ -201,7 +201,7 @@ function handleSuccess(moveLeftDistance: number) {
   passFlag.value = true;
 
   const duration = ((endMovetime.value - startMoveTime.value) / 1000).toFixed(2);
-  tipWords.value = `${duration}s${$t('captcha.verifySuccess')}`;
+  tipWords.value = `${duration}s${$t('core.captcha.verifySuccess')}`;
 
   const pointData = { x: moveLeftDistance, y: Y_POSITION };
   const captchaVerification = secretKey.value
@@ -223,7 +223,7 @@ function handleError() {
   iconColor.value = '#fff';
   iconClass.value = 'icon-close';
   passFlag.value = false;
-  tipWords.value = $t('captcha.verifyFailed');
+  tipWords.value = $t('core.captcha.verifyFailed');
 
   setTimeout(() => {
     tipWords.value = '';
@@ -263,7 +263,7 @@ const refresh = () => {
   setTimeout(() => {
     transitionWidth.value = '';
     transitionLeft.value = '';
-    text.value = props.explain || $t('captcha.slide');
+    text.value = props.explain || $t('core.captcha.slide');
   }, 300);
 };
 
@@ -287,7 +287,7 @@ async function doGetPicture(initial?: any) {
       secretKey.value = res.secretKey;
     }
   } catch {
-    tipWords.value = $t('captcha.networkError');
+    tipWords.value = $t('core.captcha.networkError');
   }
   isLoad.value = false;
 }
@@ -297,7 +297,7 @@ const getPicture = useDebounceFn((initial?: any) => doGetPicture(initial), 800);
 
 // 初始化
 function init() {
-  text.value = props.explain || $t('captcha.slide');
+  text.value = props.explain || $t('core.captcha.slide');
   doGetPicture(props.initialData ?? undefined);
 
   nextTick(() => {

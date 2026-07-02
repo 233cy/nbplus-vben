@@ -44,7 +44,7 @@ export function useConfigItems(activeGroup: Ref<string>) {
         value: editValues.value[item.key] ?? '',
       }));
       await saveConfigApi(items);
-      message.success($t('system.config.saveSuccess'));
+      message.success($t('sys.config.saveSuccess'));
       await loadConfig();
     } finally {
       saving.value = false;
@@ -53,7 +53,7 @@ export function useConfigItems(activeGroup: Ref<string>) {
 
   async function handleMarkAsSys(item: ConfigApi.ConfigItem) {
     await toggleConfigApi(item.id, 'isSys');
-    message.success($t('system.config.markAsSysSuccess'));
+    message.success($t('sys.config.markAsSysSuccess'));
     await loadConfig();
   }
 
@@ -64,7 +64,7 @@ export function useConfigItems(activeGroup: Ref<string>) {
 
   async function handleDelete(item: ConfigApi.ConfigItem) {
     await deleteConfigApi(item.id);
-    message.success($t('system.config.deleteSuccess'));
+    message.success($t('sys.config.deleteSuccess'));
     await loadConfig();
   }
 

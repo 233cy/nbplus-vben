@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import type { StorageApi } from '#/api/sys/storage';
-
 import { ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
-import { Form, FormItem, Select } from 'ant-design-vue';
+import { Form, FormItem } from 'ant-design-vue';
 
+import ApiSelect from '#/components/page-select/api-select.vue';
 import { $t } from '#/locales';
 
 const emit = defineEmits<{ confirm: [ids: string[], code: string] }>();
@@ -17,7 +16,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
   onOpenChange: handleOpenChange,
 });
 
-const options = ref<StorageApi.StorageOptions[]>([]);
 const targetCode = ref('');
 const ids = ref<string[]>([]);
 
@@ -26,10 +24,8 @@ function handleOpenChange(isOpen: boolean) {
     return;
   }
 
-  const data = drawerApi.getData<{ options?: StorageApi.StorageOptions[]; ids?: string[] }>();
-  options.value = data?.options || [];
-  ids.value = data?.ids || [];
-  targetCode.value = options.value[0]?.code || '';
+  const data = drawerApi.getData<{ ids?: string[] }>();
+  ids.value = Array.isArray(data?.ids) ? data.ids : [];
 }
 
 function handleConfirm() {
@@ -42,10 +38,17 @@ function handleConfirm() {
 </script>
 
 <template>
-  <Drawer :title="ids.length > 1 ? $t('system.file.batchMove') : $t('system.file.move')">
+  <Drawer :title="ids.length > 1 ? $t('sys.file.batchMove') : $t('sys.file.move')">
     <Form layout="vertical">
-      <FormItem :label="$t('system.file.fields.storageCode')" required>
-        <Select v-model:value="targetCode" :options="options.map((o) => ({ label: o.name, value: o.code }))" class="w-full" />
+      <FormItem :label="$t('sys.file.fields.storageCode')" required>
+        <ApiSelect
+          v-model:value="targetCode"
+          config="storage"
+          label-field="name"
+          value-field="code"
+          auto-select="first"
+          class="w-full"
+        />
       </FormItem>
     </Form>
   </Drawer>

@@ -18,6 +18,8 @@ const props = withDefaults(
     accessPolicy?: 'login' | 'owner' | 'public';
     /** 访问类型: authorized | public | login，默认 public */
     accessType?: 'authorized' | 'login' | 'public';
+    /** 是否启用秒传，默认 true */
+    enableFastUpload?: boolean;
     /** 裁剪比例，默认 1:1 */
     aspectRatio?: string;
     /** v-model：存逻辑路径，组件自动解析为 fullUrl 回显 */
@@ -29,6 +31,7 @@ const props = withDefaults(
     aspectRatio: '1:1',
     accessType: undefined,
     accessPolicy: undefined,
+    enableFastUpload: true,
     modelValue: '',
     shape: 'circle',
   },
@@ -43,6 +46,7 @@ const queue = useUploadQueue({
   type: 'avatar',
   accessType: props.accessType,
   accessPolicy: props.accessPolicy,
+  enableFastUpload: props.enableFastUpload,
   multiple: false,
   maxCount: 1,
 });
@@ -63,7 +67,7 @@ const displaySrc = computed(() => {
 });
 const uploading = computed(() => {
   const s = current.value?.status;
-  return s === 'queued' || s === 'uploading' || s === 'wait';
+  return s === 'queued' || s === 'uploading' || s === 'wait' || s === 'checking';
 });
 const isError = computed(() => current.value?.status === 'error');
 const percent = computed(() => current.value?.percent ?? 0);
@@ -104,7 +108,7 @@ function handlePreview() {
 function handleBeforeUpload(file: File) {
   const acceptList = ACCEPT.split(',').map(t => t.trim());
   if (!acceptList.includes(file.type)) {
-    message.error($t('upload.onlySupportImageFormat', { accept: ACCEPT }));
+    message.error($t('core.upload.onlySupportImageFormat', { accept: ACCEPT }));
     return false;
   }
   const preError = validateFileBySystem(file);
@@ -132,7 +136,7 @@ async function handleCropOk() {
     blob = null;
   }
   if (!blob) {
-    message.error($t('upload.cropFailed'));
+    message.error($t('core.upload.cropFailed'));
     return;
   }
   const file = new File([blob], originalFile.value.name || 'avatar.jpg', { type: blob.type });
@@ -159,7 +163,7 @@ function handleModalCancel() {
           <img v-if="displaySrc" :src="displaySrc" alt="avatar" class="avatar-image" />
           <div v-else class="avatar-placeholder">
             <IconifyIcon icon="ant-design:plus-outlined" class="text-xl text-gray-400" />
-            <div class="mt-2 text-sm text-gray-500">{{ $t('upload.uploadAvatar') }}</div>
+            <div class="mt-2 text-sm text-gray-500">{{ $t('core.upload.uploadAvatar') }}</div>
           </div>
 
           <!-- 上传中圆圈进度 -->
@@ -172,15 +176,15 @@ function handleModalCancel() {
             <div class="flex w-full items-center justify-center gap-4 text-white">
               <div class="group/preview flex cursor-pointer flex-col items-center transition-colors hover:text-blue-400" @click.stop="handlePreview">
                 <IconifyIcon icon="ant-design:eye-outlined" class="text-xl" />
-                <span class="mt-1 text-xs opacity-90">{{ $t('upload.preview') }}</span>
+                <span class="mt-1 text-xs opacity-90">{{ $t('core.upload.preview') }}</span>
               </div>
               <div v-if="isError" class="group/retry flex cursor-pointer flex-col items-center transition-colors hover:text-blue-400" @click.stop="current && retry(current)">
                 <IconifyIcon icon="ant-design:reload-outlined" class="text-xl" />
-                <span class="mt-1 text-xs opacity-90">{{ $t('upload.retry') }}</span>
+                <span class="mt-1 text-xs opacity-90">{{ $t('core.upload.retry') }}</span>
               </div>
               <div v-else class="group/edit flex cursor-pointer flex-col items-center transition-colors hover:text-blue-400">
                 <IconifyIcon icon="ant-design:camera-outlined" class="text-xl" />
-                <span class="mt-1 text-xs opacity-90">{{ $t('upload.modify') }}</span>
+                <span class="mt-1 text-xs opacity-90">{{ $t('core.upload.modify') }}</span>
               </div>
             </div>
           </div>
@@ -189,21 +193,21 @@ function handleModalCancel() {
     </a-upload>
     <div class="mt-2">
       <a-tag :color="currentAccessType === 'authorized' ? 'red' : currentAccessType === 'public' ? 'cyan' : 'purple'">
-        <span v-if="currentAccessType === 'authorized'">{{ $t('upload.privateResource') }}</span>
-        <span v-else-if="currentAccessType === 'public'">{{ $t('upload.publicResource') }}</span>
-        <span v-else>{{ $t('upload.protectedResource') }}</span>
+        <span v-if="currentAccessType === 'authorized'">{{ $t('core.upload.privateResource') }}</span>
+        <span v-else-if="currentAccessType === 'public'">{{ $t('core.upload.publicResource') }}</span>
+        <span v-else>{{ $t('core.upload.protectedResource') }}</span>
       </a-tag>
     </div>
 
     <!-- 裁剪弹窗 -->
-    <a-modal v-model:open="cropperVisible" destroy-on-close :title="$t('upload.cropAndUpload')" width="700px" @cancel="handleModalCancel" @ok="handleCropOk">
+    <a-modal v-model:open="cropperVisible" destroy-on-close :title="$t('core.upload.cropAndUpload')" width="700px" @cancel="handleModalCancel" @ok="handleCropOk">
       <div class="flex justify-center p-4">
         <VCropper v-if="cropperVisible && tempImage" ref="cropperRef" :width="600" :height="600" :aspect-ratio="aspectRatio" :img="tempImage" />
       </div>
     </a-modal>
 
     <!-- 查看大图弹窗 -->
-    <a-modal v-model:open="previewVisible" :footer="null" :title="$t('upload.previewAvatar')" width="800px" centered @cancel="previewVisible = false">
+    <a-modal v-model:open="previewVisible" :footer="null" :title="$t('core.upload.previewAvatar')" width="800px" centered @cancel="previewVisible = false">
       <img v-if="displaySrc" :src="displaySrc" alt="avatar" class="w-full" />
     </a-modal>
   </div>

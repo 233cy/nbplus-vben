@@ -105,13 +105,13 @@ export function validateFileBySystem(file: File, maxSizeMB?: number): string {
   const systemMax = getUploadMaxSizeMB();
   const effectiveMax = maxSizeMB && maxSizeMB > 0 ? Math.min(maxSizeMB, systemMax) : systemMax;
   if (file.size > effectiveMax * 1024 * 1024) {
-    return $t('upload.errFileTooLarge', { maxSize: effectiveMax });
+    return $t('core.upload.errFileTooLarge', { maxSize: effectiveMax });
   }
 
   const allowed = getAllowedExtensions();
   const ext = getFileExt(file.name);
   if (allowed.length > 0 && (!ext || !allowed.includes(ext))) {
-    return $t('upload.errExtNotAllowed', { ext });
+    return $t('core.upload.errExtNotAllowed', { ext });
   }
 
   return '';
@@ -145,13 +145,13 @@ export function resolveUploadErrorMsg(error: any, response?: any): string {
 
   const status = response?.status ?? extractStatusFromError(error);
   if (status === 413) {
-    return $t('upload.errFileTooLarge', { maxSize: getUploadMaxSizeMB() });
+    return $t('core.upload.errFileTooLarge', { maxSize: getUploadMaxSizeMB() });
   }
   if (status === 401 || status === 403) {
-    return $t('upload.errNoPermission');
+    return $t('core.upload.errNoPermission');
   }
 
-  return error?.message || $t('upload.errUnknown');
+  return error?.message || $t('core.upload.errUnknown');
 }
 
 /**
@@ -240,7 +240,7 @@ function uploadWithTus(file: File, options: UploadOptions = {}): Promise<UploadR
         if (!tusUrl) throw new Error('no uploadURL');
         const fileId = tusUrl.split('/').pop();
         if (!fileId) throw new Error('no fileId');
-        const infoRes: any = await getTusFileInfo({ uploadKey: fileId });
+        const infoRes: any = await getTusFileInfo({ fileId });
         resolve({ logicalPath: infoRes.logicalPath, fullUrl: infoRes.fullUrl });
       } catch (error) {
         reject(error);

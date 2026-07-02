@@ -33,10 +33,10 @@ const shape = ref<AvatarShape>('circle');
 const hasSuccess = ref(false);
 
 const uploadTypeOptions: { label: string; value: UploadType }[] = [
-  { label: $t('system.file.options.uploadType.file'), value: 'file' },
-  { label: $t('system.file.options.uploadType.image'), value: 'image' },
-  { label: $t('system.file.options.uploadType.media'), value: 'media' },
-  { label: $t('system.file.options.uploadType.avatar'), value: 'avatar' },
+  { label: $t('sys.file.options.uploadType.file'), value: 'file' },
+  { label: $t('sys.file.options.uploadType.image'), value: 'image' },
+  { label: $t('sys.file.options.uploadType.media'), value: 'media' },
+  { label: $t('sys.file.options.uploadType.avatar'), value: 'avatar' },
 ];
 
 const aspectRatioOptions: { label: string; value: AspectRatio }[] = [
@@ -47,8 +47,8 @@ const aspectRatioOptions: { label: string; value: AspectRatio }[] = [
 ];
 
 const shapeOptions: { label: string; value: AvatarShape }[] = [
-  { label: $t('system.file.options.avatarShape.circle'), value: 'circle' },
-  { label: $t('system.file.options.avatarShape.square'), value: 'square' },
+  { label: $t('sys.file.options.avatarShape.circle'), value: 'circle' },
+  { label: $t('sys.file.options.avatarShape.square'), value: 'square' },
 ];
 
 function handleOpenChange(isOpen: boolean) {
@@ -76,41 +76,41 @@ function handleSuccess() {
 </script>
 
 <template>
-  <Drawer :title="$t('system.file.upload')" width="700px">
+  <Drawer :title="$t('sys.file.upload')" width="700px">
     <Form layout="vertical">
-      <FormItem :label="$t('system.file.fields.uploadType')" required>
+      <FormItem :label="$t('sys.file.fields.uploadType')" required>
         <RadioGroup v-model:value="uploadType">
           <Radio v-for="item in uploadTypeOptions" :key="item.value" :value="item.value">{{ item.label }}</Radio>
         </RadioGroup>
       </FormItem>
 
-      <FormItem :label="$t('system.file.fields.accessType')" required>
+      <FormItem :label="$t('sys.file.fields.accessType')" required>
         <RadioGroup v-model:value="accessType">
-          <Radio value="public">{{ $t('system.file.options.accessType.public') }}</Radio>
-          <Radio value="login">{{ $t('system.file.options.accessType.login') }}</Radio>
-          <Radio value="authorized">{{ $t('system.file.options.accessType.authorized') }}</Radio>
+          <Radio value="public">{{ $t('sys.file.options.accessType.public') }}</Radio>
+          <Radio value="login">{{ $t('sys.file.options.accessType.login') }}</Radio>
+          <Radio value="authorized">{{ $t('sys.file.options.accessType.authorized') }}</Radio>
         </RadioGroup>
       </FormItem>
 
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <FormItem :label="$t('system.file.fields.maxCount')">
+        <FormItem :label="$t('sys.file.fields.maxCount')">
           <InputNumber v-model:value="maxCount" :min="1" :max="100" class="w-full" />
         </FormItem>
 
-        <FormItem :label="$t('system.file.fields.maxSize')">
+        <FormItem :label="$t('sys.file.fields.maxSize')">
           <InputNumber v-model:value="maxSize" :min="0" :precision="1" class="w-full" addon-after="MB" />
         </FormItem>
       </div>
 
       <template v-if="uploadType === 'avatar'">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <FormItem :label="$t('system.file.fields.aspectRatio')">
+          <FormItem :label="$t('sys.file.fields.aspectRatio')">
             <Select v-model:value="aspectRatio">
               <SelectOption v-for="item in aspectRatioOptions" :key="item.value" :value="item.value">{{ item.label }}</SelectOption>
             </Select>
           </FormItem>
 
-          <FormItem :label="$t('system.file.fields.shape')">
+          <FormItem :label="$t('sys.file.fields.shape')">
             <RadioGroup v-model:value="shape">
               <Radio v-for="item in shapeOptions" :key="item.value" :value="item.value">{{ item.label }}</Radio>
             </RadioGroup>
@@ -118,7 +118,7 @@ function handleSuccess() {
         </div>
       </template>
 
-      <FormItem :label="$t('system.file.fields.uploadTarget')">
+      <FormItem :label="$t('sys.file.fields.uploadTarget')">
         <UpFile
           v-if="uploadType === 'file'"
           :access-type="accessType"

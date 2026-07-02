@@ -57,10 +57,10 @@ export function useItemForm(options: UseItemFormOptions) {
     try {
       if (editing.value) {
         await updateDictItemApi({ id: editing.value.id, dictId: activeDict.value.id, ...form.value });
-        message.success($t('system.dict.itemUpdateSuccess'));
+        message.success($t('sys.dict.itemUpdateSuccess'));
       } else {
         await createDictItemApi({ dictId: activeDict.value.id, ...form.value });
-        message.success($t('system.dict.itemCreateSuccess'));
+        message.success($t('sys.dict.itemCreateSuccess'));
       }
       visible.value = false;
       await reloadItems(activeDict.value.id);
@@ -72,7 +72,7 @@ export function useItemForm(options: UseItemFormOptions) {
   async function handleDelete(item: DictApi.DictItemData) {
     if (!activeDict.value) return;
     await deleteDictItemApi(item.id);
-    message.success($t('system.dict.itemDeleteSuccess'));
+    message.success($t('sys.dict.itemDeleteSuccess'));
     await reloadItems(activeDict.value.id);
   }
 

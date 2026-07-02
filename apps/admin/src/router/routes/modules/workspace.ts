@@ -11,7 +11,7 @@ const routes: RouteRecordRaw[] = [
       order: 0,
       affixTab: true,
       affixTabOrder: 0,
-      title: $t('workspace.workspace'),
+      title: $t('workspace.workspace.workspace'),
     },
     name: 'Workspace',
     path: '/workspace',

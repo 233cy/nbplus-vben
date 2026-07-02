@@ -54,7 +54,7 @@ export function useCaptchaDrivers() {
     saving[driver.id] = true;
     try {
       await updateCaptchaDriverApi({ id: driver.id, config: editConfigs[driver.id] });
-      message.success($t('system.captcha-driver.saveSuccess'));
+      message.success($t('sys.captcha-driver.saveSuccess'));
       await loadDrivers();
     } finally {
       saving[driver.id] = false;

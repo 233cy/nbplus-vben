@@ -26,7 +26,7 @@ export function useWatermark() {
     saving.value = true;
     try {
       await saveCaptchaWatermarkApi(watermark.value);
-      message.success($t('system.captcha-driver.saveSuccess'));
+      message.success($t('sys.captcha-driver.saveSuccess'));
     } finally {
       saving.value = false;
     }

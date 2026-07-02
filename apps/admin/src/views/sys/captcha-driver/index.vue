@@ -35,7 +35,7 @@ onMounted(() => {
 <template>
   <div class="p-4">
     <Spin :spinning="drivers.loading.value">
-      <Alert v-if="!drivers.loading.value && !drivers.hasEnabled.value" :message="$t('system.captcha-driver.noDriverEnabled')" type="warning" show-icon class="mb-4" />
+      <Alert v-if="!drivers.loading.value && !drivers.hasEnabled.value" :message="$t('sys.captcha-driver.noDriverEnabled')" type="warning" show-icon class="mb-4" />
 
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <DriverCard

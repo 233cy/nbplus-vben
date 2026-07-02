@@ -88,7 +88,7 @@ async function handleSendCode() {
   cachedCaptcha = null;
   // 用后端返回的冷却秒数驱动倒计时，0 则兜底用 props.maxTime
   currentMaxTime.value = retryAfter > 0 ? retryAfter : props.maxTime;
-  message.success(props.successMessage ?? $t('captcha.sendSuccess'));
+  message.success(props.successMessage ?? $t('core.captcha.sendSuccess'));
 }
 </script>
 

@@ -21,8 +21,8 @@ const selectedChannel = ref<Channel>('sms');
 const CODE_LENGTH = 6;
 
 const channelLabels: Record<Channel, string> = {
-  email: $t('authentication.codeLogin.emailChannel'),
-  sms: $t('authentication.codeLogin.smsChannel'),
+  email: $t('core.authentication.codeLogin.emailChannel'),
+  sms: $t('core.authentication.codeLogin.smsChannel'),
 };
 
 const channelIcons: Record<Channel, string> = {
@@ -35,7 +35,7 @@ async function beforeSend() {
   if (formApi) {
     const result = await formApi.validateField('codeTarget');
     if (result?.errors && Object.keys(result.errors).length > 0) {
-      throw new Error($t('authentication.codeLogin.targetRequired'));
+      throw new Error($t('core.authentication.codeLogin.targetRequired'));
     }
   }
 }
@@ -52,28 +52,28 @@ const formSchema = computed((): VbenFormSchema[] => [
   {
     component: 'Input',
     componentProps: {
-      placeholder: selectedChannel.value === 'sms' ? $t('authentication.codeLogin.phonePlaceholder') : $t('authentication.codeLogin.emailPlaceholder'),
+      placeholder: selectedChannel.value === 'sms' ? $t('core.authentication.codeLogin.phonePlaceholder') : $t('core.authentication.codeLogin.emailPlaceholder'),
     },
     fieldName: 'codeTarget',
     defaultValue: '18700842199',
-    label: selectedChannel.value === 'sms' ? $t('authentication.codeLogin.phone') : $t('authentication.codeLogin.email'),
+    label: selectedChannel.value === 'sms' ? $t('core.authentication.codeLogin.phone') : $t('core.authentication.codeLogin.email'),
     rules:
       selectedChannel.value === 'sms'
-        ? z.string().regex(/^1[3-9]\d{9}$/, { message: $t('authentication.codeLogin.invalidPhone') })
-        : z.string().email({ message: $t('authentication.codeLogin.invalidEmail') }),
+        ? z.string().regex(/^1[3-9]\d{9}$/, { message: $t('core.authentication.codeLogin.invalidPhone') })
+        : z.string().email({ message: $t('core.authentication.codeLogin.invalidEmail') }),
   },
   {
     component: 'CaptchaPinInput',
     componentProps: {
       codeLength: CODE_LENGTH,
-      createText: (countdown: number) => (countdown > 0 ? $t('authentication.sendText', [countdown]) : $t('authentication.sendCode')),
+      createText: (countdown: number) => (countdown > 0 ? $t('core.authentication.sendText', [countdown]) : $t('core.authentication.sendCode')),
       beforeSend,
       sendApi,
     },
     fieldName: 'code',
-    label: $t('authentication.code'),
+    label: $t('core.authentication.code'),
     rules: z.string().length(CODE_LENGTH, {
-      message: $t('authentication.codeTip', [CODE_LENGTH]),
+      message: $t('core.authentication.codeTip', [CODE_LENGTH]),
     }),
   },
 ]);
@@ -90,7 +90,7 @@ async function handleSubmit(values: Recordable<any>) {
 <template>
   <AuthenticationCodeLogin ref="loginRef" :form-schema="formSchema" sub-title="通过你绑定的邮箱/手机号快捷登录" :loading="authStore.loginLoading" @submit="handleSubmit">
     <template #title>
-      <div class="mb-2 text-xl font-semibold">{{ $t('authentication.codeLogin.title') }}</div>
+      <div class="mb-2 text-xl font-semibold">{{ $t('core.authentication.codeLogin.title') }}</div>
       <div class="mb-4 flex gap-2">
         <button
           v-for="(label, ch) in channelLabels"

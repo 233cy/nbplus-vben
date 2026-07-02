@@ -50,33 +50,30 @@ export enum BizCode {
   /** 上传内容不是文件 */
   OSS_UPLOAD_NOT_FILE = 20_004,
 
-  /* 存储配置 / 文件管理 */
-  /** 存储桶未配置 */
-  STORAGE_BUCKET_NOT_CONFIGURED = 20_056,
-
   /* 职务管理 */
   /** 职务编码已存在 */
   POST_CODE_EXISTS = 40_500,
+
   /** 职务编码自动生成失败，请手动填写 */
   POST_CODE_GENERATE_FAILED = 40_501,
   /** 该联系方式尚未绑定 */
   PROFILE_CONTACT_NOT_BOUND = 30_021,
-
-  /* 角色管理 */
-  /** 角色编码不能为空 */
-  ROLE_CODE_REQUIRED = 40_600,
-  /** 角色编码已存在 */
-  ROLE_CODE_EXISTS = 40_601,
-  /** 角色不存在或已删除 */
-  ROLE_NOT_FOUND = 40_602,
-
   /* 个人中心 */
   /** 旧密码不正确 */
   PROFILE_OLD_PASSWORD_WRONG = 30_020,
 
+  /** 角色编码已存在 */
+  ROLE_CODE_EXISTS = 40_601,
+  /* 角色管理 */
+  /** 角色编码不能为空 */
+  ROLE_CODE_REQUIRED = 40_600,
+  /** 角色不存在或已删除 */
+  ROLE_NOT_FOUND = 40_602,
+
   /* 安全防护 - 防爆破 */
   /** 登录频率超限，触发限流 */
   SAFE_LOGIN_THROTTLE = 20_200,
+
   /** MFA 渠道未开启 */
   SAFE_MFA_CHANNEL_OFF = 20_211,
   /** MFA 验证码已失效（错误次数超限） */
@@ -87,7 +84,10 @@ export enum BizCode {
   SAFE_MFA_REQUIRED = 20_210,
   /** MFA 验证码发送失败 */
   SAFE_MFA_SEND_FAILED = 20_212,
-
   /** 账号已绑定 TOTP，需完成 TOTP 二步验证 */
   SAFE_TOTP_REQUIRED = 20_214,
+
+  /* 存储配置 / 文件管理 */
+  /** 存储桶未配置 */
+  STORAGE_BUCKET_NOT_CONFIGURED = 20_056,
 }

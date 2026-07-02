@@ -15,31 +15,31 @@ const [Form, formApi] = useVbenForm({
   schema: [
     {
       fieldName: 'oldPassword',
-      label: $t('profile.password.oldPassword'),
+      label: $t('core.profile.password.oldPassword'),
       component: 'InputPassword',
-      componentProps: { placeholder: $t('profile.password.oldPasswordPlaceholder') },
-      rules: z.string().min(1, { message: $t('profile.password.oldPasswordRequired') }),
+      componentProps: { placeholder: $t('core.profile.password.oldPasswordPlaceholder') },
+      rules: z.string().min(1, { message: $t('core.profile.password.oldPasswordRequired') }),
     },
     {
       fieldName: 'newPassword',
-      label: $t('profile.password.newPassword'),
+      label: $t('core.profile.password.newPassword'),
       component: 'PasswordInput',
-      componentProps: { placeholder: $t('profile.password.newPasswordPlaceholder') },
+      componentProps: { placeholder: $t('core.profile.password.newPasswordPlaceholder') },
       rules: 'required',
     },
     {
       fieldName: 'confirmPassword',
-      label: $t('profile.password.confirmPassword'),
+      label: $t('core.profile.password.confirmPassword'),
       component: 'InputPassword',
-      componentProps: { placeholder: $t('profile.password.confirmPasswordPlaceholder') },
+      componentProps: { placeholder: $t('core.profile.password.confirmPasswordPlaceholder') },
       dependencies: {
         rules(values) {
           const { newPassword } = values;
           return z
-            .string({ required_error: $t('profile.password.confirmPasswordRequired') })
-            .min(1, { message: $t('profile.password.confirmPasswordRequired') })
+            .string({ required_error: $t('core.profile.password.confirmPasswordRequired') })
+            .min(1, { message: $t('core.profile.password.confirmPasswordRequired') })
             .refine(value => value === newPassword, {
-              message: $t('profile.password.passwordMismatch'),
+              message: $t('core.profile.password.passwordMismatch'),
             });
         },
         triggerFields: ['newPassword'],
@@ -58,7 +58,7 @@ async function handleSubmit() {
     newPassword: values.newPassword as string,
     confirmPassword: values.confirmPassword as string,
   });
-  message.success($t('profile.password.changeSuccess'));
+  message.success($t('core.profile.password.changeSuccess'));
   formApi.resetForm();
 }
 </script>
@@ -66,7 +66,7 @@ async function handleSubmit() {
   <div class="w-1/3">
     <Form />
     <a-button class="mt-4" type="primary" @click="handleSubmit">
-      {{ $t('profile.password.changePassword') }}
+      {{ $t('core.profile.password.changePassword') }}
     </a-button>
   </div>
 </template>

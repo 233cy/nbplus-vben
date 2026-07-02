@@ -17,17 +17,17 @@ export function useColumns(
     { type: 'checkbox', width: 50 },
     {
       field: 'originalName',
-      title: $t('system.file.fields.originalName'),
+      title: $t('sys.file.fields.originalName'),
       minWidth: 200,
     },
     {
       field: 'extension',
-      title: $t('system.file.fields.extension'),
+      title: $t('sys.file.fields.extension'),
       width: 100,
     },
     {
       field: 'sizeByte',
-      title: $t('system.file.fields.sizeByte'),
+      title: $t('sys.file.fields.sizeByte'),
       width: 120,
       formatter: ({ cellValue }: any) => {
         const size = Number(cellValue);
@@ -38,34 +38,34 @@ export function useColumns(
     },
     {
       field: 'accessType',
-      title: $t('system.file.fields.accessType'),
+      title: $t('sys.file.fields.accessType'),
       width: 120,
       slots: {
         default: ({ row }: any) =>
-          h(Tag, { color: row.accessType === 'public' ? 'green' : row.accessType === 'login' ? 'blue' : 'orange' }, () => $t(`system.file.options.accessType.${row.accessType}`)),
+          h(Tag, { color: row.accessType === 'public' ? 'green' : row.accessType === 'login' ? 'blue' : 'orange' }, () => $t(`sys.file.options.accessType.${row.accessType}`)),
       },
     },
     {
       field: 'storageCode',
-      title: $t('system.file.fields.storageCode'),
+      title: $t('sys.file.fields.storageCode'),
       width: 140,
     },
     {
       field: 'refCount',
-      title: $t('system.file.fields.refCount'),
+      title: $t('sys.file.fields.refCount'),
       width: 100,
     },
     {
       field: 'status',
-      title: $t('system.file.fields.status'),
+      title: $t('sys.file.fields.status'),
       width: 100,
       slots: {
-        default: ({ row }: any) => $t(`system.file.options.status.${row.status}`),
+        default: ({ row }: any) => $t(`sys.file.options.status.${row.status}`),
       },
     },
     {
       field: 'createdAt',
-      title: $t('system.file.fields.createdAt'),
+      title: $t('sys.file.fields.createdAt'),
       width: 180,
       formatter: ({ cellValue }: any) => (cellValue ? formatUnixTime(cellValue) : '-'),
     },
@@ -80,7 +80,7 @@ export function useColumns(
           actions: [
             {
               key: 'preview',
-              label: $t('system.file.preview'),
+              label: $t('sys.file.preview'),
               icon: 'lucide:eye',
               onClick: onPreview,
             },
@@ -94,7 +94,7 @@ export function useColumns(
             },
             {
               key: 'move',
-              label: $t('system.file.move'),
+              label: $t('sys.file.move'),
               icon: 'lucide:move-horizontal',
               hidden: true,
               onClick: onMove,

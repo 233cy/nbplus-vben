@@ -16,46 +16,46 @@ const formSchema = computed((): VbenFormSchema[] => {
     {
       component: 'VbenInput',
       componentProps: {
-        placeholder: $t('authentication.usernameTip'),
+        placeholder: $t('core.authentication.usernameTip'),
       },
       fieldName: 'username',
-      label: $t('authentication.username'),
-      rules: z.string().min(1, { message: $t('authentication.usernameTip') }),
+      label: $t('core.authentication.username'),
+      rules: z.string().min(1, { message: $t('core.authentication.usernameTip') }),
     },
     {
       component: 'VbenInputPassword',
       componentProps: {
         passwordStrength: true,
-        placeholder: $t('authentication.password'),
+        placeholder: $t('core.authentication.password'),
       },
       fieldName: 'password',
-      label: $t('authentication.password'),
+      label: $t('core.authentication.password'),
       renderComponentContent() {
         return {
-          strengthText: () => $t('authentication.passwordStrength'),
+          strengthText: () => $t('core.authentication.passwordStrength'),
         };
       },
-      rules: z.string().min(1, { message: $t('authentication.passwordTip') }),
+      rules: z.string().min(1, { message: $t('core.authentication.passwordTip') }),
     },
     {
       component: 'VbenInputPassword',
       componentProps: {
-        placeholder: $t('authentication.confirmPassword'),
+        placeholder: $t('core.authentication.confirmPassword'),
       },
       dependencies: {
         rules(values) {
           const { password } = values;
           return z
-            .string({ required_error: $t('authentication.passwordTip') })
-            .min(1, { message: $t('authentication.passwordTip') })
+            .string({ required_error: $t('core.authentication.passwordTip') })
+            .min(1, { message: $t('core.authentication.passwordTip') })
             .refine((value) => value === password, {
-              message: $t('authentication.confirmPasswordTip'),
+              message: $t('core.authentication.confirmPasswordTip'),
             });
         },
         triggerFields: ['password'],
       },
       fieldName: 'confirmPassword',
-      label: $t('authentication.confirmPassword'),
+      label: $t('core.authentication.confirmPassword'),
     },
     {
       component: 'VbenCheckbox',
@@ -63,19 +63,19 @@ const formSchema = computed((): VbenFormSchema[] => {
       renderComponentContent: () => ({
         default: () =>
           h('span', [
-            $t('authentication.agree'),
+            $t('core.authentication.agree'),
             h(
               'a',
               {
                 class: 'vben-link ml-1 ',
                 href: '',
               },
-              `${$t('authentication.privacyPolicy')} & ${$t('authentication.terms')}`,
+              `${$t('core.authentication.privacyPolicy')} & ${$t('core.authentication.terms')}`,
             ),
           ]),
       }),
       rules: z.boolean().refine((value) => !!value, {
-        message: $t('authentication.agreeTip'),
+        message: $t('core.authentication.agreeTip'),
       }),
     },
   ];

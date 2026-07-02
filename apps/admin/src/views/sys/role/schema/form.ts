@@ -10,36 +10,36 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'code',
-      label: $t('auth.role.fields.code'),
+      label: $t('sys.role.fields.code'),
       rules: 'required',
       disabled: isEdit,
       componentProps: {
-        placeholder: $t('auth.role.placeholders.code'),
+        placeholder: $t('sys.role.placeholders.code'),
       },
     },
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('auth.role.fields.name'),
+      label: $t('sys.role.fields.name'),
       rules: 'required',
       componentProps: {
-        placeholder: $t('auth.role.placeholders.name'),
+        placeholder: $t('sys.role.placeholders.name'),
       },
     },
     {
       component: 'InputNumber',
       fieldName: 'sort',
-      label: $t('auth.role.fields.sort'),
+      label: $t('sys.role.fields.sort'),
       defaultValue: 0,
       componentProps: {
         min: 0,
-        placeholder: $t('auth.role.placeholders.sort'),
+        placeholder: $t('sys.role.placeholders.sort'),
       },
     },
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('auth.role.fields.status'),
+      label: $t('sys.role.fields.status'),
       rules: 'required',
       defaultValue: 1,
       componentProps: {
@@ -49,10 +49,10 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'Textarea',
       fieldName: 'remark',
-      label: $t('auth.role.fields.remark'),
+      label: $t('sys.role.fields.remark'),
       componentProps: {
         rows: 3,
-        placeholder: $t('auth.role.placeholders.remark'),
+        placeholder: $t('sys.role.placeholders.remark'),
       },
     },
   ];

@@ -11,19 +11,19 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'username',
-      label: $t('system.user.fields.username'),
+      label: $t('sys.user.fields.username'),
       rules: 'required',
     },
     {
       component: 'PasswordInput',
       fieldName: 'password',
-      label: $t('system.user.fields.password'),
+      label: $t('sys.user.fields.password'),
       rules: isEdit ? undefined : 'required',
     },
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('system.user.fields.status'),
+      label: $t('sys.user.fields.status'),
       rules: 'required',
       componentProps: {
         code: 'sys_user_status',
@@ -32,29 +32,29 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'nickname',
-      label: $t('system.user.fields.nickname'),
+      label: $t('sys.user.fields.nickname'),
       rules: 'required',
     },
     {
       component: 'AvatarUpload',
       fieldName: 'avatar',
-      label: $t('system.user.fields.avatar'),
+      label: $t('sys.user.fields.avatar'),
       componentProps: { accessType: 'login' },
     },
     {
       component: 'Input',
       fieldName: 'email',
-      label: $t('system.user.fields.email'),
+      label: $t('sys.user.fields.email'),
     },
     {
       component: 'Input',
       fieldName: 'phone',
-      label: $t('system.user.fields.phone'),
+      label: $t('sys.user.fields.phone'),
     },
     {
       component: 'DictSelect',
       fieldName: 'gender',
-      label: $t('system.user.fields.gender'),
+      label: $t('sys.user.fields.gender'),
       componentProps: {
         code: 'sys_user_gender',
       },
@@ -62,7 +62,7 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'ApiSelect',
       fieldName: 'positionId',
-      label: $t('system.user.fields.positionId'),
+      label: $t('sys.user.fields.positionId'),
       componentProps: {
         api: getPostAllApi,
         labelField: 'name',

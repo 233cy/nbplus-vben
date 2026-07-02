@@ -14,35 +14,35 @@ export function useColumns(
     { type: 'checkbox', width: 50 },
     {
       field: 'name',
-      title: $t('system.storage.fields.name'),
+      title: $t('sys.storage.fields.name'),
       minWidth: 160,
     },
     {
       field: 'code',
-      title: $t('system.storage.fields.code'),
+      title: $t('sys.storage.fields.code'),
       minWidth: 120,
     },
     {
       field: 'engine',
-      title: $t('system.storage.fields.engine'),
+      title: $t('sys.storage.fields.engine'),
       width: 140,
-      formatter: ({ cellValue }: any) => $t(`system.storage.options.engine.${cellValue}`) || cellValue,
+      formatter: ({ cellValue }: any) => $t(`sys.storage.options.engine.${cellValue}`) || cellValue,
     },
     {
       field: 'isDefault',
-      title: $t('system.storage.fields.isDefault'),
+      title: $t('sys.storage.fields.isDefault'),
       width: 100,
       cellRender: {
         name: 'CellTag',
         options: [
-          { color: 'green', label: $t('system.storage.options.isDefault.1'), value: 1 },
-          { color: '', label: $t('system.storage.options.isDefault.2'), value: 2 },
+          { color: 'green', label: $t('sys.storage.options.isDefault.1'), value: 1 },
+          { color: '', label: $t('sys.storage.options.isDefault.2'), value: 2 },
         ],
       },
     },
     {
       field: 'status',
-      title: $t('system.storage.fields.status'),
+      title: $t('sys.storage.fields.status'),
       width: 100,
       cellRender: {
         name: 'CellSwitch',
@@ -60,7 +60,7 @@ export function useColumns(
     },
     {
       field: 'sort',
-      title: $t('system.storage.fields.sort'),
+      title: $t('sys.storage.fields.sort'),
       width: 100,
     },
     {
@@ -94,7 +94,7 @@ export function useColumns(
             },
             {
               key: 'setDefault',
-              label: $t('system.storage.setDefault'),
+              label: $t('sys.storage.setDefault'),
               icon: 'lucide:star',
               hidden: (row: StorageApi.StorageItem) => row.isDefault === 1,
               onClick: onSetDefault,

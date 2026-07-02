@@ -17,7 +17,7 @@ const logoDark = computed(() => siteStore.logo || preferences.logo.sourceDark);
 </script>
 
 <template>
-  <AuthPageLayout :app-name="appName" :logo="logo" :logo-dark="logoDark" :page-description="$t('authentication.pageDesc')" :page-title="appName">
+  <AuthPageLayout :app-name="appName" :logo="logo" :logo-dark="logoDark" :page-description="$t('core.authentication.pageDesc')" :page-title="appName">
     <!-- 自定义工具栏 -->
     <!-- <template #toolbar></template> -->
   </AuthPageLayout>

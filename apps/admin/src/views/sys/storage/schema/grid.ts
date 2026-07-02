@@ -12,24 +12,24 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'Select',
       fieldName: 'engine',
-      label: $t('system.storage.fields.engine'),
+      label: $t('sys.storage.fields.engine'),
       componentProps: {
         options: [
-          { label: $t('system.storage.options.engine.local'), value: 'local' },
-          { label: $t('system.storage.options.engine.minio'), value: 'minio' },
-          { label: $t('system.storage.options.engine.aliyun'), value: 'aliyun' },
-          { label: $t('system.storage.options.engine.qiniu'), value: 'qiniu' },
+          { label: $t('sys.storage.options.engine.local'), value: 'local' },
+          { label: $t('sys.storage.options.engine.minio'), value: 'minio' },
+          { label: $t('sys.storage.options.engine.aliyun'), value: 'aliyun' },
+          { label: $t('sys.storage.options.engine.qiniu'), value: 'qiniu' },
         ],
       },
     },
     {
       component: 'Select',
       fieldName: 'status',
-      label: $t('system.storage.fields.status'),
+      label: $t('sys.storage.fields.status'),
       componentProps: {
         options: [
-          { label: $t('system.storage.options.status.1'), value: 1 },
-          { label: $t('system.storage.options.status.2'), value: 2 },
+          { label: $t('sys.storage.options.status.1'), value: 1 },
+          { label: $t('sys.storage.options.status.2'), value: 2 },
         ],
       },
     },
