@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { PostApi } from '#/api/sys/post';
+import type { PostApi } from '#/api/sys/userDuty';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { createPostApi, getPostDetailApi, updatePostApi } from '#/api/sys/post';
+import { createPostApi, getPostDetailApi, updatePostApi } from '#/api/sys/userDuty';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
@@ -59,10 +59,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 </script>
 
 <template>
-  <Drawer
-    :title="isReadonly ? $t('sys.post.detail') : rowId ? $t('sys.post.edit') : $t('sys.post.create')"
-    :show-confirm-button="!isReadonly && (!!rowId ? canUpdate : true)"
-  >
+  <Drawer :title="isReadonly ? $t('sys.user-duty.detail') : rowId ? $t('sys.user-duty.edit') : $t('sys.user-duty.create')" :show-confirm-button="!isReadonly && (!!rowId ? canUpdate : true)">
     <Form :disabled="isReadonly" />
   </Drawer>
 </template>

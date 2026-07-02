@@ -1,11 +1,11 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { PostApi } from '#/api/sys/post';
+import type { PostApi } from '#/api/sys/userDuty';
 
-import { deletePostApi, inlineUpdatePostApi } from '#/api/sys/post';
+import { deletePostApi, inlineUpdatePostApi } from '#/api/sys/userDuty';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
-import { formatUnixTime } from '#/utils/time';
 import { useTableDelete } from '#/utils/table';
+import { formatUnixTime } from '#/utils/time';
 
 /**
  * 职务列表列定义
@@ -21,7 +21,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     { field: 'id', title: 'ID', visible: false },
     {
       field: 'code',
-      title: $t('sys.post.fields.code'),
+      title: $t('sys.user-duty.fields.code'),
       minWidth: 120,
       sortable: true,
       cellRender: {
@@ -34,7 +34,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     },
     {
       field: 'name',
-      title: $t('sys.post.fields.name'),
+      title: $t('sys.user-duty.fields.name'),
       minWidth: 160,
       sortable: true,
       cellRender: {
@@ -47,8 +47,14 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
       },
     },
     {
+      field: 'deptFullName',
+      title: $t('sys.user-duty.fields.deptId'),
+      minWidth: 240,
+      showOverflow: 'tooltip',
+    },
+    {
       field: 'level',
-      title: $t('sys.post.fields.level'),
+      title: $t('sys.user-duty.fields.level'),
       width: 130,
       sortable: true,
       cellRender: {
@@ -62,7 +68,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     },
     {
       field: 'status',
-      title: $t('sys.post.fields.status'),
+      title: $t('sys.user-duty.fields.status'),
       width: 120,
       sortable: true,
       cellRender: {
@@ -77,7 +83,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     },
     {
       field: 'sort',
-      title: $t('sys.post.fields.sort'),
+      title: $t('sys.user-duty.fields.sort'),
       width: 130,
       sortable: true,
       cellRender: {
@@ -91,7 +97,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailC
     },
     {
       field: 'remark',
-      title: $t('sys.post.fields.remark'),
+      title: $t('sys.user-duty.fields.remark'),
       minWidth: 160,
       showOverflow: 'tooltip',
     },

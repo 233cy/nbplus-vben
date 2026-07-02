@@ -1,4 +1,4 @@
-import type { DeptApi } from '#/api/sys/dept';
+import type { DeptApi } from '#/api/sys/userDept';
 
 export interface DeptTreeNode extends DeptApi.DeptItem {
   key: string;

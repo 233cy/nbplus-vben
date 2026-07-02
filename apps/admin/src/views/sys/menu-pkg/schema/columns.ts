@@ -1,7 +1,7 @@
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { MenuPkgApi } from '#/api/sys/menu-pkg';
+import type { MenuPkgApi } from '#/api/sys/menuPkg';
 
-import { deleteMenuPkgApi, inlineUpdateMenuPkgApi } from '#/api/sys/menu-pkg';
+import { deleteMenuPkgApi, inlineUpdateMenuPkgApi } from '#/api/sys/menuPkg';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';

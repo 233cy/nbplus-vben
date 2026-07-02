@@ -1,4 +1,4 @@
-import type { MenuPkgApi } from '#/api/sys/menu-pkg';
+import type { MenuPkgApi } from '#/api/sys/menuPkg';
 
 /**
  * useMenuPkg - 权限包管理页面表格操作逻辑

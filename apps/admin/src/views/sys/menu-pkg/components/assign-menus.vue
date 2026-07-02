@@ -2,7 +2,7 @@
 import type { PermissionAssignPanelExpose } from '../../role/shared/permission-assign-panel.vue';
 import type { PermissionNode } from '../../role/shared/usePermissionTree';
 
-import type { MenuPkgApi } from '#/api/sys/menu-pkg';
+import type { MenuPkgApi } from '#/api/sys/menuPkg.js';
 
 import { ref } from 'vue';
 
@@ -11,7 +11,7 @@ import { IconifyIcon } from '@vben/icons';
 
 import { message } from 'ant-design-vue';
 
-import { assignMenuPkgMenusApi, getMenuPkgMenuIdsApi, getMenuPkgMenuTreeApi } from '#/api/sys/menu-pkg';
+import { assignMenuPkgMenusApi, getMenuPkgMenuIdsApi, getMenuPkgMenuTreeApi } from '#/api/sys/menuPkg.js';
 import { $t } from '#/locales';
 
 import PermissionAssignPanel from '../../role/shared/permission-assign-panel.vue';

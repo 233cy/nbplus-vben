@@ -5,15 +5,15 @@ import { IconifyIcon, Plus } from '@vben/icons';
 import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { batchDeletePostApi, batchUpdatePostApi, getPostDetailApi, getPostListApi } from '#/api/sys/post.js';
+import { batchDeletePostApi, batchUpdatePostApi, getPostDetailApi, getPostListApi } from '#/api/sys/userDuty.js';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
 import Form from './components/form.vue';
-import { usePost } from './composables/usePost';
-import { useColumns } from './schema/columns';
-import { useGridFormSchema } from './schema/grid';
+import { usePost } from './composables/usePost.js';
+import { useColumns } from './schema/columns.js';
+import { useGridFormSchema } from './schema/grid.js';
 
 const { hasAccessByCodes } = useAccess();
 const canCreate = hasAccessByCodes(['org:post:create']);
@@ -64,7 +64,7 @@ const post = usePost(gridApi);
 <template>
   <Page auto-content-height>
     <FormDrawer @success="post.onRefresh" />
-    <Grid :table-title="$t('sys.post.pageTitle')">
+    <Grid :table-title="$t('sys.user-duty.pageTitle')">
       <template #toolbar-tools>
         <BatchActionDropdown
           v-if="canBatchDelete"
@@ -91,12 +91,12 @@ const post = usePost(gridApi);
           :api-fn="batchUpdatePostApi"
           :get-ids="post.getSelectedIds"
           :on-success="post.onRefresh"
-          :fields="[{ fieldName: 'status', label: $t('sys.post.fields.status'), dictCode: 'sys_post_status' }]"
+          :fields="[{ fieldName: 'status', label: $t('sys.user-duty.fields.status'), dictCode: 'sys_post_status' }]"
         />
 
         <Button v-if="canCreate" type="primary" @click="formDrawerApi.setData({}).open()">
           <Plus class="size-5" />
-          {{ $t('sys.post.create') }}
+          {{ $t('sys.user-duty.create') }}
         </Button>
       </template>
     </Grid>

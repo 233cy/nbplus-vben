@@ -1,10 +1,10 @@
-import type { DeptApi } from '#/api/sys/dept';
+import type { DeptApi } from '#/api/sys/userDept';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { createDeptApi, updateDeptApi } from '#/api/sys/dept';
+import { createDeptApi, updateDeptApi } from '#/api/sys/userDept';
 
 import { createDefaultForm, findDeptTitle } from '../data';
 
@@ -23,10 +23,10 @@ export function useDeptForm(options: UseDeptFormOptions) {
   const form = ref<DeptApi.SaveParams & { id?: string }>(createDefaultForm());
 
   const title = computed(() => {
-    if (isEdit.value) return t('sys.dept.edit');
+    if (isEdit.value) return t('sys.user-dept.edit');
     const parentId = form.value.parentId;
     const parentTitle = parentId ? findDeptTitle(treeData.value, parentId) : '';
-    const actionKey = parentId ? 'sys.dept.addChild' : 'sys.dept.addRoot';
+    const actionKey = parentId ? 'sys.user-dept.addChild' : 'sys.user-dept.addRoot';
     return `${t(actionKey)}${parentTitle ? `「${parentTitle}」` : ''}`;
   });
 
@@ -45,7 +45,7 @@ export function useDeptForm(options: UseDeptFormOptions) {
 
   function validate(): boolean {
     if (!form.value.name?.trim()) {
-      message.warning(t('sys.dept.placeholder.name'));
+      message.warning(t('sys.user-dept.placeholder.name'));
       return false;
     }
     return true;
@@ -68,11 +68,11 @@ export function useDeptForm(options: UseDeptFormOptions) {
         // 编辑时不允许修改编码
         delete (data as any).code;
         await updateDeptApi(data as DeptApi.SaveParams & { id: string });
-        message.success(t('sys.dept.updateSuccess'));
+        message.success(t('sys.user-dept.updateSuccess'));
       } else {
         data.code = form.value.code?.trim();
         await createDeptApi(data);
-        message.success(t('sys.dept.createSuccess'));
+        message.success(t('sys.user-dept.createSuccess'));
       }
       await reload();
       visible.value = false;

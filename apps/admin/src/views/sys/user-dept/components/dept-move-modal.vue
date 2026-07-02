@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DeptApi } from '#/api/sys/dept';
+import type { DeptApi } from '#/api/sys/userDept';
 
 import { Modal, TreeSelect } from 'ant-design-vue';
 
@@ -31,7 +31,7 @@ function handleCancel() {
 <template>
   <Modal
     v-model:open="showVisible"
-    :title="$t('sys.dept.moveTitle', { title: moveItem?.name ?? '' })"
+    :title="$t('sys.user-dept.moveTitle', { title: moveItem?.name ?? '' })"
     :confirm-loading="loading"
     width="400px"
     @ok="handleOk"

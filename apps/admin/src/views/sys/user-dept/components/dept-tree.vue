@@ -62,7 +62,7 @@ function isExpanded(id: string) {
 }
 
 function getStatusText(status: number) {
-  return status === 1 ? $t('sys.dept.status.enabled') : $t('sys.dept.status.disabled');
+  return status === 1 ? $t('sys.user-dept.status.enabled') : $t('sys.user-dept.status.disabled');
 }
 </script>
 
@@ -129,12 +129,12 @@ function getStatusText(status: number) {
             <div class="h-4 w-px bg-border"></div>
 
             <Space :size="4" @click.stop>
-              <Tooltip :title="$t('sys.dept.addChild')">
+              <Tooltip :title="$t('sys.user-dept.addChild')">
                 <Button size="small" type="text" @click="$emit('create', item.id)">
                   <IconifyIcon icon="ant-design:plus-outlined" />
                 </Button>
               </Tooltip>
-              <Tooltip :title="$t('sys.dept.move')">
+              <Tooltip :title="$t('sys.user-dept.move')">
                 <Button size="small" type="text" @click="$emit('move', item)">
                   <IconifyIcon icon="ant-design:drag-outlined" />
                 </Button>
@@ -145,8 +145,8 @@ function getStatusText(status: number) {
                 </Button>
               </Tooltip>
               <Popconfirm
-                :title="$t('sys.dept.confirmDelete')"
-                :description="$t('sys.dept.confirmDeleteContent', { name: item.name })"
+                :title="$t('sys.user-dept.confirmDelete')"
+                :description="$t('sys.user-dept.confirmDeleteContent', { name: item.name })"
                 @confirm="$emit('delete', item.id)"
               >
                 <Tooltip :title="$t('common.delete')">

@@ -5,7 +5,7 @@ import { IconifyIcon, Plus } from '@vben/icons';
 import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { batchDeleteMenuPkgApi, batchUpdateMenuPkgApi, getMenuPkgDetailApi, getMenuPkgListApi } from '#/api/sys/menu-pkg';
+import { batchDeleteMenuPkgApi, batchUpdateMenuPkgApi, getMenuPkgDetailApi, getMenuPkgListApi } from '#/api/sys/menuPkg.js';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';

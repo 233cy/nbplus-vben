@@ -5,6 +5,9 @@ export namespace PostApi {
     id: string;
     code: string;
     name: string;
+    deptId: string;
+    deptName: string;
+    deptFullName: string;
     level: number;
     status: number;
     sort: number;
@@ -16,6 +19,7 @@ export namespace PostApi {
   export interface SaveParams {
     code: string;
     name: string;
+    deptId: string;
     level?: number;
     status?: number;
     sort?: number;
@@ -28,11 +32,12 @@ export namespace PostApi {
     keyword?: string;
     code?: string;
     name?: string;
+    deptId?: string | string[];
     status?: number;
   }
 }
 
-const BASE = '/admin/sys/post';
+const BASE = '/admin/sys/user-duty';
 
 export function getPostListApi(params: PostApi.PageParams) {
   return requestClient.get<{ items: PostApi.PostItem[]; meta: { currentPage: number; perPage: number; total: number } }>(`${BASE}/list`, { params });

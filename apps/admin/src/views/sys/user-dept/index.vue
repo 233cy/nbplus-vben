@@ -11,7 +11,7 @@ import { $t } from '#/locales';
 import DeptForm from './components/dept-form.vue';
 import DeptMoveModal from './components/dept-move-modal.vue';
 import DeptTree from './components/dept-tree.vue';
-import { useDeptForm, useDeptMove, useDeptTree } from './composables';
+import { useDeptForm, useDeptMove, useDeptTree } from './composables/index.js';
 
 const tree = useDeptTree({ t: $t });
 const form = useDeptForm({ treeData: tree.treeData, reload: tree.loadDepts, t: $t });
@@ -33,28 +33,28 @@ tree.loadDepts();
             <template #icon>
               <IconifyIcon icon="ant-design:node-expand-outlined" />
             </template>
-            {{ $t('sys.dept.expandAll') }}
+            {{ $t('sys.user-dept.expandAll') }}
           </Button>
           <Button @click="tree.collapseAll">
             <template #icon>
               <IconifyIcon icon="ant-design:node-collapse-outlined" />
             </template>
-            {{ $t('sys.dept.collapseAll') }}
+            {{ $t('sys.user-dept.collapseAll') }}
           </Button>
           <Button :disabled="checkedCount === 0" danger @click="tree.handleBatchDelete">
             <template #icon>
               <IconifyIcon icon="ant-design:delete-outlined" />
             </template>
-            {{ $t('sys.dept.batchDelete') }} {{ checkedCount > 0 ? `(${checkedCount})` : '' }}
+            {{ $t('sys.user-dept.batchDelete') }} {{ checkedCount > 0 ? `(${checkedCount})` : '' }}
           </Button>
-          <Input v-model:value="tree.keyword.value" :placeholder="$t('sys.dept.searchPlaceholder')" allow-clear style="width: 240px">
+          <Input v-model:value="tree.keyword.value" :placeholder="$t('sys.user-dept.searchPlaceholder')" allow-clear style="width: 240px">
             <template #prefix>
               <IconifyIcon icon="ant-design:search-outlined" class="text-gray-400" />
             </template>
           </Input>
           <Button type="primary" @click="form.openCreate()">
             <Plus class="size-4" />
-            {{ $t('sys.dept.addRoot') }}
+            {{ $t('sys.user-dept.addRoot') }}
           </Button>
         </Space>
       </div>

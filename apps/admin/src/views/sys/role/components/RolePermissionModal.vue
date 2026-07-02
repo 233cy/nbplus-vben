@@ -11,7 +11,7 @@ import { IconifyIcon } from '@vben/icons';
 
 import { message } from 'ant-design-vue';
 
-import { getMenuPkgAllApi, getMenuPkgMenuIdsApi } from '#/api/sys/menu-pkg';
+import { getMenuPkgAllApi, getMenuPkgMenuIdsApi } from '#/api/sys/menuPkg.js';
 import { assignRoleMenusApi, getRoleMenuTreeApi } from '#/api/sys/role';
 import { $t } from '#/locales';
 

@@ -15,20 +15,31 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('sys.post.fields.name'),
+      label: $t('sys.user-duty.fields.name'),
       rules: 'required',
       componentProps: {
-        placeholder: $t('sys.post.placeholders.name'),
+        placeholder: $t('sys.user-duty.placeholders.name'),
+      },
+    },
+    {
+      component: 'ApiSelect',
+      fieldName: 'deptId',
+      label: $t('sys.user-duty.fields.deptId'),
+      rules: 'required',
+      componentProps: {
+        config: 'dept',
+        multiple: false,
+        placeholder: $t('sys.user-duty.placeholders.deptId'),
       },
     },
     {
       component: 'Input',
       fieldName: 'code',
-      label: $t('sys.post.fields.code'),
+      label: $t('sys.user-duty.fields.code'),
       rules: 'required',
       disabled: isEdit,
       componentProps: {
-        placeholder: $t('sys.post.placeholders.code'),
+        placeholder: $t('sys.user-duty.placeholders.code'),
       },
       renderComponentContent: isEdit
         ? undefined
@@ -53,16 +64,16 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'InputNumber',
       fieldName: 'level',
-      label: $t('sys.post.fields.level'),
+      label: $t('sys.user-duty.fields.level'),
       componentProps: {
-        placeholder: $t('sys.post.placeholders.level'),
+        placeholder: $t('sys.user-duty.placeholders.level'),
         min: 0,
       },
     },
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('sys.post.fields.status'),
+      label: $t('sys.user-duty.fields.status'),
       rules: 'required',
       defaultValue: 1,
       componentProps: {
@@ -72,18 +83,18 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
     {
       component: 'InputNumber',
       fieldName: 'sort',
-      label: $t('sys.post.fields.sort'),
+      label: $t('sys.user-duty.fields.sort'),
       componentProps: {
-        placeholder: $t('sys.post.placeholders.sort'),
+        placeholder: $t('sys.user-duty.placeholders.sort'),
         min: 0,
       },
     },
     {
       component: 'Textarea',
       fieldName: 'remark',
-      label: $t('sys.post.fields.remark'),
+      label: $t('sys.user-duty.fields.remark'),
       componentProps: {
-        placeholder: $t('sys.post.placeholders.remark'),
+        placeholder: $t('sys.user-duty.placeholders.remark'),
         rows: 3,
       },
     },

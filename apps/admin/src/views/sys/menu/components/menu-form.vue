@@ -9,7 +9,7 @@ import { Button, Checkbox, Form, FormItem, Input, InputNumber, Modal, RadioButto
 
 import { $t } from '#/locales';
 
-import { createBadgeTypeOptions, createBadgeVariantOptions, createDefaultForm, createStatusOptions } from '../data';
+import { createBadgeTypeOptions, createBadgeVariantOptions, createDefaultForm, createStatusOptions, ROOT_PARENT } from '../data';
 
 const props = defineProps<{
   availableTypes: { label: string; value: MenuAdminApi.MenuType }[];
@@ -100,7 +100,7 @@ function onTypeChange() {
       <FormItem :label="$t('dev.menu.fields.parentId')">
         <TreeSelect
           v-model:value="form.parentId"
-          :tree-data="[{ label: $t('dev.menu.rootLevel'), value: null, children: treeSelectData }]"
+          :tree-data="[{ label: $t('dev.menu.rootLevel'), value: ROOT_PARENT, children: treeSelectData }]"
           :placeholder="$t('dev.menu.placeholder.parentId')"
           allow-clear
           tree-default-expand-all

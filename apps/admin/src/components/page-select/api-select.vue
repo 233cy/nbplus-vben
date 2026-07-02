@@ -104,14 +104,17 @@ const isMultiple = computed(() => {
   if (props.mode === 'multiple' || props.mode === 'tags') {
     return true;
   }
-  return props.multiple || resolvedConfig.value?.multiple || false;
+  // 严格判断：只有显式 true 或字符串 'true' 才启用多选
+  const propMultiple = props.multiple === true || String(props.multiple) === 'true';
+  const configMultiple = resolvedConfig.value?.multiple === true || String(resolvedConfig.value?.multiple) === 'true';
+  return propMultiple || configMultiple;
 });
 
 const resolvedMode = computed(() => {
   if (props.mode) {
     return props.mode;
   }
-  if (props.multiple || resolvedConfig.value?.multiple) {
+  if (isMultiple.value) {
     return 'multiple';
   }
   return undefined;
@@ -351,6 +354,17 @@ function handleDropdownVisibleChange(visible: boolean) {
   }
 }
 
+/**
+ * 处理 TreeSelect 的值更新，确保多选时返回的是 value 数组而非对象数组.
+ */
+function handleTreeValueUpdate(val: any) {
+  if (isTree.value && isMultiple.value && Array.isArray(val) && val.length > 0 && typeof val[0] === 'object') {
+    modelValue.value = val.map((item: any) => item?.value ?? item);
+    return;
+  }
+  modelValue.value = val;
+}
+
 watch(
   () => [resolvedApi.value, props.params, resolvedPageSize.value],
   () => {
@@ -404,21 +418,21 @@ watch(
 
   <TreeSelect
     v-else
-    v-model:value="modelValue"
+    :value="modelValue"
     :allow-clear="allowClear"
     :dropdown-match-select-width="dropdownMatchSelectWidth"
     :field-names="{ label: 'label', value: 'value', children: 'children' }"
     :loading="loading"
-    :multiple="isMultiple"
     :placeholder="placeholder || $t('ui.placeholder.select')"
     :show-search="true"
-    :show-checked-strategy="TreeSelect.SHOW_ALL"
+    :show-checked-strategy="isMultiple ? TreeSelect.SHOW_ALL : undefined"
     :tree-checkable="isMultiple"
-    :tree-check-strictly="resolvedCheckStrictly"
+    :tree-check-strictly="isMultiple ? resolvedCheckStrictly : undefined"
     :tree-data="options"
     :tree-default-expand-all="treeDefaultExpandAll"
     tree-node-filter-prop="label"
     @dropdown-visible-change="handleDropdownVisibleChange"
+    @update:value="handleTreeValueUpdate"
   >
     <template #suffixIcon>
       <IconifyIcon :class="loading ? 'animate-spin text-base' : 'text-base'" :icon="loading ? 'mdi:loading' : 'lucide:chevron-down'" />

@@ -12,13 +12,13 @@
 
 import type { DeptTreeNode } from '../data';
 
-import type { DeptApi } from '#/api/sys/dept';
+import type { DeptApi } from '#/api/sys/userDept';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { batchDeleteDeptApi, deleteDeptApi, getDeptTreeApi, sortDeptApi, toggleDeptApi } from '#/api/sys/dept';
+import { batchDeleteDeptApi, deleteDeptApi, getDeptTreeApi, sortDeptApi, toggleDeptApi } from '#/api/sys/userDept';
 import { useTableBatchAction } from '#/utils/table';
 
 import { buildGlobalSortItems, buildTreeNodes, collectAllKeys, filterDeptTree, findParentId } from '../data';
@@ -102,13 +102,13 @@ export function useDeptTree(options: UseDeptTreeOptions) {
 
   async function handleDelete(id: string) {
     await deleteDeptApi(id);
-    message.success(t('sys.dept.deleteSuccess'));
+    message.success(t('sys.user-dept.deleteSuccess'));
     await loadDepts();
   }
 
   function handleBatchDelete() {
     if (checkedKeys.value.length === 0) {
-      message.warning(t('sys.dept.batchDeleteEmpty'));
+      message.warning(t('sys.user-dept.batchDeleteEmpty'));
       return;
     }
 

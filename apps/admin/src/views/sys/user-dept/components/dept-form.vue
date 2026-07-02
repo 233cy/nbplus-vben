@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DeptApi } from '#/api/sys/dept';
+import type { DeptApi } from '#/api/sys/userDept';
 
 import { computed } from 'vue';
 
@@ -80,11 +80,11 @@ function buildTreeData(
     @cancel="handleCancel"
   >
     <Form :model="form" layout="vertical" class="mt-4">
-      <FormItem :label="$t('sys.dept.fields.parentId')">
+      <FormItem :label="$t('sys.user-dept.fields.parentId')">
         <TreeSelect
           :value="form.parentId || ''"
-          :tree-data="[{ label: $t('sys.dept.rootLevel'), value: '', children: treeSelectData }]"
-          :placeholder="$t('sys.dept.placeholder.parentId')"
+          :tree-data="[{ label: $t('sys.user-dept.rootLevel'), value: '', children: treeSelectData }]"
+          :placeholder="$t('sys.user-dept.placeholder.parentId')"
           allow-clear
           tree-default-expand-all
           class="w-full"
@@ -92,39 +92,39 @@ function buildTreeData(
         />
       </FormItem>
 
-      <FormItem :label="$t('sys.dept.fields.name')" required>
-        <Input v-model:value="form.name" :placeholder="$t('sys.dept.placeholder.name')" />
+      <FormItem :label="$t('sys.user-dept.fields.name')" required>
+        <Input v-model:value="form.name" :placeholder="$t('sys.user-dept.placeholder.name')" />
       </FormItem>
 
-      <FormItem :label="$t('sys.dept.fields.code')">
+      <FormItem :label="$t('sys.user-dept.fields.code')">
         <Input
           v-model:value="form.code"
-          :placeholder="$t('sys.dept.placeholder.code')"
+          :placeholder="$t('sys.user-dept.placeholder.code')"
           :disabled="isEdit"
         >
           <template v-if="!isEdit" #addonAfter>
             <Button type="link" size="small" @click="generateCodeFromName">
-              {{ $t('sys.dept.generateCode') }}
+              {{ $t('sys.user-dept.generateCode') }}
             </Button>
           </template>
         </Input>
       </FormItem>
 
       <div class="grid grid-cols-2 gap-x-4">
-        <FormItem :label="$t('sys.dept.fields.leaderId')">
-          <Input v-model:value="form.leaderId" :placeholder="$t('sys.dept.placeholder.leaderId')" />
+        <FormItem :label="$t('sys.user-dept.fields.leaderId')">
+          <Input v-model:value="form.leaderId" :placeholder="$t('sys.user-dept.placeholder.leaderId')" />
         </FormItem>
-        <FormItem :label="$t('sys.dept.fields.status')">
+        <FormItem :label="$t('sys.user-dept.fields.status')">
           <Select v-model:value="form.status" :options="statusOptions" class="w-full" />
         </FormItem>
       </div>
 
       <div class="grid grid-cols-2 gap-x-4">
-        <FormItem :label="$t('sys.dept.fields.phone')">
-          <Input v-model:value="form.phone" :placeholder="$t('sys.dept.placeholder.phone')" />
+        <FormItem :label="$t('sys.user-dept.fields.phone')">
+          <Input v-model:value="form.phone" :placeholder="$t('sys.user-dept.placeholder.phone')" />
         </FormItem>
-        <FormItem :label="$t('sys.dept.fields.email')">
-          <Input v-model:value="form.email" :placeholder="$t('sys.dept.placeholder.email')" />
+        <FormItem :label="$t('sys.user-dept.fields.email')">
+          <Input v-model:value="form.email" :placeholder="$t('sys.user-dept.placeholder.email')" />
         </FormItem>
       </div>
     </Form>

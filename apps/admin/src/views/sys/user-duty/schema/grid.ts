@@ -19,7 +19,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'code',
-      label: $t('sys.post.fields.code'),
+      label: $t('sys.user-duty.fields.code'),
       componentProps: {
         allowClear: true,
       },
@@ -27,18 +27,29 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('sys.post.fields.name'),
+      label: $t('sys.user-duty.fields.name'),
       componentProps: {
+        allowClear: true,
+      },
+    },
+    {
+      component: 'ApiSelect',
+      fieldName: 'deptId',
+      label: $t('sys.user-duty.fields.deptId'),
+      componentProps: {
+        config: 'dept',
+        multiple: true,
+        checkStrictly: true,
         allowClear: true,
       },
     },
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('sys.post.fields.status'),
+      label: $t('sys.user-duty.fields.status'),
       componentProps: {
         allowClear: true,
-        code: 'sys_post_status',
+        code: 'is_enable',
       },
     },
   ];

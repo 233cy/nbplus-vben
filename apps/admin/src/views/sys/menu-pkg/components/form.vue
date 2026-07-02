@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { MenuPkgApi } from '#/api/sys/menu-pkg';
+import type { MenuPkgApi } from '#/api/sys/menuPkg';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { createMenuPkgApi, getMenuPkgDetailApi, updateMenuPkgApi } from '#/api/sys/menu-pkg';
+import { createMenuPkgApi, getMenuPkgDetailApi, updateMenuPkgApi } from '#/api/sys/menuPkg';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 

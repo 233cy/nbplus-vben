@@ -36,6 +36,7 @@ export function deptPageSelectConfig(): PageSelectConfig {
     labelField: 'name',
     valueField: 'id',
     parentField: 'parentId',
+    multiple: false,
     title: $t('common.selectData'),
     checkStrictly: true,
   };

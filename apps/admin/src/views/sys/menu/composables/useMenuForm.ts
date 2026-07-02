@@ -15,9 +15,8 @@ import { computed, ref } from 'vue';
 import { message } from 'ant-design-vue';
 
 import { createMenuApi, updateMenuApi } from '#/api/sys/menuAdmin';
-import { $t } from '#/locales';
 
-import { createDefaultForm, findNodeTitle, getAllowedTypes } from '../data';
+import { createDefaultForm, findNodeTitle, getAllowedTypes, ROOT_PARENT } from '../data';
 
 export interface UseMenuFormOptions {
   treeData: { value: MenuAdminApi.MenuItem[] };
@@ -33,13 +32,18 @@ export function useMenuForm(options: UseMenuFormOptions) {
   const isEdit = ref(false);
   const form = ref<MenuAdminApi.SaveParams & { id?: string }>(createDefaultForm());
 
-  const availableTypes = computed(() => getAllowedTypes(form.value.parentId ?? null, treeData.value, t));
+  const availableTypes = computed(() => {
+    const parentId = form.value.parentId;
+    const resolvedParentId = parentId === ROOT_PARENT || parentId === undefined ? null : parentId;
+    return getAllowedTypes(resolvedParentId, treeData.value, t);
+  });
 
   const title = computed(() => {
     if (isEdit.value) return t('dev.menu.edit');
     const parentId = form.value.parentId;
-    const parentTitle = parentId ? findNodeTitle(treeData.value, parentId) : '';
-    const actionKey = parentId ? 'dev.menu.addChild' : 'dev.menu.addRoot';
+    const isRoot = !parentId || parentId === ROOT_PARENT;
+    const parentTitle = isRoot ? '' : findNodeTitle(treeData.value, parentId);
+    const actionKey = isRoot ? 'dev.menu.addRoot' : 'dev.menu.addChild';
     return `${t(actionKey)}${parentTitle ? `「${parentTitle}」` : ''}`;
   });
 
@@ -47,13 +51,13 @@ export function useMenuForm(options: UseMenuFormOptions) {
     isEdit.value = false;
     const allowed = getAllowedTypes(parentId, treeData.value, t);
     const defaultType = allowed[0]?.value ?? 1;
-    form.value = { ...createDefaultForm(), parentId, type: defaultType };
+    form.value = { ...createDefaultForm(), parentId: parentId ?? ROOT_PARENT, type: defaultType };
     visible.value = true;
   }
 
   function openEdit(item: MenuAdminApi.MenuItem) {
     isEdit.value = true;
-    form.value = { ...item };
+    form.value = { ...item, parentId: item.parentId ?? ROOT_PARENT };
     visible.value = true;
   }
 
@@ -90,11 +94,15 @@ export function useMenuForm(options: UseMenuFormOptions) {
 
     loading.value = true;
     try {
-      if (isEdit.value && form.value.id) {
-        await updateMenuApi(form.value as MenuAdminApi.SaveParams & { id: string });
+      const submitData = {
+        ...form.value,
+        parentId: form.value.parentId === ROOT_PARENT ? null : form.value.parentId,
+      };
+      if (isEdit.value && submitData.id) {
+        await updateMenuApi(submitData as MenuAdminApi.SaveParams & { id: string });
         message.success(t('dev.menu.updateSuccess'));
       } else {
-        await createMenuApi(form.value);
+        await createMenuApi(submitData);
         message.success(t('dev.menu.createSuccess'));
       }
       await reload();

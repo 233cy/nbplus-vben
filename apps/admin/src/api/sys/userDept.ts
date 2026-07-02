@@ -3,13 +3,13 @@ import { requestClient } from '#/api/request';
 export namespace DeptApi {
   export interface DeptItem {
     id: string;
-    parentId: string | null;
+    parentId: null | string;
     name: string;
-    code: string | null;
+    code: null | string;
     sort: number;
-    leaderId: string | null;
-    phone: string | null;
-    email: string | null;
+    leaderId: null | string;
+    phone: null | string;
+    email: null | string;
     status: number;
     createdAt: number;
     updatedAt: number;
@@ -18,14 +18,14 @@ export namespace DeptApi {
 
   export interface DeptOption {
     id: string;
-    parentId: string | null;
+    parentId: null | string;
     name: string;
-    code: string | null;
+    code: null | string;
   }
 
   export interface SaveParams {
     id?: string;
-    parentId?: string | null;
+    parentId?: null | string;
     name: string;
     code?: string;
     leaderId?: string;
@@ -40,7 +40,7 @@ export namespace DeptApi {
   }
 }
 
-const BASE = '/admin/sys/dept';
+const BASE = '/admin/sys/user-dept';
 
 export function getDeptTreeApi() {
   return requestClient.get<DeptApi.DeptItem[]>(`${BASE}/tree`);

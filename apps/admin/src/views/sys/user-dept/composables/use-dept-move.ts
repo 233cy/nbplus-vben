@@ -1,10 +1,10 @@
-import type { DeptApi } from '#/api/sys/dept';
+import type { DeptApi } from '#/api/sys/userDept';
 
 import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { updateDeptApi } from '#/api/sys/dept';
+import { updateDeptApi } from '#/api/sys/userDept';
 
 import { buildParentTreeData, ROOT_PARENT } from '../data';
 
@@ -23,7 +23,7 @@ export function useDeptMove(options: UseDeptMoveOptions) {
   const moveParentId = ref<string>(ROOT_PARENT);
 
   const treeSelectData = computed(() => [
-    { label: t('sys.dept.rootLevel'), value: ROOT_PARENT, children: [] },
+    { label: t('sys.user-dept.rootLevel'), value: ROOT_PARENT, children: [] },
     ...buildParentTreeData(treeData.value, moveItem.value?.id),
   ]);
 
@@ -40,7 +40,7 @@ export function useDeptMove(options: UseDeptMoveOptions) {
     try {
       const parentId = moveParentId.value === ROOT_PARENT ? null : moveParentId.value;
       await updateDeptApi({ ...moveItem.value, parentId });
-      message.success(t('sys.dept.moveSuccess'));
+      message.success(t('sys.user-dept.moveSuccess'));
       visible.value = false;
       await reload();
     } finally {
