@@ -3,20 +3,18 @@ import type { MenuAdminApi } from '#/api/sys/menuAdmin';
 
 import { CheckboxGroup, Form, FormItem, Input, Modal } from 'ant-design-vue';
 
-const props = defineProps<{
-  visible: boolean;
-  loading: boolean;
+defineProps<{
   genItem: MenuAdminApi.MenuItem | null;
-  genPrefix: string;
-  genSelected: string[];
+  loading: boolean;
   permissionOptions: { label: string; value: string }[];
+  visible: boolean;
 }>();
 
 const emit = defineEmits<{
-  'update:visible': [visible: boolean];
+  submit: [];
   'update:genPrefix': [value: string];
   'update:genSelected': [value: string[]];
-  submit: [];
+  'update:visible': [visible: boolean];
 }>();
 
 const showVisible = defineModel<boolean>('visible', { required: true });
@@ -35,17 +33,17 @@ function handleCancel() {
 <template>
   <Modal
     v-model:open="showVisible"
-    :title="$t('dev.menu.permission.generateTitle', { title: genItem?.title ?? '' })"
+    :title="$t('sys.menu.permission.generateTitle', { title: genItem?.title ?? '' })"
     :confirm-loading="loading"
     width="480px"
     @ok="handleOk"
     @cancel="handleCancel"
   >
     <Form layout="vertical" class="mt-4">
-      <FormItem :label="$t('dev.menu.fields.permission')" required>
-        <Input v-model:value="genPrefix" :placeholder="$t('dev.menu.placeholder.permissionPrefix')" />
+      <FormItem :label="$t('sys.menu.fields.permission')" required>
+        <Input v-model:value="genPrefix" :placeholder="$t('sys.menu.placeholder.permissionPrefix')" />
       </FormItem>
-      <FormItem :label="$t('dev.menu.permission.standardPermissions')" required>
+      <FormItem :label="$t('sys.menu.permission.standardPermissions')" required>
         <CheckboxGroup v-model:value="genSelected" :options="permissionOptions" />
       </FormItem>
     </Form>

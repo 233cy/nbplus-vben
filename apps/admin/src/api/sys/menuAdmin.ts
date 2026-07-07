@@ -7,6 +7,8 @@ export namespace MenuAdminApi {
   export interface MenuItem {
     id: string;
     parentId: null | string;
+    treePath: string;
+    level: number;
     type: MenuType;
     title: string;
     name: string;
@@ -19,8 +21,8 @@ export namespace MenuAdminApi {
     permission: string;
     sort: number;
     badge: string;
-    badgeType: '' | 'dot' | 'normal';
-    badgeVariants: 'default' | 'destructive' | 'primary' | 'success' | 'warning' | '';
+    badgeType: '' | 'dot' | 'normal' | 'off';
+    badgeVariants: '' | 'default' | 'destructive' | 'primary' | 'success' | 'warning';
     isHidden: boolean;
     isHideChildren: boolean;
     isHideBreadcrumb: boolean;
@@ -28,6 +30,9 @@ export namespace MenuAdminApi {
     isKeepAlive: boolean;
     isAffixTab: boolean;
     status: 1 | 2;
+    createdAt?: number;
+    updatedAt?: number;
+    hasChild?: boolean;
     children?: MenuItem[];
   }
 
@@ -46,8 +51,8 @@ export namespace MenuAdminApi {
     permission?: string;
     sort?: number;
     badge?: string;
-    badgeType?: '' | 'dot' | 'normal';
-    badgeVariants?: 'default' | 'destructive' | 'primary' | 'success' | 'warning' | '';
+    badgeType?: '' | 'dot' | 'normal' | 'off';
+    badgeVariants?: '' | 'default' | 'destructive' | 'primary' | 'success' | 'warning';
     isHidden?: boolean;
     isHideChildren?: boolean;
     isHideBreadcrumb?: boolean;
@@ -58,8 +63,16 @@ export namespace MenuAdminApi {
   }
 }
 
-export function getMenuListApi() {
-  return requestClient.get<MenuAdminApi.MenuItem[]>('/admin/sys/menu/list');
+export function getMenuTreeApi(params?: { keyword?: string; status?: number }) {
+  return requestClient.get<MenuAdminApi.MenuItem[]>('/admin/sys/menu/tree', { params });
+}
+
+export function getMenuListApi(params: { keyword?: string; page?: number; pageSize?: number; parentId?: string; status?: number }) {
+  return requestClient.get('/admin/sys/menu/list', { params });
+}
+
+export function getMenuDetailApi(id: string) {
+  return requestClient.get<MenuAdminApi.MenuItem>('/admin/sys/menu/detail', { params: { id } });
 }
 
 export function createMenuApi(data: MenuAdminApi.SaveParams) {
@@ -82,6 +95,10 @@ export function sortMenuApi(items: { id: string; sort: number }[]) {
   return requestClient.put('/admin/sys/menu/sort', { items });
 }
 
+export function inlineUpdateMenuApi(id: string, field: string, value: any) {
+  return requestClient.put('/admin/sys/menu/inline-update', { id, field, value });
+}
+
 export function batchCreateMenuApi(items: MenuAdminApi.SaveParams[]) {
   return requestClient.post<{ created: MenuAdminApi.MenuItem[]; skipped: string[] }>('/admin/sys/menu/batch-create', { items });
 }
@@ -94,8 +111,4 @@ export interface ControllerMethodItem {
 
 export function getControllerMethodsApi(prefix: string) {
   return requestClient.post<ControllerMethodItem[]>('/admin/sys/menu/controller-methods', { prefix });
-}
-
-export function toggleMenuApi(id: string, field: 'isAffixTab' | 'isHidden' | 'isKeepAlive' | 'status', value: boolean | number) {
-  return requestClient.put('/admin/sys/menu/toggle', { id, [field]: value });
 }

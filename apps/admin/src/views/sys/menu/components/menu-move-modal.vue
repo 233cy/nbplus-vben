@@ -3,19 +3,17 @@ import type { MenuAdminApi } from '#/api/sys/menuAdmin';
 
 import { Modal, TreeSelect } from 'ant-design-vue';
 
-import { ROOT_PARENT } from '../data';
-
-const props = defineProps<{
-  visible: boolean;
+defineProps<{
   loading: boolean;
   moveItem: MenuAdminApi.MenuItem | null;
-  treeData: { label: string; value: string; children: any[] }[];
+  treeData: { children: any[]; label: string; value: string }[];
+  visible: boolean;
 }>();
 
 const emit = defineEmits<{
-  'update:visible': [visible: boolean];
-  'update:moveParentId': [value: string];
   submit: [];
+  'update:moveParentId': [value: string];
+  'update:visible': [visible: boolean];
 }>();
 
 const showVisible = defineModel<boolean>('visible', { required: true });
@@ -33,19 +31,14 @@ function handleCancel() {
 <template>
   <Modal
     v-model:open="showVisible"
-    :title="$t('dev.menu.moveTitle', { title: moveItem?.title ?? '' })"
+    :title="$t('sys.menu.moveTitle', { title: moveItem?.title ?? '' })"
     :confirm-loading="loading"
     width="400px"
     @ok="handleOk"
     @cancel="handleCancel"
   >
     <div class="py-4">
-      <TreeSelect
-        v-model:value="moveParentId"
-        :tree-data="treeData"
-        tree-default-expand-all
-        class="w-full"
-      />
+      <TreeSelect v-model:value="moveParentId" :tree-data="treeData" tree-default-expand-all class="w-full" />
     </div>
   </Modal>
 </template>

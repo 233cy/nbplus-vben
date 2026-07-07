@@ -6,7 +6,7 @@ import { computed, ref } from 'vue';
 import { message } from 'ant-design-vue';
 
 import { createCurdMenuApi } from '#/api/dev/curdAdmin';
-import { getMenuListApi } from '#/api/sys/menuAdmin';
+import { getMenuTreeApi } from '#/api/sys/menuAdmin';
 import { $t } from '#/locales';
 
 import { buildMenuPath, createDefaultMenuForm } from '../data';
@@ -93,7 +93,7 @@ export function useMenuForm() {
       menuIcon: 'lucide:table-2',
       menuSort: 0,
     };
-    const tree = await getMenuListApi();
+    const tree = await getMenuTreeApi();
     menuTreeFlat.value = flattenDirTree(tree);
     menuTreeData.value = [{ id: '__root__', title: $t('dev.curd.menu.root'), path: '', type: 1, children: filterDirTree(tree) }];
     visible.value = true;

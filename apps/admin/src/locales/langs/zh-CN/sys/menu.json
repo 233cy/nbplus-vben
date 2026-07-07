@@ -59,7 +59,7 @@
     "disabled": "禁用"
   },
   "badgeType": {
-    "none": "不显示",
+    "off": "关闭",
     "dot": "圆点",
     "normal": "文字"
   },

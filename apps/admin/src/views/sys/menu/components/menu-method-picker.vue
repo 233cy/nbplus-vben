@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import { Button, Form, FormItem, Input, Modal, Select } from 'ant-design-vue';
 
-const props = defineProps<{
-  visible: boolean;
+defineProps<{
   loading: boolean;
-  controllerPrefix: string;
-  permissionPrefix: string;
   methods: { label: string; value: string }[];
-  selected: string;
 }>();
 
 const emit = defineEmits<{
-  'update:visible': [visible: boolean];
+  pick: [];
+  scan: [];
   'update:controllerPrefix': [value: string];
   'update:permissionPrefix': [value: string];
   'update:selected': [value: string];
-  scan: [];
-  pick: [];
+  'update:visible': [visible: boolean];
 }>();
 
 const showVisible = defineModel<boolean>('visible', { required: true });
@@ -38,29 +34,23 @@ function handleCancel() {
 </script>
 
 <template>
-  <Modal
-    v-model:open="showVisible"
-    :title="$t('dev.menu.permission.pickTitle')"
-    width="560px"
-    @ok="handleOk"
-    @cancel="handleCancel"
-  >
+  <Modal v-model:open="showVisible" :title="$t('sys.menu.permission.pickTitle')" width="560px" @ok="handleOk" @cancel="handleCancel">
     <Form layout="vertical" class="mt-4">
-      <FormItem :label="$t('dev.menu.permission.controllerPrefix')" required>
+      <FormItem :label="$t('sys.menu.permission.controllerPrefix')" required>
         <div class="flex gap-2">
-          <Input v-model:value="controllerPrefix" :placeholder="$t('dev.menu.placeholder.controllerPrefix')" class="flex-1" />
-          <Button :loading="loading" @click="handleScan">{{ $t('dev.menu.permission.scan') }}</Button>
+          <Input v-model:value="controllerPrefix" :placeholder="$t('sys.menu.placeholder.controllerPrefix')" class="flex-1" />
+          <Button :loading="loading" @click="handleScan">{{ $t('sys.menu.permission.scan') }}</Button>
         </div>
       </FormItem>
-      <FormItem :label="$t('dev.menu.permission.permissionPrefix')">
-        <Input v-model:value="permissionPrefix" :placeholder="$t('dev.menu.placeholder.permissionPrefix')" />
+      <FormItem :label="$t('sys.menu.permission.permissionPrefix')">
+        <Input v-model:value="permissionPrefix" :placeholder="$t('sys.menu.placeholder.permissionPrefix')" />
       </FormItem>
-      <FormItem :label="$t('dev.menu.permission.method')">
+      <FormItem :label="$t('sys.menu.permission.method')">
         <Select
           v-model:value="selected"
           :loading="loading"
           :options="methods"
-          :placeholder="$t('dev.menu.permission.methodPlaceholder')"
+          :placeholder="$t('sys.menu.permission.methodPlaceholder')"
           class="w-full"
           show-search
           option-filter-prop="label"
