@@ -79,10 +79,6 @@ export function batchDeleteStorageApi(ids: string[]) {
   return requestClient.delete(`${BASE}/batch-delete`, { data: { ids } });
 }
 
-export function toggleStorageApi(id: string, status: number) {
-  return requestClient.put(`${BASE}/toggle`, { id, status });
-}
-
 export function setDefaultStorageApi(id: string) {
   return requestClient.put(`${BASE}/set-default`, { id });
 }

@@ -25,14 +25,34 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
+function buildUserOrgValue(data?: UserApi.UserItem): UserApi.UserOrgValue {
+  if (!data) {
+    return {};
+  }
+
+  return {
+    deptId: data.deptId,
+    dutyId: data.dutyId,
+    deptDuties: data.deptDuties || [],
+  };
+}
+
 const [Drawer, drawerApi] = useVbenDrawer({
   async onConfirm() {
     const { valid } = await formApi.validate();
     if (!valid) return;
-    const values = await formApi.getValues<UserApi.SaveParams>();
+    const values = await formApi.getValues<UserApi.SaveParams & { userOrg?: UserApi.UserOrgValue }>();
+    const { userOrg, ...rest } = values;
+    const payload: UserApi.SaveParams = {
+      ...rest,
+      deptId: userOrg?.deptId,
+      dutyId: userOrg?.dutyId,
+      deptDuties: userOrg?.deptDuties,
+    };
+
     drawerApi.lock();
     try {
-      await (rowId.value ? updateUserApi({ id: rowId.value, ...values }) : createUserApi(values));
+      await (rowId.value ? updateUserApi({ id: rowId.value, ...payload }) : createUserApi(payload));
       emit('success');
       drawerApi.close();
     } finally {
@@ -47,7 +67,10 @@ const [Drawer, drawerApi] = useVbenDrawer({
       if (data?.id) {
         rowId.value = data.id;
         await nextTick();
-        formApi.setValues(data);
+        formApi.setValues({
+          ...data,
+          userOrg: buildUserOrgValue(data),
+        });
       } else {
         rowId.value = undefined;
       }
@@ -57,10 +80,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 </script>
 
 <template>
-  <Drawer
-    :title="isReadonly ? $t('sys.user.detail') : rowId ? $t('sys.user.edit') : $t('sys.user.create')"
-    :show-confirm-button="!isReadonly && (!!rowId ? canUpdate : true)"
-  >
+  <Drawer :title="isReadonly ? $t('sys.user.detail') : rowId ? $t('sys.user.edit') : $t('sys.user.create')" :show-confirm-button="!isReadonly && (!!rowId ? canUpdate : true)">
     <Form :disabled="isReadonly" />
   </Drawer>
 </template>

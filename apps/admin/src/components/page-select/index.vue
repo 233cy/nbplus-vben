@@ -22,23 +22,41 @@ interface RowType {
 
 const props = withDefaults(
   defineProps<{
+    /**
+     * 树形模式下父子节点是否独立勾选，默认读取 config.checkStrictly
+     * 传入该 prop 时优先级高于 config 中的配置
+     */
+    checkStrictly?: boolean;
     /** 选择器配置：预设 key 或完整配置对象 */
     config: OptionsType | PageSelectConfig;
     /** 页面回显区域最多展示的 Tag 数量，默认 20 */
     maxEchoCount?: number;
-    modelValue?: string;
+    /** 绑定值：逗号分隔字符串或字符串数组 */
+    modelValue?: string | string[];
+    /**
+     * 是否多选，默认读取 config.multiple
+     * 传入该 prop 时优先级高于 config 中的配置
+     */
+    multiple?: boolean;
     /** 是否展示页面回显区域（slot 区域），默认 true */
     showEchoSlot?: boolean;
+    /**
+     * 响应的数据格式
+     * - string：逗号分隔字符串（默认）
+     * - array：字符串数组
+     */
+    valueType?: 'array' | 'string';
   }>(),
   {
     maxEchoCount: 20,
     modelValue: '',
     showEchoSlot: true,
+    valueType: 'string',
   },
 );
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', v: string): void;
+  (e: 'update:modelValue', v: string | string[]): void;
   (e: 'confirm', v: any[]): void;
 }>();
 
@@ -53,11 +71,12 @@ const api = computed(() => resolvedConfig.value.api);
 const columns = computed(() => resolvedConfig.value.columns);
 const labelField = computed(() => String(resolvedConfig.value.labelField));
 const valueField = computed(() => String(resolvedConfig.value.valueField));
-const multiple = computed(() => resolvedConfig.value.multiple ?? true);
+const multiple = computed(() => props.multiple ?? resolvedConfig.value.multiple ?? true);
 const pageSize = computed(() => resolvedConfig.value.pageSize ?? 10);
 const title = computed(() => resolvedConfig.value.title ?? $t('common.selectData'));
 const tree = computed(() => resolvedConfig.value.type === 'tree');
-const checkStrictly = computed(() => resolvedConfig.value.checkStrictly ?? false);
+const checkStrictly = computed(() => props.checkStrictly ?? resolvedConfig.value.checkStrictly ?? false);
+const treeDefaultExpandAll = computed(() => resolvedConfig.value.treeDefaultExpandAll ?? false);
 const parentField = computed(() => (resolvedConfig.value.parentField as string) ?? 'parentId');
 
 /* ============================================================
@@ -76,14 +95,34 @@ const tempSelectedMap = ref(new Map());
 const uncheckedInSession = ref(new Set<string>());
 // 默认 IDS 经过用户增减后的完整集合，用于"只看已选"查询和最终提交
 const processedSelectedIds = ref(new Set<string>());
+// 树形模式下是否已经加载过数据，避免每次打开弹窗都重新加载导致展开状态丢失
+const hasTreeLoaded = ref(false);
+// 树形模式下用户手动展开的节点 ID 集合，用于下次打开时恢复展开状态
+const expandedIds = ref(new Set<string>());
 
 function initProcessedSelectedIds() {
   processedSelectedIds.value = new Set(allSelectedIds.value.map(String));
 }
 
 const allSelectedIds = computed(() => {
-  return props.modelValue ? props.modelValue.split(',').filter(Boolean) : [];
+  const raw = props.modelValue;
+  if (Array.isArray(raw)) {
+    return raw.map(String).filter(Boolean);
+  }
+  if (typeof raw === 'string' && raw) {
+    return raw.split(',').filter(Boolean);
+  }
+  return [];
 });
+
+/** 统一输出 modelValue：按 valueType 决定返回逗号字符串还是数组 */
+function emitModelValue(ids: string[]) {
+  if (props.valueType === 'array') {
+    emit('update:modelValue', [...ids]);
+  } else {
+    emit('update:modelValue', ids.join(','));
+  }
+}
 
 const exceededEchoCount = computed(() => Math.max(0, allSelectedIds.value.length - props.maxEchoCount));
 
@@ -100,7 +139,7 @@ function clearAll() {
   selectedMap.value.clear();
   tempSelectedMap.value.clear();
   echoPage.value = 1;
-  emit('update:modelValue', '');
+  emitModelValue([]);
 }
 
 /* ============================================================
@@ -194,6 +233,7 @@ const gridOptions: VxeGridProps<RowType> = {
         rowField: 'id',
         parentField: 'parentId',
         showLine: true,
+        expandAll: treeDefaultExpandAll.value,
       }
     : undefined,
 
@@ -218,11 +258,41 @@ const gridOptions: VxeGridProps<RowType> = {
     } as any,
   },
 
+  toolbarConfig: {
+    refresh: true,
+  },
+
   columns: displayColumns.value as any,
 };
 
+/** 从 vxe-table 实际勾选记录重建选中集合（仅树形父子联动场景使用） */
+async function syncSelectionFromGrid() {
+  const table = gridApi.grid;
+  if (!table) return;
+
+  await nextTick();
+  const checkedRows = tree.value ? flattenTree(table.getCheckboxRecords()) : [...table.getCheckboxRecords(), ...table.getCheckboxReserveRecords()];
+  const checkedIds = new Set(checkedRows.map((r: any) => String(r[valueField.value])));
+
+  // 移除已不在勾选记录中的 ID
+  for (const key of processedSelectedIds.value) {
+    if (!checkedIds.has(String(key))) {
+      processedSelectedIds.value.delete(key);
+      tempSelectedMap.value.delete(key);
+    }
+  }
+
+  // 补充勾选记录中的 ID
+  checkedRows.forEach((r: any) => {
+    const checkedId = String(r[valueField.value]);
+    processedSelectedIds.value.add(checkedId);
+    tempSelectedMap.value.set(r[valueField.value], r);
+    uncheckedInSession.value.delete(checkedId);
+  });
+}
+
 const gridEvents = {
-  checkboxChange: ({ row, checked }: any) => {
+  checkboxChange: async ({ row, checked }: any) => {
     const id = String(row[valueField.value]);
     if (checked) {
       tempSelectedMap.value.set(row[valueField.value], row);
@@ -232,6 +302,12 @@ const gridEvents = {
       tempSelectedMap.value.delete(row[valueField.value]);
       processedSelectedIds.value.delete(id);
       uncheckedInSession.value.add(id);
+    }
+
+    // 仅树形父子联动场景下，vxe-table 内部联动状态更新有延迟，
+    // 需要等状态稳定后以实际勾选记录为准重建选中集合。
+    if (tree.value && !checkStrictly.value) {
+      await syncSelectionFromGrid();
     }
   },
 
@@ -244,12 +320,19 @@ const gridEvents = {
     uncheckedInSession.value.clear();
   },
 
-  checkboxAll: ({ checked }: any) => {
+  checkboxAll: async ({ checked }: any) => {
     if (!multiple.value) return;
 
     const table = gridApi.grid;
     if (!table) return;
 
+    // 树形父子联动场景下，以 vxe-table 实际勾选记录为准重建集合
+    if (tree.value && !checkStrictly.value) {
+      await syncSelectionFromGrid();
+      return;
+    }
+
+    // 非联动场景按原来的简单逻辑处理
     const rows = tree.value ? flattenTree(table.getTableData().fullData) : table.getTableData().fullData;
     rows.forEach((r: any) => {
       const id = String(r[valueField.value]);
@@ -267,6 +350,17 @@ const gridEvents = {
 
   // proxy 查询完成后，自动勾选已选项（与手动调用形成双保险）
   'proxy-query': () => handleQuerySuccess(),
+
+  // 记录树形节点展开状态，下次打开时恢复
+  'toggle-tree-expand': ({ row, expanded }: any) => {
+    if (!tree.value) return;
+    const id = String(row[valueField.value]);
+    if (expanded) {
+      expandedIds.value.add(id);
+    } else {
+      expandedIds.value.delete(id);
+    }
+  },
 };
 
 const [Grid, gridApi] = useVbenVxeGrid({ gridOptions, gridEvents } as any);
@@ -285,6 +379,31 @@ function flattenTree(rows: any[]): any[] {
   return result;
 }
 
+/** 恢复树形展开状态（依据用户上次手动展开的节点） */
+async function restoreTreeExpand() {
+  if (!tree.value) return;
+  const table = gridApi.grid as any;
+  if (!table) return;
+
+  await nextTick();
+
+  // 首次加载且没有用户展开记录时，按 treeDefaultExpandAll 统一展开/折叠
+  if (expandedIds.value.size === 0) {
+    table.setAllTreeExpand(treeDefaultExpandAll.value);
+    return;
+  }
+
+  // 有展开记录时，先统一折叠，再展开用户之前展开过的节点
+  table.setAllTreeExpand(false);
+  const rows = flattenTree(table.getTableData().fullData);
+  rows.forEach((r: any) => {
+    const id = String(r[valueField.value]);
+    if (expandedIds.value.has(id)) {
+      table.setTreeExpand(r, true);
+    }
+  });
+}
+
 /* ============================================================
    搜索
    ============================================================ */
@@ -297,6 +416,21 @@ async function handleSearch() {
   }
   await gridApi.query();
   await handleQuerySuccess();
+}
+
+/** 手动刷新表格数据 */
+async function handleRefresh() {
+  if (tree.value) {
+    // 树形模式刷新时重新请求接口，并标记为已加载
+    hasTreeLoaded.value = false;
+    await gridApi.query();
+    hasTreeLoaded.value = true;
+  } else {
+    await gridApi.query();
+  }
+  await nextTick();
+  await handleQuerySuccess();
+  await restoreTreeExpand();
 }
 
 function filterTreeRows(rows: any[], keyword: string): any[] {
@@ -405,24 +539,41 @@ async function openModal() {
   modalApi.open();
   await nextTick();
 
-  // 重置表格分页到第一页，防止 gridApi.query() 沿用上次关闭时的页码
-  const table = gridApi.grid as any;
-  if (table) {
-    const pager = table.getPager ? table.getPager() : null;
-    if (pager) {
-      pager.currentPage = 1;
+  // 树形模式已加载过数据则不再重新 query，避免重置展开状态；
+  // 首次打开或普通 list 模式仍需 query。
+  if (tree.value && hasTreeLoaded.value) {
+    const table = gridApi.grid as any;
+    if (table && treeRows.value.length > 0) {
+      await table.loadData(treeRows.value);
+      await nextTick();
+      await handleQuerySuccess();
+      await restoreTreeExpand();
     }
-  }
+  } else {
+    // 重置表格分页到第一页，防止 gridApi.query() 沿用上次关闭时的页码
+    const table = gridApi.grid as any;
+    if (table) {
+      const pager = table.getPager ? table.getPager() : null;
+      if (pager) {
+        pager.currentPage = 1;
+      }
+    }
 
-  await gridApi.query();
-  await nextTick();
-  await handleQuerySuccess();
+    await gridApi.query();
+    if (tree.value) {
+      hasTreeLoaded.value = true;
+    }
+    await nextTick();
+    await handleQuerySuccess();
+    await restoreTreeExpand();
+  }
 }
 
 /* ============================================================
    只看已选切换时自动刷新表格
    ============================================================ */
 watch(showSelectedOnly, async () => {
+  if (tree.value) return;
   await gridApi.query();
   await handleQuerySuccess();
 });
@@ -437,7 +588,7 @@ async function confirmSelect() {
   const rows = [...tempSelectedMap.value.values()].filter((row: any) => finalIdSet.has(String(row[valueField.value])));
   const ids = [...finalIdSet];
 
-  emit('update:modelValue', ids.join(','));
+  emitModelValue(ids);
   emit('confirm', rows);
 
   // 确认后取变动后的最新 modelValue 前 maxEchoCount 个 ID 重新反显给 slot
@@ -576,7 +727,19 @@ onMounted(async () => {
           {{ $t('common.search.button') }}
         </Button>
 
-        <Switch v-if="allSelectedIds.length > 0" v-model:checked="showSelectedOnly" :checked-children="$t('common.selectedOnly')" :un-checked-children="$t('common.allData')" />
+        <Switch
+          v-if="allSelectedIds.length > 0 && !tree"
+          v-model:checked="showSelectedOnly"
+          :checked-children="$t('common.selectedOnly')"
+          :un-checked-children="$t('common.allData')"
+        />
+
+        <Button @click="handleRefresh">
+          <template #icon>
+            <IconifyIcon icon="mdi:refresh" class="text-base" />
+          </template>
+          {{ $t('common.refresh') }}
+        </Button>
       </div>
 
       <Grid />

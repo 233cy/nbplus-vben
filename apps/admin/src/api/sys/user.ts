@@ -1,6 +1,21 @@
 import { requestClient } from '#/api/request';
 
 export namespace UserApi {
+  export interface UserOrgItem {
+    deptId: string;
+    deptName?: string;
+    dutyId: string;
+    dutyName?: string;
+    isMain: 1 | 2;
+    sort?: number;
+  }
+
+  export interface UserOrgValue {
+    deptId?: string;
+    dutyId?: string;
+    deptDuties?: UserOrgItem[];
+  }
+
   export interface UserItem {
     id: string;
     username: string;
@@ -11,9 +26,11 @@ export namespace UserApi {
     phone: string;
     totpSecret: string;
     gender: string;
-    deptId: number;
-    positionId: string;
-    positionName: string;
+    deptId?: string;
+    dutyId?: string;
+    deptName?: string;
+    dutyName?: string;
+    deptDuties?: UserOrgItem[];
     lastLoginIp: string;
     lastLoginTime: string;
     createdAt: number;
@@ -44,7 +61,9 @@ export namespace UserApi {
     email?: string;
     phone?: string;
     gender?: string;
-    positionId?: string;
+    deptId?: string;
+    dutyId?: string;
+    deptDuties?: UserOrgItem[];
   }
 
   export interface PageParams {

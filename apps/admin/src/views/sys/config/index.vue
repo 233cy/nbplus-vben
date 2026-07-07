@@ -16,13 +16,13 @@ const groups = useConfigGroups();
 const items = useConfigItems(groups.activeGroup);
 
 const activeGroupLabel = computed(() => {
-  const found = groups.groups.value.find((g) => g.groups === groups.activeGroup.value);
+  const found = groups.groups.value.find(g => g.groups === groups.activeGroup.value);
   return found ? groups.groupsLabel(found) : groups.activeGroup.value;
 });
 
 /** 当前分组在所有分组中的索引位置 */
 const activeGroupIndex = computed(() => {
-  return groups.groups.value.findIndex((g) => g.groups === groups.activeGroup.value);
+  return groups.groups.value.findIndex(g => g.groups === groups.activeGroup.value);
 });
 
 function copyKey(key: string) {
@@ -45,12 +45,7 @@ onMounted(() => {
 
 <template>
   <div class="flex h-full gap-4 p-4">
-    <GroupMenu
-      :groups="groups.groups.value"
-      :active-group="groups.activeGroup.value"
-      @update:active-group="groups.activeGroup.value = $event"
-      @reload="groups.loadGroups()"
-    />
+    <GroupMenu :groups="groups.groups.value" :active-group="groups.activeGroup.value" @update:active-group="groups.activeGroup.value = $event" @reload="groups.loadGroups()" />
 
     <div class="flex flex-1 flex-col overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
       <!-- 顶部操作 -->

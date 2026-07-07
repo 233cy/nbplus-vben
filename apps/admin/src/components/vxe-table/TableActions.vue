@@ -34,36 +34,41 @@ const props = withDefaults(
     actions: TableActionItem[];
     /** 直接平铺展示的最大数量，默认 2 */
     maxVisible?: number;
-    /** 平铺按钮是否显示文字，默认 true */
-    showLabel?: boolean;
     /** 「更多」按钮是否显示文字，默认 false */
     moreShowLabel?: boolean;
+    /**
+     * 二次确认弹窗的弹出位置
+     * 表格右侧固定列建议传 'topRight'，让弹窗向左展开，避免贴边被挤压
+     */
+    popconfirmPlacement?: 'bottom' | 'bottomLeft' | 'bottomRight' | 'left' | 'leftBottom' | 'leftTop' | 'right' | 'rightBottom' | 'rightTop' | 'top' | 'topLeft' | 'topRight';
+    /** 平铺按钮是否显示文字，默认 true */
+    showLabel?: boolean;
   }>(),
   {
     maxVisible: 2,
-    showLabel: true,
     moreShowLabel: false,
+    popconfirmPlacement: 'topRight',
+    showLabel: true,
   },
 );
 
-const visibleActions = computed(() =>
-  props.actions.filter((item) => !item.hidden).slice(0, props.maxVisible),
-);
+const visibleActions = computed(() => props.actions.filter(item => !item.hidden).slice(0, props.maxVisible));
 
-const moreActions = computed(() =>
-  props.actions.filter((item) => !item.hidden).slice(props.maxVisible),
-);
+const moreActions = computed(() => props.actions.filter(item => !item.hidden).slice(props.maxVisible));
 
 const hasMore = computed(() => moreActions.value.length > 0);
 
 const onMenuClick: MenuProps['onClick'] = ({ key }) => {
-  const item = props.actions.find((action) => action.key === key);
+  const item = props.actions.find(action => action.key === key);
   if (!item || item.disabled) return;
   item.onClick();
 };
 
 // Popconfirm 弹层挂到 body，避免固定操作列窄容器把确认文字挤成竖排
 const getPopupContainer = () => document.body;
+
+// 增强自动位置调整：当按钮靠近视口边缘时，弹窗主动翻转方向，避免被挤压
+const autoAdjustOverflow = { adjustX: 1 as const, adjustY: 1 as const };
 </script>
 
 <template>
@@ -72,38 +77,18 @@ const getPopupContainer = () => document.body;
       <Popconfirm
         v-if="item.confirmTitle"
         :title="item.confirmTitle"
+        :auto-adjust-overflow="autoAdjustOverflow"
         :get-popup-container="getPopupContainer"
+        :placement="props.popconfirmPlacement"
         @confirm="item.onClick"
       >
-        <Button
-          type="link"
-          size="small"
-          :danger="item.danger"
-          :disabled="item.disabled"
-          :loading="item.loading"
-        >
-          <IconifyIcon
-            v-if="item.icon"
-            :icon="item.icon"
-            :class="{ 'size-4': true, 'mr-1': showLabel }"
-          />
+        <Button type="link" size="small" :danger="item.danger" :disabled="item.disabled" :loading="item.loading">
+          <IconifyIcon v-if="item.icon" :icon="item.icon" class="size-4" :class="{ 'mr-1': showLabel }" />
           <span v-if="showLabel">{{ item.label }}</span>
         </Button>
       </Popconfirm>
-      <Button
-        v-else
-        type="link"
-        size="small"
-        :danger="item.danger"
-        :disabled="item.disabled"
-        :loading="item.loading"
-        @click="item.onClick"
-      >
-        <IconifyIcon
-          v-if="item.icon"
-          :icon="item.icon"
-          :class="{ 'size-4': true, 'mr-1': showLabel }"
-        />
+      <Button v-else type="link" size="small" :danger="item.danger" :disabled="item.disabled" :loading="item.loading" @click="item.onClick">
+        <IconifyIcon v-if="item.icon" :icon="item.icon" class="size-4" :class="{ 'mr-1': showLabel }" />
         <span v-if="showLabel">{{ item.label }}</span>
       </Button>
     </template>
@@ -111,24 +96,13 @@ const getPopupContainer = () => document.body;
     <Dropdown v-if="hasMore">
       <Button type="link" size="small">
         <span v-if="moreShowLabel" class="mr-1">{{ $t('common.more') }}</span>
-        <IconifyIcon
-          :icon="moreShowLabel ? 'lucide:chevron-down' : 'lucide:more-horizontal'"
-          class="size-4"
-        />
+        <IconifyIcon :icon="moreShowLabel ? 'lucide:chevron-down' : 'lucide:more-horizontal'" class="size-4" />
       </Button>
       <template #overlay>
-        <Menu style="min-width: 120px;" @click="onMenuClick">
-          <MenuItem
-            v-for="item in moreActions"
-            :key="item.key"
-            :disabled="item.disabled"
-          >
+        <Menu style="min-width: 120px" @click="onMenuClick">
+          <MenuItem v-for="item in moreActions" :key="item.key" :disabled="item.disabled">
             <span :class="{ 'text-red-500': item.danger }">
-              <IconifyIcon
-                v-if="item.icon"
-                :icon="item.icon"
-                class="mr-1 size-4"
-              />
+              <IconifyIcon v-if="item.icon" :icon="item.icon" class="mr-1 size-4" />
               {{ item.label }}
             </span>
           </MenuItem>

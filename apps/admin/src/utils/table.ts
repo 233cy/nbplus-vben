@@ -28,16 +28,27 @@ export function useTableDelete(apiFn: (id: string) => Promise<any>, id: string, 
  * @param apiFn     批量操作接口，接收 id 数组
  * @param ids       要操作的 id 列表
  * @param action    操作名称，如"删除"、"停用"、"归档"，用于提示文案
- * @param onSuccess 操作成功后的回调
- * @param options   可选配置：countdown 倒计时秒数（默认 3）
+ * @param onSuccess 操作成功后的回调，可接收接口返回结果
+ * @param options   可选配置
+ * @param options.countdown   倒计时秒数（默认 3）
+ * @param options.formatSuccess 自定义成功提示文案，可返回字符串或 { type, content }
  */
-export function useTableBatchAction(apiFn: (ids: string[]) => Promise<any>, ids: string[], action: string, onSuccess: () => void, options: { countdown?: number } = {}) {
+export function useTableBatchAction(
+  apiFn: (ids: string[]) => Promise<any>,
+  ids: string[],
+  action: string,
+  onSuccess: (result?: any) => void,
+  options: {
+    countdown?: number;
+    formatSuccess?: (result: any) => string | { content: string; type: 'error' | 'success' | 'warning' };
+  } = {},
+) {
   if (ids.length === 0) {
     message.warning($t('common.batchActionNoSelection'));
     return;
   }
 
-  const { countdown = 3 } = options;
+  const { countdown = 3, formatSuccess } = options;
   let remaining = countdown;
 
   const modal = Modal.confirm({
@@ -48,9 +59,11 @@ export function useTableBatchAction(apiFn: (ids: string[]) => Promise<any>, ids:
     onOk: async () => {
       const hide = message.loading({ content: $t('common.batchActionProcessing', { action }), duration: 0, key: 'batch-action' });
       try {
-        await apiFn(ids);
-        message.success({ content: $t('common.batchActionSuccess', { action }), key: 'batch-action' });
-        onSuccess();
+        const result = await apiFn(ids);
+        const successMsg = formatSuccess ? formatSuccess(result) : $t('common.batchActionSuccess', { action });
+        const msg = typeof successMsg === 'string' ? { type: 'success' as const, content: successMsg } : successMsg;
+        message[msg.type]({ content: msg.content, key: 'batch-action' });
+        onSuccess(result);
       } catch {
         hide();
       }

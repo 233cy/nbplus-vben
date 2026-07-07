@@ -55,7 +55,7 @@ async function openEdit(record: StorageApi.StorageItem) {
 }
 
 async function handleToggle(record: StorageApi.StorageItem, checked: boolean) {
-  await storage.toggle(record.id, checked ? 1 : 2);
+  await storage.updateStatus(record.id, checked ? 1 : 2);
   gridApi.query();
 }
 

@@ -22,6 +22,7 @@ async function initSetupVbenForm() {
         Radio: 'checked',
         Switch: 'checked',
         Upload: 'fileList',
+        UserOrgEditor: 'modelValue',
       },
     },
     defineRules: {

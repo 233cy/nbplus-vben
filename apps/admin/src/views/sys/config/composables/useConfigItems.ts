@@ -6,7 +6,7 @@ import { ref, watch } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { deleteConfigApi, getConfigListApi, saveConfigApi, toggleConfigApi } from '#/api/sys/config';
+import { deleteConfigApi, getConfigListApi, saveConfigApi, updateConfigApi } from '#/api/sys/config';
 import { $t } from '#/locales';
 
 /**
@@ -52,13 +52,13 @@ export function useConfigItems(activeGroup: Ref<string>) {
   }
 
   async function handleMarkAsSys(item: ConfigApi.ConfigItem) {
-    await toggleConfigApi(item.id, 'isSys');
+    await updateConfigApi({ id: item.id, isSys: true });
     message.success($t('sys.config.markAsSysSuccess'));
     await loadConfig();
   }
 
   async function handleTogglePublic(item: ConfigApi.ConfigItem) {
-    await toggleConfigApi(item.id, 'isPublic');
+    await updateConfigApi({ id: item.id, isPublic: !item.isPublic, label: item.label });
     await loadConfig();
   }
 

@@ -9,7 +9,7 @@ import {
   getStorageDriverSchemasApi,
   getStorageListApi,
   setDefaultStorageApi,
-  toggleStorageApi,
+  updateStorageApi,
 } from '#/api/sys/storage';
 import { $t } from '#/locales';
 
@@ -35,8 +35,8 @@ export function useStorage() {
     return getStorageDetailApi(id);
   }
 
-  async function toggle(id: string, status: number) {
-    await toggleStorageApi(id, status);
+  async function updateStatus(id: string, status: number) {
+    await updateStorageApi({ id, status });
   }
 
   async function setDefault(id: string) {
@@ -55,7 +55,7 @@ export function useStorage() {
     loadList,
     loadSchemas,
     detail,
-    toggle,
+    updateStatus,
     setDefault,
     batchDelete,
   };

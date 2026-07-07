@@ -4,8 +4,8 @@ import type { UserApi } from '#/api/sys/user';
 import { deleteUserApi, inlineUpdateUserApi } from '#/api/sys/user';
 import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
-import { formatUnixTime } from '#/utils/time';
 import { useTableDelete } from '#/utils/table';
+import { formatUnixTime } from '#/utils/time';
 
 /**
  * 用户列表列定义
@@ -98,15 +98,16 @@ export function useColumns(
       sortable: true,
     },
     {
-      field: 'deptId',
+      field: 'deptName',
       title: $t('sys.user.fields.deptId'),
-      minWidth: 120,
+      minWidth: 160,
+      formatter: ({ row }: { row: UserApi.UserItem }) => row.deptName || '-',
     },
     {
-      field: 'positionId',
-      title: $t('sys.user.fields.positionId'),
+      field: 'dutyName',
+      title: $t('sys.user.fields.dutyId'),
       minWidth: 140,
-      formatter: ({ row }: { row: UserApi.UserItem }) => row.positionName || '-',
+      formatter: ({ row }: { row: UserApi.UserItem }) => row.dutyName || '-',
     },
     {
       field: 'lastLoginIp',

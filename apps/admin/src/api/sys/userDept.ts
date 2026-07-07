@@ -4,6 +4,8 @@ export namespace DeptApi {
   export interface DeptItem {
     id: string;
     parentId: null | string;
+    path?: string;
+    level?: number;
     name: string;
     code: null | string;
     sort: number;
@@ -16,11 +18,21 @@ export namespace DeptApi {
     children?: DeptItem[];
   }
 
-  export interface DeptOption {
-    id: string;
-    parentId: null | string;
-    name: string;
-    code: null | string;
+  export interface DeptListParams {
+    parentId?: string;
+    keyword?: string;
+    status?: number;
+    page?: number;
+    pageSize?: number;
+  }
+
+  export interface DeptListResult {
+    items: DeptItem[];
+    meta: {
+      currentPage: number;
+      perPage: number;
+      total: number;
+    };
   }
 
   export interface SaveParams {
@@ -33,17 +45,25 @@ export namespace DeptApi {
     email?: string;
     status?: number;
   }
-
-  export interface SortItem {
-    id: string;
-    sort: number;
-  }
 }
 
 const BASE = '/admin/sys/user-dept';
 
 export function getDeptTreeApi() {
   return requestClient.get<DeptApi.DeptItem[]>(`${BASE}/tree`);
+}
+
+export function getDeptListApi(params: DeptApi.DeptListParams = {}) {
+  return requestClient.get<DeptApi.DeptListResult>(`${BASE}/list`, {
+    params: {
+      parentId: params.parentId ?? '0',
+      ...params,
+    },
+  });
+}
+
+export function getDeptDetailApi(id: string) {
+  return requestClient.get<DeptApi.DeptItem>(`${BASE}/detail`, { params: { id } });
 }
 
 export function createDeptApi(data: DeptApi.SaveParams) {
@@ -54,20 +74,10 @@ export function updateDeptApi(data: DeptApi.SaveParams & { id: string }) {
   return requestClient.put<DeptApi.DeptItem>(`${BASE}/update`, data);
 }
 
+export function inlineUpdateDeptApi(id: string, field: string, value: any) {
+  return requestClient.put<DeptApi.DeptItem>(`${BASE}/inline-update`, { id, field, value });
+}
+
 export function deleteDeptApi(id: string) {
   return requestClient.delete(`${BASE}/delete`, { data: { id } });
-}
-
-export function batchDeleteDeptApi(ids: string[]) {
-  return requestClient.delete<{ deleted: string[]; skipped: string[] }>(`${BASE}/batch-delete`, {
-    data: { ids },
-  });
-}
-
-export function toggleDeptApi(id: string, status: number) {
-  return requestClient.put<DeptApi.DeptItem>(`${BASE}/toggle`, { id, status });
-}
-
-export function sortDeptApi(items: DeptApi.SortItem[]) {
-  return requestClient.put(`${BASE}/sort`, { items });
 }

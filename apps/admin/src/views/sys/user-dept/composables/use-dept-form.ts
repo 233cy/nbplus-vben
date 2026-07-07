@@ -4,42 +4,81 @@ import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { createDeptApi, updateDeptApi } from '#/api/sys/userDept';
+import { createDeptApi, getDeptDetailApi, getDeptTreeApi, updateDeptApi } from '#/api/sys/userDept';
 
-import { createDefaultForm, findDeptTitle } from '../data';
+import { buildParentTreeData, createDefaultForm, findTreePathKeys } from '../data';
 
 export interface UseDeptFormOptions {
-  treeData: { value: DeptApi.DeptItem[] };
-  reload: () => Promise<void>;
+  gridApi: any;
   t: (key: string) => string;
 }
 
 export function useDeptForm(options: UseDeptFormOptions) {
-  const { treeData, reload, t } = options;
+  const { gridApi, t } = options;
 
   const visible = ref(false);
   const loading = ref(false);
   const isEdit = ref(false);
+  const isDetail = ref(false);
+  const treeLoading = ref(false);
   const form = ref<DeptApi.SaveParams & { id?: string }>(createDefaultForm());
+  const treeData = ref<{ children: any[]; label: string; value: string }[]>([]);
+  const treeExpandedKeys = ref<string[]>([]);
 
   const title = computed(() => {
+    if (isDetail.value) return t('sys.user-dept.detail');
     if (isEdit.value) return t('sys.user-dept.edit');
-    const parentId = form.value.parentId;
-    const parentTitle = parentId ? findDeptTitle(treeData.value, parentId) : '';
-    const actionKey = parentId ? 'sys.user-dept.addChild' : 'sys.user-dept.addRoot';
-    return `${t(actionKey)}${parentTitle ? `「${parentTitle}」` : ''}`;
+    return form.value.parentId ? t('sys.user-dept.addChild') : t('sys.user-dept.addRoot');
   });
 
+  async function loadTreeData(excludeId?: string) {
+    treeLoading.value = true;
+    try {
+      const tree = await getDeptTreeApi();
+      treeData.value = buildParentTreeData(tree, excludeId);
+      // 默认展开到当前选中的父节点（包含父节点本身），没有选中则不展开
+      const parentId = form.value.parentId;
+      treeExpandedKeys.value = parentId ? findTreePathKeys(treeData.value, parentId) : [];
+    } finally {
+      treeLoading.value = false;
+    }
+  }
+
+  async function loadDetailForm(id: string) {
+    const detail = await getDeptDetailApi(id);
+    form.value = {
+      id: detail.id,
+      parentId: detail.parentId,
+      name: detail.name,
+      code: detail.code ?? undefined,
+      leaderId: detail.leaderId ?? undefined,
+      phone: detail.phone ?? undefined,
+      email: detail.email ?? undefined,
+      status: detail.status,
+    };
+  }
+
   function openCreate(parentId: null | string = null) {
+    isDetail.value = false;
     isEdit.value = false;
     form.value = { ...createDefaultForm(), parentId };
+    loadTreeData();
     visible.value = true;
   }
 
-  function openEdit(item: DeptApi.DeptItem) {
+  async function openEdit(id: string) {
+    isDetail.value = false;
     isEdit.value = true;
-    const { children: _children, ...rest } = item;
-    form.value = { ...rest };
+    await loadDetailForm(id);
+    await loadTreeData(id);
+    visible.value = true;
+  }
+
+  async function openDetail(id: string) {
+    isDetail.value = true;
+    isEdit.value = false;
+    await loadDetailForm(id);
+    await loadTreeData(id);
     visible.value = true;
   }
 
@@ -51,7 +90,39 @@ export function useDeptForm(options: UseDeptFormOptions) {
     return true;
   }
 
+  async function refreshParent() {
+    const grid = gridApi.grid as any;
+    if (!grid) return;
+
+    const parentId = form.value.parentId;
+    if (parentId) {
+      const parentRow = grid.getRowById?.(parentId);
+      if (parentRow) {
+        // 新增/编辑都会让父节点至少存在一个子节点，确保 hasChild 为 true，
+        // 以通过 reloadTreeExpand 的懒加载门控（此前删除最后一个子节点可能将其置为 false）
+        parentRow.hasChild = true;
+        await grid.reloadTreeExpand?.(parentRow);
+        // 显式恢复/保持父节点展开状态，确保展示新增/编辑后的子节点
+        if (!grid.isTreeExpandByRow?.(parentRow)) {
+          await grid.setTreeExpand?.([parentRow], true);
+        }
+        return;
+      }
+    }
+
+    // 根节点或父节点未加载时：保存展开状态 → 刷新 → 恢复展开状态
+    const expandedRows = grid.getTreeExpandRecords?.() ?? [];
+    await gridApi.query();
+    if (expandedRows.length > 0) {
+      await grid.setTreeExpand?.(expandedRows, true);
+    }
+  }
+
   async function handleSubmit() {
+    if (isDetail.value) {
+      visible.value = false;
+      return;
+    }
     if (!validate()) return;
 
     loading.value = true;
@@ -74,7 +145,7 @@ export function useDeptForm(options: UseDeptFormOptions) {
         await createDeptApi(data);
         message.success(t('sys.user-dept.createSuccess'));
       }
-      await reload();
+      await refreshParent();
       visible.value = false;
     } finally {
       loading.value = false;
@@ -85,10 +156,15 @@ export function useDeptForm(options: UseDeptFormOptions) {
     visible,
     loading,
     isEdit,
+    isDetail,
+    treeLoading,
     form,
+    treeData,
+    treeExpandedKeys,
     title,
     openCreate,
     openEdit,
+    openDetail,
     handleSubmit,
   };
 }

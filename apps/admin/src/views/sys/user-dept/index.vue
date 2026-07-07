@@ -1,103 +1,123 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import type { DeptApi } from '#/api/sys/userDept';
 
 import { Page } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
 
-import { Button, Input, Space } from 'ant-design-vue';
+import { Button, Space } from 'ant-design-vue';
 
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { getDeptListApi } from '#/api/sys/userDept';
 import { $t } from '#/locales';
 
 import DeptForm from './components/dept-form.vue';
 import DeptMoveModal from './components/dept-move-modal.vue';
-import DeptTree from './components/dept-tree.vue';
-import { useDeptForm, useDeptMove, useDeptTree } from './composables/index.js';
+import { useDept, useDeptForm, useDeptMove } from './composables';
+import { useColumns } from './schema/columns';
+import { useGridFormSchema } from './schema/grid';
 
-const tree = useDeptTree({ t: $t });
-const form = useDeptForm({ treeData: tree.treeData, reload: tree.loadDepts, t: $t });
-const move = useDeptMove({ treeData: tree.treeData, reload: tree.loadDepts, t: $t });
+// 先创建 grid，后续把操作回调挂到 handlers 上
+const handlers = {
+  onAddChild: (_row: DeptApi.DeptItem) => {},
+  onDelete: (_row: DeptApi.DeptItem) => {},
+  onDetail: (_row: DeptApi.DeptItem) => {},
+  onEdit: (_row: DeptApi.DeptItem) => {},
+  onMove: (_row: DeptApi.DeptItem) => {},
+  onRefreshNode: async (_row: DeptApi.DeptItem) => {},
+  onToggleStatus: async (_row: DeptApi.DeptItem, _val: number) => {},
+};
 
-const checkedCount = computed(() => tree.checkedKeys.value.length);
+const [Grid, gridApi] = useVbenVxeGrid({
+  formOptions: {
+    collapsed: false,
+    schema: useGridFormSchema(),
+    submitOnChange: false,
+  },
+  gridOptions: {
+    columns: useColumns(handlers),
+    height: 'auto',
+    keepSource: true,
+    proxyConfig: {
+      ajax: {
+        queryApi: getDeptListApi,
+      } as any,
+    },
+    rowConfig: { keyField: 'id' },
+    treeConfig: {
+      showLine: false,
+      showRootLine: true,
+      transform: true,
+      rowField: 'id',
+      parentField: 'parentId',
+      hasChildField: 'hasChild',
+      lazy: true,
+      loadMethod: async ({ row }: { row: DeptApi.DeptItem }) => {
+        const { items } = await getDeptListApi({ parentId: row.id, pageSize: 1000 });
+        return items;
+      },
+    },
+    toolbarConfig: { custom: true, export: false, refresh: true, search: true, zoom: true },
+  },
+});
 
-// 页面初始化
-tree.loadDepts();
+const dept = useDept({ gridApi });
+const form = useDeptForm({ gridApi, t: $t });
+const move = useDeptMove({ gridApi, t: $t });
+
+handlers.onAddChild = (row: DeptApi.DeptItem) => form.openCreate(row.id);
+handlers.onDelete = dept.handleDelete;
+handlers.onDetail = (row: DeptApi.DeptItem) => form.openDetail(row.id);
+handlers.onEdit = (row: DeptApi.DeptItem) => form.openEdit(row.id);
+handlers.onMove = move.openMove;
+handlers.onRefreshNode = dept.handleRefreshNode;
+handlers.onToggleStatus = dept.handleToggleStatus;
 </script>
 
 <template>
   <Page auto-content-height>
-    <div class="flex h-full flex-col">
-      <!-- 顶部工具栏 -->
-      <div class="mb-4 flex items-center gap-4 rounded-[var(--radius)] border border-border bg-card p-4">
+    <DeptForm
+      v-model:form="form.form.value"
+      v-model:visible="form.visible.value"
+      :is-detail="form.isDetail.value"
+      :is-edit="form.isEdit.value"
+      :loading="form.loading.value"
+      :title="form.title.value"
+      :tree-data="form.treeData.value"
+      :tree-expanded-keys="form.treeExpandedKeys.value"
+      :tree-loading="form.treeLoading.value"
+      @submit="form.handleSubmit"
+    />
+
+    <DeptMoveModal
+      v-model:visible="move.visible.value"
+      v-model:move-parent-id="move.moveParentId.value"
+      :loading="move.loading.value"
+      :move-item="move.moveItem.value"
+      :tree-data="move.treeSelectData.value"
+      @submit="move.handleMove"
+    />
+
+    <Grid :table-title="$t('sys.user-dept.pageTitle')">
+      <template #toolbar-tools>
         <Space :size="8">
-          <Button @click="tree.expandAll">
+          <Button @click="dept.expandAll">
             <template #icon>
               <IconifyIcon icon="ant-design:node-expand-outlined" />
             </template>
             {{ $t('sys.user-dept.expandAll') }}
           </Button>
-          <Button @click="tree.collapseAll">
+          <Button @click="dept.collapseAll">
             <template #icon>
               <IconifyIcon icon="ant-design:node-collapse-outlined" />
             </template>
             {{ $t('sys.user-dept.collapseAll') }}
           </Button>
-          <Button :disabled="checkedCount === 0" danger @click="tree.handleBatchDelete">
-            <template #icon>
-              <IconifyIcon icon="ant-design:delete-outlined" />
-            </template>
-            {{ $t('sys.user-dept.batchDelete') }} {{ checkedCount > 0 ? `(${checkedCount})` : '' }}
-          </Button>
-          <Input v-model:value="tree.keyword.value" :placeholder="$t('sys.user-dept.searchPlaceholder')" allow-clear style="width: 240px">
-            <template #prefix>
-              <IconifyIcon icon="ant-design:search-outlined" class="text-gray-400" />
-            </template>
-          </Input>
           <Button type="primary" @click="form.openCreate()">
             <Plus class="size-4" />
             {{ $t('sys.user-dept.addRoot') }}
           </Button>
         </Space>
-      </div>
-
-      <!-- 部门树 -->
-      <DeptTree
-        class="flex-1 overflow-auto rounded-[var(--radius)] border border-border bg-card p-3"
-        :loading="tree.loading.value"
-        :tree-data="tree.filteredTreeData.value"
-        :expanded-keys="tree.expandedKeys.value"
-        :checked-keys="tree.checkedKeys.value"
-        :toggle-loading="tree.toggleLoading.value"
-        @update:expanded-keys="tree.expandedKeys.value = $event"
-        @update:checked-keys="tree.checkedKeys.value = $event"
-        @drop="tree.onDrop"
-        @toggle="tree.toggleNode"
-        @create="form.openCreate"
-        @edit="form.openEdit"
-        @delete="tree.handleDelete"
-        @move="move.openMove"
-        @toggle-status="tree.handleToggleStatus"
-      />
-
-      <!-- 新增/编辑弹窗 -->
-      <DeptForm
-        v-model:form="form.form.value"
-        v-model:visible="form.visible.value"
-        :loading="form.loading.value"
-        :is-edit="form.isEdit.value"
-        :title="form.title.value"
-        :tree-data="tree.treeData.value"
-        @submit="form.handleSubmit"
-      />
-
-      <!-- 移动节点弹窗 -->
-      <DeptMoveModal
-        v-model:visible="move.visible.value"
-        v-model:move-parent-id="move.moveParentId.value"
-        :loading="move.loading.value"
-        :move-item="move.moveItem.value"
-        :tree-data="move.treeSelectData.value"
-        @submit="move.handleMove"
-      />
-    </div>
+      </template>
+    </Grid>
   </Page>
 </template>

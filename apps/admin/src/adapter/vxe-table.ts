@@ -5,7 +5,6 @@ import type { ComponentType } from './component';
 
 import { h } from 'vue';
 
-import { IconifyIcon } from '@vben/icons';
 import { setupVbenVxeTable, useVbenVxeGrid as useGrid } from '@vben/plugins/vxe-table';
 import { get, isFunction } from '@vben/utils';
 
@@ -13,8 +12,8 @@ import { objectOmit } from '@vueuse/core';
 import { Button, Image, Switch, Tag } from 'ant-design-vue';
 
 import DictTag from '#/components/dict/DictTag.vue';
-import ImgPreview from '#/components/vxe-table/ImgPreview.vue';
 import CellInlineEdit from '#/components/vxe-table/CellInlineEdit.vue';
+import ImgPreview from '#/components/vxe-table/ImgPreview.vue';
 import TableActions from '#/components/vxe-table/TableActions.vue';
 import { $t } from '#/locales';
 import { useSiteStore } from '#/store/site';
@@ -42,6 +41,7 @@ setupVbenVxeTable({
           multiple: true,
         },
         align: 'center',
+        stripe: true,
         border: false,
         columnConfig: {
           resizable: true,
@@ -64,6 +64,10 @@ setupVbenVxeTable({
           },
           showActiveMsg: true,
           showResponseMsg: false,
+        },
+        rowConfig: {
+          isHover: true,
+          isCurrent: true,
         },
         round: true,
         showOverflow: true,
@@ -174,10 +178,11 @@ setupVbenVxeTable({
     /**
      * 表格行内操作按钮渲染器
      * 内部封装 TableActions 组件，统一操作列视觉与交互
-     * 用法：cellRender: { name: 'TableActions', attrs: { actions: [...], maxVisible, showLabel, moreShowLabel } }
+     * 用法：cellRender: { name: 'TableActions', attrs: { actions: [...], maxVisible, showLabel, moreShowLabel, popconfirmPlacement } }
      * actions 每项：{ key, label, icon?, danger?, hidden?, disabled?, loading?, confirmTitle?, onClick }
      *   - hidden / disabled / loading 支持 boolean 或 (row) => boolean
      *   - onClick 接收当前行参数 (row) => void
+     *   - popconfirmPlacement 用于表格右侧固定列传 'topRight'，避免贴边挤压
      */
     vxeUI.renderer.add('TableActions', {
       renderTableDefault({ attrs }, { row }) {
@@ -192,15 +197,16 @@ setupVbenVxeTable({
         return h(TableActions, {
           actions,
           maxVisible: attrs?.maxVisible,
-          showLabel: attrs?.showLabel,
           moreShowLabel: attrs?.moreShowLabel,
+          popconfirmPlacement: attrs?.popconfirmPlacement,
+          showLabel: attrs?.showLabel,
         }) as any;
       },
     });
 
     /**
      * 行内编辑渲染器
-     * 用法：cellRender: { name: 'CellInlineEdit', attrs: { type, apiFn, dictCode?, options?, disabled?, field? } }
+     * 用法：cellRender: { name: 'CellInlineEdit', attrs: { type, apiFn, afterSuccess?, dictCode?, options?, disabled?, field? } }
      * type: 'select' | 'input' | 'number'，默认 'select'
      */
     vxeUI.renderer.add('CellInlineEdit', {
@@ -213,6 +219,7 @@ setupVbenVxeTable({
           options: attrs?.options,
           apiFn: attrs?.apiFn,
           disabled: attrs?.disabled,
+          afterSuccess: attrs?.afterSuccess,
         }) as any;
       },
     });

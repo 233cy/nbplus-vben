@@ -11,10 +11,13 @@ import { stringToCode } from '#/utils/string-to-code';
 import { createDefaultForm, createStatusOptions } from '../data';
 
 const props = defineProps<{
+  isDetail: boolean;
   isEdit: boolean;
   loading: boolean;
   title: string;
-  treeData: DeptApi.DeptItem[];
+  treeData: { children: any[]; label: string; value: string }[];
+  treeExpandedKeys: string[];
+  treeLoading: boolean;
   visible: boolean;
 }>();
 
@@ -30,15 +33,10 @@ const form = defineModel<DeptApi.SaveParams & { id?: string }>('form', {
 
 const showVisible = computed({
   get: () => props.visible,
-  set: (val) => emit('update:visible', val),
+  set: val => emit('update:visible', val),
 });
 
 const statusOptions = createStatusOptions($t);
-
-const treeSelectData = computed(() => {
-  const excludeId = props.isEdit ? form.value.id : undefined;
-  return buildTreeData(props.treeData, excludeId);
-});
 
 function generateCodeFromName() {
   form.value.code = stringToCode(form.value.name ?? '');
@@ -49,23 +47,11 @@ function handleCancel() {
 }
 
 function handleOk() {
-  emit('submit');
-}
-
-function buildTreeData(
-  nodes: DeptApi.DeptItem[],
-  excludeId?: string,
-): { children: any[]; label: string; value: string }[] {
-  const result: { children: any[]; label: string; value: string }[] = [];
-  for (const node of nodes) {
-    if (node.id === excludeId) continue;
-    result.push({
-      label: `${node.name}${node.code ? `（${node.code}）` : ''}`,
-      value: node.id,
-      children: node.children?.length ? buildTreeData(node.children, excludeId) : [],
-    });
+  if (props.isDetail) {
+    handleCancel();
+    return;
   }
-  return result;
+  emit('submit');
 }
 </script>
 
@@ -74,35 +60,38 @@ function buildTreeData(
     v-model:open="showVisible"
     :title="title"
     :confirm-loading="loading"
-    :ok-text="$t('common.confirm')"
+    :ok-text="isDetail ? undefined : $t('common.confirm')"
     :cancel-text="$t('common.cancel')"
+    destroy-on-close
     @ok="handleOk"
     @cancel="handleCancel"
   >
+    <template v-if="isDetail" #footer>
+      <Button @click="handleCancel">{{ $t('common.cancel') }}</Button>
+    </template>
+
     <Form :model="form" layout="vertical" class="mt-4">
       <FormItem :label="$t('sys.user-dept.fields.parentId')">
         <TreeSelect
-          :value="form.parentId || ''"
-          :tree-data="[{ label: $t('sys.user-dept.rootLevel'), value: '', children: treeSelectData }]"
+          v-model:value="form.parentId"
+          :tree-data="treeData"
+          :loading="treeLoading"
+          :allow-clear="true"
+          :disabled="isDetail"
           :placeholder="$t('sys.user-dept.placeholder.parentId')"
-          allow-clear
-          tree-default-expand-all
+          :field-names="{ title: 'label', value: 'value', children: 'children' } as any"
+          :tree-default-expanded-keys="treeExpandedKeys"
           class="w-full"
-          @update:value="form.parentId = $event || null"
         />
       </FormItem>
 
       <FormItem :label="$t('sys.user-dept.fields.name')" required>
-        <Input v-model:value="form.name" :placeholder="$t('sys.user-dept.placeholder.name')" />
+        <Input v-model:value="form.name" :disabled="isDetail" :placeholder="$t('sys.user-dept.placeholder.name')" />
       </FormItem>
 
       <FormItem :label="$t('sys.user-dept.fields.code')">
-        <Input
-          v-model:value="form.code"
-          :placeholder="$t('sys.user-dept.placeholder.code')"
-          :disabled="isEdit"
-        >
-          <template v-if="!isEdit" #addonAfter>
+        <Input v-model:value="form.code" :disabled="isDetail || isEdit" :placeholder="$t('sys.user-dept.placeholder.code')">
+          <template v-if="!isEdit && !isDetail" #addonAfter>
             <Button type="link" size="small" @click="generateCodeFromName">
               {{ $t('sys.user-dept.generateCode') }}
             </Button>
@@ -112,19 +101,19 @@ function buildTreeData(
 
       <div class="grid grid-cols-2 gap-x-4">
         <FormItem :label="$t('sys.user-dept.fields.leaderId')">
-          <Input v-model:value="form.leaderId" :placeholder="$t('sys.user-dept.placeholder.leaderId')" />
+          <Input v-model:value="form.leaderId" :disabled="isDetail" :placeholder="$t('sys.user-dept.placeholder.leaderId')" />
         </FormItem>
         <FormItem :label="$t('sys.user-dept.fields.status')">
-          <Select v-model:value="form.status" :options="statusOptions" class="w-full" />
+          <Select v-model:value="form.status" :disabled="isDetail" :options="statusOptions" class="w-full" />
         </FormItem>
       </div>
 
       <div class="grid grid-cols-2 gap-x-4">
         <FormItem :label="$t('sys.user-dept.fields.phone')">
-          <Input v-model:value="form.phone" :placeholder="$t('sys.user-dept.placeholder.phone')" />
+          <Input v-model:value="form.phone" :disabled="isDetail" :placeholder="$t('sys.user-dept.placeholder.phone')" />
         </FormItem>
         <FormItem :label="$t('sys.user-dept.fields.email')">
-          <Input v-model:value="form.email" :placeholder="$t('sys.user-dept.placeholder.email')" />
+          <Input v-model:value="form.email" :disabled="isDetail" :placeholder="$t('sys.user-dept.placeholder.email')" />
         </FormItem>
       </div>
     </Form>

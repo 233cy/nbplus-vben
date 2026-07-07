@@ -113,6 +113,9 @@ async function handleSubmit() {
       <FormItem :label="$t('sys.storage.fields.sort')" name="sort">
         <InputNumber v-model:value="form.sort" class="w-full" :min="0" />
       </FormItem>
+      <FormItem :label="$t('sys.storage.fields.status')" name="status">
+        <Switch v-model:checked="form.status" :checkedValue="1" :unCheckedValue="2" />
+      </FormItem>
 
       <div class="mt-4 border-t pt-4">
         <h4 class="mb-2 font-medium">{{ $t('sys.storage.configForm') }}</h4>

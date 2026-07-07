@@ -19,6 +19,7 @@ interface InlineOption {
 }
 
 const props = defineProps<{
+  afterSuccess?: (row: Record<string, any>, field: string, value: any) => void;
   apiFn: (id: string, field: string, value: any) => Promise<any>;
   dictCode?: string;
   disabled?: ((row: Record<string, any>) => boolean) | boolean;
@@ -83,15 +84,21 @@ async function submit() {
   // eslint-disable-next-line vue/no-mutating-props
   props.row[props.field] = newValue;
   loading.value = true;
+  let success = false;
   try {
     await props.apiFn(props.row.id, props.field, newValue);
     editing.value = false;
+    success = true;
   } catch {
     // eslint-disable-next-line vue/no-mutating-props
     props.row[props.field] = oldValue;
     message.error('修改失败，请重试');
   } finally {
     loading.value = false;
+  }
+
+  if (success) {
+    props.afterSuccess?.(props.row, props.field, newValue);
   }
 }
 
@@ -117,14 +124,20 @@ async function onSelect(newValue: number | string) {
   // eslint-disable-next-line vue/no-mutating-props
   props.row[props.field] = newValue;
   loading.value = true;
+  let success = false;
   try {
     await props.apiFn(props.row.id, props.field, newValue);
+    success = true;
   } catch {
     // eslint-disable-next-line vue/no-mutating-props
     props.row[props.field] = oldValue;
     message.error('修改失败，请重试');
   } finally {
     loading.value = false;
+  }
+
+  if (success) {
+    props.afterSuccess?.(props.row, props.field, newValue);
   }
 }
 </script>

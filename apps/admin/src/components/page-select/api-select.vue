@@ -54,7 +54,7 @@ interface Props {
   checkStrictly?: boolean;
   /** 树形平级数据转树时的父节点字段，默认 parentId */
   parentField?: string;
-  /** 树形模式下是否默认展开全部节点，默认 true */
+  /** 树形模式下是否默认展开全部节点，默认 false */
   treeDefaultExpandAll?: boolean;
 }
 
@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
   autoSelect: false,
   showSearchButton: true,
   parentField: 'parentId',
-  treeDefaultExpandAll: true,
+  treeDefaultExpandAll: false,
   api: undefined,
   params: undefined,
   config: undefined,
@@ -384,6 +384,13 @@ watch(
   },
   { immediate: true },
 );
+
+defineExpose({
+  reload: () => fetchData(false),
+  get options() {
+    return options.value;
+  },
+});
 </script>
 
 <template>
@@ -400,6 +407,7 @@ watch(
     :on-search="showSearch ? handleSearch : undefined"
     @dropdown-visible-change="handleDropdownVisibleChange"
     @popup-scroll="handlePopupScroll"
+    style="min-width: 160px"
   >
     <template #suffixIcon>
       <IconifyIcon :class="loading ? 'animate-spin text-base' : 'text-base'" :icon="loading ? 'mdi:loading' : 'lucide:chevron-down'" />
@@ -433,6 +441,7 @@ watch(
     tree-node-filter-prop="label"
     @dropdown-visible-change="handleDropdownVisibleChange"
     @update:value="handleTreeValueUpdate"
+    style="min-width: 160px"
   >
     <template #suffixIcon>
       <IconifyIcon :class="loading ? 'animate-spin text-base' : 'text-base'" :icon="loading ? 'mdi:loading' : 'lucide:chevron-down'" />

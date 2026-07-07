@@ -4,33 +4,46 @@ import { computed, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import { updateDeptApi } from '#/api/sys/userDept';
+import { getDeptTreeApi, updateDeptApi } from '#/api/sys/userDept';
 
 import { buildParentTreeData, ROOT_PARENT } from '../data';
 
 export interface UseDeptMoveOptions {
-  treeData: { value: DeptApi.DeptItem[] };
-  reload: () => Promise<void>;
+  gridApi: any;
   t: (key: string) => string;
 }
 
 export function useDeptMove(options: UseDeptMoveOptions) {
-  const { treeData, reload, t } = options;
+  const { gridApi, t } = options;
 
   const visible = ref(false);
   const loading = ref(false);
   const moveItem = ref<DeptApi.DeptItem | null>(null);
   const moveParentId = ref<string>(ROOT_PARENT);
+  const treeData = ref<DeptApi.DeptItem[]>([]);
 
-  const treeSelectData = computed(() => [
-    { label: t('sys.user-dept.rootLevel'), value: ROOT_PARENT, children: [] },
-    ...buildParentTreeData(treeData.value, moveItem.value?.id),
-  ]);
+  const treeSelectData = computed(() => [{ label: t('sys.user-dept.rootLevel'), value: ROOT_PARENT, children: [] }, ...buildParentTreeData(treeData.value, moveItem.value?.id)]);
+
+  async function loadTreeData() {
+    treeData.value = await getDeptTreeApi();
+  }
 
   function openMove(item: DeptApi.DeptItem) {
     moveItem.value = item;
     moveParentId.value = item.parentId ?? ROOT_PARENT;
+    loadTreeData();
     visible.value = true;
+  }
+
+  async function refreshRoot() {
+    const grid = gridApi.grid as any;
+    if (!grid) return;
+
+    const expandedRows = grid.getTreeExpandRecords?.() ?? [];
+    await gridApi.query();
+    if (expandedRows.length > 0) {
+      await grid.setTreeExpand?.(expandedRows, true);
+    }
   }
 
   async function handleMove() {
@@ -39,10 +52,10 @@ export function useDeptMove(options: UseDeptMoveOptions) {
     loading.value = true;
     try {
       const parentId = moveParentId.value === ROOT_PARENT ? null : moveParentId.value;
-      await updateDeptApi({ ...moveItem.value, parentId });
+      await updateDeptApi({ ...moveItem.value, parentId } as DeptApi.SaveParams & { id: string });
       message.success(t('sys.user-dept.moveSuccess'));
       visible.value = false;
-      await reload();
+      await refreshRoot();
     } finally {
       loading.value = false;
     }

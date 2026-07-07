@@ -59,20 +59,10 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
       },
     },
     {
-      component: 'ApiSelect',
-      fieldName: 'positionId',
-      label: $t('sys.user.fields.positionId'),
-      componentProps: {
-        config: 'post',
-      },
-    },
-    {
-      component: 'ApiSelect',
-      fieldName: 'deptId',
-      label: $t('sys.user.fields.deptId'),
-      componentProps: {
-        config: 'dept',
-      },
+      component: 'UserOrgEditor',
+      fieldName: 'userOrg',
+      hideLabel: true,
+      formItemClass: 'col-span-full',
     },
   ];
 }

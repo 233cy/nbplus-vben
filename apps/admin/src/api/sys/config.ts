@@ -81,10 +81,6 @@ export function sortConfigApi(items: { id: string; sort: number }[]) {
   return requestClient.put('/admin/sys/config/sort', { items });
 }
 
-export function toggleConfigApi(id: string, field: 'isPublic' | 'isSys') {
-  return requestClient.put<ConfigApi.ConfigItem>('/admin/sys/config/toggle', { id, field });
-}
-
 export function deleteConfigApi(id: string) {
   return requestClient.delete('/admin/sys/config/delete', { data: { id } });
 }

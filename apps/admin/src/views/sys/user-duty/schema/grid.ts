@@ -33,14 +33,13 @@ export function useGridFormSchema(): VbenFormSchema[] {
       },
     },
     {
-      component: 'ApiSelect',
+      component: 'PageSelect',
       fieldName: 'deptId',
       label: $t('sys.user-duty.fields.deptId'),
       componentProps: {
         config: 'dept',
         multiple: true,
-        checkStrictly: true,
-        allowClear: true,
+        checkStrictly: false,
       },
     },
     {

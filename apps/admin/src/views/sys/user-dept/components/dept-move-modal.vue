@@ -6,7 +6,7 @@ import { Modal, TreeSelect } from 'ant-design-vue';
 const props = defineProps<{
   loading: boolean;
   moveItem: DeptApi.DeptItem | null;
-  treeData: { label: string; value: string; children: any[] }[];
+  treeData: { children: any[]; label: string; value: string }[];
   visible: boolean;
 }>();
 

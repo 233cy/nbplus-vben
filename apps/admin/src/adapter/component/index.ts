@@ -46,6 +46,9 @@ const DictRadio = defineAsyncComponent(() => import('#/components/dict/DictRadio
 const CaptchaPinInput = defineAsyncComponent(() => import('#/components/captcha-pin-input/index.vue'));
 const PasswordInput = defineAsyncComponent(() => import('#/components/password-input/index.vue'));
 const ApiSelect = defineAsyncComponent(() => import('#/components/page-select/api-select.vue'));
+const PageSelect = defineAsyncComponent(() => import('#/components/page-select/index.vue'));
+
+const UserOrgEditor = defineAsyncComponent(() => import('#/views/sys/user/components/user-org-editor.vue'));
 
 const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select', componentProps: Recordable<any> = {}) => {
   return defineComponent({
@@ -92,6 +95,7 @@ export type ComponentType =
   | 'InputPassword'
   | 'MediaUpload'
   | 'Mentions'
+  | 'PageSelect'
   | 'PasswordInput'
   | 'PrimaryButton'
   | 'Radio'
@@ -105,6 +109,7 @@ export type ComponentType =
   | 'TimePicker'
   | 'TreeSelect'
   | 'Upload'
+  | 'UserOrgEditor'
   | BaseFormComponentType;
 
 async function initComponentAdapter() {
@@ -113,6 +118,9 @@ async function initComponentAdapter() {
     // Button: () =>
     // import('xxx').then((res) => res.Button),
     ApiSelect: withDefaultPlaceholder(ApiSelect, 'select'),
+    PageSelect: (props, { attrs, slots }) => {
+      return h(PageSelect, { ...props, attrs, showEchoSlot: false }, slots);
+    },
     ApiTreeSelect: withDefaultPlaceholder(ApiComponent, 'select', {
       component: TreeSelect,
       fieldNames: { label: 'label', value: 'value', children: 'children' },
@@ -155,6 +163,7 @@ async function initComponentAdapter() {
     TimePicker,
     TreeSelect: withDefaultPlaceholder(TreeSelect, 'select'),
     Upload,
+    UserOrgEditor,
     Edit,
     AvatarUpload,
     ImageUpload,

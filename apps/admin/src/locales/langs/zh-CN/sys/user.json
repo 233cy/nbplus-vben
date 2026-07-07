@@ -16,10 +16,26 @@
     "phone": "手机号码",
     "totpSecret": "启用TOTP",
     "gender": "性别",
-    "deptId": "主属部门ID",
-    "positionId": "主身份职位ID",
+    "deptId": "主属部门",
+    "dutyId": "主属职务",
+    "deptName": "部门",
+    "dutyName": "职务",
+    "userOrg": "任职信息",
+    "isMain": "是否主职",
     "lastLoginIp": "最后登录IP",
     "lastLoginTime": "最后登录时间",
     "onlineCount": "在线设备"
+  },
+  "userOrg": {
+    "add": "添加任职",
+    "addTitle": "添加任职",
+    "listTitle": "任职列表",
+    "setMain": "设为主职",
+    "main": "主职",
+    "secondary": "兼职",
+    "empty": "暂无任职信息",
+    "deptRequired": "请先选择部门",
+    "dutyRequired": "请选择职务",
+    "duplicate": "该部门与职务组合已存在"
   }
 }
