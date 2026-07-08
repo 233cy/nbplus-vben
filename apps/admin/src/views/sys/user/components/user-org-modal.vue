@@ -104,7 +104,6 @@ function handleOk() {
 
 // 组件首次挂载时初始化空白状态
 reset();
-
 </script>
 
 <template>
@@ -120,26 +119,11 @@ reset();
 
     <Form layout="vertical" class="mt-4">
       <FormItem :label="$t('sys.user.fields.deptId')" required>
-        <ApiSelect
-          ref="deptSelectRef"
-          v-model:value="deptId"
-          config="dept"
-          :immediate="false"
-          :placeholder="$t('ui.placeholder.select')"
-          class="w-full"
-        />
+        <ApiSelect ref="deptSelectRef" v-model:value="deptId" config="dept" :immediate="false" :placeholder="$t('ui.placeholder.select')" class="w-full" />
       </FormItem>
 
       <FormItem :label="$t('sys.user.fields.dutyId')" required>
-        <ApiSelect
-          ref="dutySelectRef"
-          v-model:value="dutyId"
-          config="post"
-          :immediate="false"
-          :params="postParams"
-          :placeholder="$t('ui.placeholder.select')"
-          class="w-full"
-        />
+        <ApiSelect ref="dutySelectRef" v-model:value="dutyId" config="post" :immediate="false" :params="postParams" :placeholder="$t('ui.placeholder.select')" class="w-full" />
       </FormItem>
     </Form>
   </Modal>

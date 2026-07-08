@@ -309,6 +309,92 @@ import { useTableDelete } from '#/utils/table';
 
 **特殊场景**：若操作列需要依赖组件内的响应式状态（如 `loading` 随 `ref` 实时变化），可在 `.vue` 模板 slot 中直接使用 `TableActions` 组件。
 
+## 列表详情与抽屉规范
+
+标准 vxe-table 列表页的新增/编辑/详情，**默认使用右侧抽屉（Drawer）承载表单**，与 `sys/user`、`sys/role` 等模块保持一致：
+
+- **默认右侧抽屉**：列表页的主表单（新增、编辑、详情）统一走 `useVbenDrawer`，`placement` 为右侧。不要随意改用中间弹窗（Modal）或把抽屉放到其他位置。
+- **详情入口**：列表中代表业务主键的字段（如名称、标题、用户名、编码等，通常放在第一列但不是必须）使用 `CellLink` 渲染，点击后打开详情抽屉。
+- **详情抽屉只有取消按钮**：详情模式下抽屉不展示确认按钮；表单控件不强制禁用，与列表/编辑态保持一致的展示效果，仅通过缺失确认按钮避免误提交。
+- **抽屉中的内容弹窗**：抽屉内部若需要二次交互（如选择器、确认框），可再使用弹窗；但列表到表单的层级默认是抽屉。
+
+> 这不是硬性强制标准，而是项目默认规范。若因业务需要（如复杂多步骤表单、全屏编辑）必须改用其他形态，应在实现前说明理由。
+
+**标准用法：标题/名称列作为详情入口**
+
+```ts
+const canDetail = hasAccessByCodes(['xxx:xxx:detail']);
+
+{
+  field: 'title',
+  title: $t('xxx.fields.title'),
+  minWidth: 160,
+  cellRender: {
+    name: 'CellLink',
+    attrs: {
+      hasAccess: canDetail,
+      onClick: (row: XxxItem) => onDetailClick(row.id),
+    },
+  },
+}
+```
+
+**标准抽屉表单结构**
+
+```vue
+<script setup lang="ts">
+const emit = defineEmits<{ success: [] }>();
+
+const isReadonly = ref(false);
+const rowId = ref<string | undefined>();
+const isEdit = computed(() => !!rowId.value);
+
+const [Form, formApi] = useVbenForm({
+  schema: computed(() => useFormSchema(isEdit.value)) as any,
+  showDefaultActions: false,
+});
+
+const [Drawer, drawerApi] = useVbenDrawer({
+  async onConfirm() {
+    const { valid } = await formApi.validate();
+    if (!valid) return;
+    const values = await formApi.getValues<XxxSaveParams>();
+    drawerApi.lock();
+    try {
+      await (rowId.value ? updateXxxApi({ id: rowId.value, ...values }) : createXxxApi(values));
+      emit('success');
+      drawerApi.close();
+    } finally {
+      drawerApi.unlock();
+    }
+  },
+  async onOpenChange(isOpen) {
+    if (!isOpen) return;
+    const data = drawerApi.getData<XxxItem & { readonly?: boolean }>();
+    formApi.resetForm();
+    isReadonly.value = data?.readonly ?? false;
+    if (data?.id) {
+      rowId.value = data.id;
+      await nextTick();
+      const detail = await getXxxDetailApi(data.id);
+      formApi.setValues(detail);
+    } else {
+      rowId.value = undefined;
+    }
+  },
+});
+</script>
+
+<template>
+  <Drawer
+    :title="isReadonly ? $t('xxx.detail') : rowId ? $t('xxx.edit') : $t('xxx.create')"
+    :show-confirm-button="!isReadonly && (!!rowId ? canUpdate : true)"
+  >
+    <Form :disabled="isReadonly" />
+  </Drawer>
+</template>
+```
+
 ## 批量操作规范
 
 所有涉及多条记录的批量操作（批量删除、批量更新字段、批量启用/禁用等）必须保持**统一的交互行为**：

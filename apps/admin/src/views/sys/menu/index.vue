@@ -1,28 +1,30 @@
 <script setup lang="ts">
 import type { MenuAdminApi } from '#/api/sys/menuAdmin';
 
-import { computed } from 'vue';
+import { ref } from 'vue';
 
-import { Page } from '@vben/common-ui';
+import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
 
 import { Button, Space } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getMenuListApi } from '#/api/sys/menuAdmin';
+import { batchDeleteMenuApi, getMenuListApi } from '#/api/sys/menuAdmin';
+import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
+import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
 import MenuForm from './components/menu-form.vue';
-import MenuMethodPicker from './components/menu-method-picker.vue';
 import MenuMoveModal from './components/menu-move-modal.vue';
 import MenuPermissionModal from './components/menu-permission-modal.vue';
-import { useMenu, useMenuForm, useMenuMove, useMenuPermission } from './composables';
+import { useMenu, useMenuMove, useMenuPermission } from './composables';
 import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
 
 const handlers = {
   onAddChild: (_row: MenuAdminApi.MenuItem) => {},
   onDelete: (_row: MenuAdminApi.MenuItem) => {},
+  onDetail: (_row: MenuAdminApi.MenuItem) => {},
   onEdit: (_row: MenuAdminApi.MenuItem) => {},
   onGeneratePermission: (_row: MenuAdminApi.MenuItem) => {},
   onMove: (_row: MenuAdminApi.MenuItem) => {},
@@ -45,6 +47,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
       } as any,
     },
     rowConfig: { keyField: 'id' },
+    checkboxConfig: {
+      checkStrictly: true,
+    },
     treeConfig: {
       showLine: false,
       showRootLine: true,
@@ -62,50 +67,58 @@ const [Grid, gridApi] = useVbenVxeGrid({
   },
 });
 
-const menu = useMenu({ gridApi });
-const form = useMenuForm({ gridApi, t: $t });
-const move = useMenuMove({ gridApi, t: $t });
-const permission = useMenuPermission({ reload: () => gridApi.query(), t: $t });
+const [MenuFormDrawer, menuFormDrawerApi] = useVbenDrawer({
+  connectedComponent: MenuForm,
+  destroyOnClose: true,
+});
 
-handlers.onAddChild = (row: MenuAdminApi.MenuItem) => form.openCreate(row.id);
+const { hasAccessByCodes } = useAccess();
+const canBatchDelete = hasAccessByCodes(['adm:sys:menu:batchDelete']);
+
+const menu = useMenu({ gridApi });
+const move = useMenuMove({
+  t: $t,
+  onSuccess: (payload) => menu.refreshByParentIds([payload.originalParentId, payload.newParentId]),
+});
+const permission = useMenuPermission({
+  t: $t,
+  onSuccess: (item) => menu.refreshByParentId(item.id),
+});
+
+handlers.onAddChild = (row: MenuAdminApi.MenuItem) => menuFormDrawerApi.setData({ parentId: row.id }).open();
 handlers.onDelete = menu.handleDelete;
-handlers.onEdit = form.openEdit;
+handlers.onDetail = (row: MenuAdminApi.MenuItem) => menuFormDrawerApi.setData({ id: row.id, isDetail: true }).open();
+handlers.onEdit = (row: MenuAdminApi.MenuItem) => menuFormDrawerApi.setData({ id: row.id }).open();
 handlers.onGeneratePermission = permission.openGeneratePermission;
 handlers.onMove = move.openMove;
 handlers.onRefreshNode = menu.handleRefreshNode;
 
-function handlePickMethod() {
-  permission.openPickMethod();
+async function handleFormSuccess(payload: { parentId?: string | null; originalParentId?: string | null }) {
+  const parentIds = [payload.parentId, payload.originalParentId].filter((id): id is string | null => id !== undefined);
+  await menu.refreshByParentIds(parentIds);
 }
 
-function onMethodPicked(permissionCode: string, title?: string) {
-  form.form.value.permission = permissionCode;
-  if (title && !form.form.value.title) {
-    form.form.value.title = title;
-  }
+const selectedRowsForBatchDelete = ref<MenuAdminApi.MenuItem[]>([]);
+
+function handleBatchDeleteClick(onClick: () => void) {
+  selectedRowsForBatchDelete.value = menu.getSelectedRows();
+  onClick();
 }
 
-const checkedCount = computed(() => (gridApi.grid as any)?.getCheckboxRecords?.().length ?? 0);
+async function handleBatchDeleteSuccess() {
+  const parentIds = selectedRowsForBatchDelete.value.map((row) => row.parentId);
+  await menu.refreshByParentIds(parentIds);
+  selectedRowsForBatchDelete.value = [];
+}
 
-async function handleBatchDelete() {
-  const rows = (gridApi.grid as any)?.getCheckboxRecords?.() ?? [];
-  const ids = rows.map((row: MenuAdminApi.MenuItem) => row.id);
-  await menu.handleBatchDelete(ids);
+function openCreate() {
+  menuFormDrawerApi.setData({}).open();
 }
 </script>
 
 <template>
   <Page auto-content-height>
-    <MenuForm
-      v-model:form="form.form.value"
-      v-model:visible="form.visible.value"
-      :is-edit="form.isEdit.value"
-      :loading="form.loading.value"
-      :title="form.title.value"
-      :available-types="form.availableTypes.value"
-      @submit="form.handleSubmit"
-      @open-pick-method="handlePickMethod"
-    />
+    <MenuFormDrawer @success="handleFormSuccess" />
 
     <MenuMoveModal
       v-model:visible="move.visible.value"
@@ -118,23 +131,9 @@ async function handleBatchDelete() {
 
     <MenuPermissionModal
       v-model:visible="permission.genVisible.value"
-      v-model:gen-prefix="permission.genPrefix.value"
-      v-model:gen-selected="permission.genSelected.value"
-      :loading="permission.genLoading.value"
+      mode="multiple"
       :gen-item="permission.genItem.value"
-      :permission-options="permission.permissionOptions"
       @submit="permission.handleGeneratePermission"
-    />
-
-    <MenuMethodPicker
-      v-model:visible="permission.pickVisible.value"
-      v-model:controller-prefix="permission.pickControllerPrefix.value"
-      v-model:permission-prefix="permission.pickPermissionPrefix.value"
-      v-model:selected="permission.pickSelected.value"
-      :loading="permission.pickLoading.value"
-      :methods="permission.methodOptions()"
-      @scan="permission.handleScanMethods"
-      @pick="permission.handlePickMethod(onMethodPicked)"
     />
 
     <Grid :table-title="$t('sys.menu.pageTitle')">
@@ -152,13 +151,22 @@ async function handleBatchDelete() {
             </template>
             {{ $t('sys.menu.collapseAll') }}
           </Button>
-          <Button :disabled="checkedCount === 0" danger @click="handleBatchDelete">
-            <template #icon>
-              <IconifyIcon icon="ant-design:delete-outlined" />
+          <BatchActionDropdown
+            v-if="canBatchDelete"
+            type="direct"
+            :action="$t('common.delete')"
+            :api-fn="(ids: string[]) => batchDeleteMenuApi(ids)"
+            :get-ids="menu.getSelectedIds"
+            :on-success="handleBatchDeleteSuccess"
+          >
+            <template #default="{ onClick }">
+              <Button danger @click="handleBatchDeleteClick(onClick)">
+                <IconifyIcon icon="ant-design:delete-outlined" class="size-4" />
+                {{ $t('common.batchDelete') }}
+              </Button>
             </template>
-            {{ $t('common.batchDelete') }} {{ checkedCount > 0 ? `(${checkedCount})` : '' }}
-          </Button>
-          <Button type="primary" @click="form.openCreate()">
+          </BatchActionDropdown>
+          <Button type="primary" @click="openCreate">
             <Plus class="size-4" />
             {{ $t('sys.menu.addRoot') }}
           </Button>

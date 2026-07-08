@@ -5,7 +5,7 @@ import { Select, Tag } from 'ant-design-vue';
 
 import { useDict } from '#/utils/dict';
 
-const props = defineProps<{
+interface Props {
   allowClear?: boolean;
   code: string;
   disabled?: boolean;
@@ -15,9 +15,15 @@ const props = defineProps<{
   /** 是否只显示启用的字典项，默认 true */
   onlyEnabled?: boolean;
   placeholder?: string;
+  /** 是否显示搜索框，默认 true */
+  showSearch?: boolean;
   /** 指定 option value 的类型，默认 'string'，传 'number' 时自动转换 */
   valueType?: 'number' | 'string';
-}>();
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  allowClear: true,
+});
 
 const modelValue = defineModel<null | number | number[] | string | string[] | undefined>('value');
 
@@ -67,12 +73,12 @@ watch(loading, isLoading => {
     :options="options"
     :loading="loading"
     :placeholder="placeholder"
-    :allow-clear="allowClear ?? true"
+    :allow-clear="allowClear"
     :dropdown-match-select-width="dropdownMatchSelectWidth ?? false"
     :mode="multiple ? 'multiple' : undefined"
     :disabled="disabled"
+    :show-search="showSearch ?? true"
     option-filter-prop="label"
-    show-search
   >
     <template #option="{ label, color }">
       <Tag v-if="color" :color="color" class="mr-1">{{ label }}</Tag>

@@ -8,10 +8,17 @@ import { formatUnixTime } from '#/utils/time';
 
 /**
  * 菜单树表格列定义
+ *
+ * 设计原则：
+ * 1. 标题列作为详情入口，使用 CellLink 渲染，与标准列表模块保持一致。
+ * 2. 行内编辑仅开放路由路径、权限码、排序、状态等低风险字段；
+ *    标题、组件路径等核心字段走表单编辑。
+ * 3. 详情入口集中在列表第一列（标题），操作列不再重复放置「详情」按钮。
  */
 export function useColumns(handlers: {
   onAddChild: (row: MenuAdminApi.MenuItem) => void;
   onDelete: (row: MenuAdminApi.MenuItem) => void;
+  onDetail: (row: MenuAdminApi.MenuItem) => void;
   onEdit: (row: MenuAdminApi.MenuItem) => void;
   onGeneratePermission: (row: MenuAdminApi.MenuItem) => void;
   onMove: (row: MenuAdminApi.MenuItem) => void;
@@ -21,22 +28,27 @@ export function useColumns(handlers: {
   const canCreate = hasAccessByCodes(['adm:sys:menu:create']);
   const canUpdate = hasAccessByCodes(['adm:sys:menu:update']);
   const canDelete = hasAccessByCodes(['adm:sys:menu:delete']);
+  const canDetail = hasAccessByCodes(['adm:sys:menu:detail']);
 
   const inlineApi = (id: string, field: string, value: any) => inlineUpdateMenuApi(id, field, value);
 
   return [
     {
+      type: 'checkbox',
+      width: 50,
+      align: 'center',
+    },
+    {
       field: 'title',
       title: $t('sys.menu.fields.title'),
-      minWidth: 260,
+      minWidth: 200,
       align: 'left',
       treeNode: true,
       cellRender: {
-        name: 'CellInlineEdit',
+        name: 'CellLink',
         attrs: {
-          type: 'input',
-          disabled: !canUpdate,
-          apiFn: inlineApi,
+          hasAccess: canDetail,
+          onClick: (row: MenuAdminApi.MenuItem) => handlers.onDetail(row),
         },
       },
     },
@@ -44,29 +56,21 @@ export function useColumns(handlers: {
       field: 'type',
       title: $t('sys.menu.fields.type'),
       width: 100,
-      cellRender: {
-        name: 'CellInlineEdit',
-        attrs: {
-          type: 'select',
-          dictCode: 'sys_menu_type',
-          disabled: !canUpdate,
-          apiFn: inlineApi,
-          afterSuccess: (row: MenuAdminApi.MenuItem) => handlers.onRefreshNode(row),
-        },
+      formatter: ({ cellValue }: { cellValue: number }) => {
+        const map: Record<number, string> = {
+          1: $t('sys.menu.type.dir'),
+          2: $t('sys.menu.type.menu'),
+          3: $t('sys.menu.type.button'),
+          4: $t('sys.menu.type.embedded'),
+          5: $t('sys.menu.type.external'),
+        };
+        return map[cellValue] ?? '';
       },
     },
     {
       field: 'name',
       title: $t('sys.menu.fields.name'),
       minWidth: 140,
-      cellRender: {
-        name: 'CellInlineEdit',
-        attrs: {
-          type: 'input',
-          disabled: !canUpdate,
-          apiFn: inlineApi,
-        },
-      },
     },
     {
       field: 'path',
@@ -76,7 +80,7 @@ export function useColumns(handlers: {
         name: 'CellInlineEdit',
         attrs: {
           type: 'input',
-          disabled: !canUpdate,
+          disabled: (row: MenuAdminApi.MenuItem) => row.type !== 3 || !canUpdate,
           apiFn: inlineApi,
         },
       },
@@ -85,14 +89,6 @@ export function useColumns(handlers: {
       field: 'component',
       title: $t('sys.menu.fields.component'),
       minWidth: 180,
-      cellRender: {
-        name: 'CellInlineEdit',
-        attrs: {
-          type: 'input',
-          disabled: !canUpdate,
-          apiFn: inlineApi,
-        },
-      },
     },
     {
       field: 'permission',
@@ -137,137 +133,6 @@ export function useColumns(handlers: {
       },
     },
     {
-      field: 'isHidden',
-      title: $t('sys.menu.fields.isHidden'),
-      width: 100,
-      cellRender: {
-        name: 'CellSwitch',
-        attrs: {
-          disabled: !canUpdate,
-          beforeChange: async (val: number, row: MenuAdminApi.MenuItem) => {
-            await inlineUpdateMenuApi(row.id, 'isHidden', val);
-            return true;
-          },
-        },
-      },
-    },
-    {
-      field: 'isKeepAlive',
-      title: $t('sys.menu.fields.isKeepAlive'),
-      width: 100,
-      cellRender: {
-        name: 'CellSwitch',
-        attrs: {
-          disabled: !canUpdate,
-          beforeChange: async (val: number, row: MenuAdminApi.MenuItem) => {
-            await inlineUpdateMenuApi(row.id, 'isKeepAlive', val);
-            return true;
-          },
-        },
-      },
-    },
-    {
-      field: 'isHideChildren',
-      title: $t('sys.menu.fields.isHideChildren'),
-      width: 120,
-      cellRender: {
-        name: 'CellSwitch',
-        attrs: {
-          disabled: !canUpdate,
-          beforeChange: async (val: number, row: MenuAdminApi.MenuItem) => {
-            await inlineUpdateMenuApi(row.id, 'isHideChildren', val);
-            return true;
-          },
-        },
-      },
-    },
-    {
-      field: 'isHideBreadcrumb',
-      title: $t('sys.menu.fields.isHideBreadcrumb'),
-      width: 120,
-      cellRender: {
-        name: 'CellSwitch',
-        attrs: {
-          disabled: !canUpdate,
-          beforeChange: async (val: number, row: MenuAdminApi.MenuItem) => {
-            await inlineUpdateMenuApi(row.id, 'isHideBreadcrumb', val);
-            return true;
-          },
-        },
-      },
-    },
-    {
-      field: 'isHideTab',
-      title: $t('sys.menu.fields.isHideTab'),
-      width: 120,
-      cellRender: {
-        name: 'CellSwitch',
-        attrs: {
-          disabled: !canUpdate,
-          beforeChange: async (val: number, row: MenuAdminApi.MenuItem) => {
-            await inlineUpdateMenuApi(row.id, 'isHideTab', val);
-            return true;
-          },
-        },
-      },
-    },
-    {
-      field: 'isAffixTab',
-      title: $t('sys.menu.fields.isAffixTab'),
-      width: 100,
-      cellRender: {
-        name: 'CellSwitch',
-        attrs: {
-          disabled: !canUpdate,
-          beforeChange: async (val: number, row: MenuAdminApi.MenuItem) => {
-            await inlineUpdateMenuApi(row.id, 'isAffixTab', val);
-            return true;
-          },
-        },
-      },
-    },
-    {
-      field: 'badgeType',
-      title: $t('sys.menu.fields.badgeType'),
-      width: 110,
-      cellRender: {
-        name: 'CellInlineEdit',
-        attrs: {
-          type: 'select',
-          dictCode: 'sys_badge_type',
-          disabled: !canUpdate,
-          apiFn: inlineApi,
-        },
-      },
-    },
-    {
-      field: 'badgeVariants',
-      title: $t('sys.menu.fields.badgeVariants'),
-      width: 110,
-      cellRender: {
-        name: 'CellInlineEdit',
-        attrs: {
-          type: 'select',
-          dictCode: 'sys_badge_variant',
-          disabled: !canUpdate,
-          apiFn: inlineApi,
-        },
-      },
-    },
-    {
-      field: 'badge',
-      title: $t('sys.menu.fields.badge'),
-      width: 120,
-      cellRender: {
-        name: 'CellInlineEdit',
-        attrs: {
-          type: 'input',
-          disabled: !canUpdate,
-          apiFn: inlineApi,
-        },
-      },
-    },
-    {
       field: 'createdAt',
       title: $t('common.createdAt'),
       width: 160,
@@ -283,6 +148,7 @@ export function useColumns(handlers: {
       cellRender: {
         name: 'TableActions',
         attrs: {
+          maxVisible: 2,
           actions: [
             {
               key: 'edit',
@@ -304,7 +170,7 @@ export function useColumns(handlers: {
               key: 'addChild',
               label: $t('sys.menu.addChild'),
               icon: 'lucide:plus',
-              hidden: !canCreate,
+              hidden: ({ type }: MenuAdminApi.MenuItem) => !canCreate || type === 3,
               onClick: (row: MenuAdminApi.MenuItem) => handlers.onAddChild(row),
             },
             {

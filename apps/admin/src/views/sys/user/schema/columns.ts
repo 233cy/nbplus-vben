@@ -2,10 +2,11 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { UserApi } from '#/api/sys/user';
 
 import { deleteUserApi, inlineUpdateUserApi } from '#/api/sys/user';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { useTableDelete } from '#/utils/table';
 import { formatUnixTime } from '#/utils/time';
+
+import { useUserPermission } from '../permissions';
 
 /**
  * 用户列表列定义
@@ -16,10 +17,7 @@ export function useColumns(
   onOnlineClick: (row: UserApi.UserItem) => void,
   onRefresh: () => void,
 ): VxeTableGridOptions['columns'] {
-  const { hasAccessByCodes } = useAccess();
-  const canDetail = hasAccessByCodes(['org:user:detail']);
-  const canUpdate = hasAccessByCodes(['org:user:update']);
-  const canDelete = hasAccessByCodes(['org:user:delete']);
+  const { canDetail, canUpdate, canDelete, canOnline } = useUserPermission();
 
   return [
     { type: 'checkbox', width: 50 },
@@ -129,7 +127,7 @@ export function useColumns(
       cellRender: {
         name: 'CellLink',
         attrs: {
-          hasAccess: hasAccessByCodes(['org:user:online']),
+          hasAccess: canOnline,
           onClick: (row: UserApi.UserItem) => onOnlineClick(row),
         },
       },

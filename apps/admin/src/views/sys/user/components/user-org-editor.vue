@@ -11,10 +11,12 @@ import UserOrgModal from './user-org-modal.vue';
 
 interface Props {
   modelValue?: UserApi.UserOrgValue;
+  isReadonly?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: () => ({}),
+  isReadonly: true,
 });
 
 const emit = defineEmits<{
@@ -126,19 +128,22 @@ const columns = [
     key: 'isMain',
     width: 80,
   },
-  {
+];
+if (!props.isReadonly) {
+  columns.push({
     title: $t('common.operation'),
+    dataIndex: 'action',
     key: 'action',
     width: 80,
-  },
-];
+  });
+}
 </script>
 
 <template>
   <div class="w-full space-y-3">
     <div class="flex items-center justify-between">
       <div class="text-base font-medium">{{ $t('sys.user.userOrg.listTitle') }}</div>
-      <Button type="primary" size="small" @click="modalVisible = true">
+      <Button v-if="!props.isReadonly" type="primary" size="small" @click="modalVisible = true">
         {{ $t('sys.user.userOrg.add') }}
       </Button>
     </div>

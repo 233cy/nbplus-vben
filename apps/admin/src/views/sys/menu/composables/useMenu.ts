@@ -1,6 +1,6 @@
 import type { MenuAdminApi } from '#/api/sys/menuAdmin';
 
-import { batchDeleteMenuApi, deleteMenuApi, inlineUpdateMenuApi } from '#/api/sys/menuAdmin';
+import { deleteMenuApi, inlineUpdateMenuApi } from '#/api/sys/menuAdmin';
 import { useTableDelete } from '#/utils/table';
 
 export interface UseMenuOptions {
@@ -44,6 +44,51 @@ export function useMenu(options: UseMenuOptions) {
   }
 
   /**
+   * 根据父级 ID 刷新对应子树。
+   * parentId 为 null 时刷新根级列表。
+   */
+  async function refreshByParentId(parentId: string | null) {
+    const grid = gridApi.grid as any;
+    if (!grid) return;
+
+    if (!parentId) {
+      await refreshRoot();
+      return;
+    }
+
+    const parentRow = grid.getRowById?.(parentId);
+    if (!parentRow) {
+      // 父节点不在当前视图中（可能未展开），保守整表刷新
+      await refreshRoot();
+      return;
+    }
+
+    const parentWasExpanded = !!grid.isTreeExpandByRow?.(parentRow);
+    await grid.reloadTreeExpand?.(parentRow);
+
+    const childCount = parentRow.children?.length ?? 0;
+    parentRow.hasChild = childCount > 0;
+
+    if (childCount > 0) {
+      if (parentWasExpanded && !grid.isTreeExpandByRow?.(parentRow)) {
+        await grid.setTreeExpand?.([parentRow], true);
+      }
+    } else if (grid.isTreeExpandByRow?.(parentRow)) {
+      await grid.setTreeExpand?.([parentRow], false);
+    }
+  }
+
+  /**
+   * 批量刷新多个父节点子树。
+   */
+  async function refreshByParentIds(parentIds: (string | null)[]) {
+    const uniqueIds = Array.from(new Set(parentIds));
+    for (const parentId of uniqueIds) {
+      await refreshByParentId(parentId);
+    }
+  }
+
+  /**
    * 整表刷新并恢复刷新前已展开的根级节点。
    */
   async function refreshRoot() {
@@ -64,12 +109,12 @@ export function useMenu(options: UseMenuOptions) {
     useTableDelete(deleteMenuApi, row.id, row.title, () => refreshParentOf(row));
   }
 
-  async function handleBatchDelete(selectedIds: string[]) {
-    if (selectedIds.length === 0) return;
-    const result = await batchDeleteMenuApi(selectedIds);
-    if (result.deleted.length > 0) {
-      await gridApi.query();
-    }
+  function getSelectedIds(): string[] {
+    return (gridApi.grid?.getCheckboxRecords() as MenuAdminApi.MenuItem[])?.map(r => r.id) ?? [];
+  }
+
+  function getSelectedRows(): MenuAdminApi.MenuItem[] {
+    return (gridApi.grid?.getCheckboxRecords() as MenuAdminApi.MenuItem[]) ?? [];
   }
 
   async function expandAll() {
@@ -82,8 +127,11 @@ export function useMenu(options: UseMenuOptions) {
 
   return {
     handleDelete,
-    handleBatchDelete,
+    getSelectedIds,
+    getSelectedRows,
     handleRefreshNode: refreshParentOf,
+    refreshByParentId,
+    refreshByParentIds,
     handleToggleStatus,
     expandAll,
     collapseAll,

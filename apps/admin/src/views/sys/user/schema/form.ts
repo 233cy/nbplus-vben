@@ -5,7 +5,7 @@ import { $t } from '#/locales';
 /**
  * 用户新增/编辑表单 Schema
  */
-export function useFormSchema(isEdit = false): VbenFormSchema[] {
+export function useFormSchema(isEdit = false, isReadonly = false): VbenFormSchema[] {
   return [
     {
       component: 'Input',
@@ -63,6 +63,9 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
       fieldName: 'userOrg',
       hideLabel: true,
       formItemClass: 'col-span-full',
+      componentProps: {
+        isReadonly,
+      },
     },
   ];
 }

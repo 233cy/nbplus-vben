@@ -32,18 +32,50 @@ export function createDefaultForm(): DeptApi.SaveParams {
 
 /**
  * 构建 TreeSelect 可用的父节点树数据
+ *
+ * @param nodes 平级部门列表（后端 /tree 接口返回的 items）
+ * @param excludeId 需要排除的节点 ID（通常用于编辑时排除自身及其子树）
  */
 export function buildParentTreeData(nodes: DeptApi.DeptItem[], excludeId?: string): { children: any[]; label: string; value: string }[] {
-  const result: { children: any[]; label: string; value: string }[] = [];
-  for (const node of nodes) {
-    if (node.id === excludeId) continue;
-    result.push({
+  // 1. 过滤掉 excludeId 及其所有后代
+  let validNodes = nodes;
+  if (excludeId) {
+    const excludeSet = new Set<string>();
+    const collectDescendants = (parentId: string) => {
+      for (const node of nodes) {
+        if (node.parentId === parentId && !excludeSet.has(node.id)) {
+          excludeSet.add(node.id);
+          collectDescendants(node.id);
+        }
+      }
+    };
+    excludeSet.add(excludeId);
+    collectDescendants(excludeId);
+    validNodes = nodes.filter(node => !excludeSet.has(node.id));
+  }
+
+  // 2. 按 parentId 分组
+  const childrenMap = new Map<string | null, DeptApi.DeptItem[]>();
+  for (const node of validNodes) {
+    const key = node.parentId ?? null;
+    if (!childrenMap.has(key)) {
+      childrenMap.set(key, []);
+    }
+    childrenMap.get(key)!.push(node);
+  }
+
+  // 3. 递归构建树，按 sort 降序排列（与后端默认排序一致）
+  const build = (parentId: string | null): { children: any[]; label: string; value: string }[] => {
+    const children = childrenMap.get(parentId) ?? [];
+    children.sort((a, b) => (b.sort ?? 0) - (a.sort ?? 0));
+    return children.map(node => ({
       label: `${node.name}${node.code ? `（${node.code}）` : ''}`,
       value: node.id,
-      children: node.children?.length ? buildParentTreeData(node.children, excludeId) : [],
-    });
-  }
-  return result;
+      children: build(node.id),
+    }));
+  };
+
+  return build(null);
 }
 
 /**

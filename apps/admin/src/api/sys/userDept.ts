@@ -35,6 +35,14 @@ export namespace DeptApi {
     };
   }
 
+  export interface DeptTreeResult {
+    items: DeptItem[];
+    meta: {
+      type: 'tree';
+      total: number;
+    };
+  }
+
   export interface SaveParams {
     id?: string;
     parentId?: null | string;
@@ -50,7 +58,7 @@ export namespace DeptApi {
 const BASE = '/admin/sys/user-dept';
 
 export function getDeptTreeApi() {
-  return requestClient.get<DeptApi.DeptItem[]>(`${BASE}/tree`);
+  return requestClient.get<DeptApi.DeptTreeResult>(`${BASE}/tree`);
 }
 
 export function getDeptListApi(params: DeptApi.DeptListParams = {}) {

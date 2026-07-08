@@ -10,7 +10,7 @@ import { message } from 'ant-design-vue';
 
 import { getMenuTreeApi, updateMenuApi } from '#/api/sys/menuAdmin';
 
-import { ROOT_PARENT } from './useMenuForm';
+import { ROOT_PARENT } from '../data';
 
 function buildParentTreeData(nodes: MenuAdminApi.MenuItem[], excludeId?: string): { children: any[]; label: string; value: string }[] {
   const result: { children: any[]; label: string; value: string }[] = [];
@@ -26,12 +26,12 @@ function buildParentTreeData(nodes: MenuAdminApi.MenuItem[], excludeId?: string)
 }
 
 export interface UseMenuMoveOptions {
-  gridApi: any;
+  onSuccess?: (payload: { originalParentId: string | null; newParentId: string | null }) => void | Promise<void>;
   t: (key: string, params?: Record<string, any>) => string;
 }
 
 export function useMenuMove(options: UseMenuMoveOptions) {
-  const { gridApi, t } = options;
+  const { onSuccess, t } = options;
 
   const visible = ref(false);
   const loading = ref(false);
@@ -61,11 +61,12 @@ export function useMenuMove(options: UseMenuMoveOptions) {
 
     loading.value = true;
     try {
+      const originalParentId = moveItem.value.parentId ?? null;
       const parentId = moveParentId.value === ROOT_PARENT ? null : moveParentId.value;
       await updateMenuApi({ ...moveItem.value, parentId });
       message.success(t('sys.menu.moveSuccess'));
       visible.value = false;
-      await gridApi.query();
+      await onSuccess?.({ originalParentId, newParentId: parentId });
     } finally {
       loading.value = false;
     }

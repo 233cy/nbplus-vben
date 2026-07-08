@@ -2,6 +2,7 @@
   "pageTitle": "菜单管理",
   "addRoot": "新增顶级菜单",
   "addChild": "新增子菜单",
+  "detail": "查看菜单",
   "edit": "编辑",
   "delete": "删除",
   "move": "移动到",
@@ -80,11 +81,9 @@
     "batchUpdate": "批量修改",
     "standardPermissions": "标准权限码",
     "controllerPrefix": "控制器前缀",
-    "permissionPrefix": "权限码前缀",
     "method": "接口方法",
     "scan": "扫描接口",
     "pickTitle": "从控制器接口选择权限码",
-    "methodPlaceholder": "请先扫描接口",
     "prefixRequired": "请输入权限码前缀",
     "selectRequired": "请至少选择一个权限码",
     "controllerPrefixRequired": "请输入控制器前缀",
@@ -100,7 +99,6 @@
     "parentId": "请选择父级菜单",
     "activePath": "用于高亮侧边栏，如详情页激活列表菜单",
     "badge": "文字内容",
-    "permissionPrefix": "如：system:role:",
     "controllerPrefix": "如：/admin/system/dict"
   },
   "validate": {

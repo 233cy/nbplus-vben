@@ -7,21 +7,20 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { createUserApi, updateUserApi } from '#/api/sys/user';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
+import { useUserPermission } from '../permissions';
 import { useFormSchema } from '../schema/form';
 
 const emit = defineEmits<{ success: [] }>();
 
-const { hasAccessByCodes } = useAccess();
-const canUpdate = computed(() => hasAccessByCodes(['org:user:update']));
+const { canUpdate } = useUserPermission();
 const rowId = ref<string | undefined>();
 const isReadonly = ref(false);
 const isEdit = computed(() => !!rowId.value);
 
 const [Form, formApi] = useVbenForm({
-  schema: computed(() => useFormSchema(isEdit.value)) as any,
+  schema: computed(() => useFormSchema(isEdit.value, isReadonly.value)) as any,
   showDefaultActions: false,
 });
 

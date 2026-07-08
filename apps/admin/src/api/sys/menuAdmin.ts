@@ -21,7 +21,7 @@ export namespace MenuAdminApi {
     permission: string;
     sort: number;
     badge: string;
-    badgeType: '' | 'dot' | 'normal' | 'off';
+    badgeType: '' | 'dot' | 'normal';
     badgeVariants: '' | 'default' | 'destructive' | 'primary' | 'success' | 'warning';
     isHidden: boolean;
     isHideChildren: boolean;
@@ -51,7 +51,7 @@ export namespace MenuAdminApi {
     permission?: string;
     sort?: number;
     badge?: string;
-    badgeType?: '' | 'dot' | 'normal' | 'off';
+    badgeType?: '' | 'dot' | 'normal';
     badgeVariants?: '' | 'default' | 'destructive' | 'primary' | 'success' | 'warning';
     isHidden?: boolean;
     isHideChildren?: boolean;
@@ -107,8 +107,13 @@ export interface ControllerMethodItem {
   title: string;
   path: string;
   method: string;
+  permissions: string[];
 }
 
 export function getControllerMethodsApi(prefix: string) {
   return requestClient.post<ControllerMethodItem[]>('/admin/sys/menu/controller-methods', { prefix });
+}
+
+export function getControllerPrefixesApi() {
+  return requestClient.get<string[]>('/admin/sys/menu/controller-prefixes');
 }

@@ -34,8 +34,8 @@ export function useDeptForm(options: UseDeptFormOptions) {
   async function loadTreeData(excludeId?: string) {
     treeLoading.value = true;
     try {
-      const tree = await getDeptTreeApi();
-      treeData.value = buildParentTreeData(tree, excludeId);
+      const { items } = await getDeptTreeApi();
+      treeData.value = buildParentTreeData(items, excludeId);
       // 默认展开到当前选中的父节点（包含父节点本身），没有选中则不展开
       const parentId = form.value.parentId;
       treeExpandedKeys.value = parentId ? findTreePathKeys(treeData.value, parentId) : [];

@@ -7,19 +7,16 @@ import { Button } from 'ant-design-vue';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { batchDeleteUserApi, batchUpdateUserApi, getUserDetailApi, getUserListApi } from '#/api/sys/user.js';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
 import Form from './components/form.vue';
 import Online from './components/online.vue';
 import { useUser } from './composables/useUser';
+import { useUserPermission } from './permissions';
 import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
 
-const { hasAccessByCodes } = useAccess();
-const canCreate = hasAccessByCodes(['org:user:create']);
-const canBatchDelete = hasAccessByCodes(['org:user:batchDelete']);
-const canBatchUpdate = hasAccessByCodes(['org:user:batchUpdate']);
+const { canCreate, canBatchDelete, canBatchUpdate } = useUserPermission();
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,

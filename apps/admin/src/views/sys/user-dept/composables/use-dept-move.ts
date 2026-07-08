@@ -25,7 +25,8 @@ export function useDeptMove(options: UseDeptMoveOptions) {
   const treeSelectData = computed(() => [{ label: t('sys.user-dept.rootLevel'), value: ROOT_PARENT, children: [] }, ...buildParentTreeData(treeData.value, moveItem.value?.id)]);
 
   async function loadTreeData() {
-    treeData.value = await getDeptTreeApi();
+    const { items } = await getDeptTreeApi();
+    treeData.value = items;
   }
 
   function openMove(item: DeptApi.DeptItem) {
