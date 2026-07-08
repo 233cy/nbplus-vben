@@ -7,19 +7,16 @@ import { Button } from 'ant-design-vue';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { batchDeleteMenuPkgApi, batchUpdateMenuPkgApi, getMenuPkgDetailApi, getMenuPkgListApi } from '#/api/sys/menuPkg.js';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
 import AssignMenus from './components/assign-menus.vue';
 import Form from './components/form.vue';
 import { useMenuPkg } from './composables/useMenuPkg';
+import { useMenuPkgPermission } from './permissions';
 import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
 
-const { hasAccessByCodes } = useAccess();
-const canCreate = hasAccessByCodes(['adm:sys:menuPkg:create']);
-const canBatchDelete = hasAccessByCodes(['adm:sys:menuPkg:batchDelete']);
-const canBatchUpdate = hasAccessByCodes(['adm:sys:menuPkg:batchUpdate']);
+const { canCreate, canBatchDelete, canBatchUpdate } = useMenuPkgPermission();
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,

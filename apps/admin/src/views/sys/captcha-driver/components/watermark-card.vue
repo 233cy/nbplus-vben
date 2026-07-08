@@ -7,6 +7,8 @@ import { Button, Card, Form, FormItem, Input, InputNumber } from 'ant-design-vue
 
 import { $t } from '#/locales';
 
+import { useCaptchaDriverPermission } from '../permissions';
+
 interface Props {
   saving?: boolean;
 }
@@ -16,6 +18,8 @@ defineProps<Props>();
 const emit = defineEmits<{
   (e: 'save'): void;
 }>();
+
+const { canWatermark } = useCaptchaDriverPermission();
 
 const config = defineModel<CaptchaDriverApi.WatermarkConfig>('config', { required: true });
 
@@ -49,7 +53,7 @@ function updateFontsize(value: number) {
       </FormItem>
     </Form>
     <div class="mt-2 flex justify-end">
-      <Button type="primary" size="small" :loading="saving" @click="emit('save')">
+      <Button type="primary" size="small" :loading="saving" :disabled="!canWatermark" @click="emit('save')">
         <template #icon>
           <IconifyIcon icon="ant-design:save-outlined" />
         </template>

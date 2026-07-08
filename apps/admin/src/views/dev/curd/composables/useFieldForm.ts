@@ -5,7 +5,7 @@ import { computed, ref } from 'vue';
 import { message } from 'ant-design-vue';
 
 import { getCurdFieldListApi, saveCurdFieldsApi, syncCurdFieldsApi } from '#/api/dev/curdAdmin';
-import { getAllDictsApi } from '#/api/sys/dict';
+import { getDictOptionsApi } from '#/api/sys/dict';
 import { $t } from '#/locales';
 
 import { createDefaultField } from '../data';
@@ -29,7 +29,7 @@ export function useFieldForm() {
   const title = computed(() => (currentTable.value ? `${currentTable.value.title} - ${$t('dev.curd.field.title')}` : $t('dev.curd.field.title')));
 
   async function loadDicts() {
-    const list = await getAllDictsApi();
+    const list = await getDictOptionsApi();
     dictOptions.value = list.map(d => ({
       label: `${d.name}（${d.code}）`,
       value: d.code,

@@ -7,6 +7,7 @@ import { Badge, Button, Card, Popconfirm, Switch, Tag, Tooltip } from 'ant-desig
 
 import { $t } from '#/locales';
 
+import { useCaptchaDriverPermission } from '../permissions';
 import DriverConfigForm from './driver-config-form.vue';
 
 interface Props {
@@ -15,6 +16,8 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const { canUpdate, canPreview } = useCaptchaDriverPermission();
 
 const emit = defineEmits<{
   (e: 'toggle', enabled: boolean): void;
@@ -41,20 +44,20 @@ const config = defineModel<Record<string, any>>('config', { required: true });
         <Switch :checked="false" disabled />
       </Tooltip>
       <Popconfirm v-else :title="driver.isEnabled ? $t('sys.captcha-driver.disableConfirm') : $t('sys.captcha-driver.enableConfirm')" @confirm="emit('toggle', !driver.isEnabled)">
-        <Switch :checked="driver.isEnabled" />
+        <Switch :checked="driver.isEnabled" :disabled="!canUpdate" />
       </Popconfirm>
     </template>
 
     <DriverConfigForm :driver="driver" v-model:config="config" />
 
     <div class="flex justify-end gap-2">
-      <Button size="small" :disabled="!driver.isValid" @click="emit('preview')">
+      <Button size="small" :disabled="!driver.isValid || !canPreview" @click="emit('preview')">
         <template #icon>
           <IconifyIcon icon="ant-design:eye-outlined" />
         </template>
         {{ $t('sys.captcha-driver.preview') }}
       </Button>
-      <Button type="primary" size="small" :loading="saving" :disabled="!driver.isValid" @click="emit('save')">
+      <Button type="primary" size="small" :loading="saving" :disabled="!driver.isValid || !canUpdate" @click="emit('save')">
         <template #icon>
           <IconifyIcon icon="ant-design:save-outlined" />
         </template>

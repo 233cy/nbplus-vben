@@ -11,13 +11,13 @@ import { Button, Space } from 'ant-design-vue';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { batchDeleteMenuApi, getMenuListApi } from '#/api/sys/menuAdmin';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
 import MenuForm from './components/menu-form.vue';
 import MenuMoveModal from './components/menu-move-modal.vue';
 import MenuPermissionModal from './components/menu-permission-modal.vue';
 import { useMenu, useMenuMove, useMenuPermission } from './composables';
+import { useMenuAccessPermission } from './permissions';
 import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
 
@@ -72,8 +72,7 @@ const [MenuFormDrawer, menuFormDrawerApi] = useVbenDrawer({
   destroyOnClose: true,
 });
 
-const { hasAccessByCodes } = useAccess();
-const canBatchDelete = hasAccessByCodes(['adm:sys:menu:batchDelete']);
+const { canBatchDelete } = useMenuAccessPermission();
 
 const menu = useMenu({ gridApi });
 const move = useMenuMove({

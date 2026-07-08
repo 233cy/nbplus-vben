@@ -7,20 +7,17 @@ import { Button } from 'ant-design-vue';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { batchDeleteRoleApi, batchUpdateRoleApi, getRoleDetailApi, getRoleListApi } from '#/api/sys/role.js';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
 import Form from './components/form.vue';
 import RoleDataScopeModal from './components/RoleDataScopeModal.vue';
 import RolePermissionModal from './components/RolePermissionModal.vue';
 import { useRole } from './composables/useRole';
+import { useRolePermission } from './permissions';
 import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
 
-const { hasAccessByCodes } = useAccess();
-const canCreate = hasAccessByCodes(['auth:role:create']);
-const canBatchDelete = hasAccessByCodes(['auth:role:batchDelete']);
-const canBatchUpdate = hasAccessByCodes(['auth:role:batchUpdate']);
+const { canCreate, canBatchDelete, canBatchUpdate } = useRolePermission();
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,

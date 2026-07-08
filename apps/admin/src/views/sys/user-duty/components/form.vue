@@ -7,15 +7,15 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { createPostApi, getPostDetailApi, updatePostApi } from '#/api/sys/userDuty';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
+import { useUserDutyPermission } from '../permissions';
 import { useFormSchema } from '../schema/form';
 
 const emit = defineEmits<{ success: [] }>();
 
-const { hasAccessByCodes } = useAccess();
-const canUpdate = computed(() => hasAccessByCodes(['org:post:update']));
+const permission = useUserDutyPermission();
+const canUpdate = computed(() => permission.canUpdate);
 const rowId = ref<string | undefined>();
 const isReadonly = ref(false);
 const isEdit = computed(() => !!rowId.value);

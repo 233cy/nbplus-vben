@@ -4,12 +4,45 @@ import type { StorageApi } from '#/api/sys/storage';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
 
+import { useStoragePermission } from '../permissions';
+
 export function useColumns(
   onEdit: (record: StorageApi.StorageItem) => void,
   onSetDefault: (record: StorageApi.StorageItem) => void,
   onToggle: (record: StorageApi.StorageItem, checked: boolean) => void,
   onSingleDelete: (record: StorageApi.StorageItem) => void,
 ): VxeTableGridOptions['columns'] {
+  const { canUpdate, canDelete } = useStoragePermission();
+
+  const actions = [];
+  if (canUpdate) {
+    actions.push({
+      key: 'edit',
+      label: $t('common.edit'),
+      icon: 'lucide:pencil',
+      onClick: onEdit,
+    });
+  }
+  if (canDelete) {
+    actions.push({
+      key: 'delete',
+      label: $t('common.delete'),
+      icon: 'lucide:trash-2',
+      danger: true,
+      confirmTitle: $t('common.confirmDelete'),
+      onClick: onSingleDelete,
+    });
+  }
+  if (canUpdate) {
+    actions.push({
+      key: 'setDefault',
+      label: $t('sys.storage.setDefault'),
+      icon: 'lucide:star',
+      hidden: (row: StorageApi.StorageItem) => row.isDefault === 1,
+      onClick: onSetDefault,
+    });
+  }
+
   return [
     { type: 'checkbox', width: 50 },
     {
@@ -49,6 +82,7 @@ export function useColumns(
         props: {
           checkedValue: 1,
           unCheckedValue: 2,
+          disabled: !canUpdate,
         },
         attrs: {
           beforeChange: (newVal: number, row: StorageApi.StorageItem) => {
@@ -77,29 +111,7 @@ export function useColumns(
       cellRender: {
         name: 'TableActions',
         attrs: {
-          actions: [
-            {
-              key: 'edit',
-              label: $t('common.edit'),
-              icon: 'lucide:pencil',
-              onClick: onEdit,
-            },
-            {
-              key: 'delete',
-              label: $t('common.delete'),
-              icon: 'lucide:trash-2',
-              danger: true,
-              confirmTitle: $t('common.confirmDelete'),
-              onClick: onSingleDelete,
-            },
-            {
-              key: 'setDefault',
-              label: $t('sys.storage.setDefault'),
-              icon: 'lucide:star',
-              hidden: (row: StorageApi.StorageItem) => row.isDefault === 1,
-              onClick: onSetDefault,
-            },
-          ],
+          actions,
         },
       },
     },

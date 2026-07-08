@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DeptApi } from '#/api/sys/userDept';
 
-import { Page } from '@vben/common-ui';
+import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
 
 import { Button, Space } from 'ant-design-vue';
@@ -12,7 +12,7 @@ import { $t } from '#/locales';
 
 import DeptForm from './components/dept-form.vue';
 import DeptMoveModal from './components/dept-move-modal.vue';
-import { useDept, useDeptForm, useDeptMove } from './composables';
+import { useDept, useDeptMove } from './composables';
 import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
 
@@ -60,33 +60,34 @@ const [Grid, gridApi] = useVbenVxeGrid({
   },
 });
 
-const dept = useDept({ gridApi });
-const form = useDeptForm({ gridApi, t: $t });
-const move = useDeptMove({ gridApi, t: $t });
+const [DeptFormDrawer, deptFormDrawerApi] = useVbenDrawer({
+  connectedComponent: DeptForm,
+  destroyOnClose: true,
+});
 
-handlers.onAddChild = (row: DeptApi.DeptItem) => form.openCreate(row.id);
+const dept = useDept({ gridApi });
+const move = useDeptMove({
+  t: $t,
+  onSuccess: payload => dept.refreshByParentIds([payload.originalParentId, payload.newParentId]),
+});
+
+handlers.onAddChild = (row: DeptApi.DeptItem) => deptFormDrawerApi.setData({ parentId: row.id }).open();
 handlers.onDelete = dept.handleDelete;
-handlers.onDetail = (row: DeptApi.DeptItem) => form.openDetail(row.id);
-handlers.onEdit = (row: DeptApi.DeptItem) => form.openEdit(row.id);
+handlers.onDetail = (row: DeptApi.DeptItem) => deptFormDrawerApi.setData({ id: row.id, isDetail: true }).open();
+handlers.onEdit = (row: DeptApi.DeptItem) => deptFormDrawerApi.setData({ id: row.id }).open();
 handlers.onMove = move.openMove;
 handlers.onRefreshNode = dept.handleRefreshNode;
 handlers.onToggleStatus = dept.handleToggleStatus;
+
+async function handleFormSuccess(payload: { originalParentId?: null | string; parentId?: null | string }) {
+  const parentIds = [payload.parentId, payload.originalParentId].filter((id): id is null | string => id !== undefined);
+  await dept.refreshByParentIds(parentIds);
+}
 </script>
 
 <template>
   <Page auto-content-height>
-    <DeptForm
-      v-model:form="form.form.value"
-      v-model:visible="form.visible.value"
-      :is-detail="form.isDetail.value"
-      :is-edit="form.isEdit.value"
-      :loading="form.loading.value"
-      :title="form.title.value"
-      :tree-data="form.treeData.value"
-      :tree-expanded-keys="form.treeExpandedKeys.value"
-      :tree-loading="form.treeLoading.value"
-      @submit="form.handleSubmit"
-    />
+    <DeptFormDrawer @success="handleFormSuccess" />
 
     <DeptMoveModal
       v-model:visible="move.visible.value"
@@ -112,7 +113,7 @@ handlers.onToggleStatus = dept.handleToggleStatus;
             </template>
             {{ $t('sys.user-dept.collapseAll') }}
           </Button>
-          <Button type="primary" @click="form.openCreate()">
+          <Button type="primary" @click="deptFormDrawerApi.setData({}).open()">
             <Plus class="size-4" />
             {{ $t('sys.user-dept.addRoot') }}
           </Button>

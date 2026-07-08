@@ -1,3 +1,2 @@
-export * from './useConfigForm';
-export * from './useConfigGroups';
-export * from './useConfigItems';
+export * from './useConfig';
+export * from './useConfigValue';

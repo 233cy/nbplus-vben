@@ -15,10 +15,12 @@ import { $t } from '#/locales';
 
 import StorageForm from './components/storage-form.vue';
 import { useStorage } from './composables/useStorage';
+import { useStoragePermission } from './permissions';
 import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
 
 const storage = useStorage();
+const { canCreate, canDelete } = useStoragePermission();
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: StorageForm,
@@ -112,6 +114,7 @@ onMounted(() => {
     <Grid :table-title="$t('sys.storage.pageTitle')">
       <template #toolbar-tools>
         <BatchActionDropdown
+          v-if="canDelete"
           type="direct"
           :action="$t('common.delete')"
           :api-fn="(ids: string[]) => batchDeleteStorageApi(ids)"
@@ -126,7 +129,7 @@ onMounted(() => {
           </template>
         </BatchActionDropdown>
 
-        <Button type="primary" class="ml-2" @click="openCreate">
+        <Button v-if="canCreate" type="primary" class="ml-2" @click="openCreate">
           <Plus class="size-5" />
           {{ $t('sys.storage.create') }}
         </Button>

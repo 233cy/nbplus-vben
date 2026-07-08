@@ -1,11 +1,6 @@
 import { requestClient } from '#/api/request';
 
 export namespace ConfigApi {
-  export interface GroupItem {
-    groups: string;
-    groupsLabel: string;
-  }
-
   export interface ConfigItem {
     id: string;
     groups: string;
@@ -14,25 +9,36 @@ export namespace ConfigApi {
     value: string;
     component: string;
     label: string;
-    isEncrypted: boolean;
-    isPublic: boolean;
-    isSys: boolean;
+    isEncrypted: number;
+    isPublic: number;
+    isSys: number;
     sort: number;
     remark: null | string;
+    createdAt: number;
+    updatedAt: number;
   }
 
-  export interface SaveItem {
-    key: string;
+  export interface GroupOption {
+    label: string;
     value: string;
+  }
+
+  export interface PageParams {
+    page?: number;
+    pageSize?: number;
+    keyword?: string;
+    groups?: string;
+    isPublic?: number;
   }
 
   export interface CreateParams {
     groups: string;
     key: string;
     label: string;
+    value?: string;
     component?: string;
-    isEncrypted?: boolean;
-    isPublic?: boolean;
+    isEncrypted?: number;
+    isPublic?: number;
     sort?: number;
     remark?: string;
   }
@@ -43,11 +49,16 @@ export namespace ConfigApi {
     label?: string;
     value?: string;
     component?: string;
-    isEncrypted?: boolean;
-    isPublic?: boolean;
-    isSys?: boolean;
+    isEncrypted?: number;
+    isPublic?: number;
+    isSys?: number;
     sort?: number;
     remark?: string;
+  }
+
+  export interface SaveItem {
+    key: string;
+    value: string;
   }
 
   export interface PublicConfigItem {
@@ -57,16 +68,16 @@ export namespace ConfigApi {
   }
 }
 
-export function getConfigGroupsApi() {
-  return requestClient.get<ConfigApi.GroupItem[]>('/admin/sys/config/groups');
+export function getConfigListApi(params: ConfigApi.PageParams) {
+  return requestClient.get<{ items: ConfigApi.ConfigItem[]; meta: any }>('/admin/sys/config/list', { params });
 }
 
-export function getConfigListApi(groups: string) {
-  return requestClient.get<ConfigApi.ConfigItem[]>('/admin/sys/config/list', { params: { groups } });
+export function getConfigOptionsApi() {
+  return requestClient.get<ConfigApi.GroupOption[]>('/admin/sys/config/options');
 }
 
-export function saveConfigApi(items: ConfigApi.SaveItem[]) {
-  return requestClient.post('/admin/sys/config/save', { items });
+export function getConfigDetailApi(id: string) {
+  return requestClient.get<ConfigApi.ConfigItem>('/admin/sys/config/detail', { params: { id } });
 }
 
 export function createConfigApi(data: ConfigApi.CreateParams) {
@@ -77,12 +88,20 @@ export function updateConfigApi(data: ConfigApi.UpdateParams) {
   return requestClient.put<ConfigApi.ConfigItem>('/admin/sys/config/update', data);
 }
 
-export function sortConfigApi(items: { id: string; sort: number }[]) {
-  return requestClient.put('/admin/sys/config/sort', { items });
+export function saveConfigApi(items: ConfigApi.SaveItem[]) {
+  return requestClient.post('/admin/sys/config/save', { items });
 }
 
 export function deleteConfigApi(id: string) {
   return requestClient.delete('/admin/sys/config/delete', { data: { id } });
+}
+
+export function batchDeleteConfigApi(ids: string[]) {
+  return requestClient.delete('/admin/sys/config/batch-delete', { data: { ids } });
+}
+
+export function batchUpdateConfigApi(ids: string[], fieldName: string, value: any) {
+  return requestClient.put('/admin/sys/config/batch-update', { ids, [fieldName]: value });
 }
 
 /** 获取公开配置（无需登录） */

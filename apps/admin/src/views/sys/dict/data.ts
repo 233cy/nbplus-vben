@@ -1,7 +1,3 @@
-/**
- * 字典管理模块共享常量、类型与工具函数
- */
-
 import type { DictApi } from '#/api/sys/dict';
 
 /** 字典项颜色选项 */
@@ -26,48 +22,11 @@ export function createColorOptions(t: (key: string) => string) {
   ];
 }
 
-/** 从所有字典中提取分组列表 */
-export function extractGroups(dicts: DictApi.DictItem[], defaultGroup: string): string[] {
-  const set = new Set(dicts.map(d => d.groups || defaultGroup));
-  return [...set];
-}
-
-/** 按分组归类字典 */
-export function groupByGroups(dicts: DictApi.DictItem[], defaultGroup: string): Map<string, DictApi.DictItem[]> {
-  const map = new Map<string, DictApi.DictItem[]>();
+/** 从字典列表中提取所有分组 */
+export function getAllGroups(dicts: DictApi.DictItem[]): string[] {
+  const set = new Set<string>();
   for (const d of dicts) {
-    const g = d.groups || defaultGroup;
-    if (!map.has(g)) map.set(g, []);
-    map.get(g)!.push(d);
+    if (d.groups) set.add(d.groups);
   }
-  return map;
-}
-
-/** 字典项默认表单 */
-export function createDefaultItemForm(): {
-  color: string;
-  label: string;
-  remark: string;
-  sort: number;
-  status: number;
-  value: string;
-} {
-  return { label: '', value: '', color: '', remark: '', sort: 0, status: 1 };
-}
-
-/** 字典类型默认表单 */
-export function createDefaultDictForm(): {
-  code: string;
-  groups: string;
-  name: string;
-  remark: string;
-  status: number;
-} {
-  return { name: '', code: '', groups: '', remark: '', status: 1 };
-}
-
-/** 计算新建字典项的默认排序 */
-export function calcNextSort(items: DictApi.DictItemData[]): number {
-  if (items.length === 0) return 10;
-  return Math.max(...items.map(i => i.sort)) + 10;
+  return [...set];
 }

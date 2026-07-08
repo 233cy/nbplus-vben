@@ -58,7 +58,8 @@ async function loadConfig() {
 
   loading.value = true;
   try {
-    const items = await getConfigListApi(props.group);
+    const res = await getConfigListApi({ groups: props.group, page: 1, pageSize: 100 });
+    const items = res.items ?? [];
     rawItems.value = items;
 
     const values: Record<string, string> = {};

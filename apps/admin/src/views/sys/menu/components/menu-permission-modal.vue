@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import type { ControllerMethodItem, MenuAdminApi } from '#/api/sys/menuAdmin';
+import type { ControllerMethodItem, ControllerPrefixItem, MenuAdminApi } from '#/api/sys/menuAdmin';
 
 import { computed, ref, watch } from 'vue';
 
 import { IconifyIcon } from '@vben/icons';
 
-import { Button, Checkbox, Form, FormItem, Modal, Radio, RadioButton, RadioGroup, Select } from 'ant-design-vue';
+import { Button, Checkbox, Form, FormItem, Modal, RadioButton, RadioGroup, Select } from 'ant-design-vue';
 
 import { getControllerMethodsApi, getControllerPrefixesApi } from '#/api/sys/menuAdmin';
 import { $t } from '#/locales';
 
 type Mode = 'single' | 'multiple';
+
+interface PermissionGroup {
+  permission: string;
+  titles: string[];
+}
 
 const props = defineProps<{
   mode: Mode;
@@ -27,14 +32,14 @@ const emit = defineEmits<{
 const showVisible = defineModel<boolean>('visible', { required: true });
 
 const controllerPrefix = ref('');
-const prefixes = ref<string[]>([]);
+const prefixes = ref<ControllerPrefixItem[]>([]);
 const prefixesLoading = ref(false);
 const scanLoading = ref(false);
 const submitLoading = ref(false);
 const methods = ref<ControllerMethodItem[]>([]);
-const checkedMap = ref<Record<string, boolean>>({});
-const permissionMap = ref<Record<string, string>>({});
-const selectedKey = ref<string>('');
+const selectedPermissions = ref<Record<string, boolean>>({});
+const titleMap = ref<Record<string, string>>({});
+const selectedSingle = ref<string>('');
 
 const isSingle = computed(() => props.mode === 'single');
 const title = computed(() => {
@@ -44,18 +49,31 @@ const title = computed(() => {
   return $t('sys.menu.permission.generateTitle', { title: props.genItem?.title ?? '' });
 });
 
-const prefixOptions = computed(() => prefixes.value.map(p => ({ label: p, value: p })));
+const prefixOptions = computed(() => prefixes.value.map(p => ({ label: p.prefix, value: p.prefix })));
 
-function methodKey(method: string, path: string): string {
-  return `${method}:${path}`;
-}
+const permissionGroups = computed<PermissionGroup[]>(() => {
+  const map = new Map<string, Set<string>>();
+  methods.value.forEach((m) => {
+    m.permissions.forEach((permission) => {
+      if (!map.has(permission)) {
+        map.set(permission, new Set());
+      }
+      map.get(permission)!.add(m.title);
+    });
+  });
+
+  return Array.from(map.entries()).map(([permission, titles]) => ({
+    permission,
+    titles: Array.from(titles),
+  }));
+});
 
 function resetState() {
   controllerPrefix.value = '';
   methods.value = [];
-  checkedMap.value = {};
-  permissionMap.value = {};
-  selectedKey.value = '';
+  selectedPermissions.value = {};
+  titleMap.value = {};
+  selectedSingle.value = '';
 }
 
 async function loadPrefixes(force = false) {
@@ -85,7 +103,7 @@ function inferControllerPrefix(): string | null {
     .join('/')
     .replace(/^adm/, '/admin');
 
-  return prefixes.value.find((p) => p === modulePath) ?? null;
+  return prefixes.value.find((p) => p.prefix === modulePath)?.prefix ?? null;
 }
 
 async function handleScan() {
@@ -97,17 +115,18 @@ async function handleScan() {
   try {
     const res = await getControllerMethodsApi(prefix);
     methods.value = res;
-    checkedMap.value = {};
-    permissionMap.value = {};
-    selectedKey.value = '';
 
-    res.forEach((m) => {
-      const key = methodKey(m.method, m.path);
-      permissionMap.value[key] = m.permissions[0] ?? '';
-      if (!isSingle.value) {
-        checkedMap.value[key] = true;
-      }
+    const selected: Record<string, boolean> = {};
+    const titles: Record<string, string> = {};
+
+    permissionGroups.value.forEach((g) => {
+      selected[g.permission] = true;
+      titles[g.permission] = g.titles[0] ?? '';
     });
+
+    selectedPermissions.value = selected;
+    titleMap.value = titles;
+    selectedSingle.value = permissionGroups.value[0]?.permission ?? '';
   } finally {
     scanLoading.value = false;
   }
@@ -124,25 +143,32 @@ function handleCancel() {
 function buildSaveParams(): MenuAdminApi.SaveParams[] {
   if (!props.genItem) return [];
 
-  return methods.value
-    .filter((m) => checkedMap.value[methodKey(m.method, m.path)])
-    .map((m, index) => ({
+  const items: MenuAdminApi.SaveParams[] = [];
+  let sort = 10;
+
+  permissionGroups.value.forEach((g) => {
+    if (!selectedPermissions.value[g.permission]) return;
+    items.push({
       parentId: props.genItem!.id,
       type: 3 as MenuAdminApi.MenuType,
-      title: m.title,
-      permission: permissionMap.value[methodKey(m.method, m.path)],
-      sort: (index + 1) * 10,
+      title: titleMap.value[g.permission] ?? g.titles[0] ?? '',
+      permission: g.permission,
+      sort,
       status: 1,
-    }));
+    });
+    sort += 10;
+  });
+
+  return items;
 }
 
 async function handleOk() {
   if (isSingle.value) {
-    const selected = methods.value.find((m) => methodKey(m.method, m.path) === selectedKey.value);
-    if (!selected) return;
-    const permission = permissionMap.value[selectedKey.value] ?? selected.permissions[0] ?? '';
-    if (!permission) return;
-    emit('select', { permission, title: selected.title });
+    const group = permissionGroups.value.find((g) => g.permission === selectedSingle.value);
+    if (!group) return;
+    const title = titleMap.value[selectedSingle.value] ?? group.titles[0] ?? '';
+    if (!title) return;
+    emit('select', { permission: group.permission, title });
     showVisible.value = false;
     return;
   }
@@ -174,7 +200,7 @@ watch(showVisible, async (visible) => {
   <Modal
     v-model:open="showVisible"
     :confirm-loading="submitLoading"
-    width="560px"
+    width="600px"
     @ok="handleOk"
     @cancel="handleCancel"
   >
@@ -203,35 +229,33 @@ watch(showVisible, async (visible) => {
         </div>
       </FormItem>
 
-      <FormItem v-if="methods.length > 0" :label="$t('sys.menu.permission.method')">
-        <div class="max-h-[320px] overflow-y-auto rounded border border-[hsl(var(--border))] p-2">
+      <FormItem v-if="permissionGroups.length > 0" :label="$t('sys.menu.permission.method')">
+        <div class="max-h-[360px] overflow-y-auto rounded border border-[hsl(var(--border))] p-2">
           <div
-            v-for="m in methods"
-            :key="methodKey(m.method, m.path)"
+            v-for="g in permissionGroups"
+            :key="g.permission"
             class="mb-3 rounded p-2 last:mb-0 hover:bg-[hsl(var(--muted))]"
           >
             <div class="flex items-center gap-2">
               <template v-if="isSingle">
-                <Radio :value="methodKey(m.method, m.path)" :checked="selectedKey === methodKey(m.method, m.path)" @click="selectedKey = methodKey(m.method, m.path)">
-                  <span class="font-medium">[{{ m.method }}] {{ m.path }}</span>
-                  <span class="ml-2 text-[hsl(var(--muted-foreground))]">{{ m.title }}</span>
-                </Radio>
+                <RadioGroup v-model:value="selectedSingle" size="small">
+                  <RadioButton :value="g.permission">{{ g.permission }}</RadioButton>
+                </RadioGroup>
               </template>
               <template v-else>
-                <Checkbox v-model:checked="checkedMap[methodKey(m.method, m.path)]">
-                  <span class="font-medium">[{{ m.method }}] {{ m.path }}</span>
-                  <span class="ml-2 text-[hsl(var(--muted-foreground))]">{{ m.title }}</span>
+                <Checkbox v-model:checked="selectedPermissions[g.permission]">
+                  <span class="font-medium">{{ g.permission }}</span>
                 </Checkbox>
               </template>
             </div>
             <div class="mt-2 pl-6">
-              <template v-if="m.permissions.length === 1">
-                <span class="text-sm text-[hsl(var(--muted-foreground))]">{{ m.permissions[0] }}</span>
+              <template v-if="g.titles.length === 1">
+                <span class="text-sm text-[hsl(var(--muted-foreground))]">{{ g.titles[0] }}</span>
               </template>
               <template v-else>
-                <RadioGroup v-model:value="permissionMap[methodKey(m.method, m.path)]" size="small">
-                  <RadioButton v-for="perm in m.permissions" :key="perm" :value="perm">
-                    {{ perm }}
+                <RadioGroup v-model:value="titleMap[g.permission]" size="small">
+                  <RadioButton v-for="t in g.titles" :key="t" :value="t">
+                    {{ t }}
                   </RadioButton>
                 </RadioGroup>
               </template>

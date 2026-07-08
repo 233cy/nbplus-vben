@@ -1,105 +1,118 @@
-<!--
-  字典管理页面
-  ============
-  左侧：字典分组与字典列表（点击选中字典）
-  右侧：当前选中字典的字典项列表（支持排序、搜索、CRUD）
-
-  逻辑拆分：
-  - composables/useDict.ts      → 字典数据与选中状态
-  - composables/useDictItems.ts → 字典项数据与排序
-  - composables/useDictForm.ts  → 字典类型 CRUD 弹窗
-  - composables/useItemForm.ts  → 字典项 CRUD 弹窗
-  - components/dict-sidebar.vue → 左侧字典列表
-  - components/dict-form.vue    → 字典类型弹窗
-  - components/item-list.vue    → 右侧字典项列表
-  - components/item-form.vue    → 字典项弹窗
--->
 <script setup lang="ts">
-import { ColPage } from '@vben/common-ui';
+import { Page, useVbenDrawer } from '@vben/common-ui';
+import { IconifyIcon, Plus } from '@vben/icons';
 
+import { Button } from 'ant-design-vue';
+import { ref } from 'vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import {
+  batchDeleteDictApi,
+  batchUpdateDictApi,
+  getDictDetailApi,
+  getDictListApi,
+  getDictOptionsApi,
+} from '#/api/sys/dict';
+import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { $t } from '#/locales';
 
 import DictForm from './components/dict-form.vue';
-import DictSidebar from './components/dict-sidebar.vue';
-import ItemForm from './components/item-form.vue';
-import ItemList from './components/item-list.vue';
-import { useDict, useDictForm, useDictItems, useItemForm } from './composables';
+import { useDictPermission } from './permissions';
+import { useColumns } from './schema/columns';
+import { useGridFormSchema } from './schema/grid';
 
-const dict = useDict({ defaultGroupLabel: $t('sys.dict.defaultGroup') });
-const items = useDictItems();
-const dictForm = useDictForm({
-  allDicts: dict.allDicts,
-  activeDict: dict.activeDict,
-  reload: dict.loadDicts,
-  clearSelection: dict.clearSelection,
-});
-const itemForm = useItemForm({
-  activeDict: dict.activeDict,
-  itemList: items.list,
-  reloadItems: items.loadItems,
+const { canCreate, canBatchDelete, canBatchUpdate } = useDictPermission();
+
+const groupsOptions = ref<{ label: string; value: string }[]>([]);
+getDictOptionsApi().then((dicts) => {
+  const groups = [...new Set(dicts.map(d => d.groups).filter(Boolean))] as string[];
+  groupsOptions.value = groups.map(g => ({ label: g, value: g }));
 });
 
-function onSelectDict(dictItem: any) {
-  dict.activeDict.value = dictItem;
-  items.keyword.value = '';
-  if (dictItem) {
-    items.loadItems(dictItem.id);
-  } else {
-    items.list.value = [];
-  }
+const [DictFormDrawer, dictFormDrawerApi] = useVbenDrawer({
+  connectedComponent: DictForm,
+  destroyOnClose: true,
+});
+
+async function onEditClick(id: string) {
+  const res = await getDictDetailApi(id);
+  dictFormDrawerApi.setData(res).open();
 }
 
-// 页面初始化
-dict.loadDicts();
+const [Grid, gridApi] = useVbenVxeGrid({
+  formOptions: {
+    collapsed: true,
+    schema: useGridFormSchema(groupsOptions),
+    showCollapseButton: true,
+    submitOnChange: false,
+    wrapperClass: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+  },
+  gridOptions: {
+    columns: useColumns(onEditClick, () => gridApi.query()),
+    height: 'auto',
+    keepSource: true,
+    proxyConfig: {
+      ajax: {
+        queryApi: getDictListApi,
+      } as any,
+    },
+    rowConfig: { keyField: 'id' },
+    checkboxConfig: { reserve: true, highlight: true },
+    toolbarConfig: { custom: true, export: false, refresh: true, search: true, zoom: true },
+    expandConfig: {
+      showIcon: true,
+    },
+  },
+});
+
+function onRefresh() {
+  gridApi.query();
+}
+
+function getSelectedIds(): string[] {
+  return (gridApi.grid?.getCheckboxRecords() as { id: string }[])?.map(r => r.id) ?? [];
+}
 </script>
 
 <template>
-  <ColPage auto-content-height :left-width="26" :right-width="74" :resizable="true" :split-line="true" :split-handle="true">
-    <template #left>
-      <DictSidebar
-        :loading="dict.loading.value"
-        :tree-data="dict.treeData.value"
-        :groups="dict.groups.value"
-        :keyword="dict.keyword.value"
-        :expanded-keys="dict.expandedKeys.value"
-        :active-dict="dict.activeDict.value"
-        @update:keyword="dict.keyword.value = $event"
-        @update:expanded-keys="dict.expandedKeys.value = $event"
-        @select="onSelectDict"
-        @create="dictForm.openCreate($event)"
-        @edit="dictForm.openEdit"
-        @delete="dictForm.handleDelete"
-        @reload="dict.loadDicts()"
-      />
-    </template>
+  <Page auto-content-height>
+    <DictFormDrawer @success="onRefresh" />
+    <Grid :table-title="$t('sys.dict.pageTitle')">
+      <template #toolbar-tools>
+        <BatchActionDropdown
+          v-if="canBatchDelete"
+          class="ml-2"
+          type="direct"
+          :action="$t('common.delete')"
+          :api-fn="(ids: string[]) => batchDeleteDictApi(ids)"
+          :get-ids="getSelectedIds"
+          :on-success="onRefresh"
+        >
+          <template #default="{ onClick }">
+            <Button danger @click="onClick">
+              <IconifyIcon icon="lucide:trash-2" class="size-4" />
+              {{ $t('common.batchDelete') }}
+            </Button>
+          </template>
+        </BatchActionDropdown>
 
-    <ItemList
-      :active-dict="dict.activeDict.value"
-      :items="items.list.value"
-      :loading="items.loading.value"
-      :keyword="items.keyword.value"
-      @update:keyword="items.keyword.value = $event"
-      @add="itemForm.openCreate"
-      @edit="itemForm.openEdit"
-      @delete="itemForm.handleDelete"
-      @reload="dict.activeDict.value && items.loadItems(dict.activeDict.value.id)"
-    />
+        <BatchActionDropdown
+          v-if="canBatchUpdate"
+          class="ml-2 mr-2"
+          type="dict"
+          :action="$t('common.batchUpdate')"
+          :api-fn="batchUpdateDictApi"
+          :get-ids="getSelectedIds"
+          :on-success="onRefresh"
+          field-name="status"
+          dict-code="is_enable"
+        />
 
-    <DictForm
-      v-model:visible="dictForm.visible.value"
-      v-model:form="dictForm.form.value"
-      :loading="dictForm.loading.value"
-      :is-edit="!!dictForm.editing.value"
-      :group-options="dictForm.groupOptions.value"
-      @submit="dictForm.handleSubmit"
-    />
-
-    <ItemForm
-      v-model:visible="itemForm.visible.value"
-      v-model:form="itemForm.form.value"
-      :loading="itemForm.loading.value"
-      :is-edit="!!itemForm.editing.value"
-      @submit="itemForm.handleSubmit"
-    />
-  </ColPage>
+        <Button v-if="canCreate" type="primary" @click="dictFormDrawerApi.setData(undefined as any).open()">
+          <Plus class="size-5" />
+          {{ $t('sys.dict.addDict') }}
+        </Button>
+      </template>
+    </Grid>
+  </Page>
 </template>

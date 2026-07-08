@@ -11,29 +11,32 @@ import { $t } from '#/locales';
 
 import { buildMenuPath, createDefaultMenuForm } from '../data';
 
-/** 递归平铺菜单树（只保留目录节点 type===1） */
+/** 平铺菜单列表（只保留目录节点 type===1） */
 function flattenDirTree(nodes: MenuAdminApi.MenuItem[]): MenuAdminApi.MenuItem[] {
-  const result: MenuAdminApi.MenuItem[] = [];
-  for (const node of nodes) {
-    if (node.type === 1) {
-      result.push(node);
-      if (node.children?.length) {
-        result.push(...flattenDirTree(node.children));
-      }
-    }
-  }
-  return result;
+  return nodes.filter(node => node.type === 1);
 }
 
-/** 递归过滤只保留目录节点的树 */
+/** 从平级菜单列表构建只包含目录节点的树 */
 function filterDirTree(nodes: MenuAdminApi.MenuItem[]): MenuAdminApi.MenuItem[] {
-  const result: MenuAdminApi.MenuItem[] = [];
-  for (const node of nodes) {
-    if (node.type !== 1) continue;
-    const children = filterDirTree(node.children ?? []);
-    result.push({ ...node, children });
+  const dirNodes = nodes.filter(node => node.type === 1);
+  const childrenMap = new Map<null | string, MenuAdminApi.MenuItem[]>();
+  for (const node of dirNodes) {
+    const key = node.parentId ?? null;
+    if (!childrenMap.has(key)) {
+      childrenMap.set(key, []);
+    }
+    childrenMap.get(key)!.push(node);
   }
-  return result;
+
+  const build = (parentId: null | string): MenuAdminApi.MenuItem[] => {
+    const children = childrenMap.get(parentId) ?? [];
+    return children.map(node => ({
+      ...node,
+      children: build(node.id),
+    }));
+  };
+
+  return build(null);
 }
 
 /**
@@ -93,7 +96,8 @@ export function useMenuForm() {
       menuIcon: 'lucide:table-2',
       menuSort: 0,
     };
-    const tree = await getMenuTreeApi();
+    const result = await getMenuTreeApi();
+    const tree = result.items ?? [];
     menuTreeFlat.value = flattenDirTree(tree);
     menuTreeData.value = [{ id: '__root__', title: $t('dev.curd.menu.root'), path: '', type: 1, children: filterDirTree(tree) }];
     visible.value = true;

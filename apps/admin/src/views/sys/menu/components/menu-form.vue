@@ -9,11 +9,12 @@ import { Button, Checkbox, Form, FormItem, Input, InputNumber, message, RadioBut
 
 import { createMenuApi, getMenuDetailApi, getMenuTreeApi, updateMenuApi } from '#/api/sys/menuAdmin';
 import DictSelect from '#/components/dict/DictSelect.vue';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { getDictItems, useDict } from '#/utils/dict';
 
-import { createDefaultForm, findNodeTitle, getAllowedTypes, ROOT_PARENT } from '../data';
+import { useMenuAccessPermission } from '../permissions';
+
+import { buildParentTreeData, createDefaultForm, findNodeTitle, getAllowedTypes, ROOT_PARENT } from '../data';
 import MenuPermissionModal from './menu-permission-modal.vue';
 
 interface FormSuccessPayload {
@@ -23,9 +24,9 @@ interface FormSuccessPayload {
 
 const emit = defineEmits<{ success: [payload: FormSuccessPayload] }>();
 
-const { hasAccessByCodes } = useAccess();
-const canCreate = computed(() => hasAccessByCodes(['adm:sys:menu:create']));
-const canUpdate = computed(() => hasAccessByCodes(['adm:sys:menu:update']));
+const permission = useMenuAccessPermission();
+const canCreate = computed(() => permission.canCreate);
+const canUpdate = computed(() => permission.canUpdate);
 
 const form = ref<MenuAdminApi.SaveParams & { id?: string }>(createDefaultForm());
 const treeData = ref<MenuAdminApi.MenuItem[]>([]);
@@ -52,26 +53,12 @@ const title = computed(() => {
   return `${$t(actionKey)}${parentTitle ? `「${parentTitle}」` : ''}`;
 });
 
-const treeSelectData = computed(() => buildTreeData(treeData.value, rowId.value));
+const treeSelectData = computed(() => buildParentTreeData(treeData.value, rowId.value));
 
-function buildTreeData(nodes: MenuAdminApi.MenuItem[], excludeId?: string): { children: any[]; label: string; value: string }[] {
-  const result: { children: any[]; label: string; value: string }[] = [];
-  for (const node of nodes) {
-    // 按钮为末级，不能作为父级菜单
-    if (node.id === excludeId || node.type === 3) continue;
-    result.push({
-      label: node.title,
-      value: node.id,
-      children: node.children?.length ? buildTreeData(node.children, excludeId) : [],
-    });
-  }
-  return result;
-}
-
-async function loadTreeData(excludeId?: string) {
+async function loadTreeData() {
   try {
-    const tree = await getMenuTreeApi();
-    treeData.value = excludeId ? filterTreeExclude(tree, excludeId) : tree;
+    const result = await getMenuTreeApi();
+    treeData.value = result.items ?? [];
   } catch {
     treeData.value = [];
   }
@@ -99,16 +86,6 @@ function updateTreeExpandedKeys() {
   }
   const rootNodes = [{ value: ROOT_PARENT, children: treeSelectData.value }];
   treeExpandedKeys.value = findPathToNode(rootNodes, parentId);
-}
-
-function filterTreeExclude(nodes: MenuAdminApi.MenuItem[], excludeId?: string): MenuAdminApi.MenuItem[] {
-  if (!excludeId) return nodes;
-  return nodes
-    .filter(node => node.id !== excludeId)
-    .map(node => ({
-      ...node,
-      children: node.children?.length ? filterTreeExclude(node.children, excludeId) : [],
-    }));
 }
 
 async function loadDetailForm(id: string) {
@@ -215,7 +192,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     originalParentId.value = null;
     isReadonly.value = false;
 
-    await loadTreeData(data?.id);
+    await loadTreeData();
 
     if (data?.id) {
       rowId.value = data.id;

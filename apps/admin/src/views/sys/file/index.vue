@@ -17,10 +17,12 @@ import QuickConfigDrawer from '#/views/sys/config/shared/quick-config-drawer.vue
 import MoveModal from './components/move-modal.vue';
 import UploadDrawer from './components/upload-drawer.vue';
 import { useFile } from './composables/useFile';
+import { useFilePermission } from './permissions';
 import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
 
 const file = useFile();
+const { canDelete, canMove, canSaveConfig } = useFilePermission();
 
 const configDrawerVisible = ref(false);
 
@@ -120,12 +122,19 @@ async function handleSingleDelete(record: FileApi.FileItem) {
             {{ $t('sys.file.upload') }}
           </Button>
 
-          <Button @click="openBatchMove">
+          <Button v-if="canMove" @click="openBatchMove">
             <IconifyIcon icon="lucide:move" class="size-4" />
             {{ $t('sys.file.batchMove') }}
           </Button>
 
-          <BatchActionDropdown type="direct" :action="$t('common.delete')" :api-fn="(ids: string[]) => batchDeleteFileApi(ids)" :get-ids="getSelectedIds" :on-success="onRefresh">
+          <BatchActionDropdown
+            v-if="canDelete"
+            type="direct"
+            :action="$t('common.delete')"
+            :api-fn="(ids: string[]) => batchDeleteFileApi(ids)"
+            :get-ids="getSelectedIds"
+            :on-success="onRefresh"
+          >
             <template #default="{ onClick }">
               <Button danger @click="onClick">
                 <IconifyIcon icon="lucide:trash-2" class="size-4" />
@@ -134,7 +143,7 @@ async function handleSingleDelete(record: FileApi.FileItem) {
             </template>
           </BatchActionDropdown>
 
-          <Button @click="configDrawerVisible = true">
+          <Button v-if="canSaveConfig" @click="configDrawerVisible = true">
             <IconifyIcon icon="lucide:settings" class="size-4" />
             {{ $t('common.paramConfig') }}
           </Button>

@@ -2,10 +2,11 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { MenuPkgApi } from '#/api/sys/menuPkg';
 
 import { deleteMenuPkgApi, inlineUpdateMenuPkgApi } from '#/api/sys/menuPkg';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
 import { useTableDelete } from '#/utils/table';
+
+import { useMenuPkgPermission } from '../permissions';
 
 /**
  * 权限包列表列定义
@@ -16,11 +17,7 @@ export function useColumns(
   onAssignMenus: (row: MenuPkgApi.MenuPkgItem) => void,
   onRefresh: () => void,
 ): VxeTableGridOptions['columns'] {
-  const { hasAccessByCodes } = useAccess();
-  const canDetail = hasAccessByCodes(['adm:sys:menuPkg:detail']);
-  const canUpdate = hasAccessByCodes(['adm:sys:menuPkg:update']);
-  const canDelete = hasAccessByCodes(['adm:sys:menuPkg:delete']);
-  const canAssignMenus = hasAccessByCodes(['adm:sys:menuPkg:assignMenus']);
+  const { canDetail, canUpdate, canDelete, canAssignMenus } = useMenuPkgPermission();
 
   return [
     { type: 'checkbox', width: 50 },

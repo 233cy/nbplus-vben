@@ -36,6 +36,14 @@ export namespace MenuAdminApi {
     children?: MenuItem[];
   }
 
+  export interface MenuTreeResult {
+    items: MenuItem[];
+    meta: {
+      type: 'tree';
+      total: number;
+    };
+  }
+
   export interface SaveParams {
     id?: string;
     parentId?: null | string;
@@ -64,7 +72,7 @@ export namespace MenuAdminApi {
 }
 
 export function getMenuTreeApi(params?: { keyword?: string; status?: number }) {
-  return requestClient.get<MenuAdminApi.MenuItem[]>('/admin/sys/menu/tree', { params });
+  return requestClient.get<MenuAdminApi.MenuTreeResult>('/admin/sys/menu/tree', { params });
 }
 
 export function getMenuListApi(params: { keyword?: string; page?: number; pageSize?: number; parentId?: string; status?: number }) {
@@ -87,8 +95,13 @@ export function deleteMenuApi(id: string) {
   return requestClient.delete('/admin/sys/menu/delete', { data: { id } });
 }
 
+export interface BatchDeleteResult {
+  deleted: string[];
+  skipped: string[];
+}
+
 export function batchDeleteMenuApi(ids: string[]) {
-  return requestClient.delete<{ deleted: string[]; skipped: string[] }>('/admin/sys/menu/batch-delete', { data: { ids } });
+  return requestClient.delete<BatchDeleteResult>('/admin/sys/menu/batch-delete', { data: { ids } });
 }
 
 export function sortMenuApi(items: { id: string; sort: number }[]) {
@@ -114,6 +127,10 @@ export function getControllerMethodsApi(prefix: string) {
   return requestClient.post<ControllerMethodItem[]>('/admin/sys/menu/controller-methods', { prefix });
 }
 
+export interface ControllerPrefixItem {
+  prefix: string;
+}
+
 export function getControllerPrefixesApi() {
-  return requestClient.get<string[]>('/admin/sys/menu/controller-prefixes');
+  return requestClient.get<ControllerPrefixItem[]>('/admin/sys/menu/controller-prefixes');
 }

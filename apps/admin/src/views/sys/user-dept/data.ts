@@ -9,14 +9,6 @@ export interface DeptTreeNode extends DeptApi.DeptItem {
 /** 移动节点时的虚拟根节点值 */
 export const ROOT_PARENT = '__root__';
 
-/** 状态选项 */
-export function createStatusOptions(t: (key: string) => string) {
-  return [
-    { label: t('common.enabled'), value: 1 },
-    { label: t('common.disabled'), value: 2 },
-  ];
-}
-
 /** 默认空表单 */
 export function createDefaultForm(): DeptApi.SaveParams {
   return {
@@ -55,7 +47,7 @@ export function buildParentTreeData(nodes: DeptApi.DeptItem[], excludeId?: strin
   }
 
   // 2. 按 parentId 分组
-  const childrenMap = new Map<string | null, DeptApi.DeptItem[]>();
+  const childrenMap = new Map<null | string, DeptApi.DeptItem[]>();
   for (const node of validNodes) {
     const key = node.parentId ?? null;
     if (!childrenMap.has(key)) {
@@ -65,7 +57,7 @@ export function buildParentTreeData(nodes: DeptApi.DeptItem[], excludeId?: strin
   }
 
   // 3. 递归构建树，按 sort 降序排列（与后端默认排序一致）
-  const build = (parentId: string | null): { children: any[]; label: string; value: string }[] => {
+  const build = (parentId: null | string): { children: any[]; label: string; value: string }[] => {
     const children = childrenMap.get(parentId) ?? [];
     children.sort((a, b) => (b.sort ?? 0) - (a.sort ?? 0));
     return children.map(node => ({

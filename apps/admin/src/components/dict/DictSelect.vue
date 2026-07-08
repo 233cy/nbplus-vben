@@ -23,6 +23,9 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   allowClear: true,
+  dropdownMatchSelectWidth: false,
+  placeholder: undefined,
+  valueType: undefined,
 });
 
 const modelValue = defineModel<null | number | number[] | string | string[] | undefined>('value');

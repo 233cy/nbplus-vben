@@ -10,20 +10,7 @@ import { message } from 'ant-design-vue';
 
 import { getMenuTreeApi, updateMenuApi } from '#/api/sys/menuAdmin';
 
-import { ROOT_PARENT } from '../data';
-
-function buildParentTreeData(nodes: MenuAdminApi.MenuItem[], excludeId?: string): { children: any[]; label: string; value: string }[] {
-  const result: { children: any[]; label: string; value: string }[] = [];
-  for (const node of nodes) {
-    if (node.id === excludeId) continue;
-    result.push({
-      label: node.title,
-      value: node.id,
-      children: node.children?.length ? buildParentTreeData(node.children, excludeId) : [],
-    });
-  }
-  return result;
-}
+import { buildParentTreeData, ROOT_PARENT } from '../data';
 
 export interface UseMenuMoveOptions {
   onSuccess?: (payload: { originalParentId: string | null; newParentId: string | null }) => void | Promise<void>;
@@ -43,7 +30,8 @@ export function useMenuMove(options: UseMenuMoveOptions) {
 
   async function loadTreeData() {
     try {
-      treeData.value = await getMenuTreeApi();
+      const result = await getMenuTreeApi();
+      treeData.value = result.items ?? [];
     } catch {
       treeData.value = [];
     }

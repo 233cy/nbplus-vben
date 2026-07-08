@@ -2,9 +2,10 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { MenuAdminApi } from '#/api/sys/menuAdmin';
 
 import { inlineUpdateMenuApi } from '#/api/sys/menuAdmin';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
+
+import { useMenuAccessPermission } from '../permissions';
 
 /**
  * 菜单树表格列定义
@@ -24,11 +25,7 @@ export function useColumns(handlers: {
   onMove: (row: MenuAdminApi.MenuItem) => void;
   onRefreshNode: (row: MenuAdminApi.MenuItem) => Promise<void>;
 }): VxeTableGridOptions['columns'] {
-  const { hasAccessByCodes } = useAccess();
-  const canCreate = hasAccessByCodes(['adm:sys:menu:create']);
-  const canUpdate = hasAccessByCodes(['adm:sys:menu:update']);
-  const canDelete = hasAccessByCodes(['adm:sys:menu:delete']);
-  const canDetail = hasAccessByCodes(['adm:sys:menu:detail']);
+  const { canCreate, canUpdate, canDelete, canDetail, canBatchCreate } = useMenuAccessPermission();
 
   const inlineApi = (id: string, field: string, value: any) => inlineUpdateMenuApi(id, field, value);
 
@@ -177,7 +174,7 @@ export function useColumns(handlers: {
               key: 'generatePermission',
               label: $t('sys.menu.generatePermission'),
               icon: 'lucide:lock',
-              hidden: ({ type }: MenuAdminApi.MenuItem) => type !== 2,
+              hidden: ({ type }: MenuAdminApi.MenuItem) => type !== 2 || !canBatchCreate,
               onClick: (row: MenuAdminApi.MenuItem) => handlers.onGeneratePermission(row),
             },
             {

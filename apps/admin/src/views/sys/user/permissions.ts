@@ -14,11 +14,11 @@ export function useUserPermission() {
     canCreate: hasAccessByCodes(['adm:sys:user:create']),
     canUpdate: hasAccessByCodes(['adm:sys:user:update']),
     canDelete: hasAccessByCodes(['adm:sys:user:delete']),
-    canBatchDelete: hasAccessByCodes(['adm:sys:user:batchDelete']),
-    canBatchUpdate: hasAccessByCodes(['adm:sys:user:batchUpdate']),
-    canInlineUpdate: hasAccessByCodes(['adm:sys:user:inlineUpdate']),
-    canOnline: hasAccessByCodes(['adm:sys:user:online']),
+    canBatchDelete: hasAccessByCodes(['adm:sys:user:delete']),
+    canBatchUpdate: hasAccessByCodes(['adm:sys:user:update']),
+    canInlineUpdate: hasAccessByCodes(['adm:sys:user:update']),
+    canOnline: hasAccessByCodes(['adm:sys:user:list']),
     canKick: hasAccessByCodes(['adm:sys:user:kick']),
-    canKickAll: hasAccessByCodes(['adm:sys:user:kickAll']),
+    canKickAll: hasAccessByCodes(['adm:sys:user:kick']),
   };
 }

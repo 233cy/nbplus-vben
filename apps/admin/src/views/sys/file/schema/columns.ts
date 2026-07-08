@@ -8,11 +8,44 @@ import { Tag } from 'ant-design-vue';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
 
+import { useFilePermission } from '../permissions';
+
 export function useColumns(
   onPreview: (record: FileApi.FileItem) => void,
   onMove: (record: FileApi.FileItem) => void,
   onDelete: (record: FileApi.FileItem) => void,
 ): VxeTableGridOptions['columns'] {
+  const { canPreview, canDelete, canMove } = useFilePermission();
+
+  const actions = [];
+  if (canPreview) {
+    actions.push({
+      key: 'preview',
+      label: $t('sys.file.preview'),
+      icon: 'lucide:eye',
+      onClick: onPreview,
+    });
+  }
+  if (canDelete) {
+    actions.push({
+      key: 'delete',
+      label: $t('common.delete'),
+      icon: 'lucide:trash-2',
+      danger: true,
+      confirmTitle: $t('common.confirmDelete'),
+      onClick: onDelete,
+    });
+  }
+  if (canMove) {
+    actions.push({
+      key: 'move',
+      label: $t('sys.file.move'),
+      icon: 'lucide:move-horizontal',
+      hidden: true,
+      onClick: onMove,
+    });
+  }
+
   return [
     { type: 'checkbox', width: 50 },
     {
@@ -77,29 +110,7 @@ export function useColumns(
       cellRender: {
         name: 'TableActions',
         attrs: {
-          actions: [
-            {
-              key: 'preview',
-              label: $t('sys.file.preview'),
-              icon: 'lucide:eye',
-              onClick: onPreview,
-            },
-            {
-              key: 'delete',
-              label: $t('common.delete'),
-              icon: 'lucide:trash-2',
-              danger: true,
-              confirmTitle: $t('common.confirmDelete'),
-              onClick: onDelete,
-            },
-            {
-              key: 'move',
-              label: $t('sys.file.move'),
-              icon: 'lucide:move-horizontal',
-              hidden: true,
-              onClick: onMove,
-            },
-          ],
+          actions,
         },
       },
     },

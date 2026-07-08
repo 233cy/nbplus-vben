@@ -14,7 +14,7 @@ import type { DictApi } from '#/api/sys/dict';
 
 import { computed, ref } from 'vue';
 
-import { getAllDictsApi, getDictItemsApi } from '#/api/sys/dict';
+import { getDictItemListApi, getDictOptionsApi } from '#/api/sys/dict';
 
 // =========================================================================
 // 全局缓存
@@ -24,18 +24,18 @@ import { getAllDictsApi, getDictItemsApi } from '#/api/sys/dict';
 const dictCache = new Map<string, DictApi.DictItemData[]>();
 /** code → 正在进行中的 Promise（防并发重复请求） */
 const pendingMap = new Map<string, Promise<DictApi.DictItemData[]>>();
-/** code → dictId（通过 all 接口拿到的映射） */
+/** code → dictId（通过 options 接口拿到的映射） */
 const codeToIdMap = new Map<string, string>();
 
-let allDictsLoaded = false;
+let optionsLoaded = false;
 
 async function ensureCodeMap() {
-  if (allDictsLoaded) return;
-  const dicts = await getAllDictsApi();
+  if (optionsLoaded) return;
+  const dicts = await getDictOptionsApi();
   for (const d of dicts) {
     codeToIdMap.set(d.code, d.id);
   }
-  allDictsLoaded = true;
+  optionsLoaded = true;
 }
 
 async function fetchByCode(code: string): Promise<DictApi.DictItemData[]> {
@@ -47,7 +47,7 @@ async function fetchByCode(code: string): Promise<DictApi.DictItemData[]> {
     await ensureCodeMap();
     const dictId = codeToIdMap.get(code);
     if (!dictId) return [];
-    const items = await getDictItemsApi(dictId);
+    const items = await getDictItemListApi(dictId);
     dictCache.set(code, items);
     pendingMap.delete(code);
     return items;
@@ -66,7 +66,7 @@ export function clearDictCache(code?: string) {
     dictCache.clear();
     pendingMap.clear();
     codeToIdMap.clear();
-    allDictsLoaded = false;
+    optionsLoaded = false;
   }
 }
 
@@ -108,7 +108,7 @@ export function useDictLabel(code: string, value: null | number | string | undef
 
 /**
  * 根据 value 获取 color（响应式 computed）
- * @example const color = useDictColor('gender', row.gender)
+ * @example const color = useDictColor('gender', 1)
  */
 export function useDictColor(code: string, value: null | number | string | undefined) {
   const { items } = useDict(code);

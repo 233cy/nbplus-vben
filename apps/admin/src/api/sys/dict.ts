@@ -5,17 +5,20 @@ export namespace DictApi {
     id: string;
     name: string;
     code: string;
-    groups: string;
+    groups: null | string;
     remark: null | string;
     sort: number;
     status: number;
+    itemCount: number;
+    createdAt: number;
+    updatedAt: number;
   }
 
   export interface DictSaveParams {
     name: string;
     code: string;
-    groups?: string;
-    remark?: string | null;
+    groups?: null | string;
+    remark?: null | string;
     status?: number;
   }
 
@@ -35,27 +38,36 @@ export namespace DictApi {
     dictId: string;
     label: string;
     value: string;
-    color?: string;
-    remark?: string;
+    color?: null | string;
+    remark?: null | string;
     sort?: number;
     status?: number;
   }
 
-  export interface SortItem {
-    id: string;
-    sort: number;
+  export interface DictListParams {
+    keyword?: string;
+    status?: number;
+    groups?: string;
   }
 }
 
-export function getAllDictsApi() {
-  return requestClient.get<DictApi.DictItem[]>('/admin/sys/dict/all');
+export function getDictListApi(params: DictApi.DictListParams & { page: number; pageSize: number }) {
+  return requestClient.get('/admin/sys/dict/list', { params });
+}
+
+export function getDictOptionsApi() {
+  return requestClient.get<DictApi.DictItem[]>('/admin/sys/dict/options');
+}
+
+export function getDictDetailApi(id: string) {
+  return requestClient.get<DictApi.DictItem>('/admin/sys/dict/detail', { params: { id } });
 }
 
 export function createDictApi(data: DictApi.DictSaveParams) {
   return requestClient.post<DictApi.DictItem>('/admin/sys/dict/create', data);
 }
 
-export function updateDictApi(data: DictApi.DictSaveParams & { id: string }) {
+export function updateDictApi(data: Partial<DictApi.DictSaveParams> & { id: string; sort?: number }) {
   return requestClient.put<DictApi.DictItem>('/admin/sys/dict/update', data);
 }
 
@@ -63,26 +75,38 @@ export function deleteDictApi(id: string) {
   return requestClient.delete('/admin/sys/dict/delete', { data: { id } });
 }
 
-export function sortDictApi(items: DictApi.SortItem[]) {
-  return requestClient.put('/admin/sys/dict/sort', { items });
+export function batchDeleteDictApi(ids: string[]) {
+  return requestClient.delete('/admin/sys/dict/batch-delete', { data: { ids } });
 }
 
-export function getDictItemsApi(id: string) {
-  return requestClient.get<DictApi.DictItemData[]>('/admin/sys/dict/items', { params: { id } });
+export function batchUpdateDictApi(ids: string[], fieldName: string, value: any) {
+  return requestClient.put('/admin/sys/dict/batch-update', { ids, [fieldName]: value });
+}
+
+export function getDictItemListApi(dictId: string) {
+  return requestClient.get<DictApi.DictItemData[]>('/admin/sys/dict/items/list', { params: { id: dictId } });
+}
+
+export function getDictItemDetailApi(id: string) {
+  return requestClient.get<DictApi.DictItemData>('/admin/sys/dict/items/detail', { params: { id } });
 }
 
 export function createDictItemApi(data: DictApi.DictItemSaveParams) {
-  return requestClient.post<DictApi.DictItemData>('/admin/sys/dict/item/create', data);
+  return requestClient.post<DictApi.DictItemData>('/admin/sys/dict/items/create', data);
 }
 
 export function updateDictItemApi(data: DictApi.DictItemSaveParams & { id: string }) {
-  return requestClient.put<DictApi.DictItemData>('/admin/sys/dict/item/update', data);
+  return requestClient.put<DictApi.DictItemData>('/admin/sys/dict/items/update', data);
 }
 
 export function deleteDictItemApi(id: string) {
-  return requestClient.delete('/admin/sys/dict/item/delete', { data: { id } });
+  return requestClient.delete('/admin/sys/dict/items/delete', { data: { id } });
 }
 
-export function sortDictItemApi(items: DictApi.SortItem[]) {
-  return requestClient.put('/admin/sys/dict/item/sort', { items });
+export function batchDeleteDictItemApi(ids: string[]) {
+  return requestClient.delete('/admin/sys/dict/items/batch-delete', { data: { ids } });
+}
+
+export function batchUpdateDictItemApi(ids: string[], fieldName: string, value: any) {
+  return requestClient.put('/admin/sys/dict/items/batch-update', { ids, [fieldName]: value });
 }

@@ -4,10 +4,11 @@ import type { RoleApi } from '#/api/sys/role';
 import { h } from 'vue';
 
 import { deleteRoleApi, inlineUpdateRoleApi } from '#/api/sys/role';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { useTableDelete } from '#/utils/table';
 import { formatUnixTime } from '#/utils/time';
+
+import { useRolePermission } from '../permissions';
 
 const dataScopeMap: Record<number, string> = {
   1: 'sys.role.dataScope.all',
@@ -27,12 +28,7 @@ export function useColumns(
   onAssignDataScope: (row: RoleApi.RoleItem) => void,
   onRefresh: () => void,
 ): VxeTableGridOptions['columns'] {
-  const { hasAccessByCodes } = useAccess();
-  const canDetail = hasAccessByCodes(['sys:role:detail']);
-  const canUpdate = hasAccessByCodes(['sys:role:update']);
-  const canDelete = hasAccessByCodes(['sys:role:delete']);
-  const canAssignMenus = hasAccessByCodes(['sys:role:assignMenus']);
-  const canAssignDataScope = hasAccessByCodes(['sys:role:assignDataScope']);
+  const { canDetail, canUpdate, canDelete, canAssignMenus, canAssignDataScope } = useRolePermission();
 
   return [
     { type: 'checkbox', width: 50 },

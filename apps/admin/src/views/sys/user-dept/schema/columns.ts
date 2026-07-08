@@ -2,9 +2,10 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { DeptApi } from '#/api/sys/userDept';
 
 import { inlineUpdateDeptApi } from '#/api/sys/userDept';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
+
+import { useUserDeptPermission } from '../permissions';
 
 /**
  * 部门树表格列定义
@@ -18,11 +19,7 @@ export function useColumns(handlers: {
   onRefreshNode: (row: DeptApi.DeptItem) => Promise<void>;
   onToggleStatus: (row: DeptApi.DeptItem, val: number) => Promise<void>;
 }): VxeTableGridOptions['columns'] {
-  const { hasAccessByCodes } = useAccess();
-  const canCreate = hasAccessByCodes(['adm:sys:userDept:create']);
-  const canDetail = hasAccessByCodes(['adm:sys:userDept:detail']);
-  const canUpdate = hasAccessByCodes(['adm:sys:userDept:update']);
-  const canDelete = hasAccessByCodes(['adm:sys:userDept:delete']);
+  const { canCreate, canDetail, canUpdate, canDelete } = useUserDeptPermission();
 
   return [
     {

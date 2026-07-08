@@ -7,15 +7,15 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { createRoleApi, getRoleDetailApi, updateRoleApi } from '#/api/sys/role';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
+import { useRolePermission } from '../permissions';
 import { useFormSchema } from '../schema/form';
 
 const emit = defineEmits<{ success: [] }>();
 
-const { hasAccessByCodes } = useAccess();
-const canUpdate = computed(() => hasAccessByCodes(['auth:role:update']));
+const permission = useRolePermission();
+const canUpdate = computed(() => permission.canUpdate);
 const rowId = ref<string | undefined>();
 const isReadonly = ref(false);
 const isEdit = computed(() => !!rowId.value);

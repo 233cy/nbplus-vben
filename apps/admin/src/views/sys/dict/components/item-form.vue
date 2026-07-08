@@ -1,31 +1,66 @@
 <script setup lang="ts">
+import type { DictApi } from '#/api/sys/dict';
+
+import { computed, ref, watch } from 'vue';
+
 import { Form, FormItem, Input, Modal, Select, Tag } from 'ant-design-vue';
 
+import { createDictItemApi, updateDictItemApi } from '#/api/sys/dict';
 import { $t } from '#/locales';
 
 import { createColorOptions } from '../data';
 
 interface ItemFormModel {
-  label: string;
-  value: string;
   color: string;
+  label: string;
   remark: string;
   sort: number;
   status: number;
+  value: string;
 }
 
 const props = defineProps<{
-  visible: boolean;
-  loading: boolean;
-  isEdit: boolean;
+  data: null | DictApi.DictItemData;
+  dictId: string;
+  dictName: string;
 }>();
 
 const emit = defineEmits<{
-  submit: [];
+  success: [];
 }>();
 
 const visible = defineModel<boolean>('visible', { required: true });
-const form = defineModel<ItemFormModel>('form', { required: true });
+
+const loading = ref(false);
+const form = ref<ItemFormModel>({
+  label: '',
+  value: '',
+  color: '',
+  remark: '',
+  sort: 0,
+  status: 1,
+});
+
+const isEdit = computed(() => !!props.data);
+
+watch(
+  () => props.data,
+  (val) => {
+    if (val) {
+      form.value = {
+        label: val.label,
+        value: val.value,
+        color: val.color ?? '',
+        remark: val.remark ?? '',
+        sort: val.sort,
+        status: val.status,
+      };
+    } else {
+      form.value = { label: '', value: '', color: '', remark: '', sort: 0, status: 1 };
+    }
+  },
+  { immediate: true },
+);
 
 const statusOptions = [
   { label: $t('common.enabled'), value: 1 },
@@ -34,8 +69,19 @@ const statusOptions = [
 
 const colorOptions = createColorOptions($t);
 
-function handleOk() {
-  emit('submit');
+async function handleOk() {
+  loading.value = true;
+  try {
+    if (isEdit.value && props.data) {
+      await updateDictItemApi({ id: props.data.id, dictId: props.dictId, ...form.value });
+    } else {
+      await createDictItemApi({ dictId: props.dictId, ...form.value });
+    }
+    emit('success');
+    visible.value = false;
+  } finally {
+    loading.value = false;
+  }
 }
 
 function handleCancel() {
@@ -51,7 +97,10 @@ function handleCancel() {
     @ok="handleOk"
     @cancel="handleCancel"
   >
-    <Form :model="form" layout="vertical" class="mt-4">
+    <div class="mb-2 text-sm text-gray-500">
+      {{ $t('sys.dict.itemFormBelong', { name: dictName }) }}
+    </div>
+    <Form :model="form" layout="vertical" class="mt-2">
       <FormItem :label="$t('sys.dict.itemFields.label')" required>
         <Input v-model:value="form.label" />
       </FormItem>

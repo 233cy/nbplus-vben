@@ -2,19 +2,17 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { PostApi } from '#/api/sys/userDuty';
 
 import { deletePostApi, inlineUpdatePostApi } from '#/api/sys/userDuty';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 import { useTableDelete } from '#/utils/table';
 import { formatUnixTime } from '#/utils/time';
+
+import { useUserDutyPermission } from '../permissions';
 
 /**
  * 职务列表列定义
  */
 export function useColumns(onEditClick: (id: string) => Promise<void>, onDetailClick: (id: string) => Promise<void>, onRefresh: () => void): VxeTableGridOptions['columns'] {
-  const { hasAccessByCodes } = useAccess();
-  const canDetail = hasAccessByCodes(['org:post:detail']);
-  const canUpdate = hasAccessByCodes(['org:post:update']);
-  const canDelete = hasAccessByCodes(['org:post:delete']);
+  const { canDetail, canUpdate, canDelete } = useUserDutyPermission();
 
   return [
     { type: 'checkbox', width: 50 },

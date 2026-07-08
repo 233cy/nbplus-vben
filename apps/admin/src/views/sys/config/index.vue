@@ -1,95 +1,114 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { Page, useVbenDrawer } from '@vben/common-ui';
+import { IconifyIcon, Plus } from '@vben/icons';
 
-import { Button, message, Spin } from 'ant-design-vue';
+import { Button } from 'ant-design-vue';
+import { ref } from 'vue';
 
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import {
+  batchDeleteConfigApi,
+  batchUpdateConfigApi,
+  getConfigDetailApi,
+  getConfigListApi,
+  getConfigOptionsApi,
+} from '#/api/sys/config';
+import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { $t } from '#/locales';
 
 import ConfigForm from './components/config-form.vue';
-import ConfigItemList from './components/config-item-list.vue';
-import GroupMenu from './components/group-menu.vue';
-import { useConfigForm, useConfigGroups, useConfigItems } from './composables';
+import { useConfigPermission } from './permissions';
+import { useColumns } from './schema/columns';
+import { useGridFormSchema } from './schema/grid';
 
-defineOptions({ name: 'ConfigPage' });
+const { canCreate, canBatchDelete, canBatchUpdate } = useConfigPermission();
 
-const groups = useConfigGroups();
-const items = useConfigItems(groups.activeGroup);
-
-const activeGroupLabel = computed(() => {
-  const found = groups.groups.value.find(g => g.groups === groups.activeGroup.value);
-  return found ? groups.groupsLabel(found) : groups.activeGroup.value;
+const groupsOptions = ref<{ label: string; value: string }[]>([]);
+getConfigOptionsApi().then((options) => {
+  groupsOptions.value = options;
 });
 
-/** 当前分组在所有分组中的索引位置 */
-const activeGroupIndex = computed(() => {
-  return groups.groups.value.findIndex(g => g.groups === groups.activeGroup.value);
+const [ConfigFormDrawer, configFormDrawerApi] = useVbenDrawer({
+  connectedComponent: ConfigForm,
+  destroyOnClose: true,
 });
 
-function copyKey(key: string) {
-  navigator.clipboard.writeText(key).then(() => {
-    message.success($t('sys.config.copySuccess'));
-  });
+async function onEditClick(id: string) {
+  const res = await getConfigDetailApi(id);
+  configFormDrawerApi.setData(res).open();
 }
 
-const form = useConfigForm({
-  activeGroup: groups.activeGroup,
-  groups: groups.groups,
-  onSuccess: items.loadConfig,
-  onGroupsChange: groups.loadGroups,
+const [Grid, gridApi] = useVbenVxeGrid({
+  formOptions: {
+    collapsed: true,
+    schema: useGridFormSchema(groupsOptions),
+    showCollapseButton: true,
+    submitOnChange: false,
+    wrapperClass: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+  },
+  gridOptions: {
+    columns: useColumns(onEditClick, () => gridApi.query()),
+    height: 'auto',
+    keepSource: true,
+    proxyConfig: {
+      ajax: {
+        queryApi: getConfigListApi,
+      } as any,
+    },
+    rowConfig: { keyField: 'id' },
+    checkboxConfig: { reserve: true, highlight: true },
+    toolbarConfig: { custom: true, export: false, refresh: true, search: true, zoom: true },
+  },
 });
 
-onMounted(() => {
-  groups.loadGroups();
-});
+function onRefresh() {
+  gridApi.query();
+}
+
+function getSelectedIds(): string[] {
+  return (gridApi.grid?.getCheckboxRecords() as { id: string }[])?.map(r => r.id) ?? [];
+}
 </script>
 
 <template>
-  <div class="flex h-full gap-4 p-4">
-    <GroupMenu :groups="groups.groups.value" :active-group="groups.activeGroup.value" @update:active-group="groups.activeGroup.value = $event" @reload="groups.loadGroups()" />
+  <Page auto-content-height>
+    <ConfigFormDrawer @success="onRefresh" />
+    <Grid :table-title="$t('sys.config.pageTitle')">
+      <template #toolbar-tools>
+        <BatchActionDropdown
+          v-if="canBatchDelete"
+          class="ml-2"
+          type="direct"
+          :action="$t('common.delete')"
+          :api-fn="(ids: string[]) => batchDeleteConfigApi(ids)"
+          :get-ids="getSelectedIds"
+          :on-success="onRefresh"
+        >
+          <template #default="{ onClick }">
+            <Button danger @click="onClick">
+              <IconifyIcon icon="lucide:trash-2" class="size-4" />
+              {{ $t('common.batchDelete') }}
+            </Button>
+          </template>
+        </BatchActionDropdown>
 
-    <div class="flex flex-1 flex-col overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
-      <!-- 顶部操作 -->
-      <div class="flex items-center justify-between border-b px-6 py-3 dark:border-gray-700">
-        <span class="text-base font-medium">{{ activeGroupLabel }}</span>
-        <div class="flex gap-2">
-          <Button type="primary" size="small" @click="form.openCreate"> + {{ $t('sys.config.addItem') }} </Button>
-        </div>
-      </div>
-
-      <!-- 配置列表 -->
-      <Spin :spinning="items.loading.value" class="flex-1 overflow-auto">
-        <ConfigItemList
-          :items="items.configItems.value"
-          :edit-values="items.editValues.value"
-          :group-index="activeGroupIndex"
-          :loading="items.loading.value"
-          @update:edit-value="items.updateEditValue"
-          @mark-as-sys="items.handleMarkAsSys"
-          @toggle-public="items.handleTogglePublic"
-          @edit="form.openEdit"
-          @delete="items.handleDelete"
-          @copy-key="copyKey"
-          @reload="items.loadConfig()"
+        <BatchActionDropdown
+          v-if="canBatchUpdate"
+          class="ml-2 mr-2"
+          type="dict"
+          :action="$t('common.batchUpdate')"
+          :api-fn="batchUpdateConfigApi"
+          :get-ids="getSelectedIds"
+          :on-success="onRefresh"
+          field-name="isPublic"
+          dict-code="is_enable"
         />
-      </Spin>
 
-      <!-- 底部保存按钮 -->
-      <div class="flex justify-end border-t px-6 py-3 dark:border-gray-700">
-        <Button type="primary" :loading="items.saving.value" @click="items.handleSave">
-          {{ $t('sys.config.save') }}
+        <Button v-if="canCreate" type="primary" @click="configFormDrawerApi.setData(undefined as any).open()">
+          <Plus class="size-5" />
+          {{ $t('sys.config.addItem') }}
         </Button>
-      </div>
-    </div>
-
-    <ConfigForm
-      v-model:visible="form.modalVisible.value"
-      v-model:form="form.formState.value"
-      :mode="form.modalMode.value"
-      :loading="form.modalLoading.value"
-      :editing-is-sys="form.editingIsSys.value"
-      :component-options="form.componentOptions.value"
-      :group-options="form.groupOptions.value"
-      @submit="form.handleSubmit"
-    />
-  </div>
+      </template>
+    </Grid>
+  </Page>
 </template>

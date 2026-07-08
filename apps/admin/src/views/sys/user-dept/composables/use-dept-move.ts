@@ -9,12 +9,12 @@ import { getDeptTreeApi, updateDeptApi } from '#/api/sys/userDept';
 import { buildParentTreeData, ROOT_PARENT } from '../data';
 
 export interface UseDeptMoveOptions {
-  gridApi: any;
+  onSuccess?: (payload: { originalParentId: string | null; newParentId: string | null }) => void | Promise<void>;
   t: (key: string) => string;
 }
 
 export function useDeptMove(options: UseDeptMoveOptions) {
-  const { gridApi, t } = options;
+  const { onSuccess, t } = options;
 
   const visible = ref(false);
   const loading = ref(false);
@@ -36,27 +36,17 @@ export function useDeptMove(options: UseDeptMoveOptions) {
     visible.value = true;
   }
 
-  async function refreshRoot() {
-    const grid = gridApi.grid as any;
-    if (!grid) return;
-
-    const expandedRows = grid.getTreeExpandRecords?.() ?? [];
-    await gridApi.query();
-    if (expandedRows.length > 0) {
-      await grid.setTreeExpand?.(expandedRows, true);
-    }
-  }
-
   async function handleMove() {
     if (!moveItem.value) return;
 
     loading.value = true;
     try {
+      const originalParentId = moveItem.value.parentId ?? null;
       const parentId = moveParentId.value === ROOT_PARENT ? null : moveParentId.value;
       await updateDeptApi({ ...moveItem.value, parentId } as DeptApi.SaveParams & { id: string });
       message.success(t('sys.user-dept.moveSuccess'));
       visible.value = false;
-      await refreshRoot();
+      await onSuccess?.({ originalParentId, newParentId: parentId });
     } finally {
       loading.value = false;
     }

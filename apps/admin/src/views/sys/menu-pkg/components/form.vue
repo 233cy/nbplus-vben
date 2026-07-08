@@ -7,15 +7,15 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { createMenuPkgApi, getMenuPkgDetailApi, updateMenuPkgApi } from '#/api/sys/menuPkg';
-import { useAccess } from '#/composables/use-access';
 import { $t } from '#/locales';
 
+import { useMenuPkgPermission } from '../permissions';
 import { useFormSchema } from '../schema/form';
 
 const emit = defineEmits<{ success: [] }>();
 
-const { hasAccessByCodes } = useAccess();
-const canUpdate = computed(() => hasAccessByCodes(['adm:sys:menuPkg:update']));
+const permission = useMenuPkgPermission();
+const canUpdate = computed(() => permission.canUpdate);
 const rowId = ref<string | undefined>();
 const isReadonly = ref(false);
 const isEdit = computed(() => !!rowId.value);
