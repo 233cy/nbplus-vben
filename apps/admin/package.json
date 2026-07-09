@@ -26,10 +26,10 @@
     "#/*": "./src/*"
   },
   "dependencies": {
-    "@uppy/core": "catalog:",
-    "@uppy/tus": "catalog:",
-    "@uppy/vue": "catalog:",
-    "@uppy/xhr-upload": "catalog:",
+    "@uppy/core": "^5.2.0",
+    "@uppy/tus": "^5.1.1",
+    "@uppy/vue": "^3.2.0",
+    "@uppy/xhr-upload": "^5.2.0",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",
@@ -45,23 +45,23 @@
     "@vben/types": "workspace:*",
     "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
-    "@wangeditor/editor": "catalog:",
-    "@wangeditor/editor-for-vue": "catalog:",
-    "@wangeditor/plugin-upload-attachment": "catalog:",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
+    "@wangeditor/plugin-upload-attachment": "1.1.0",
     "ant-design-vue": "catalog:",
-    "crypto-js": "catalog:",
+    "crypto-js": "^4.2.0",
     "dayjs": "catalog:",
     "pinia": "catalog:",
-    "pinyin-pro": "catalog:",
-    "spark-md5": "catalog:",
+    "pinyin-pro": "^3.28.1",
+    "spark-md5": "^3.0.2",
     "vue": "catalog:",
     "vue-router": "catalog:",
-    "vuedraggable": "catalog:",
-    "xe-utils": "catalog:"
+    "vuedraggable": "^4.1.0",
+    "xe-utils": "^3.9.1"
   },
   "devDependencies": {
-    "@types/spark-md5": "catalog:",
-    "unplugin-auto-import": "catalog:",
-    "unplugin-vue-components": "catalog:"
+    "@types/spark-md5": "^3.0.5",
+    "unplugin-auto-import": "^20.3.0",
+    "unplugin-vue-components": "^30.0.0"
   }
 }
