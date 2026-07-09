@@ -714,7 +714,7 @@ onMounted(async () => {
 
       <!-- 搜索栏 -->
       <div class="mb-3 flex items-center gap-2">
-        <Input v-model:value="keyword" style="width: 260px" allow-clear :disabled="showSelectedOnly" :placeholder="$t('common.search.keyword')" @press-enter="handleSearch">
+        <Input v-model:value="keyword" style="width: 260px" allow-clear :disabled="showSelectedOnly" :placeholder="$t('common.searchKeyword')" @press-enter="handleSearch">
           <template #prefix>
             <IconifyIcon icon="mdi:magnify" class="text-base" />
           </template>
@@ -724,7 +724,7 @@ onMounted(async () => {
           <template #icon>
             <IconifyIcon icon="mdi:magnify" class="text-base" />
           </template>
-          {{ $t('common.search.button') }}
+          {{ $t('common.search') }}
         </Button>
 
         <Switch

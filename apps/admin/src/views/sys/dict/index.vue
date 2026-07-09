@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
 
 import { Button } from 'ant-design-vue';
-import { ref } from 'vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {

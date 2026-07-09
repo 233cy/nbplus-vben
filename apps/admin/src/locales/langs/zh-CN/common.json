@@ -11,10 +11,7 @@
   "refresh": "刷新",
   "confirm": "确认",
   "loadingMenu": "正在加载菜单",
-  "search": {
-    "button": "搜索",
-    "keyword": "请输入关键词"
-  },
+  "searchKeyword": "请输入关键词",
   "selectedOnly": "只看已选",
   "batchActionProcessing": "正在{action}...",
   "batchActionSuccess": "批量{action}成功",
