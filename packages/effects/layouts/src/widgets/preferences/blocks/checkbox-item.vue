@@ -51,6 +51,13 @@ const slots = useSlots();
         <slot name="tip"></slot>
       </VbenTooltip>
     </span>
-    <VbenCheckButtonGroup v-model="inputValue" class="h-8 w-[165px]" :options="items" :disabled="disabled" :multiple="multiple" @btn-click="onBtnClick" />
+    <VbenCheckButtonGroup
+      v-model="inputValue"
+      class="h-8 w-41.25"
+      :options="items"
+      :disabled="disabled"
+      :multiple="multiple"
+      @btn-click="onBtnClick"
+    />
   </div>
 </template>

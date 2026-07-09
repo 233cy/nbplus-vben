@@ -1,5 +1,12 @@
 <script lang="ts" setup>
-import type { VxeGridDefines, VxeGridInstance, VxeGridListeners, VxeGridPropTypes, VxeGridProps as VxeTableGridProps, VxeToolbarPropTypes } from 'vxe-table';
+import type {
+  VxeGridDefines,
+  VxeGridInstance,
+  VxeGridListeners,
+  VxeGridPropTypes,
+  VxeGridProps as VxeTableGridProps,
+  VxeToolbarPropTypes,
+} from 'vxe-table';
 
 import type { SetupContext } from 'vue';
 
@@ -7,13 +14,28 @@ import type { VbenFormProps } from '@vben-core/form-ui';
 
 import type { ExtendedVxeGridApi, VxeGridProps } from './types';
 
-import { computed, nextTick, onMounted, onUnmounted, toRaw, useSlots, useTemplateRef, watch } from 'vue';
+import {
+  computed,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  toRaw,
+  useSlots,
+  useTemplateRef,
+  watch,
+} from 'vue';
 
 import { usePriorityValues } from '@vben/hooks';
 import { EmptyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { usePreferences } from '@vben/preferences';
-import { cloneDeep, cn, isBoolean, isEqual, mergeWithArrayOverride } from '@vben/utils';
+import {
+  cloneDeep,
+  cn,
+  isBoolean,
+  isEqual,
+  mergeWithArrayOverride,
+} from '@vben/utils';
 
 import { VbenHelpTooltip, VbenLoading } from '@vben-core/shadcn-ui';
 
@@ -22,6 +44,7 @@ import { VxeGrid, VxeUI } from 'vxe-table';
 
 import { extendProxyOptions } from './extends';
 import { useTableForm } from './init';
+import { applyViewedRowOptions, useViewedRow } from './use-viewed-row';
 
 import 'vxe-table/styles/cssvar.scss';
 import 'vxe-pc-ui/styles/cssvar.scss';
@@ -43,11 +66,46 @@ const gridRef = useTemplateRef<VxeGridInstance>('gridRef');
 
 const state = props.api?.useStore?.();
 
-const { gridOptions, class: className, gridClass, gridEvents, formOptions, tableTitle, tableTitleHelp, showSearchForm, separator } = usePriorityValues(props, state);
+const {
+  gridOptions,
+  class: className,
+  gridClass,
+  gridEvents,
+  formOptions,
+  tableTitle,
+  tableData,
+  tableTitleHelp,
+  showSearchForm,
+  separator,
+  viewedRowOptions,
+} = usePriorityValues(props, state);
+
+// viewedRowOptions：helper 只创建一次（persist/keyField 不支持运行时切换）
+// actionCodes、rowClassName、rowStyle、viewedKeys 的变化通过 options computed 自然响应
+const gridApi = props.api;
+
+watch(
+  viewedRowOptions,
+  (cfg) => {
+    // helper 已存在则不重建
+    if (gridApi.viewedRowHelper) return;
+
+    if (!cfg) return;
+
+    const keyField = (gridOptions.value?.rowConfig as any)?.keyField || 'id';
+    const resolved = isBoolean(cfg) ? { keyField } : { keyField, ...cfg };
+    gridApi.viewedRowHelper = useViewedRow(resolved);
+  },
+  { immediate: true },
+);
 
 const { isMobile } = usePreferences();
 const isSeparator = computed(() => {
-  if (!formOptions.value || showSearchForm.value === false || separator.value === false) {
+  if (
+    !formOptions.value ||
+    showSearchForm.value === false ||
+    separator.value === false
+  ) {
     return false;
   }
   if (separator.value === true || separator.value === undefined) {
@@ -56,7 +114,11 @@ const isSeparator = computed(() => {
   return separator.value.show !== false;
 });
 const separatorBg = computed(() => {
-  return !separator.value || isBoolean(separator.value) || !separator.value.backgroundColor ? undefined : separator.value.backgroundColor;
+  return !separator.value ||
+    isBoolean(separator.value) ||
+    !separator.value.backgroundColor
+    ? undefined
+    : separator.value.backgroundColor;
 });
 const slots: SetupContext['slots'] = useSlots();
 
@@ -84,7 +146,7 @@ const [Form, formApi] = useTableForm({
   },
   showCollapseButton: true,
   submitButtonOptions: {
-    content: computed(() => $t('common.search.button')),
+    content: computed(() => $t('common.search')),
   },
   wrapperClass: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
 });
@@ -94,7 +156,11 @@ const showTableTitle = computed(() => {
 });
 
 const showToolbar = computed(() => {
-  return !!slots[TOOLBAR_ACTIONS]?.() || !!slots[TOOLBAR_TOOLS]?.() || showTableTitle.value;
+  return (
+    !!slots[TOOLBAR_ACTIONS]?.() ||
+    !!slots[TOOLBAR_TOOLS]?.() ||
+    showTableTitle.value
+  );
 });
 
 const toolbarOptions = computed(() => {
@@ -105,14 +171,19 @@ const toolbarOptions = computed(() => {
     icon: 'vxe-icon-search',
     circle: true,
     status: showSearchForm.value ? 'primary' : undefined,
-    title: showSearchForm.value ? $t('common.hideSearchPanel') : $t('common.showSearchPanel'),
+    title: showSearchForm.value
+      ? $t('common.hideSearchPanel')
+      : $t('common.showSearchPanel'),
   };
   // 将搜索按钮合并到用户配置的toolbarConfig.tools中
   const toolbarConfig: VxeGridPropTypes.ToolbarConfig = {
-    tools: (gridOptions.value?.toolbarConfig?.tools ?? []) as VxeToolbarPropTypes.ToolConfig[],
+    tools: (gridOptions.value?.toolbarConfig?.tools ??
+      []) as VxeToolbarPropTypes.ToolConfig[],
   };
   if (gridOptions.value?.toolbarConfig?.search && !!formOptions.value) {
-    toolbarConfig.tools = Array.isArray(toolbarConfig.tools) ? [...toolbarConfig.tools, searchBtn] : [searchBtn];
+    toolbarConfig.tools = Array.isArray(toolbarConfig.tools)
+      ? [...toolbarConfig.tools, searchBtn]
+      : [searchBtn];
   }
 
   if (!showToolbar.value) {
@@ -123,7 +194,9 @@ const toolbarOptions = computed(() => {
   // 强制使用固定的toolbar配置，不允许用户自定义
   // 减少配置的复杂度，以及后续维护的成本
   toolbarConfig.slots = {
-    ...(slotActions || showTableTitle.value ? { buttons: TOOLBAR_ACTIONS } : {}),
+    ...(slotActions || showTableTitle.value
+      ? { buttons: TOOLBAR_ACTIONS }
+      : {}),
     ...(slotTools ? { tools: TOOLBAR_TOOLS } : {}),
   };
   return { toolbarConfig };
@@ -132,7 +205,14 @@ const toolbarOptions = computed(() => {
 const options = computed(() => {
   const globalGridConfig = VxeUI?.getConfig()?.grid ?? {};
 
-  const mergedOptions: VxeTableGridProps = cloneDeep(mergeWithArrayOverride({}, toRaw(toolbarOptions.value), toRaw(gridOptions.value), globalGridConfig));
+  const mergedOptions: VxeTableGridProps = cloneDeep(
+    mergeWithArrayOverride(
+      {},
+      toRaw(toolbarOptions.value),
+      toRaw(gridOptions.value),
+      globalGridConfig,
+    ),
+  );
 
   if (mergedOptions.proxyConfig) {
     const { ajax } = mergedOptions.proxyConfig;
@@ -142,20 +222,49 @@ const options = computed(() => {
   }
 
   if (mergedOptions.pagerConfig) {
-    const mobileLayouts = ['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump'] as any;
-    const layouts = ['Total', 'Sizes', 'Home', ...mobileLayouts, 'End'] as readonly string[];
-    mergedOptions.pagerConfig = mergeWithArrayOverride({}, mergedOptions.pagerConfig, {
-      pageSize: 20,
-      background: true,
-      pageSizes: [10, 20, 30, 50, 100, 200],
-      className: 'mt-2 w-full',
-      layouts: isMobile.value ? mobileLayouts : layouts,
-      size: 'mini' as const,
-    });
+    const mobileLayouts = [
+      'PrevJump',
+      'PrevPage',
+      'Number',
+      'NextPage',
+      'NextJump',
+    ] as any;
+    const layouts = [
+      'Total',
+      'Sizes',
+      'Home',
+      ...mobileLayouts,
+      'End',
+    ] as readonly string[];
+    mergedOptions.pagerConfig = mergeWithArrayOverride(
+      {},
+      mergedOptions.pagerConfig,
+      {
+        pageSize: 20,
+        background: true,
+        pageSizes: [10, 20, 30, 50, 100, 200],
+        className: 'mt-2 w-full',
+        layouts: isMobile.value ? mobileLayouts : layouts,
+        size: 'mini' as const,
+      },
+    );
   }
   if (mergedOptions.formConfig) {
     mergedOptions.formConfig.enabled = false;
   }
+  if (tableData.value && tableData.value.length > 0) {
+    mergedOptions.data = tableData.value;
+  }
+
+  // 注入已读行功能（rowClassName、rowStyle、columns 拦截）
+  if (viewedRowOptions.value && gridApi.viewedRowHelper) {
+    applyViewedRowOptions(
+      mergedOptions,
+      viewedRowOptions.value,
+      gridApi.viewedRowHelper,
+    );
+  }
+
   return mergedOptions;
 });
 
@@ -163,7 +272,9 @@ function onToolbarToolClick(event: VxeGridDefines.ToolbarToolClickEventParams) {
   if (event.code === 'search') {
     onSearchBtnClick();
   }
-  (gridEvents.value?.toolbarToolClick as VxeGridListeners['toolbarToolClick'])?.(event);
+  (
+    gridEvents.value?.toolbarToolClick as VxeGridListeners['toolbarToolClick']
+  )?.(event);
 }
 
 function onSearchBtnClick() {
@@ -181,7 +292,11 @@ const delegatedSlots = computed(() => {
   const resultSlots: string[] = [];
 
   for (const key of Object.keys(slots)) {
-    if (!['empty', 'form', 'loading', TOOLBAR_ACTIONS, TOOLBAR_TOOLS].includes(key)) {
+    if (
+      !['empty', 'form', 'loading', TOOLBAR_ACTIONS, TOOLBAR_TOOLS].includes(
+        key,
+      )
+    ) {
       resultSlots.push(key);
     }
   }
@@ -196,7 +311,7 @@ const delegatedFormSlots = computed(() => {
       resultSlots.push(key);
     }
   }
-  return resultSlots.map(key => key.replace(FORM_SLOT_PREFIX, ''));
+  return resultSlots.map((key) => key.replace(FORM_SLOT_PREFIX, ''));
 });
 
 const showDefaultEmpty = computed(() => {
@@ -211,12 +326,19 @@ const showDefaultEmpty = computed(() => {
 async function init() {
   await nextTick();
   const globalGridConfig = VxeUI?.getConfig()?.grid ?? {};
-  const defaultGridOptions: VxeTableGridProps = mergeWithArrayOverride({}, toRaw(gridOptions.value), toRaw(globalGridConfig));
+  const defaultGridOptions: VxeTableGridProps = mergeWithArrayOverride(
+    {},
+    toRaw(gridOptions.value),
+    toRaw(globalGridConfig),
+  );
   // 内部主动加载数据，防止form的默认值影响
   const autoLoad = defaultGridOptions.proxyConfig?.autoLoad;
   const enableProxyConfig = options.value.proxyConfig?.enabled;
   if (enableProxyConfig && autoLoad) {
-    props.api.grid.commitProxy?.('query', formOptions.value ? ((await formApi.getValues()) ?? {}) : {});
+    props.api.grid.commitProxy?.(
+      'query',
+      formOptions.value ? ((await formApi.getValues()) ?? {}) : {},
+    );
     // props.api.reload(formApi.form?.values ?? {});
   }
 
@@ -225,20 +347,27 @@ async function init() {
   // 处理某个页面加载多个Table时，第2个之后的Table初始化报出警告
   // 因为第一次初始化之后会把defaultGridOptions和gridOptions合并后缓存进State
   if (formConfig && formConfig.enabled) {
-    console.warn('[Vben Vxe Table]: The formConfig in the grid is not supported, please use the `formOptions` props');
+    console.warn(
+      '[Vben Vxe Table]: The formConfig in the grid is not supported, please use the `formOptions` props',
+    );
   }
-  // @ts-ignore
   props.api?.setState?.({ gridOptions: defaultGridOptions });
   // form 由 vben-form 代替，所以需要保证query相关事件可以拿到参数
-  extendProxyOptions(props.api, defaultGridOptions, () => formApi.getLatestSubmissionValues());
+  extendProxyOptions(props.api, defaultGridOptions, () =>
+    formApi.getLatestSubmissionValues(),
+  );
 }
 
 // formOptions支持响应式
 watch(
   formOptions,
   () => {
-    formApi.setState(prev => {
-      const finalFormOptions: VbenFormProps = mergeWithArrayOverride({}, formOptions.value, prev);
+    formApi.setState((prev: Record<string, any>) => {
+      const finalFormOptions: VbenFormProps = mergeWithArrayOverride(
+        {},
+        formOptions.value,
+        prev,
+      );
       return {
         ...finalFormOptions,
         collapseTriggerResize: !!finalFormOptions.showCollapseButton,
@@ -266,7 +395,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div :class="cn('bg-card h-full rounded-md', className)">
+  <div :class="cn('h-full rounded-md bg-card', className)">
     <VxeGrid
       ref="gridRef"
       :class="
@@ -284,9 +413,9 @@ onUnmounted(() => {
       <!-- 左侧操作区域或者title -->
       <template v-if="showToolbar" #toolbar-actions="slotProps">
         <slot v-if="showTableTitle" name="table-title">
-          <div class="mr-1 pl-1 text-[1rem]">
+          <div class="flex-center gap-1 text-[1rem] font-bold">
             {{ tableTitle }}
-            <VbenHelpTooltip v-if="tableTitleHelp" trigger-class="pb-1">
+            <VbenHelpTooltip v-if="tableTitleHelp">
               {{ tableTitleHelp }}
             </VbenHelpTooltip>
           </div>
@@ -295,7 +424,11 @@ onUnmounted(() => {
       </template>
 
       <!-- 继承默认的slot -->
-      <template v-for="slotName in delegatedSlots" :key="slotName" #[slotName]="slotProps">
+      <template
+        v-for="slotName in delegatedSlots"
+        :key="slotName"
+        #[slotName]="slotProps"
+      >
         <slot :name="slotName" v-bind="slotProps"></slot>
       </template>
       <template #toolbar-tools="slotProps">
@@ -306,7 +439,7 @@ onUnmounted(() => {
           class="ml-2"
           v-if="gridOptions?.toolbarConfig?.search && !!formOptions"
           :status="showSearchForm ? 'primary' : undefined"
-          :title="$t('common.search.button')"
+          :title="$t('common.search')"
           @click="onSearchBtnClick"
         />
       </template>
@@ -316,12 +449,30 @@ onUnmounted(() => {
         <div
           v-if="formOptions"
           v-show="showSearchForm !== false"
-          :class="cn('relative rounded py-3', isCompactForm ? (isSeparator ? 'pb-8' : 'pb-4') : isSeparator ? 'pb-4' : 'pb-0')"
+          :class="
+            cn(
+              'relative rounded-sm py-3',
+              isCompactForm
+                ? isSeparator
+                  ? 'pb-8'
+                  : 'pb-4'
+                : isSeparator
+                  ? 'pb-4'
+                  : 'pb-0',
+            )
+          "
         >
           <slot name="form">
             <Form>
-              <template v-for="slotName in delegatedFormSlots" :key="slotName" #[slotName]="slotProps">
-                <slot :name="`${FORM_SLOT_PREFIX}${slotName}`" v-bind="slotProps"></slot>
+              <template
+                v-for="slotName in delegatedFormSlots"
+                :key="slotName"
+                #[slotName]="slotProps"
+              >
+                <slot
+                  :name="`${FORM_SLOT_PREFIX}${slotName}`"
+                  v-bind="slotProps"
+                ></slot>
               </template>
               <template #reset-before="slotProps">
                 <slot name="reset-before" v-bind="slotProps"></slot>
@@ -342,7 +493,7 @@ onUnmounted(() => {
             :style="{
               ...(separatorBg ? { backgroundColor: separatorBg } : undefined),
             }"
-            class="bg-background-deep z-100 absolute -left-2 bottom-1 h-2 w-[calc(100%+1rem)] overflow-hidden md:bottom-2 md:h-3"
+            class="absolute bottom-1 -left-2 z-100 h-2 w-[calc(100%+1rem)] overflow-hidden bg-background-deep md:bottom-2 md:h-3"
           ></div>
         </div>
       </template>

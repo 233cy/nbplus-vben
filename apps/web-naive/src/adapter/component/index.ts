@@ -3,9 +3,29 @@
  * 可用于 vben-form、vben-modal、vben-drawer 等组件使用,
  */
 
+import type {
+  CheckboxGroupProps,
+  CheckboxProps,
+  DatePickerProps,
+  DividerProps,
+  InputNumberProps,
+  InputProps,
+  RadioGroupProps,
+  SelectProps,
+  SpaceProps,
+  SwitchProps,
+  TimePickerProps,
+  TreeSelectProps,
+  UploadProps,
+} from 'naive-ui';
+
 import type { Component } from 'vue';
 
-import type { BaseFormComponentType } from '@vben/common-ui';
+import type {
+  ApiComponentSharedProps,
+  BaseFormComponentType,
+  IconPickerProps,
+} from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
 import { defineAsyncComponent, defineComponent, h, ref } from 'vue';
@@ -15,29 +35,68 @@ import { $t } from '@vben/locales';
 
 import { message } from '#/adapter/naive';
 
-const NButton = defineAsyncComponent(() => import('naive-ui/es/button').then((res) => res.NButton));
-const NCheckbox = defineAsyncComponent(() => import('naive-ui/es/checkbox').then((res) => res.NCheckbox));
-const NCheckboxGroup = defineAsyncComponent(() => import('naive-ui/es/checkbox').then((res) => res.NCheckboxGroup));
-const NDatePicker = defineAsyncComponent(() => import('naive-ui/es/date-picker').then((res) => res.NDatePicker));
-const NDivider = defineAsyncComponent(() => import('naive-ui/es/divider').then((res) => res.NDivider));
-const NInput = defineAsyncComponent(() => import('naive-ui/es/input').then((res) => res.NInput));
-const NInputNumber = defineAsyncComponent(() => import('naive-ui/es/input-number').then((res) => res.NInputNumber));
-const NRadio = defineAsyncComponent(() => import('naive-ui/es/radio').then((res) => res.NRadio));
-const NRadioButton = defineAsyncComponent(() => import('naive-ui/es/radio').then((res) => res.NRadioButton));
-const NRadioGroup = defineAsyncComponent(() => import('naive-ui/es/radio').then((res) => res.NRadioGroup));
-const NSelect = defineAsyncComponent(() => import('naive-ui/es/select').then((res) => res.NSelect));
-const NSpace = defineAsyncComponent(() => import('naive-ui/es/space').then((res) => res.NSpace));
-const NSwitch = defineAsyncComponent(() => import('naive-ui/es/switch').then((res) => res.NSwitch));
-const NTimePicker = defineAsyncComponent(() => import('naive-ui/es/time-picker').then((res) => res.NTimePicker));
-const NTreeSelect = defineAsyncComponent(() => import('naive-ui/es/tree-select').then((res) => res.NTreeSelect));
-const NUpload = defineAsyncComponent(() => import('naive-ui/es/upload').then((res) => res.NUpload));
+const NButton = defineAsyncComponent(() =>
+  import('naive-ui/es/button').then((res) => res.NButton),
+);
+const NCheckbox = defineAsyncComponent(() =>
+  import('naive-ui/es/checkbox').then((res) => res.NCheckbox),
+);
+const NCheckboxGroup = defineAsyncComponent(() =>
+  import('naive-ui/es/checkbox').then((res) => res.NCheckboxGroup),
+);
+const NDatePicker = defineAsyncComponent(() =>
+  import('naive-ui/es/date-picker').then((res) => res.NDatePicker),
+);
+const NDivider = defineAsyncComponent(() =>
+  import('naive-ui/es/divider').then((res) => res.NDivider),
+);
+const NInput = defineAsyncComponent(() =>
+  import('naive-ui/es/input').then((res) => res.NInput),
+);
+const NInputNumber = defineAsyncComponent(() =>
+  import('naive-ui/es/input-number').then((res) => res.NInputNumber),
+);
+const NRadio = defineAsyncComponent(() =>
+  import('naive-ui/es/radio').then((res) => res.NRadio),
+);
+const NRadioButton = defineAsyncComponent(() =>
+  import('naive-ui/es/radio').then((res) => res.NRadioButton),
+);
+const NRadioGroup = defineAsyncComponent(() =>
+  import('naive-ui/es/radio').then((res) => res.NRadioGroup),
+);
+const NSelect = defineAsyncComponent(() =>
+  import('naive-ui/es/select').then((res) => res.NSelect),
+);
+const NSpace = defineAsyncComponent(() =>
+  import('naive-ui/es/space').then((res) => res.NSpace),
+);
+const NSwitch = defineAsyncComponent(() =>
+  import('naive-ui/es/switch').then((res) => res.NSwitch),
+);
+const NTimePicker = defineAsyncComponent(() =>
+  import('naive-ui/es/time-picker').then((res) => res.NTimePicker),
+);
+const NTreeSelect = defineAsyncComponent(() =>
+  import('naive-ui/es/tree-select').then((res) => res.NTreeSelect),
+);
+const NUpload = defineAsyncComponent(() =>
+  import('naive-ui/es/upload').then((res) => res.NUpload),
+);
 
-const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input' | 'select', componentProps: Recordable<any> = {}) => {
+const withDefaultPlaceholder = (
+  component: Component,
+  type: 'input' | 'select',
+  componentProps: Recordable<any> = {},
+) => {
   return defineComponent({
     name: component.name,
     inheritAttrs: false,
     setup: (props: any, { attrs, expose, slots }) => {
-      const placeholder = props?.placeholder || attrs?.placeholder || $t(`ui.placeholder.${type}`);
+      const placeholder =
+        props?.placeholder ||
+        attrs?.placeholder ||
+        $t(`ui.placeholder.${type}`);
       // 透传组件暴露的方法
       const innerRef = ref();
       expose(
@@ -49,7 +108,12 @@ const withDefaultPlaceholder = <T extends Component>(component: T, type: 'input'
           },
         ),
       );
-      return () => h(component, { ...componentProps, placeholder, ...props, ...attrs, ref: innerRef }, slots);
+      return () =>
+        h(
+          component,
+          { ...componentProps, placeholder, ...props, ...attrs, ref: innerRef },
+          slots,
+        );
     },
   });
 };
@@ -73,6 +137,28 @@ export type ComponentType =
   | 'TreeSelect'
   | 'Upload'
   | BaseFormComponentType;
+
+/**
+ * 与 {@link ComponentType} 中注册的组件名一一对应，便于 Schema 上 `component` + `componentProps` 联动提示
+ */
+export interface ComponentPropsMap {
+  ApiSelect: ApiComponentSharedProps & SelectProps;
+  ApiTreeSelect: ApiComponentSharedProps & TreeSelectProps;
+  Checkbox: CheckboxProps;
+  CheckboxGroup: CheckboxGroupProps;
+  DatePicker: DatePickerProps;
+  Divider: DividerProps;
+  IconPicker: IconPickerProps;
+  Input: InputProps;
+  InputNumber: InputNumberProps;
+  RadioGroup: RadioGroupProps;
+  Select: SelectProps;
+  Space: SpaceProps;
+  Switch: SwitchProps;
+  TimePicker: TimePickerProps;
+  TreeSelect: TreeSelectProps;
+  Upload: UploadProps;
+}
 
 async function initComponentAdapter() {
   const components: Partial<Record<ComponentType, Component>> = {
@@ -118,7 +204,11 @@ async function initComponentAdapter() {
           defaultSlot = () => options.map((option) => h(NCheckbox, option));
         }
       }
-      return h(NCheckboxGroup, { ...props, ...attrs }, { default: defaultSlot });
+      return h(
+        NCheckboxGroup,
+        { ...props, ...attrs },
+        { default: defaultSlot },
+      );
     },
     DatePicker: NDatePicker,
     // 自定义默认按钮
@@ -135,7 +225,9 @@ async function initComponentAdapter() {
       inputComponent: NInput,
     }),
     Input: withDefaultPlaceholder(NInput, 'input'),
-    InputNumber: withDefaultPlaceholder(NInputNumber, 'input'),
+    InputNumber: withDefaultPlaceholder(NInputNumber, 'input', {
+      style: { width: '100%' },
+    }),
     RadioGroup: (props, { attrs, slots }) => {
       let defaultSlot;
       if (Reflect.has(slots, 'default')) {
@@ -143,11 +235,20 @@ async function initComponentAdapter() {
       } else {
         const { options } = attrs;
         if (Array.isArray(options)) {
-          defaultSlot = () => options.map((option) => h(attrs.isButton ? NRadioButton : NRadio, option));
+          defaultSlot = () =>
+            options.map((option) =>
+              h(attrs.isButton ? NRadioButton : NRadio, option),
+            );
         }
       }
-      const groupRender = h(NRadioGroup, { ...props, ...attrs }, { default: defaultSlot });
-      return attrs.isButton ? h(NSpace, { vertical: true }, () => groupRender) : groupRender;
+      const groupRender = h(
+        NRadioGroup,
+        { ...props, ...attrs },
+        { default: defaultSlot },
+      );
+      return attrs.isButton
+        ? h(NSpace, { vertical: true }, () => groupRender)
+        : groupRender;
     },
     Select: withDefaultPlaceholder(NSelect, 'select'),
     Space: NSpace,

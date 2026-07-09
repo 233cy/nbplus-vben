@@ -1,7 +1,20 @@
 <script setup lang="ts">
-import type { CaptchaVerifyPassingData, SliderCaptchaActionType, SliderRotateVerifyPassingData, SliderTranslateCaptchaProps } from '../types';
+import type {
+  CaptchaVerifyPassingData,
+  SliderCaptchaActionType,
+  SliderRotateVerifyPassingData,
+  SliderTranslateCaptchaProps,
+} from '../types';
 
-import { computed, onMounted, reactive, ref, unref, useTemplateRef, watch } from 'vue';
+import {
+  computed,
+  onMounted,
+  reactive,
+  ref,
+  unref,
+  useTemplateRef,
+  watch,
+} from 'vue';
 
 import { $t } from '@vben/locales';
 
@@ -22,12 +35,12 @@ const emit = defineEmits<{
 }>();
 
 const PI: number = Math.PI;
-enum CanvasOpr {
-  // eslint-disable-next-line no-unused-vars
-  Clip = 'clip',
-  // eslint-disable-next-line no-unused-vars
-  Fill = 'fill',
-}
+const canvasOpr = {
+  clip: 'clip',
+  fill: 'fill',
+} as const;
+
+type CanvasOpr = (typeof canvasOpr)[keyof typeof canvasOpr];
 
 const modalValue = defineModel<boolean>({ default: false });
 
@@ -59,7 +72,11 @@ function setLeft(val: string) {
 }
 
 const verifyTip = computed(() => {
-  return state.isPassing ? $t('ui.captcha.sliderTranslateSuccessTip', [((state.endTime - state.startTime) / 1000).toFixed(1)]) : $t('ui.captcha.sliderTranslateFailTip');
+  return state.isPassing
+    ? $t('ui.captcha.sliderTranslateSuccessTip', [
+        ((state.endTime - state.startTime) / 1000).toFixed(1),
+      ])
+    : $t('ui.captcha.sliderTranslateFailTip');
 });
 function handleStart() {
   state.startTime = Date.now();
@@ -145,7 +162,12 @@ function initCanvas() {
     const pieceLength = squareLength + 2 * circleRadius + 3;
     const sx = state.pieceX;
     const sy = state.pieceY - 2 * circleRadius - 1;
-    const imageData = pieceCanvasCtx.getImageData(sx, sy, pieceLength, pieceLength);
+    const imageData = pieceCanvasCtx.getImageData(
+      sx,
+      sy,
+      pieceLength,
+      pieceLength,
+    );
     pieceCanvas.width = pieceLength;
     pieceCanvasCtx.putImageData(imageData, 0, sy);
     setLeft('0');
@@ -159,29 +181,59 @@ function getRandomNumberByRange(start: number, end: number) {
 // 绘制拼图
 function draw(ctx1: CanvasRenderingContext2D, ctx2: CanvasRenderingContext2D) {
   const { canvasWidth, canvasHeight, squareLength, circleRadius } = props;
-  state.pieceX = getRandomNumberByRange(squareLength + 2 * circleRadius, canvasWidth - (squareLength + 2 * circleRadius));
-  state.pieceY = getRandomNumberByRange(3 * circleRadius, canvasHeight - (squareLength + 2 * circleRadius));
-  drawPiece(ctx1, state.pieceX, state.pieceY, CanvasOpr.Fill);
-  drawPiece(ctx2, state.pieceX, state.pieceY, CanvasOpr.Clip);
+  state.pieceX = getRandomNumberByRange(
+    squareLength + 2 * circleRadius,
+    canvasWidth - (squareLength + 2 * circleRadius),
+  );
+  state.pieceY = getRandomNumberByRange(
+    3 * circleRadius,
+    canvasHeight - (squareLength + 2 * circleRadius),
+  );
+  drawPiece(ctx1, state.pieceX, state.pieceY, canvasOpr.fill);
+  drawPiece(ctx2, state.pieceX, state.pieceY, canvasOpr.clip);
 }
 
 // 绘制拼图切块
-function drawPiece(ctx: CanvasRenderingContext2D, x: number, y: number, opr: CanvasOpr) {
+function drawPiece(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  opr: CanvasOpr,
+) {
   const { squareLength, circleRadius } = props;
   ctx.beginPath();
   ctx.moveTo(x, y);
-  ctx.arc(x + squareLength / 2, y - circleRadius + 2, circleRadius, 0.72 * PI, 2.26 * PI);
+  ctx.arc(
+    x + squareLength / 2,
+    y - circleRadius + 2,
+    circleRadius,
+    0.72 * PI,
+    2.26 * PI,
+  );
   ctx.lineTo(x + squareLength, y);
-  ctx.arc(x + squareLength + circleRadius - 2, y + squareLength / 2, circleRadius, 1.21 * PI, 2.78 * PI);
+  ctx.arc(
+    x + squareLength + circleRadius - 2,
+    y + squareLength / 2,
+    circleRadius,
+    1.21 * PI,
+    2.78 * PI,
+  );
   ctx.lineTo(x + squareLength, y + squareLength);
   ctx.lineTo(x, y + squareLength);
-  ctx.arc(x + circleRadius - 2, y + squareLength / 2, circleRadius + 0.4, 2.76 * PI, 1.24 * PI, true);
+  ctx.arc(
+    x + circleRadius - 2,
+    y + squareLength / 2,
+    circleRadius + 0.4,
+    2.76 * PI,
+    1.24 * PI,
+    true,
+  );
   ctx.lineTo(x, y);
   ctx.lineWidth = 2;
   ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
   ctx.stroke();
-  opr === CanvasOpr.Clip ? ctx.clip() : ctx.fill();
+  opr === canvasOpr.clip ? ctx.clip() : ctx.fill();
   ctx.globalCompositeOperation = 'destination-over';
 }
 
@@ -208,10 +260,26 @@ onMounted(() => {
 
 <template>
   <div class="relative flex flex-col items-center">
-    <div class="border-border relative flex cursor-pointer overflow-hidden border shadow-md">
-      <canvas ref="puzzleCanvasRef" :width="canvasWidth" :height="canvasHeight" @click="resume"></canvas>
-      <canvas ref="pieceCanvasRef" :width="canvasWidth" :height="canvasHeight" :style="pieceStyle" class="absolute" @click="resume"></canvas>
-      <div class="h-15 absolute bottom-3 left-0 z-10 block w-full text-center text-xs leading-[30px] text-white">
+    <div
+      class="relative flex cursor-pointer overflow-hidden border border-border shadow-md"
+    >
+      <canvas
+        ref="puzzleCanvasRef"
+        :width="canvasWidth"
+        :height="canvasHeight"
+        @click="resume"
+      ></canvas>
+      <canvas
+        ref="pieceCanvasRef"
+        :width="canvasWidth"
+        :height="canvasHeight"
+        :style="pieceStyle"
+        class="absolute"
+        @click="resume"
+      ></canvas>
+      <div
+        class="absolute bottom-3 left-0 z-10 block h-15 w-full text-center text-xs leading-[30px] text-white"
+      >
         <div
           v-if="state.showTip"
           :class="{
@@ -226,7 +294,15 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <SliderCaptcha ref="slideBarRef" v-model="modalValue" class="mt-5" is-slot @end="handleDragEnd" @move="handleDragBarMove" @start="handleStart">
+    <SliderCaptcha
+      ref="slideBarRef"
+      v-model="modalValue"
+      class="mt-5"
+      is-slot
+      @end="handleDragEnd"
+      @move="handleDragBarMove"
+      @start="handleStart"
+    >
       <template v-for="(_, key) in $slots" :key="key" #[key]="slotProps">
         <slot :name="key" v-bind="slotProps"></slot>
       </template>

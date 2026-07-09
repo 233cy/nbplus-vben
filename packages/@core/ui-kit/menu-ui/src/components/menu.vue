@@ -3,16 +3,34 @@ import type { UseResizeObserverReturn } from '@vueuse/core';
 
 import type { SetupContext, VNodeArrayChildren } from 'vue';
 
-import type { MenuItemClicked, MenuItemRegistered, MenuProps, MenuProvider } from '../types';
+import type {
+  MenuItemClicked,
+  MenuItemRegistered,
+  MenuProps,
+  MenuProvider,
+} from '../types';
 
-import { computed, nextTick, reactive, ref, toRef, useSlots, watch, watchEffect } from 'vue';
+import {
+  computed,
+  nextTick,
+  reactive,
+  ref,
+  toRef,
+  useSlots,
+  watch,
+  watchEffect,
+} from 'vue';
 
 import { useNamespace } from '@vben-core/composables';
 import { Ellipsis } from '@vben-core/icons';
 
 import { useResizeObserver } from '@vueuse/core';
 
-import { createMenuContext, createSubMenuContext, useMenuStyle } from '../hooks';
+import {
+  createMenuContext,
+  createSubMenuContext,
+  useMenuStyle,
+} from '../hooks';
 import { useMenuScroll } from '../hooks/use-menu-scroll';
 import { flattedChildren } from '../utils';
 import SubMenu from './sub-menu.vue';
@@ -41,14 +59,18 @@ const menuStyle = useMenuStyle();
 const slots: SetupContext['slots'] = useSlots();
 const menu = ref<HTMLUListElement>();
 const sliceIndex = ref(-1);
-const openedMenus = ref<MenuProvider['openedMenus']>(props.defaultOpeneds && !props.collapse ? [...props.defaultOpeneds] : []);
+const openedMenus = ref<MenuProvider['openedMenus']>(
+  props.defaultOpeneds && !props.collapse ? [...props.defaultOpeneds] : [],
+);
 const activePath = ref<MenuProvider['activePath']>(props.defaultActive);
 const items = ref<MenuProvider['items']>({});
 const subMenus = ref<MenuProvider['subMenus']>({});
 const mouseInChild = ref(false);
 
 const isMenuPopup = computed<MenuProvider['isMenuPopup']>(() => {
-  return props.mode === 'horizontal' || (props.mode === 'vertical' && props.collapse);
+  return (
+    props.mode === 'horizontal' || (props.mode === 'vertical' && props.collapse)
+  );
 });
 
 const getSlot = computed(() => {
@@ -56,9 +78,13 @@ const getSlot = computed(() => {
   const defaultSlots: VNodeArrayChildren = slots.default?.() ?? [];
 
   const originalSlot = flattedChildren(defaultSlots) as VNodeArrayChildren;
-  const slotDefault = sliceIndex.value === -1 ? originalSlot : originalSlot.slice(0, sliceIndex.value);
+  const slotDefault =
+    sliceIndex.value === -1
+      ? originalSlot
+      : originalSlot.slice(0, sliceIndex.value);
 
-  const slotMore = sliceIndex.value === -1 ? [] : originalSlot.slice(sliceIndex.value);
+  const slotMore =
+    sliceIndex.value === -1 ? [] : originalSlot.slice(sliceIndex.value);
 
   return { showSlotMore: slotMore.length > 0, slotDefault, slotMore };
 });
@@ -133,7 +159,8 @@ function calcSliceIndex() {
   const items = [...(menu.value?.childNodes ?? [])].filter(
     (item) =>
       // remove comment type node #12634
-      item.nodeName !== '#comment' && (item.nodeName !== '#text' || item.nodeValue),
+      item.nodeName !== '#comment' &&
+      (item.nodeName !== '#text' || item.nodeValue),
   ) as HTMLElement[];
 
   const moreItemWidth = 46;
@@ -181,17 +208,19 @@ function handleResize() {
   isFirstTimeRender = false;
 }
 
-const enableScroll = computed(() => props.scrollToActive && props.mode === 'vertical' && !props.collapse);
+const enableScroll = computed(
+  () => props.scrollToActive && props.mode === 'vertical' && !props.collapse,
+);
 
-const { scrollToActiveItem } = useMenuScroll(activePath, {
+useMenuScroll(activePath, {
   enable: enableScroll,
   delay: 320,
 });
 
 // 监听 activePath 变化，自动滚动到激活项
-watch(activePath, () => {
-  scrollToActiveItem();
-});
+// watch(activePath, () => {
+//   scrollToActiveItem();
+// });
 
 // 默认展开菜单
 function initMenu() {
@@ -207,7 +236,10 @@ function initMenu() {
 
 function updateActiveName(val: string) {
   const itemsInData = items.value;
-  const item = itemsInData[val] || (activePath.value && itemsInData[activePath.value]) || itemsInData[props.defaultActive || ''];
+  const item =
+    itemsInData[val] ||
+    (activePath.value && itemsInData[activePath.value]) ||
+    itemsInData[props.defaultActive || ''];
 
   activePath.value = item ? item.path : val;
 }
@@ -269,7 +301,9 @@ function openMenu(path: string, parentPaths: string[]) {
     if (activeParentPaths.includes(path)) {
       parentPaths = activeParentPaths;
     }
-    openedMenus.value = openedMenus.value.filter((path: string) => parentPaths.includes(path));
+    openedMenus.value = openedMenus.value.filter((path: string) =>
+      parentPaths.includes(path),
+    );
   }
   openedMenus.value.push(path);
   emit('open', path, parentPaths);
@@ -304,7 +338,15 @@ function getActivePaths() {
 <template>
   <ul
     ref="menu"
-    :class="[theme, b(), is(mode, true), is(theme, true), is('rounded', rounded), is('collapse', collapse), is('menu-align', mode === 'horizontal')]"
+    :class="[
+      theme,
+      b(),
+      is(mode, true),
+      is(theme, true),
+      is('rounded', rounded),
+      is('collapse', collapse),
+      is('menu-align', mode === 'horizontal'),
+    ]"
     :style="menuStyle"
     role="menu"
   >
@@ -344,7 +386,8 @@ $namespace: vben;
   align-items: center;
   height: var(--menu-item-height);
   padding: var(--menu-item-padding-y) var(--menu-item-padding-x);
-  margin: 0 var(--menu-item-margin-x) var(--menu-item-margin-y) var(--menu-item-margin-x);
+  margin: 0 var(--menu-item-margin-x) var(--menu-item-margin-y)
+    var(--menu-item-margin-x);
   font-size: var(--menu-font-size) !important;
   color: var(--menu-item-color);
   white-space: nowrap;
@@ -420,33 +463,33 @@ $namespace: vben;
   &.is-dark {
     --menu-background-color: hsl(var(--menu));
     // --menu-submenu-opened-background-color: hsl(var(--menu-opened-dark));
-    --menu-item-background-color: var(--menu-background-color);
     --menu-item-color: hsl(var(--foreground) / 80%);
+    --menu-item-background-color: var(--menu-background-color);
     --menu-item-hover-color: hsl(var(--accent-foreground));
     --menu-item-hover-background-color: hsl(var(--accent));
     --menu-item-active-color: hsl(var(--accent-foreground));
     --menu-item-active-background-color: hsl(var(--accent));
-    --menu-submenu-hover-color: hsl(var(--foreground));
-    --menu-submenu-hover-background-color: hsl(var(--accent));
-    --menu-submenu-active-color: hsl(var(--foreground));
-    --menu-submenu-active-background-color: transparent;
     --menu-submenu-background-color: var(--menu-background-color);
+    --menu-submenu-hover-color: hsl(var(--accent-foreground));
+    --menu-submenu-hover-background-color: hsl(var(--accent));
+    --menu-submenu-active-color: hsl(var(--accent-foreground));
+    --menu-submenu-active-background-color: transparent;
   }
 
   &.is-light {
     --menu-background-color: hsl(var(--menu));
     // --menu-submenu-opened-background-color: hsl(var(--menu-opened));
+    --menu-item-color: hsl(var(--accent-foreground));
     --menu-item-background-color: var(--menu-background-color);
-    --menu-item-color: hsl(var(--foreground));
     --menu-item-hover-color: var(--menu-item-color);
     --menu-item-hover-background-color: hsl(var(--accent));
     --menu-item-active-color: hsl(var(--primary));
     --menu-item-active-background-color: hsl(var(--primary) / 15%);
+    --menu-submenu-background-color: var(--menu-background-color);
     --menu-submenu-hover-color: hsl(var(--primary));
     --menu-submenu-hover-background-color: hsl(var(--accent));
     --menu-submenu-active-color: hsl(var(--primary));
     --menu-submenu-active-background-color: transparent;
-    --menu-submenu-background-color: var(--menu-background-color);
   }
 
   &.is-rounded {
@@ -475,25 +518,33 @@ $namespace: vben;
     --menu-background-color: transparent;
 
     &.is-dark {
+      --menu-background-color: hsl(var(--menu));
+      --menu-item-color: hsl(var(--foreground) / 80%);
+      --menu-item-background-color: var(--menu-background-color);
       --menu-item-hover-color: hsl(var(--accent-foreground));
       --menu-item-hover-background-color: hsl(var(--accent));
       --menu-item-active-color: hsl(var(--accent-foreground));
       --menu-item-active-background-color: hsl(var(--accent));
-      --menu-submenu-active-color: hsl(var(--foreground));
-      --menu-submenu-active-background-color: hsl(var(--accent));
+      --menu-submenu-background-color: var(--menu-background-color);
       --menu-submenu-hover-color: hsl(var(--accent-foreground));
       --menu-submenu-hover-background-color: hsl(var(--accent));
+      --menu-submenu-active-color: hsl(var(--accent-foreground));
+      --menu-submenu-active-background-color: hsl(var(--accent));
     }
 
     &.is-light {
+      --menu-background-color: hsl(var(--menu));
+      --menu-item-color: hsl(var(--accent-foreground));
+      --menu-item-background-color: var(--menu-background-color);
+      --menu-item-hover-color: var(--menu-item-color);
+      --menu-item-hover-background-color: hsl(var(--accent));
       --menu-item-active-color: hsl(var(--primary));
       --menu-item-active-background-color: hsl(var(--primary) / 15%);
-      --menu-item-hover-background-color: hsl(var(--accent));
-      --menu-item-hover-color: hsl(var(--primary));
-      --menu-submenu-active-color: hsl(var(--primary));
-      --menu-submenu-active-background-color: hsl(var(--primary) / 15%);
+      --menu-submenu-background-color: var(--menu-background-color);
       --menu-submenu-hover-color: hsl(var(--primary));
       --menu-submenu-hover-background-color: hsl(var(--accent));
+      --menu-submenu-active-color: hsl(var(--primary));
+      --menu-submenu-active-background-color: hsl(var(--primary) / 15%);
     }
   }
 }
@@ -512,14 +563,19 @@ $namespace: vben;
       & .#{$namespace}-menu-item,
       & .#{$namespace}-sub-menu-content,
       & .#{$namespace}-menu-item-group__title {
-        padding-left: calc(var(--menu-item-indent) + var(--menu-level) * var(--menu-item-indent));
+        padding-left: calc(
+          var(--menu-item-indent) + var(--menu-level) * var(--menu-item-indent)
+        );
         white-space: nowrap;
       }
 
       & > .#{$namespace}-sub-menu {
         & > .#{$namespace}-menu {
           & > .#{$namespace}-menu-item {
-            padding-left: calc(0px + var(--menu-item-indent) + var(--menu-level) * var(--menu-item-indent));
+            padding-left: calc(
+              0px + var(--menu-item-indent) + var(--menu-level) *
+                var(--menu-item-indent)
+            );
           }
         }
 
@@ -614,8 +670,10 @@ $namespace: vben;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: var(--menu-item-collapse-padding-y) var(--menu-item-collapse-padding-x);
-      margin: var(--menu-item-collapse-margin-y) var(--menu-item-collapse-margin-x);
+      padding: var(--menu-item-collapse-padding-y)
+        var(--menu-item-collapse-padding-x);
+      margin: var(--menu-item-collapse-margin-y)
+        var(--menu-item-collapse-margin-x);
       transition: all 0.3s;
 
       &.is-active {
@@ -812,9 +870,8 @@ $namespace: vben;
     padding-right: 12px !important;
   }
 
-  // &:not(.is-active):hover {
-  &:hover {
-    color: var(--menu-submenu-hover-color);
+  &:not(.is-active):hover {
+    //color: var(--menu-submenu-hover-color);
     text-decoration: none;
     cursor: pointer;
     background: var(--menu-submenu-hover-background-color) !important;

@@ -10,7 +10,14 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const { codeLength = 6, createText = async () => {}, disabled = false, handleSendCode = async () => {}, loading = false, maxTime = 60 } = defineProps<PinInputProps>();
+const {
+  codeLength = 6,
+  createText = async () => {},
+  disabled = false,
+  handleSendCode = async () => {},
+  loading = false,
+  maxTime = 60,
+} = defineProps<PinInputProps>();
 
 const emit = defineEmits<{
   complete: [];
@@ -56,9 +63,8 @@ async function handleSend(e: Event) {
     countdown.value = maxTime;
     startCountdown();
   } catch (error) {
-    countdown.value = 0;
-    clearTimeout(timer.value);
     console.error('Failed to send code:', error);
+    // Consider emitting an error event or showing a notification
     emit('sendError', error);
   }
 }
@@ -83,12 +89,32 @@ const pinType = 'text' as const;
 </script>
 
 <template>
-  <PinInput :id="id" v-model="inputValue" :disabled="disabled" class="flex w-full justify-between" otp placeholder="○" :type="pinType" @complete="handleComplete">
+  <PinInput
+    :id="id"
+    v-model="inputValue"
+    :disabled="disabled"
+    class="flex w-full justify-between"
+    otp
+    placeholder="○"
+    :type="pinType"
+    @complete="handleComplete"
+  >
     <div class="relative flex w-full">
       <PinInputGroup class="mr-2">
-        <PinInputInput v-for="(item, index) in codeLength" :key="item" :index="index" />
+        <PinInputInput
+          v-for="(item, index) in codeLength"
+          :key="item"
+          :index="index"
+        />
       </PinInputGroup>
-      <VbenButton :disabled="disabled" :loading="btnLoading" class="flex-grow" size="lg" variant="outline" @click="handleSend">
+      <VbenButton
+        :disabled="disabled"
+        :loading="btnLoading"
+        class="grow"
+        size="lg"
+        variant="outline"
+        @click="handleSend"
+      >
         {{ btnText }}
       </VbenButton>
     </div>

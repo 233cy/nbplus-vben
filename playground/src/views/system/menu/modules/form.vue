@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
-
 import type { Recordable } from '@vben/types';
 
 import type { VbenFormSchema } from '#/adapter/form';
@@ -15,7 +13,14 @@ import { getPopupContainer } from '@vben/utils';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
 import { useVbenForm, z } from '#/adapter/form';
-import { createMenu, getMenuList, isMenuNameExists, isMenuPathExists, SystemMenuApi, updateMenu } from '#/api/system/menu';
+import {
+  createMenu,
+  getMenuList,
+  isMenuNameExists,
+  isMenuPathExists,
+  SystemMenuApi,
+  updateMenu,
+} from '#/api/system/menu';
 import { $t } from '#/locales';
 import { componentKeys } from '#/router/routes';
 
@@ -52,7 +57,10 @@ const schema: VbenFormSchema[] = [
           return !(await isMenuNameExists(value, formData.value?.id));
         },
         (value) => ({
-          message: $t('ui.formRules.alreadyExists', [$t('system.menu.menuName'), value]),
+          message: $t('ui.formRules.alreadyExists', [
+            $t('system.menu.menuName'),
+            value,
+          ]),
         }),
       ),
   },
@@ -98,7 +106,7 @@ const schema: VbenFormSchema[] = [
       // 不需要处理多语言时就无需这么做
       return {
         ...(titleSuffix.value && { addonAfter: titleSuffix.value }),
-        onChange({ target: { value } }: ChangeEvent) {
+        onChange({ target: { value } }: { target: { value: string } }) {
           titleSuffix.value = value && $te(value) ? $t(value) : undefined;
         },
       };
@@ -132,7 +140,10 @@ const schema: VbenFormSchema[] = [
           return !(await isMenuPathExists(value, formData.value?.id));
         },
         (value) => ({
-          message: $t('ui.formRules.alreadyExists', [$t('system.menu.path'), value]),
+          message: $t('ui.formRules.alreadyExists', [
+            $t('system.menu.path'),
+            value,
+          ]),
         }),
       ),
   },
@@ -442,7 +453,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
       if (data) {
         formData.value = data;
         formApi.setValues(formData.value);
-        titleSuffix.value = formData.value.meta?.title ? $t(formData.value.meta.title) : '';
+        titleSuffix.value = formData.value.meta?.title
+          ? $t(formData.value.meta.title)
+          : '';
       } else {
         formApi.resetForm();
         titleSuffix.value = '';
@@ -455,7 +468,10 @@ async function onSubmit() {
   const { valid } = await formApi.validate();
   if (valid) {
     drawerApi.lock();
-    const data = await formApi.getValues<Omit<SystemMenuApi.SystemMenu, 'children' | 'id'>>();
+    const data =
+      await formApi.getValues<
+        Omit<SystemMenuApi.SystemMenu, 'children' | 'id'>
+      >();
     if (data.type === 'link') {
       data.meta = { ...data.meta, link: data.linkSrc };
     } else if (data.type === 'embedded') {
@@ -463,7 +479,9 @@ async function onSubmit() {
     }
     delete data.linkSrc;
     try {
-      await (formData.value?.id ? updateMenu(formData.value.id, data) : createMenu(data));
+      await (formData.value?.id
+        ? updateMenu(formData.value.id, data)
+        : createMenu(data));
       drawerApi.close();
       emit('success');
     } finally {
@@ -471,10 +489,14 @@ async function onSubmit() {
     }
   }
 }
-const getDrawerTitle = computed(() => (formData.value?.id ? $t('ui.actionTitle.edit', [$t('system.menu.name')]) : $t('ui.actionTitle.create', [$t('system.menu.name')])));
+const getDrawerTitle = computed(() =>
+  formData.value?.id
+    ? $t('ui.actionTitle.edit', [$t('system.menu.name')])
+    : $t('ui.actionTitle.create', [$t('system.menu.name')]),
+);
 </script>
 <template>
-  <Drawer class="w-full max-w-[800px]" :title="getDrawerTitle">
+  <Drawer class="w-full max-w-200" :title="getDrawerTitle">
     <Form class="mx-4" :layout="isHorizontal ? 'horizontal' : 'vertical'" />
   </Drawer>
 </template>

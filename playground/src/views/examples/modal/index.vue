@@ -3,7 +3,7 @@ import { onBeforeUnmount } from 'vue';
 
 import { alert, clearAllAlerts, confirm, Page, prompt, useVbenModal } from '@vben/common-ui';
 
-import { Button, Card, Flex, message } from 'ant-design-vue';
+import { Button, Card, Flex, message } from 'antdv-next';
 
 import DocButton from '../doc-button.vue';
 import AutoHeightDemo from './auto-height-demo.vue';
@@ -180,35 +180,35 @@ async function openPrompt() {
     <NestedModal />
     <BlurModal />
     <Flex wrap="wrap" class="w-full" gap="10">
-      <Card class="w-[300px]" title="基本使用">
+      <Card class="w-75" title="基本使用">
         <p>一个基础的弹窗示例</p>
         <template #actions>
           <Button type="primary" @click="openBaseModal">打开弹窗</Button>
         </template>
       </Card>
 
-      <Card class="w-[300px]" title="指定容器+关闭后不销毁">
+      <Card class="w-75" title="指定容器+关闭后不销毁">
         <p>在内容区域打开弹窗的示例</p>
         <template #actions>
           <Button type="primary" @click="openInContentModal">打开弹窗</Button>
         </template>
       </Card>
 
-      <Card class="w-[300px]" title="内容高度自适应">
+      <Card class="w-75" title="内容高度自适应">
         <p>可根据内容并自动调整高度</p>
         <template #actions>
           <Button type="primary" @click="openAutoHeightModal"> 打开弹窗 </Button>
         </template>
       </Card>
 
-      <Card class="w-[300px]" title="可拖拽示例">
+      <Card class="w-75" title="可拖拽示例">
         <p>配置 draggable 可开启拖拽功能</p>
         <template #actions>
           <Button type="primary" @click="openDragModal"> 打开弹窗 </Button>
         </template>
       </Card>
 
-      <Card class="w-[300px]" title="动态配置示例">
+      <Card class="w-75" title="动态配置示例">
         <p>通过 setState 动态调整弹窗数据</p>
         <template #extra>
           <Button type="link" @click="openDynamicModal">打开弹窗</Button>
@@ -218,34 +218,34 @@ async function openPrompt() {
         </template>
       </Card>
 
-      <Card class="w-[300px]" title="内外数据共享示例">
+      <Card class="w-75" title="内外数据共享示例">
         <p>通过共享 sharedData 来进行数据交互</p>
         <template #actions>
           <Button type="primary" @click="openSharedModal"> 打开弹窗并传递数据 </Button>
         </template>
       </Card>
 
-      <Card class="w-[300px]" title="表单弹窗示例">
+      <Card class="w-75" title="表单弹窗示例">
         <p>弹窗与表单结合</p>
         <template #actions>
           <Button type="primary" @click="openFormModal"> 打开表单弹窗 </Button>
         </template>
       </Card>
 
-      <Card class="w-[300px]" title="嵌套弹窗示例">
+      <Card class="w-75" title="嵌套弹窗示例">
         <p>在已经打开的弹窗中再次打开弹窗</p>
         <template #actions>
           <Button type="primary" @click="openNestedModal">打开嵌套弹窗</Button>
         </template>
       </Card>
 
-      <Card class="w-[300px]" title="遮罩模糊示例">
+      <Card class="w-75" title="遮罩模糊示例">
         <p>遮罩层应用类似毛玻璃的模糊效果</p>
         <template #actions>
           <Button type="primary" @click="openBlurModal">打开弹窗</Button>
         </template>
       </Card>
-      <Card class="w-[300px]" title="轻量提示弹窗">
+      <Card class="w-75" title="轻量提示弹窗">
         <template #extra>
           <DocButton path="/components/common-ui/vben-alert" />
         </template>

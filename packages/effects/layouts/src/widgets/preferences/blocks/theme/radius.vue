@@ -19,9 +19,18 @@ const items = [
 </script>
 
 <template>
-  <ToggleGroup v-model="modelValue" class="gap-2" size="sm" type="single" variant="outline">
+  <ToggleGroup
+    v-model="modelValue"
+    class="gap-2"
+    size="sm"
+    type="single"
+    variant="outline"
+  >
     <template v-for="item in items" :key="item.value">
-      <ToggleGroupItem :value="item.value" class="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground h-7 w-16 rounded-sm">
+      <ToggleGroupItem
+        :value="item.value"
+        class="h-7 w-16 rounded-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+      >
         {{ item.label }}
       </ToggleGroupItem>
     </template>

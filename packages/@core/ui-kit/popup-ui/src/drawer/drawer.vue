@@ -1,9 +1,21 @@
 <script lang="ts" setup>
 import type { DrawerProps, ExtendedDrawerApi } from './drawer';
 
-import { computed, onDeactivated, provide, ref, unref, useId, watch } from 'vue';
+import {
+  computed,
+  onDeactivated,
+  provide,
+  ref,
+  unref,
+  useId,
+  watch,
+} from 'vue';
 
-import { useIsMobile, usePriorityValues, useSimpleLocale } from '@vben-core/composables';
+import {
+  useIsMobile,
+  usePriorityValues,
+  useSimpleLocale,
+} from '@vben-core/composables';
 import { X } from '@vben-core/icons';
 import {
   Separator,
@@ -115,7 +127,11 @@ function escapeKeyDown(e: KeyboardEvent) {
 function pointerDownOutside(e: Event) {
   const target = e.target as HTMLElement;
   const dismissableDrawer = target?.dataset.dismissableDrawer;
-  if (submitting.value || !closeOnClickModal.value || dismissableDrawer !== id) {
+  if (
+    submitting.value ||
+    !closeOnClickModal.value ||
+    dismissableDrawer !== id
+  ) {
     e.preventDefault();
   }
 }
@@ -132,7 +148,9 @@ function handleFocusOutside(e: Event) {
 }
 
 const getAppendTo = computed(() => {
-  return appendToMain.value ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.absolute)>div` : undefined;
+  return appendToMain.value
+    ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.absolute)>div`
+    : undefined;
 });
 
 /**
@@ -159,13 +177,17 @@ const getForceMount = computed(() => {
 });
 </script>
 <template>
-  <Sheet :modal="false" :open="state?.isOpen" @update:open="() => drawerApi?.close()">
+  <Sheet
+    :modal="false"
+    :open="state?.isOpen"
+    @update:open="() => drawerApi?.close()"
+  >
     <SheetContent
       :append-to="getAppendTo"
       :class="
-        cn('flex w-[520px] flex-col', drawerClass, {
-          '!w-full': isMobile || placement === 'bottom' || placement === 'top',
-          'max-h-[100vh]': placement === 'bottom' || placement === 'top',
+        cn('flex w-130 flex-col', drawerClass, {
+          'w-full!': isMobile || placement === 'bottom' || placement === 'top',
+          'max-h-screen': placement === 'bottom' || placement === 'top',
           hidden: isClosed,
         })
       "
@@ -187,10 +209,14 @@ const getForceMount = computed(() => {
       <SheetHeader
         v-if="showHeader"
         :class="
-          cn('!flex flex-row items-center justify-between border-b px-6 py-5', headerClass, {
-            'px-4 py-3': closable,
-            'pl-2': closable && closeIconPlacement === 'left',
-          })
+          cn(
+            'flex! flex-row items-center justify-between border-b px-6 py-5',
+            headerClass,
+            {
+              'px-4 py-3': closable,
+              'pl-2': closable && closeIconPlacement === 'left',
+            },
+          )
         "
       >
         <div class="flex items-center">
@@ -198,7 +224,7 @@ const getForceMount = computed(() => {
             v-if="closable && closeIconPlacement === 'left'"
             as-child
             :disabled="submitting"
-            class="ml-[2px] cursor-pointer rounded-full opacity-80 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-secondary"
+            class="ml-0.5 cursor-pointer rounded-full opacity-80 transition-opacity hover:opacity-100 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-secondary"
           >
             <slot name="close-icon">
               <VbenIconButton>
@@ -206,7 +232,12 @@ const getForceMount = computed(() => {
               </VbenIconButton>
             </slot>
           </SheetClose>
-          <Separator v-if="closable && closeIconPlacement === 'left'" class="ml-1 mr-2 h-8" decorative orientation="vertical" />
+          <Separator
+            v-if="closable && closeIconPlacement === 'left'"
+            class="mr-2 ml-1 h-8"
+            decorative
+            orientation="vertical"
+          />
           <SheetTitle v-if="title" class="text-left">
             <slot name="title">
               {{ title }}
@@ -234,7 +265,7 @@ const getForceMount = computed(() => {
             v-if="closable && closeIconPlacement === 'right'"
             as-child
             :disabled="submitting"
-            class="ml-[2px] cursor-pointer rounded-full opacity-80 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-secondary"
+            class="ml-0.5 cursor-pointer rounded-full opacity-80 transition-opacity hover:opacity-100 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-secondary"
           >
             <slot name="close-icon">
               <VbenIconButton>
@@ -261,16 +292,35 @@ const getForceMount = computed(() => {
         <slot></slot>
       </div>
       <VbenLoading v-if="showLoading || submitting" spinning />
-      <SheetFooter v-if="showFooter" :class="cn('w-full flex-row items-center justify-end border-t p-2 px-3', footerClass)">
+      <SheetFooter
+        v-if="showFooter"
+        :class="
+          cn(
+            'w-full flex-row items-center justify-end border-t p-2 px-3',
+            footerClass,
+          )
+        "
+      >
         <slot name="prepend-footer"></slot>
         <slot name="footer">
-          <component :is="components.DefaultButton || VbenButton" v-if="showCancelButton" variant="ghost" :disabled="submitting" @click="() => drawerApi?.onCancel()">
+          <component
+            :is="components.DefaultButton || VbenButton"
+            v-if="showCancelButton"
+            variant="ghost"
+            :disabled="submitting"
+            @click="() => drawerApi?.onCancel()"
+          >
             <slot name="cancelText">
               {{ cancelText || $t('cancel') }}
             </slot>
           </component>
           <slot name="center-footer"></slot>
-          <component :is="components.PrimaryButton || VbenButton" v-if="showConfirmButton" :loading="confirmLoading || submitting" @click="() => drawerApi?.onConfirm()">
+          <component
+            :is="components.PrimaryButton || VbenButton"
+            v-if="showConfirmButton"
+            :loading="confirmLoading || submitting"
+            @click="() => drawerApi?.onConfirm()"
+          >
             <slot name="confirmText">
               {{ confirmText || $t('confirm') }}
             </slot>

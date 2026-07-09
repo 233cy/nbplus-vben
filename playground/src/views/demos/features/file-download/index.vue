@@ -4,7 +4,7 @@ import { ref } from 'vue';
 import { Page } from '@vben/common-ui';
 import { downloadFileFromBase64, downloadFileFromBlobPart, downloadFileFromImageUrl, downloadFileFromUrl } from '@vben/utils';
 
-import { Button, Card } from 'ant-design-vue';
+import { Button, Card } from 'antdv-next';
 
 import { downloadFile1, downloadFile2 } from '#/api/examples/download';
 

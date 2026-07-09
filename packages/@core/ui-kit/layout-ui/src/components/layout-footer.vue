@@ -35,7 +35,10 @@ const style = computed((): CSSProperties => {
 </script>
 
 <template>
-  <footer :style="style" class="bottom-0 w-full bg-background-deep transition-all duration-200">
+  <footer
+    :style="style"
+    class="bottom-0 w-full bg-background-deep transition-all duration-200"
+  >
     <slot></slot>
   </footer>
 </template>

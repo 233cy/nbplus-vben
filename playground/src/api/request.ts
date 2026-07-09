@@ -5,11 +5,16 @@ import type { AxiosResponseHeaders, RequestClientOptions } from '@vben/request';
 
 import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
-import { authenticateResponseInterceptor, defaultResponseInterceptor, errorMessageResponseInterceptor, RequestClient } from '@vben/request';
+import {
+  authenticateResponseInterceptor,
+  defaultResponseInterceptor,
+  errorMessageResponseInterceptor,
+  RequestClient,
+} from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 import { cloneDeep } from '@vben/utils';
 
-import { message } from 'ant-design-vue';
+import { message } from 'antdv-next';
 import JSONBigInt from 'json-bigint';
 
 import { useAuthStore } from '#/store';
@@ -24,8 +29,13 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     baseURL,
     transformResponse: (data: any, header: AxiosResponseHeaders) => {
       // storeAsString指示将BigInt存储为字符串，设为false则会存储为内置的BigInt类型
-      if (header.getContentType()?.toString().includes('application/json') && typeof data === 'string') {
-        return cloneDeep(JSONBigInt({ storeAsString: true, strict: true }).parse(data));
+      if (
+        header.getContentType()?.toString().includes('application/json') &&
+        typeof data === 'string'
+      ) {
+        return cloneDeep(
+          JSONBigInt({ storeAsString: true, strict: true }).parse(data),
+        );
       }
       return data;
     },
@@ -39,7 +49,10 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     const accessStore = useAccessStore();
     const authStore = useAuthStore();
     accessStore.setAccessToken(null);
-    if (preferences.app.loginExpiredMode === 'modal' && accessStore.isAccessChecked) {
+    if (
+      preferences.app.loginExpiredMode === 'modal' &&
+      accessStore.isAccessChecked
+    ) {
       accessStore.setLoginExpired(true);
     } else {
       await authStore.logout();

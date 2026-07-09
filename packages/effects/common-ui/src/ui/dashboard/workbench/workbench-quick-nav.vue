@@ -34,7 +34,7 @@ defineEmits(['click']);
             'rounded-bl-xl': index === items.length - 3,
             'rounded-br-xl': index === items.length - 1,
           }"
-          class="flex-col-center border-border group w-1/3 cursor-pointer border-r border-t py-8 hover:shadow-xl"
+          class="group flex-col-center w-1/3 cursor-pointer border-t border-r border-border py-8 hover:shadow-xl"
           @click="$emit('click', item)"
         >
           <VbenIcon :color="item.color" :icon="item.icon" class="size-7 transition-all duration-300 group-hover:scale-125" />

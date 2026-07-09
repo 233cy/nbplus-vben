@@ -19,7 +19,10 @@ const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
-  <AlertDialogDescription v-bind="forwardedProps" :class="cn('text-sm text-muted-foreground', props.class)">
+  <AlertDialogDescription
+    v-bind="forwardedProps"
+    :class="cn('text-muted-foreground text-sm', props.class)"
+  >
     <slot></slot>
   </AlertDialogDescription>
 </template>

@@ -6,7 +6,12 @@ import { computed } from 'vue';
 import { cn } from '@vben-core/shared/utils';
 
 import { Check } from 'lucide-vue-next';
-import { SelectItem, SelectItemIndicator, SelectItemText, useForwardProps } from 'reka-ui';
+import {
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  useForwardProps,
+} from 'reka-ui';
 
 const props = defineProps<SelectItemProps & { class?: any }>();
 
@@ -24,7 +29,7 @@ const forwardedProps = useForwardProps(delegatedProps);
     v-bind="forwardedProps"
     :class="
       cn(
-        'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'focus:bg-accent focus:text-accent-foreground relative flex w-full cursor-default items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         props.class,
       )
     "

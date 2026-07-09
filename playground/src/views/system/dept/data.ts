@@ -1,4 +1,4 @@
-import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
+import type { VxeTableGridColumns } from '@vben/plugins/vxe-table';
 
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn } from '#/adapter/vxe-table';
@@ -20,7 +20,10 @@ export function useSchema(): VbenFormSchema[] {
       rules: z
         .string()
         .min(2, $t('ui.formRules.minLength', [$t('system.dept.deptName'), 2]))
-        .max(20, $t('ui.formRules.maxLength', [$t('system.dept.deptName'), 20])),
+        .max(
+          20,
+          $t('ui.formRules.maxLength', [$t('system.dept.deptName'), 20]),
+        ),
     },
     {
       component: 'ApiTreeSelect',
@@ -71,7 +74,9 @@ export function useSchema(): VbenFormSchema[] {
  * @description 使用函数的形式返回列数据而不是直接export一个Array常量，是为了响应语言切换时重新翻译表头
  * @param onActionClick 表格操作按钮点击事件
  */
-export function useColumns(onActionClick?: OnActionClickFn<SystemDeptApi.SystemDept>): VxeTableGridOptions<SystemDeptApi.SystemDept>['columns'] {
+export function useColumns(
+  onActionClick?: OnActionClickFn<SystemDeptApi.SystemDept>,
+): VxeTableGridColumns<SystemDeptApi.SystemDept> {
   return [
     {
       align: 'left',

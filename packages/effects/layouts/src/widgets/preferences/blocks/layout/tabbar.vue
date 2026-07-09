@@ -25,7 +25,9 @@ const tabbarStyleType = defineModel<string>('tabbarStyleType');
 const tabbarShowMore = defineModel<boolean>('tabbarShowMore');
 const tabbarShowMaximize = defineModel<boolean>('tabbarShowMaximize');
 const tabbarMaxCount = defineModel<number>('tabbarMaxCount');
-const tabbarMiddleClickToClose = defineModel<boolean>('tabbarMiddleClickToClose');
+const tabbarMiddleClickToClose = defineModel<boolean>(
+  'tabbarMiddleClickToClose',
+);
 
 const styleItems = computed((): SelectOption[] => [
   {
@@ -55,16 +57,31 @@ const styleItems = computed((): SelectOption[] => [
   <SwitchItem v-model="tabbarPersist" :disabled="!tabbarEnable">
     {{ $t('preferences.tabbar.persist') }}
   </SwitchItem>
-  <SwitchItem v-model="tabbarVisitHistory" :disabled="!tabbarEnable" :tip="$t('preferences.tabbar.visitHistoryTip')">
+  <SwitchItem
+    v-model="tabbarVisitHistory"
+    :disabled="!tabbarEnable"
+    :tip="$t('preferences.tabbar.visitHistoryTip')"
+  >
     {{ $t('preferences.tabbar.visitHistory') }}
   </SwitchItem>
-  <NumberFieldItem v-model="tabbarMaxCount" :disabled="!tabbarEnable" :max="30" :min="0" :step="5" :tip="$t('preferences.tabbar.maxCountTip')">
+  <NumberFieldItem
+    v-model="tabbarMaxCount"
+    :disabled="!tabbarEnable"
+    :max="30"
+    :min="0"
+    :step="5"
+    :tip="$t('preferences.tabbar.maxCountTip')"
+  >
     {{ $t('preferences.tabbar.maxCount') }}
   </NumberFieldItem>
   <SwitchItem v-model="tabbarDraggable" :disabled="!tabbarEnable">
     {{ $t('preferences.tabbar.draggable') }}
   </SwitchItem>
-  <SwitchItem v-model="tabbarWheelable" :disabled="!tabbarEnable" :tip="$t('preferences.tabbar.wheelableTip')">
+  <SwitchItem
+    v-model="tabbarWheelable"
+    :disabled="!tabbarEnable"
+    :tip="$t('preferences.tabbar.wheelableTip')"
+  >
     {{ $t('preferences.tabbar.wheelable') }}
   </SwitchItem>
   <SwitchItem v-model="tabbarMiddleClickToClose" :disabled="!tabbarEnable">

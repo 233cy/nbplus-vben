@@ -5,7 +5,7 @@ import { reactive } from 'vue';
 
 import { Page, Tippy } from '@vben/common-ui';
 
-import { Button, Card, Flex } from 'ant-design-vue';
+import { Button, Card, Flex } from 'antdv-next';
 
 import { useVbenForm } from '#/adapter/form';
 
@@ -243,16 +243,25 @@ function goDoc() {
   <Page title="Tippy">
     <template #description>
       <div class="flex items-center">
-        <p>Tippy 是一个轻量级的提示工具库，它可以用来创建各种交互式提示，如工具提示、引导提示等。</p>
+        <p>
+          Tippy
+          是一个轻量级的提示工具库，它可以用来创建各种交互式提示，如工具提示、引导提示等。
+        </p>
         <Button type="link" size="small" @click="goDoc">查看文档</Button>
       </div>
     </template>
     <Card title="指令形式使用">
-      <p class="mb-4">指令形式使用比较简洁，直接在需要展示tooltip的组件上用v-tippy传递配置，适用于固定内容的工具提示。</p>
+      <p class="mb-4">
+        指令形式使用比较简洁，直接在需要展示tooltip的组件上用v-tippy传递配置，适用于固定内容的工具提示。
+      </p>
       <Flex warp="warp" gap="20" align="center">
         <Button v-tippy="'这是一个提示，使用了默认的配置'">默认配置</Button>
 
-        <Button v-tippy="{ theme: 'light', content: '这是一个提示，总是light主题' }"> 指定主题 </Button>
+        <Button
+          v-tippy="{ theme: 'light', content: '这是一个提示，总是light主题' }"
+        >
+          指定主题
+        </Button>
         <Button
           v-tippy="{
             theme: 'light',
@@ -281,7 +290,9 @@ function goDoc() {
 
       <Form class="mt-4" />
       <template #actions>
-        <p class="cursor-default text-secondary-foreground hover:text-secondary-foreground">
+        <p
+          class="cursor-default text-secondary-foreground hover:text-secondary-foreground"
+        >
           更多配置请
           <Button type="link" size="small" @click="goDoc">查看文档</Button>
           ，这里只列出了一些常用的配置

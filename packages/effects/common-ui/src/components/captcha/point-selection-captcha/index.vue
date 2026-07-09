@@ -112,16 +112,34 @@ function handleConfirm() {
 }
 </script>
 <template>
-  <CaptchaCard :captcha-image="captchaImage" :height="height" :padding-x="paddingX" :padding-y="paddingY" :title="title" :width="width" @click="handleClick">
+  <CaptchaCard
+    :captcha-image="captchaImage"
+    :height="height"
+    :padding-x="paddingX"
+    :padding-y="paddingY"
+    :title="title"
+    :width="width"
+    @click="handleClick"
+  >
     <template #title>
       <slot name="title">{{ $t('ui.captcha.title') }}</slot>
     </template>
 
     <template #extra>
-      <VbenIconButton :aria-label="$t('ui.captcha.refreshAriaLabel')" class="ml-1" @click="handleRefresh">
+      <VbenIconButton
+        :aria-label="$t('ui.captcha.refreshAriaLabel')"
+        class="ml-1"
+        @click="handleRefresh"
+      >
         <RotateCw class="size-5" />
       </VbenIconButton>
-      <VbenButton v-if="showConfirm" :aria-label="$t('ui.captcha.confirmAriaLabel')" class="ml-2" size="sm" @click="handleConfirm">
+      <VbenButton
+        v-if="showConfirm"
+        :aria-label="$t('ui.captcha.confirmAriaLabel')"
+        class="ml-2"
+        size="sm"
+        @click="handleConfirm"
+      >
         {{ $t('ui.captcha.confirm') }}
       </VbenButton>
     </template>
@@ -134,15 +152,23 @@ function handleConfirm() {
         top: `${point.y - POINT_OFFSET}px`,
         left: `${point.x - POINT_OFFSET}px`,
       }"
-      class="bg-primary text-primary-50 border-primary-50 absolute z-20 flex h-5 w-5 cursor-default items-center justify-center rounded-full border-2"
+      class="absolute z-20 flex-center size-5 cursor-default rounded-full border-2 border-primary-50 bg-primary text-primary-50"
       role="button"
       tabindex="0"
     >
       {{ index + 1 }}
     </div>
     <template #footer>
-      <img v-if="hintImage" :alt="$t('ui.captcha.alt')" :src="hintImage" class="border-border h-10 w-full rounded border" />
-      <div v-else-if="hintText" class="border-border flex-center h-10 w-full rounded border">
+      <img
+        v-if="hintImage"
+        :alt="$t('ui.captcha.alt')"
+        :src="hintImage"
+        class="h-10 w-full rounded-sm border border-border"
+      />
+      <div
+        v-else-if="hintText"
+        class="flex-center h-10 w-full rounded-sm border border-border"
+      >
         {{ `${$t('ui.captcha.clickInOrder')}` + `【${hintText}】` }}
       </div>
     </template>

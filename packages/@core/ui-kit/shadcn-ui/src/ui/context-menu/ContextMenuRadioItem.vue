@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import type { ContextMenuRadioItemEmits, ContextMenuRadioItemProps } from 'reka-ui';
+import type {
+  ContextMenuRadioItemEmits,
+  ContextMenuRadioItemProps,
+} from 'reka-ui';
 
 import { computed } from 'vue';
 
 import { cn } from '@vben-core/shared/utils';
 
 import { Circle } from 'lucide-vue-next';
-import { ContextMenuItemIndicator, ContextMenuRadioItem, useForwardPropsEmits } from 'reka-ui';
+import {
+  ContextMenuItemIndicator,
+  ContextMenuRadioItem,
+  useForwardPropsEmits,
+} from 'reka-ui';
 
 const props = defineProps<ContextMenuRadioItemProps & { class?: any }>();
 const emits = defineEmits<ContextMenuRadioItemEmits>();
@@ -25,7 +32,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     v-bind="forwarded"
     :class="
       cn(
-        'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         props.class,
       )
     "

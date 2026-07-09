@@ -9,7 +9,10 @@ import { defineLibraryConfig } from './library';
 export * from './application';
 export * from './library';
 
-function defineConfig(userConfigPromise?: DefineConfig, type: 'application' | 'auto' | 'library' = 'auto'): VbenViteConfig {
+function defineConfig(
+  userConfigPromise?: DefineConfig,
+  type: 'application' | 'auto' | 'library' = 'auto',
+): VbenViteConfig {
   let projectType = type;
 
   // 根据包是否存在 index.html,自动判断类型

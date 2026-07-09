@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import type { AvatarFallbackProps, AvatarImageProps, AvatarRootProps } from 'reka-ui';
+import type {
+  AvatarFallbackProps,
+  AvatarImageProps,
+  AvatarRootProps,
+} from 'reka-ui';
 
 import type { CSSProperties } from 'vue';
 
@@ -53,11 +57,20 @@ const rootStyle = computed(() => {
 </script>
 
 <template>
-  <div :class="props.class" :style="rootStyle" class="relative flex flex-shrink-0 items-center">
+  <div
+    :class="props.class"
+    :style="rootStyle"
+    class="relative flex shrink-0 items-center"
+  >
     <Avatar :class="props.class" class="size-full">
       <AvatarImage :alt="alt" :src="src" :style="imageStyle" />
       <AvatarFallback>{{ text }}</AvatarFallback>
     </Avatar>
-    <span v-if="dot" :class="dotClass" class="absolute bottom-0 right-0 size-3 rounded-full border-2 border-background"> </span>
+    <span
+      v-if="dot"
+      :class="dotClass"
+      class="border-background absolute right-0 bottom-0 size-3 rounded-full border-2"
+    >
+    </span>
   </div>
 </template>

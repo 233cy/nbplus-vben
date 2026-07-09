@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 // import { useAntdDesignTokens } from '@vben/hooks';
 // import { initPreferences } from '@vben/preferences';
-import { ConfigProvider, theme } from 'ant-design-vue';
+import { ConfigProvider, theme } from 'antdv-next';
 import mediumZoom from 'medium-zoom';
 import { useRoute } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';

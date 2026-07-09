@@ -8,8 +8,13 @@ import { AuthenticationLoginExpiredModal } from '@vben/common-ui';
 import { VBEN_DOC_URL, VBEN_GITHUB_URL } from '@vben/constants';
 import { useWatermark } from '@vben/hooks';
 import { BookOpenText, CircleHelp, SvgGithubIcon } from '@vben/icons';
-import { BasicLayout, LockScreen, Notification, UserDropdown } from '@vben/layouts';
-import { preferences } from '@vben/preferences';
+import {
+  BasicLayout,
+  LockScreen,
+  Notification,
+  UserDropdown,
+} from '@vben/layouts';
+import { preferences, usePreferences } from '@vben/preferences';
 import { useAccessStore, useTabbarStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
@@ -18,7 +23,17 @@ import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const { setMenuList } = useTabbarStore();
-setMenuList(['close', 'affix', 'maximize', 'reload', 'open-in-new-window', 'close-left', 'close-right', 'close-other', 'close-all']);
+setMenuList([
+  'close',
+  'affix',
+  'maximize',
+  'reload',
+  'open-in-new-window',
+  'close-left',
+  'close-right',
+  'close-other',
+  'close-all',
+]);
 
 const notifications = ref<NotificationItem[]>([
   {
@@ -78,7 +93,10 @@ const userStore = useUserStore();
 const authStore = useAuthStore();
 const accessStore = useAccessStore();
 const { destroyWatermark, updateWatermark } = useWatermark();
-const showDot = computed(() => notifications.value.some((item) => !item.isRead));
+const { isDark } = usePreferences();
+const showDot = computed(() =>
+  notifications.value.some((item) => !item.isRead),
+);
 
 const menus = computed(() => [
   {
@@ -146,15 +164,62 @@ function handleMakeAll() {
 
 function handleClickLogo() {}
 
+const viewAll = () => {};
+
+const handleClick = (item: NotificationItem) => {
+  // 如果通知项有链接，点击时跳转
+  if (item.link) {
+    navigateTo(item.link, item.query, item.state);
+  }
+};
+
+function navigateTo(
+  link: string,
+  query?: Record<string, any>,
+  state?: Record<string, any>,
+) {
+  if (link.startsWith('http://') || link.startsWith('https://')) {
+    // 外部链接，在新标签页打开
+    window.open(link, '_blank');
+  } else {
+    // 内部路由链接，支持 query 参数和 state
+    router.push({
+      path: link,
+      query: query || {},
+      state,
+    });
+  }
+}
+
 watch(
   () => ({
     enable: preferences.app.watermark,
     content: preferences.app.watermarkContent,
+    isDark: isDark.value,
   }),
-  async ({ enable, content }) => {
+  async ({ enable, content, isDark: isDarkValue }) => {
     if (enable) {
+      const watermarkColor = isDarkValue
+        ? 'rgba(255, 255, 255, 0.12)'
+        : 'rgba(0, 0, 0, 0.12)';
+
       await updateWatermark({
-        content: content || `${userStore.userInfo?.username} - ${userStore.userInfo?.realName}`,
+        advancedStyle: {
+          colorStops: [
+            {
+              color: watermarkColor,
+              offset: 0,
+            },
+            {
+              color: watermarkColor,
+              offset: 1,
+            },
+          ],
+          type: 'linear',
+        },
+        content:
+          content ||
+          `${userStore.userInfo?.username} - ${userStore.userInfo?.realName}`,
       });
     } else {
       destroyWatermark();
@@ -173,9 +238,21 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <BasicLayout @clear-preferences-and-logout="handleLogout" @click-logo="handleClickLogo">
+  <BasicLayout
+    @clear-preferences-and-logout="handleLogout"
+    @click-logo="handleClickLogo"
+  >
     <template #user-dropdown>
-      <UserDropdown :avatar :menus :text="userStore.userInfo?.realName" description="ann.vben@gmail.com" tag-text="Pro" trigger="both" @logout="handleLogout" />
+      <UserDropdown
+        :avatar
+        :menus
+        :text="userStore.userInfo?.realName"
+        description="ann.vben@gmail.com"
+        tag-text="Pro"
+        trigger="both"
+        @logout="handleLogout"
+        @clear-preferences-and-logout="handleLogout"
+      />
     </template>
     <template #notification>
       <Notification
@@ -185,10 +262,15 @@ onBeforeMount(() => {
         @read="(item) => item.id && markRead(item.id)"
         @remove="(item) => item.id && remove(item.id)"
         @make-all="handleMakeAll"
+        @on-click="handleClick"
+        @view-all="viewAll"
       />
     </template>
     <template #extra>
-      <AuthenticationLoginExpiredModal v-model:open="accessStore.loginExpired" :avatar>
+      <AuthenticationLoginExpiredModal
+        v-model:open="accessStore.loginExpired"
+        :avatar
+      >
         <LoginForm />
       </AuthenticationLoginExpiredModal>
     </template>

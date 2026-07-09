@@ -192,7 +192,7 @@ function handleExpand() {
         <div
           ref="ellipsis"
           :class="{
-            '!cursor-pointer': expand,
+            'cursor-pointer!': expand,
             ['block truncate']: line === 1,
             [$style.ellipsisMultiLine]: line > 1,
           }"

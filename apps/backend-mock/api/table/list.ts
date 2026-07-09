@@ -65,7 +65,7 @@ export default eventHandler(async (event) => {
       const aValue = a[sortKey] as unknown;
       const bValue = b[sortKey] as unknown;
 
-      let result = 0;
+      let result: number;
 
       if (typeof aValue === 'number' && typeof bValue === 'number') {
         result = aValue - bValue;

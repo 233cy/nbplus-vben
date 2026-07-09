@@ -1,9 +1,22 @@
 <script lang="ts" setup>
 import type { ExtendedModalApi, ModalProps } from './modal';
 
-import { computed, nextTick, onDeactivated, provide, ref, unref, useId, watch } from 'vue';
+import {
+  computed,
+  nextTick,
+  onDeactivated,
+  provide,
+  ref,
+  unref,
+  useId,
+  watch,
+} from 'vue';
 
-import { useIsMobile, usePriorityValues, useSimpleLocale } from '@vben-core/composables';
+import {
+  useIsMobile,
+  usePriorityValues,
+  useSimpleLocale,
+} from '@vben-core/composables';
 import { Expand, Shrink } from '@vben-core/icons';
 import {
   Dialog,
@@ -68,6 +81,7 @@ const {
   description,
   destroyOnClose,
   draggable,
+  overflow,
   footer: showFooter,
   footerClass,
   fullscreen,
@@ -89,15 +103,28 @@ const {
 
 const shouldFullscreen = computed(() => fullscreen.value || isMobile.value);
 
-const shouldDraggable = computed(() => draggable.value && !shouldFullscreen.value && header.value);
+const shouldDraggable = computed(
+  () => draggable.value && !shouldFullscreen.value && header.value,
+);
 
-const shouldCentered = computed(() => centered.value && !shouldFullscreen.value);
+const shouldCentered = computed(
+  () => centered.value && !shouldFullscreen.value,
+);
 
 const getAppendTo = computed(() => {
-  return appendToMain.value ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.absolute)>div` : undefined;
+  return appendToMain.value
+    ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.absolute)>div`
+    : undefined;
 });
 
-const { dragging, transform } = useModalDraggable(dialogRef, headerRef, shouldDraggable, getAppendTo, shouldCentered);
+const { dragging, transform } = useModalDraggable(
+  dialogRef,
+  headerRef,
+  shouldDraggable,
+  getAppendTo,
+  shouldCentered,
+  overflow,
+);
 
 const firstOpened = ref(false);
 const isClosed = ref(true);
@@ -114,7 +141,9 @@ watch(
       dialogRef.value = innerContentRef.$el;
       // reopen modal reassign value
       const { offsetX, offsetY } = transform;
-      dialogRef.value.style.transform = shouldCentered.value ? `translate(${offsetX}px, calc(-50% + ${offsetY}px))` : `translate(${offsetX}px, ${offsetY}px)`;
+      dialogRef.value.style.transform = shouldCentered.value
+        ? `translate(${offsetX}px, calc(-50% + ${offsetY}px))`
+        : `translate(${offsetX}px, ${offsetY}px)`;
     }
   },
   { immediate: true },
@@ -172,7 +201,11 @@ function handleOpenAutoFocus(e: Event) {
 function pointerDownOutside(e: Event) {
   const target = e.target as HTMLElement;
   const isDismissableModal = target?.dataset.dismissableModal;
-  if (!closeOnClickModal.value || isDismissableModal !== id || submitting.value) {
+  if (
+    !closeOnClickModal.value ||
+    isDismissableModal !== id ||
+    submitting.value
+  ) {
     e.preventDefault();
     e.stopPropagation();
   }
@@ -199,19 +232,29 @@ function handleClosed() {
 }
 </script>
 <template>
-  <Dialog :modal="false" :open="state?.isOpen" @update:open="() => (!submitting ? modalApi?.close() : undefined)">
+  <Dialog
+    :modal="false"
+    :open="state?.isOpen"
+    @update:open="() => (!submitting ? modalApi?.close() : undefined)"
+  >
     <DialogContent
       ref="contentRef"
       :append-to="getAppendTo"
       :class="
-        cn('left-0 right-0 top-[10vh] mx-auto flex max-h-[80%] w-[520px] flex-col p-0', shouldFullscreen ? 'sm:rounded-none' : 'sm:rounded-[var(--radius)]', modalClass, {
-          'border border-border': bordered,
-          'shadow-3xl': !bordered,
-          'left-0 top-0 size-full max-h-full !translate-x-0 !translate-y-0': shouldFullscreen,
-          'top-1/2': centered && !shouldFullscreen,
-          'duration-300': !dragging,
-          hidden: isClosed,
-        })
+        cn(
+          'inset-x-0 top-[10vh] mx-auto flex max-h-[80%] w-130 flex-col p-0',
+          shouldFullscreen ? 'sm:rounded-none' : 'sm:rounded-(--radius)',
+          modalClass,
+          {
+            'border border-border': bordered,
+            'shadow-3xl': !bordered,
+            'top-0 left-0 size-full max-h-full transform-[translate(0,0)]!':
+              shouldFullscreen,
+            'top-1/2': centered && !shouldFullscreen,
+            'duration-300': !dragging,
+            hidden: isClosed,
+          },
+        )
       "
       :force-mount="getForceMount"
       :modal="modal"
@@ -279,7 +322,7 @@ function handleClosed() {
       <VbenLoading v-if="showLoading || submitting" spinning />
       <VbenIconButton
         v-if="fullscreenButton"
-        class="flex-center absolute right-10 top-3 hidden size-6 rounded-full px-1 text-lg text-foreground/80 opacity-70 transition-opacity hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus:outline-none disabled:pointer-events-none sm:block"
+        class="absolute top-3 right-10 flex-center hidden size-6 rounded-full px-1 text-lg text-foreground/80 opacity-70 transition-opacity hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus:outline-hidden disabled:pointer-events-none sm:block"
         @click="handleFullscreen"
       >
         <Shrink v-if="fullscreen" class="size-3.5" />
@@ -301,7 +344,13 @@ function handleClosed() {
       >
         <slot name="prepend-footer"></slot>
         <slot name="footer">
-          <component :is="components.DefaultButton || VbenButton" v-if="showCancelButton" variant="ghost" :disabled="submitting" @click="() => modalApi?.onCancel()">
+          <component
+            :is="components.DefaultButton || VbenButton"
+            v-if="showCancelButton"
+            variant="ghost"
+            :disabled="submitting"
+            @click="() => modalApi?.onCancel()"
+          >
             <slot name="cancelText">
               {{ cancelText || $t('cancel') }}
             </slot>

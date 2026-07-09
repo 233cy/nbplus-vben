@@ -91,7 +91,9 @@ defineExpose({
 <template>
   <div>
     <Title>
-      <slot name="title"> {{ title || $t('authentication.welcomeBack') }} 📲 </slot>
+      <slot name="title">
+        {{ title || $t('authentication.welcomeBack') }} 📲
+      </slot>
       <template #desc>
         <span class="text-muted-foreground">
           <slot name="subTitle">
@@ -113,7 +115,12 @@ defineExpose({
         {{ submitButtonText || $t('common.login') }}
       </slot>
     </VbenButton>
-    <VbenButton v-if="showBack" class="mt-4 w-full" variant="outline" @click="goToLogin()">
+    <VbenButton
+      v-if="showBack"
+      class="mt-4 w-full"
+      variant="outline"
+      @click="goToLogin()"
+    >
       {{ $t('common.back') }}
     </VbenButton>
   </div>

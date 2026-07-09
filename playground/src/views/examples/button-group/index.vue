@@ -6,7 +6,7 @@ import { reactive, ref } from 'vue';
 import { Page, VbenButton, VbenButtonGroup, VbenCheckButtonGroup } from '@vben/common-ui';
 import { LoaderCircle, Square, SquareCheckBig } from '@vben/icons';
 
-import { Button, Card, message } from 'ant-design-vue';
+import { Button, Card, message } from 'antdv-next';
 
 import { useVbenForm } from '#/adapter/form';
 

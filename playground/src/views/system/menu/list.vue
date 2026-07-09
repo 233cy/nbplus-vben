@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import type { OnActionClickParams, VxeTableGridOptions } from '#/adapter/vxe-table';
+import type {
+  OnActionClickParams,
+  VxeTableGridOptions,
+} from '#/adapter/vxe-table';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
@@ -7,7 +10,7 @@ import { $t } from '@vben/locales';
 
 import { MenuBadge } from '@vben-core/menu-ui';
 
-import { Button, message } from 'ant-design-vue';
+import { Button, message } from 'antdv-next';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteMenu, getMenuList, SystemMenuApi } from '#/api/system/menu';
@@ -52,7 +55,10 @@ const [Grid, gridApi] = useVbenVxeGrid({
   } as VxeTableGridOptions,
 });
 
-function onActionClick({ code, row }: OnActionClickParams<SystemMenuApi.SystemMenu>) {
+function onActionClick({
+  code,
+  row,
+}: OnActionClickParams<SystemMenuApi.SystemMenu>) {
   switch (code) {
     case 'append': {
       onAppend(row);
@@ -116,14 +122,28 @@ function onDelete(row: SystemMenuApi.SystemMenu) {
       </template>
       <template #title="{ row }">
         <div class="flex w-full items-center gap-1">
-          <div class="size-5 flex-shrink-0">
-            <IconifyIcon v-if="row.type === 'button'" icon="carbon:security" class="size-full" />
-            <IconifyIcon v-else-if="row.meta?.icon" :icon="row.meta?.icon || 'carbon:circle-dash'" class="size-full" />
+          <div class="size-5 shrink-0">
+            <IconifyIcon
+              v-if="row.type === 'button'"
+              icon="carbon:security"
+              class="size-full"
+            />
+            <IconifyIcon
+              v-else-if="row.meta?.icon"
+              :icon="row.meta?.icon || 'carbon:circle-dash'"
+              class="size-full"
+            />
           </div>
           <span class="flex-auto">{{ $t(row.meta?.title) }}</span>
           <div class="items-center justify-end"></div>
         </div>
-        <MenuBadge v-if="row.meta?.badgeType" class="menu-badge" :badge="row.meta.badge" :badge-type="row.meta.badgeType" :badge-variants="row.meta.badgeVariants" />
+        <MenuBadge
+          v-if="row.meta?.badgeType"
+          class="menu-badge"
+          :badge="row.meta.badge"
+          :badge-type="row.meta.badgeType"
+          :badge-variants="row.meta.badgeVariants"
+        />
       </template>
     </Grid>
   </Page>

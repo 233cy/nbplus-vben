@@ -7,7 +7,11 @@ import { computed, ref } from 'vue';
 
 import { cn } from '@vben-core/shared/utils';
 
-import { AlertDialogContent, AlertDialogPortal, useForwardPropsEmits } from 'reka-ui';
+import {
+  AlertDialogContent,
+  AlertDialogPortal,
+  useForwardPropsEmits,
+} from 'reka-ui';
 
 import AlertDialogOverlay from './AlertDialogOverlay.vue';
 
@@ -24,7 +28,9 @@ const props = withDefaults(
   >(),
   { modal: true },
 );
-const emits = defineEmits<AlertDialogContentEmits & { close: []; closed: []; opened: [] }>();
+const emits = defineEmits<
+  AlertDialogContentEmits & { close: []; closed: []; opened: [] }
+>();
 
 const delegatedProps = computed(() => {
   const { class: _, modal: _modal, open: _open, ...delegated } = props;
@@ -58,7 +64,8 @@ defineExpose({
         :style="{
           ...(zIndex ? { zIndex } : {}),
           position: 'fixed',
-          backdropFilter: overlayBlur && overlayBlur > 0 ? `blur(${overlayBlur}px)` : 'none',
+          backdropFilter:
+            overlayBlur && overlayBlur > 0 ? `blur(${overlayBlur}px)` : 'none',
         }"
         @click="() => emits('close')"
       />
@@ -70,12 +77,14 @@ defineExpose({
       v-bind="forwarded"
       :class="
         cn(
-          'z-popup bg-background p-6 shadow-lg outline-none sm:rounded-xl',
+          'z-popup bg-background p-6 shadow-lg outline-hidden sm:rounded-xl',
           'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
           'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
           {
-            'data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-top-[48%]': !centered,
-            'data-[state=closed]:slide-out-to-top-[148%] data-[state=open]:slide-in-from-top-[98%]': centered,
+            'data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-top-[48%]':
+              !centered,
+            'data-[state=closed]:slide-out-to-top-[148%] data-[state=open]:slide-in-from-top-[98%]':
+              centered,
             'top-[10vh]': !centered,
             'top-1/2 -translate-y-1/2': centered,
           },

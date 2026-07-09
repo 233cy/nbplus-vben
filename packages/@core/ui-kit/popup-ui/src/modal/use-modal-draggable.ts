@@ -15,6 +15,7 @@ export function useModalDraggable(
   draggable: ComputedRef<boolean>,
   containerSelector?: ComputedRef<string | undefined>,
   centered?: ComputedRef<boolean>,
+  overflow?: ComputedRef<boolean>,
 ) {
   const transform = reactive({
     offsetX: 0,
@@ -67,15 +68,19 @@ export function useModalDraggable(
       let moveX = offsetX + e.clientX - downX;
       let moveY = offsetY + e.clientY - downY;
 
-      moveX = Math.min(Math.max(moveX, minLeft), maxLeft);
-      moveY = Math.min(Math.max(moveY, minTop), maxTop);
+      if (!overflow?.value) {
+        moveX = Math.min(Math.max(moveX, minLeft), maxLeft);
+        moveY = Math.min(Math.max(moveY, minTop), maxTop);
+      }
 
       transform.offsetX = moveX;
       transform.offsetY = moveY;
 
       if (targetRef.value) {
         const isCentered = centered?.value;
-        targetRef.value.style.transform = isCentered ? `translate(${moveX}px, calc(-50% + ${moveY}px))` : `translate(${moveX}px, ${moveY}px)`;
+        targetRef.value.style.transform = isCentered
+          ? `translate(${moveX}px, calc(-50% + ${moveY}px))`
+          : `translate(${moveX}px, ${moveY}px)`;
         dragging.value = true;
       }
     };

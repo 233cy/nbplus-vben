@@ -1,4 +1,8 @@
-import type { BaseFormComponentType, ExtendedFormApi, VbenFormProps } from './types';
+import type {
+  BaseFormComponentType,
+  ExtendedFormApi,
+  VbenFormProps,
+} from './types';
 
 import { defineComponent, h, isReactive, onBeforeUnmount, watch } from 'vue';
 
@@ -7,9 +11,12 @@ import { useStore } from '@vben-core/shared/store';
 import { FormApi } from './form-api';
 import VbenUseForm from './vben-use-form.vue';
 
-export function useVbenForm<T extends BaseFormComponentType = BaseFormComponentType>(options: VbenFormProps<T>) {
+export function useVbenForm<
+  T extends BaseFormComponentType = BaseFormComponentType,
+  P extends Record<string, any> = Record<never, never>,
+>(options: VbenFormProps<T, P>) {
   const IS_REACTIVE = isReactive(options);
-  const api = new FormApi(options);
+  const api = new FormApi(options as unknown as VbenFormProps);
   const extendedApi: ExtendedFormApi = api as never;
   extendedApi.useStore = (selector) => {
     return useStore(api.store, selector);
@@ -21,7 +28,8 @@ export function useVbenForm<T extends BaseFormComponentType = BaseFormComponentT
         api.unmount();
       });
       api.setState({ ...props, ...attrs });
-      return () => h(VbenUseForm, { ...props, ...attrs, formApi: extendedApi }, slots);
+      return () =>
+        h(VbenUseForm, { ...props, ...attrs, formApi: extendedApi }, slots);
     },
     {
       name: 'VbenUseForm',

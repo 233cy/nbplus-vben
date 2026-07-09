@@ -8,7 +8,9 @@ import { cn } from '@vben-core/shared/utils';
 import { Check, Minus } from 'lucide-vue-next';
 import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'reka-ui';
 
-const props = defineProps<CheckboxRootProps & { class?: any; indeterminate?: boolean }>();
+const props = defineProps<
+  CheckboxRootProps & { class?: any; indeterminate?: boolean }
+>();
 const emits = defineEmits<CheckboxRootEmits>();
 
 const delegatedProps = computed(() => {
@@ -25,12 +27,14 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     v-bind="forwarded"
     :class="
       cn(
-        'peer h-4 w-4 shrink-0 rounded-sm border border-border transition hover:border-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
+        'peer border-border hover:border-primary focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground h-4 w-4 shrink-0 rounded-sm border transition focus-visible:ring-1 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
         props.class,
       )
     "
   >
-    <CheckboxIndicator class="flex h-full w-full items-center justify-center text-current">
+    <CheckboxIndicator
+      class="flex h-full w-full items-center justify-center text-current"
+    >
       <slot>
         <component :is="indeterminate ? Minus : Check" class="h-4 w-4" />
       </slot>

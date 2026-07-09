@@ -2,7 +2,7 @@
 import { Page } from '@vben/common-ui';
 
 import { refAutoReset } from '@vueuse/core';
-import { Button, Card, Empty } from 'ant-design-vue';
+import { Button, Card, Empty } from 'antdv-next';
 
 import ConcurrencyCaching from './concurrency-caching.vue';
 import InfiniteQueries from './infinite-queries.vue';
@@ -19,12 +19,16 @@ const showCaching = refAutoReset(true, 1000);
         <PaginatedQueries />
       </Card>
       <Card title="无限滚动">
-        <InfiniteQueries class="h-[300px] overflow-auto" />
+        <InfiniteQueries class="h-75 overflow-auto" />
       </Card>
       <Card title="错误重试">
         <QueryRetries />
       </Card>
-      <Card title="并发和缓存" v-spinning="!showCaching" :body-style="{ minHeight: '330px' }">
+      <Card
+        title="并发和缓存"
+        v-spinning="!showCaching"
+        :styles="{ body: { minHeight: '330px' } }"
+      >
         <template #extra>
           <Button @click="showCaching = false">重新加载</Button>
         </template>

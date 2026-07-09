@@ -6,7 +6,7 @@ import type { ClassType, Recordable } from '@vben-core/typings';
 
 import type { TreeProps } from './types';
 
-import { onMounted, ref, watchEffect } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 
 import { ChevronRight, IconifyIcon } from '@vben-core/icons';
 import { cn, get } from '@vben-core/shared/utils';
@@ -52,7 +52,10 @@ function flatten<T = Recordable<any>, P = number | string>(
       value: item,
     };
     result.push(val);
-    if (val.hasChildren) result.push(...flatten(children, childrenField, level + 1, id, [...parents, id]));
+    if (val.hasChildren)
+      result.push(
+        ...flatten(children, childrenField, level + 1, id, [...parents, id]),
+      );
   });
   return result;
 }
@@ -67,13 +70,18 @@ let lastTreeData: any = null;
 onMounted(() => {
   watchEffect(() => {
     flattenData.value = flatten(props.treeData, props.childrenField);
-    updateTreeValue();
+    if (flattenData.value.length > 0) {
+      updateTreeValue();
+    }
 
     // 只在 treeData 变化时执行展开
     const currentTreeData = JSON.stringify(props.treeData);
     if (lastTreeData !== currentTreeData) {
       lastTreeData = currentTreeData;
-      if (props.defaultExpandedLevel !== undefined && props.defaultExpandedLevel > 0) {
+      if (
+        props.defaultExpandedLevel !== undefined &&
+        props.defaultExpandedLevel > 0
+      ) {
         expandToLevel(props.defaultExpandedLevel);
       }
     }
@@ -81,7 +89,9 @@ onMounted(() => {
 });
 
 function getItemByValue(value: number | string) {
-  return flattenData.value.find((item) => get(item.value, props.valueField) === value)?.value;
+  return flattenData.value.find(
+    (item) => get(item.value, props.valueField) === value,
+  )?.value;
 }
 
 function updateTreeValue() {
@@ -151,7 +161,9 @@ function expandNodes(value: Arrayable<number | string>) {
 }
 
 function expandAll() {
-  expanded.value = flattenData.value.filter((item) => item.hasChildren).map((item) => get(item.value, props.valueField));
+  expanded.value = flattenData.value
+    .filter((item) => item.hasChildren)
+    .map((item) => get(item.value, props.valueField));
 }
 
 function collapseAll() {
@@ -160,7 +172,13 @@ function collapseAll() {
 
 function checkAll() {
   if (!props.multiple) return;
-  modelValue.value = [...new Set(flattenData.value.filter((item) => !get(item.value, props.disabledField)).map((item) => get(item.value, props.valueField)))];
+  modelValue.value = [
+    ...new Set(
+      flattenData.value
+        .filter((item) => !get(item.value, props.disabledField))
+        .map((item) => get(item.value, props.valueField)),
+    ),
+  ];
   updateTreeValue();
 }
 
@@ -174,6 +192,32 @@ function isNodeDisabled(item: FlattenedItem<Recordable<any>>) {
   return props.disabled || get(item.value, props.disabledField);
 }
 
+// 计算全选/半选状态
+const selectAllStatus = computed<'indeterminate' | boolean>(() => {
+  if (!props.multiple) return false;
+  if (!modelValue.value || !Array.isArray(modelValue.value)) return false;
+
+  const allValues = flattenData.value
+    .filter((item) => !get(item.value, props.disabledField))
+    .map((item) => get(item.value, props.valueField));
+
+  const selectedCount = allValues.filter((v) =>
+    (modelValue.value as (number | string)[]).includes(v),
+  ).length;
+
+  if (selectedCount === 0) return false;
+  if (selectedCount === allValues.length) return true;
+  return 'indeterminate';
+});
+
+function onSelectAllChange(checked: 'indeterminate' | boolean) {
+  if (checked === true) {
+    checkAll();
+  } else {
+    unCheckAll();
+  }
+}
+
 function onToggle(item: FlattenedItem<Recordable<any>>) {
   emits('expand', item);
 }
@@ -182,10 +226,17 @@ function onSelect(item: FlattenedItem<Recordable<any>>, isSelected: boolean) {
     return;
   }
 
-  if (!props.checkStrictly && props.multiple && props.autoCheckParent && isSelected) {
+  if (
+    !props.checkStrictly &&
+    props.multiple &&
+    props.autoCheckParent &&
+    isSelected
+  ) {
     flattenData.value
       .find((i) => {
-        return get(i.value, props.valueField) === get(item.value, props.valueField);
+        return (
+          get(i.value, props.valueField) === get(item.value, props.valueField)
+        );
       })
       ?.parents?.filter((item) => !get(item, props.disabledField))
       ?.forEach((p) => {
@@ -194,19 +245,35 @@ function onSelect(item: FlattenedItem<Recordable<any>>, isSelected: boolean) {
         }
       });
   }
-  if (!props.checkStrictly && props.multiple && props.autoCheckParent && !isSelected) {
+  if (
+    !props.checkStrictly &&
+    props.multiple &&
+    props.autoCheckParent &&
+    !isSelected
+  ) {
     flattenData.value
       .find((i) => {
-        return get(i.value, props.valueField) === get(item.value, props.valueField);
+        return (
+          get(i.value, props.valueField) === get(item.value, props.valueField)
+        );
       })
       ?.parents?.filter((item) => !get(item, props.disabledField))
       ?.toReversed()
       .forEach((p) => {
         const children = flattenData.value.filter((i) => {
-          return i.parents.length > 0 && i.parents.includes(p) && i.id !== item._id && i.parentId === p;
+          return (
+            i.parents.length > 0 &&
+            i.parents.includes(p) &&
+            i.id !== item._id &&
+            i.parentId === p
+          );
         });
         if (Array.isArray(modelValue.value)) {
-          const hasSelectedChild = children.some((child) => (modelValue.value as unknown[]).includes(get(child.value, props.valueField)));
+          const hasSelectedChild = children.some((child) =>
+            (modelValue.value as unknown[]).includes(
+              get(child.value, props.valueField),
+            ),
+          );
           if (!hasSelectedChild) {
             const index = modelValue.value.indexOf(p);
             if (index !== -1) {
@@ -245,27 +312,64 @@ defineExpose({
     :selection-behavior="allowClear || multiple ? 'toggle' : 'replace'"
     @update:model-value="updateModelValue"
     v-slot="{ flattenItems }"
-    :class="cn('text-blackA11 container select-none list-none rounded-lg text-sm font-medium', $attrs.class as unknown as ClassType, bordered ? 'border' : '')"
+    :class="
+      cn(
+        'text-blackA11 container list-none rounded-lg text-sm font-medium select-none',
+        $attrs.class as unknown as ClassType,
+        bordered ? 'border' : '',
+      )
+    "
   >
-    <div :class="cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-b' : '')" v-if="$slots.header">
+    <div
+      :class="
+        cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-b' : '')
+      "
+      v-if="$slots.header"
+    >
       <slot name="header"> </slot>
     </div>
-    <div :class="cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-b' : '')" v-if="treeData.length > 0">
-      <div class="flex size-5 flex-1 cursor-pointer items-center" @click="() => (expanded?.length > 0 ? collapseAll() : expandAll())">
-        <ChevronRight :class="{ 'rotate-90': expanded?.length > 0 }" class="size-4 cursor-pointer text-foreground/80 transition hover:text-foreground" />
-        <Checkbox v-if="multiple" @click.stop @update:model-value="(checked: boolean | 'indeterminate') => (checked === true ? checkAll() : unCheckAll())" />
+    <div
+      :class="
+        cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-b' : '')
+      "
+      v-if="treeData.length > 0"
+    >
+      <div
+        class="flex size-5 flex-1 cursor-pointer items-center"
+        @click="() => (expanded?.length > 0 ? collapseAll() : expandAll())"
+      >
+        <ChevronRight
+          :class="{ 'rotate-90': expanded?.length > 0 }"
+          class="text-foreground/80 hover:text-foreground size-4 cursor-pointer transition"
+        />
+        <div class="flex items-center gap-1 item-all-checkbox">
+          <Checkbox
+            v-if="multiple"
+            :model-value="selectAllStatus"
+            :indeterminate="selectAllStatus === 'indeterminate'"
+            @click.stop
+            @update:model-value="onSelectAllChange"
+          />
+          <span v-if="selectAllLabel">{{ selectAllLabel }}</span>
+        </div>
       </div>
     </div>
     <TransitionGroup :name="transition ? 'fade' : ''">
       <TreeItem
         v-for="item in flattenItems"
-        v-slot="{ isExpanded, isSelected, isIndeterminate, handleSelect, handleToggle }"
+        v-slot="{
+          isExpanded,
+          isSelected,
+          isIndeterminate,
+          handleSelect,
+          handleToggle,
+        }"
         :key="item._id"
         :style="{ 'margin-left': `${item.level - 1}rem` }"
         :class="
           cn('cursor-pointer', getNodeClass?.(item), {
             'data-[selected]:bg-accent': !multiple,
-            'cursor-not-allowed text-foreground/50': isNodeDisabled(item),
+            'text-foreground/50 cursor-not-allowed': isNodeDisabled(item),
           })
         "
         v-bind="
@@ -295,11 +399,16 @@ defineExpose({
             !isNodeDisabled(item) && onToggle(item);
           }
         "
-        class="tree-node focus:ring-grass8 my-0.5 flex items-center rounded p-1 outline-none focus:ring-2"
+        class="tree-node focus:ring-grass8 my-0.5 flex items-center rounded p-1 outline-hidden"
       >
+        <!-- class="hover:ring-2" 鼠标移动上去时2px的圆环边框 -->
         <ChevronRight
-          v-if="item.hasChildren && Array.isArray(item.value[childrenField]) && item.value[childrenField].length > 0"
-          class="size-4 cursor-pointer text-foreground/80 transition hover:text-foreground"
+          v-if="
+            item.hasChildren &&
+            Array.isArray(item.value[childrenField]) &&
+            item.value[childrenField].length > 0
+          "
+          class="text-foreground/80 hover:text-foreground size-4 cursor-pointer transition"
           :class="{ 'rotate-90': isExpanded }"
           @click.stop="
             () => {
@@ -309,7 +418,7 @@ defineExpose({
           "
         />
         <div v-else class="h-4 w-4"></div>
-        <div class="flex items-center gap-1">
+        <div class="flex items-center gap-1 item-checkbox">
           <Checkbox
             v-if="multiple"
             :model-value="isSelected && !isNodeDisabled(item)"
@@ -327,7 +436,8 @@ defineExpose({
             "
           />
           <div
-            class="flex items-center gap-1"
+            class="flex items-center gap-1 item-checkbox"
+            :title="get(item.value, labelField)"
             @click="
               (event: MouseEvent) => {
                 if (isNodeDisabled(item)) {
@@ -340,7 +450,11 @@ defineExpose({
             "
           >
             <slot name="node" v-bind="item">
-              <IconifyIcon class="size-4" v-if="showIcon && get(item.value, iconField)" :icon="get(item.value, iconField)" />
+              <IconifyIcon
+                class="size-4"
+                v-if="showIcon && get(item.value, iconField)"
+                :icon="get(item.value, iconField)"
+              />
               {{ get(item.value, labelField) }}
             </slot>
           </div>
@@ -348,7 +462,12 @@ defineExpose({
         <div class="h-4 w-4"></div>
       </TreeItem>
     </TransitionGroup>
-    <div :class="cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-t' : '')" v-if="$slots.footer">
+    <div
+      :class="
+        cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-t' : '')
+      "
+      v-if="$slots.footer"
+    >
       <slot name="footer"> </slot>
     </div>
   </TreeRoot>
@@ -366,6 +485,20 @@ defineExpose({
   height: 30px;
   background-color: #f3f3f3;
   border: 1px solid #666;
+}
+
+.item-checkbox {
+  width: 100%;
+  overflow: hidden;
+}
+
+.item-all-checkbox {
+  width: 100%;
+  overflow: hidden;
+
+  .text-label {
+    margin-left: 8px;
+  }
 }
 
 /* 1. 声明过渡效果 */

@@ -1,4 +1,8 @@
-import type { NormalizedOutputOptions, OutputBundle, OutputChunk } from 'rollup';
+import type {
+  NormalizedOutputOptions,
+  OutputBundle,
+  OutputChunk,
+} from 'rolldown';
 import type { PluginOption } from 'vite';
 
 import { EOL } from 'node:os';
@@ -10,8 +14,14 @@ import { dateUtil, readPackageJSON } from '@vben/node-utils';
  * @returns
  */
 
-async function viteLicensePlugin(root = process.cwd()): Promise<PluginOption | undefined> {
-  const { description = '', homepage = '', version = '' } = await readPackageJSON(root);
+async function viteLicensePlugin(
+  root = process.cwd(),
+): Promise<PluginOption | undefined> {
+  const {
+    description = '',
+    homepage = '',
+    version = '',
+  } = await readPackageJSON(root);
 
   return {
     apply: 'build',

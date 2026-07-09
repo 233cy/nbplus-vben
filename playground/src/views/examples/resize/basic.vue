@@ -33,7 +33,9 @@ const resize = (size?: TSize, rect?: TSize) => {
   <Page description="Resize组件基础示例" title="Resize组件">
     <div class="m-4 bg-blue-500 p-48 text-xl">
       <div v-for="size in sizeList" :key="size.width">
-        {{ `width: ${size.width}px, height: ${size.height}px, top: ${size.top}px, left: ${size.left}px` }}
+        {{
+          `width: ${size.width}px, height: ${size.height}px, top: ${size.top}px, left: ${size.left}px`
+        }}
       </div>
     </div>
 
@@ -46,7 +48,10 @@ const resize = (size?: TSize, rect?: TSize) => {
         @dragging="(rect) => resize(sizeList[idx], rect)"
         @resizing="(rect) => resize(sizeList[idx], rect)"
       >
-        <div :style="{ backgroundColor: colorMap[idx] }" class="h-full w-full"></div>
+        <div
+          :style="{ backgroundColor: colorMap[idx] }"
+          class="size-full"
+        ></div>
       </VResize>
     </template>
   </Page>
