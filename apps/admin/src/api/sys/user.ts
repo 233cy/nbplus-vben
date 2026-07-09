@@ -14,6 +14,7 @@ export namespace UserApi {
     deptId?: string;
     dutyId?: string;
     deptDuties?: UserOrgItem[];
+    roleIds?: string[];
   }
 
   export interface UserItem {
@@ -31,6 +32,8 @@ export namespace UserApi {
     deptName?: string;
     dutyName?: string;
     deptDuties?: UserOrgItem[];
+    roleIds?: string[];
+    roleNames?: string;
     lastLoginIp: string;
     lastLoginTime: string;
     createdAt: number;
@@ -77,6 +80,9 @@ export namespace UserApi {
     status?: string;
     gender?: string;
     lastLoginTime?: [string, string];
+    deptId?: string;
+    dutyId?: string;
+    roleIds?: string[];
   }
 }
 

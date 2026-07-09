@@ -29,6 +29,8 @@ export function useMenu(options: UseMenuOptions) {
 
     const parentWasExpanded = !!grid.isTreeExpandByRow?.(parentRow);
 
+    // 先标记有子节点，reloadTreeExpand 才会真正触发 loadMethod 重新加载
+    parentRow.hasChild = true;
     await grid.reloadTreeExpand?.(parentRow);
 
     const childCount = parentRow.children?.length ?? 0;
@@ -64,6 +66,9 @@ export function useMenu(options: UseMenuOptions) {
     }
 
     const parentWasExpanded = !!grid.isTreeExpandByRow?.(parentRow);
+
+    // 先标记有子节点，reloadTreeExpand 才会真正触发 loadMethod 重新加载
+    parentRow.hasChild = true;
     await grid.reloadTreeExpand?.(parentRow);
 
     const childCount = parentRow.children?.length ?? 0;

@@ -20,11 +20,16 @@
     "dutyId": "主属职务",
     "deptName": "部门",
     "dutyName": "职务",
+    "roleIds": "角色",
     "userOrg": "任职信息",
     "isMain": "是否主职",
     "lastLoginIp": "最后登录IP",
     "lastLoginTime": "最后登录时间",
     "onlineCount": "在线设备"
+  },
+  "batchRole": {
+    "title": "批量分配角色",
+    "action": "分配角色"
   },
   "userOrg": {
     "add": "添加任职",

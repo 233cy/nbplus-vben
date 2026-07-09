@@ -108,6 +108,12 @@ export function useColumns(
       formatter: ({ row }: { row: UserApi.UserItem }) => row.dutyName || '-',
     },
     {
+      field: 'roleNames',
+      title: $t('sys.user.fields.roleIds'),
+      minWidth: 180,
+      formatter: ({ row }: { row: UserApi.UserItem }) => row.roleNames || '-',
+    },
+    {
       field: 'lastLoginIp',
       title: $t('sys.user.fields.lastLoginIp'),
       minWidth: 120,

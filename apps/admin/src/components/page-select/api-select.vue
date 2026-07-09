@@ -1,84 +1,73 @@
 <script setup lang="ts">
-import type { OptionsType } from './configs';
-import type { PageSelectConfig } from './types';
+import type { SelectProps, TreeSelectProps } from 'ant-design-vue';
+
+import type { OptionsType } from '#/components/page-select/configs';
+import type { PageSelectConfig } from '#/components/page-select/types';
 
 import { computed, ref, watch } from 'vue';
 
 import { IconifyIcon } from '@vben/icons';
-import { $t } from '@vben/locales';
 import { get } from '@vben/utils';
 
 import { Button, Input, Select, TreeSelect } from 'ant-design-vue';
 
-import { getPageSelectConfig } from './configs';
+import { getPageSelectConfig } from '#/components/page-select/configs';
 
 interface Props {
-  /**
-   * 数据接口，支持数组或分页对象 `{ items: [], total: number }`。
-   * 也可以传 `config` 复用 page-select 的预设配置。
-   */
+  /** 数据接口 */
   api?: (params: any) => Promise<any | any[] | { items: any[]; total?: number }>;
+  /** page-select 预设类型或完整配置 */
+  config?: OptionsType | PageSelectConfig;
   /** 透传给 api 的固定参数 */
   params?: Record<string, any>;
-  /**
-   * page-select 预设类型或完整配置。
-   * 传入时会优先使用配置中的 api/labelField/valueField/pageSize/multiple。
-   */
-  config?: OptionsType | PageSelectConfig;
   /** 显示标签字段 */
   labelField?: string;
   /** 值字段 */
   valueField?: string;
-  /** 当 api 返回对象时，指定 options 数组所在字段（不填则按 page-select 分页对象解析） */
+  /** 当 api 返回对象时，指定 options 数组所在字段 */
   resultField?: string;
   /** 每页条数，默认 10 */
   pageSize?: number;
   /** 搜索参数字段名，默认 keyword */
   keywordField?: string;
-  /** 是否多选 */
-  multiple?: boolean;
-  /** Select mode，优先级高于 multiple */
-  mode?: 'multiple' | 'tags';
   /** 是否立即加载，默认 true */
   immediate?: boolean;
   /** 自动选择：first=首个，one=只有一个时自动选择 */
   autoSelect?: 'first' | 'one' | false;
-  allowClear?: boolean;
-  placeholder?: string;
-  dropdownMatchSelectWidth?: boolean;
-  /** 是否显示下拉搜索按钮；为 true 时关闭输入实时搜索，改为在弹层内点击搜索按钮触发 */
-  showSearchButton?: boolean;
-  /** 本地兜底选项 */
-  options?: any[];
-  /** 树形模式下父子节点是否独立勾选，优先级高于 config 中的 checkStrictly */
-  checkStrictly?: boolean;
+  /** 是否为树形选择 */
+  tree?: boolean;
   /** 树形平级数据转树时的父节点字段，默认 parentId */
   parentField?: string;
-  /** 树形模式下是否默认展开全部节点，默认 false */
+  /** 树形模式下父子节点是否独立勾选 */
+  checkStrictly?: boolean;
+  /** 树形模式下是否默认展开全部节点 */
   treeDefaultExpandAll?: boolean;
+  /** 本地兜底选项 */
+  options?: any[];
+  /** 是否显示下拉搜索按钮；为 true 时关闭输入实时搜索，改为在弹层内点击搜索按钮触发 */
+  showSearchButton?: boolean;
+  /** 透传给 Ant Design Vue Select / TreeSelect 的原生属性 */
+  componentProps?: SelectProps | TreeSelectProps;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   keywordField: 'keyword',
-  allowClear: true,
-  dropdownMatchSelectWidth: false,
   immediate: true,
-  autoSelect: false,
-  showSearchButton: true,
+  pageSize: 10,
   parentField: 'parentId',
+  autoSelect: false,
+  tree: false,
+  checkStrictly: false,
   treeDefaultExpandAll: false,
+  showSearchButton: false,
   api: undefined,
-  params: undefined,
   config: undefined,
+  params: undefined,
   labelField: undefined,
   valueField: undefined,
   resultField: undefined,
-  pageSize: undefined,
-  multiple: undefined,
-  mode: undefined,
-  placeholder: undefined,
   options: undefined,
-  checkStrictly: undefined,
+  componentProps: undefined,
 });
 
 const emit = defineEmits<{
@@ -87,65 +76,29 @@ const emit = defineEmits<{
 
 const modelValue = defineModel<any>('value', { default: undefined });
 
+// ---------------- 配置解析 ----------------
 const resolvedConfig = computed<null | PageSelectConfig>(() => {
-  if (!props.config) {
-    return null;
-  }
+  if (!props.config) return null;
   return typeof props.config === 'string' ? getPageSelectConfig(props.config) : props.config;
 });
 
-const resolvedApi = computed(() => resolvedConfig.value?.api || props.api);
-const resolvedLabelField = computed(() => props.labelField ?? (resolvedConfig.value?.labelField as string) ?? 'label');
-const resolvedValueField = computed(() => props.valueField ?? (resolvedConfig.value?.valueField as string) ?? 'value');
+const resolvedApi = computed(() => props.api || resolvedConfig.value?.api);
+const resolvedLabelField = computed(() => props.labelField ?? resolvedConfig.value?.labelField ?? 'label');
+const resolvedValueField = computed(() => props.valueField ?? resolvedConfig.value?.valueField ?? 'value');
 const resolvedPageSize = computed(() => props.pageSize ?? resolvedConfig.value?.pageSize ?? 10);
-const isTree = computed(() => resolvedConfig.value?.type === 'tree');
+const resolvedTree = computed(() => props.tree || resolvedConfig.value?.type === 'tree');
 
-const isMultiple = computed(() => {
-  if (props.mode === 'multiple' || props.mode === 'tags') {
-    return true;
-  }
-  // 严格判断：只有显式 true 或字符串 'true' 才启用多选
-  const propMultiple = props.multiple === true || String(props.multiple) === 'true';
-  const configMultiple = resolvedConfig.value?.multiple === true || String(resolvedConfig.value?.multiple) === 'true';
-  return propMultiple || configMultiple;
-});
-
-const resolvedMode = computed(() => {
-  if (props.mode) {
-    return props.mode;
-  }
-  if (isMultiple.value) {
-    return 'multiple';
-  }
-  return undefined;
-});
-
-const resolvedCheckStrictly = computed(() => props.checkStrictly ?? (resolvedConfig.value?.checkStrictly as boolean) ?? false);
-const resolvedParentField = computed(() => props.parentField ?? (resolvedConfig.value?.parentField as string) ?? 'parentId');
-
-const showSearch = computed(() => !props.showSearchButton);
-
-// 多选/标签模式下，v-model 必须是数组；外部传了字符串或 undefined 时自动归一化
-watch(
-  () => [resolvedMode.value, modelValue.value],
-  ([mode, val]) => {
-    if (!mode) {
-      return;
-    }
-    if (!Array.isArray(val)) {
-      modelValue.value = val === undefined || val === null ? [] : [val];
-    }
-  },
-  { immediate: true },
-);
-
-const options = ref<any[]>(props.options || []);
+// ---------------- 状态 ----------------
+const options = ref<any[]>(props.options ?? []);
 const loading = ref(false);
 const finished = ref(false);
 const keyword = ref('');
 const page = ref(1);
 const isFirstLoaded = ref(false);
+const pendingRefresh = ref(false);
+const lastParamsKey = ref<string>();
 
+// ---------------- 数据归一化 ----------------
 function normalizeNode(row: any): any {
   const value = get(row, resolvedValueField.value);
   return {
@@ -156,8 +109,30 @@ function normalizeNode(row: any): any {
   };
 }
 
+function listToTree(rows: any[], idField: string, parentField: string): any[] {
+  const map = new Map<number | string, any>();
+  const roots: any[] = [];
+
+  for (const row of rows) {
+    const id = get(row, idField);
+    map.set(id, { ...row, children: [] });
+  }
+
+  for (const row of rows) {
+    const id = get(row, idField);
+    const parentId = get(row, parentField);
+    const node = map.get(id);
+    if (parentId && map.has(parentId)) {
+      map.get(parentId).children.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+
+  return roots;
+}
+
 function normalizeTreeOptions(rows: any[]): any[] {
-  // 如果后端已经返回嵌套 children，直接递归归一化
   if (rows.length > 0 && Array.isArray(rows[0]?.children)) {
     return rows.map(row => {
       const node = normalizeNode(row);
@@ -168,7 +143,7 @@ function normalizeTreeOptions(rows: any[]): any[] {
     });
   }
 
-  const tree = listToTree(rows, resolvedValueField.value, resolvedParentField.value);
+  const tree = listToTree(rows, resolvedValueField.value, props.parentField);
   return tree.map(row => {
     const node = normalizeNode(row);
     if (row.children?.length) {
@@ -178,101 +153,12 @@ function normalizeTreeOptions(rows: any[]): any[] {
   });
 }
 
-function normalizeOptions(rows: any[]) {
-  if (isTree.value) {
-    return normalizeTreeOptions(rows);
-  }
-
-  return rows.map(row => {
-    const value = get(row, resolvedValueField.value);
-    return {
-      ...row,
-      label: get(row, resolvedLabelField.value),
-      value,
-      key: value,
-    };
-  });
+function normalizeOptions(rows: any[]): any[] {
+  const list = rows.map(row => normalizeNode(row));
+  return resolvedTree.value ? normalizeTreeOptions(rows) : list;
 }
 
-function listToTree(rows: any[], idField: string, parentField: string): any[] {
-  const map = new Map<number | string, any>();
-  const roots: any[] = [];
-
-  rows.forEach(row => {
-    const id = get(row, idField);
-    map.set(id, { ...row, children: [] });
-  });
-
-  rows.forEach(row => {
-    const id = get(row, idField);
-    const parentId = get(row, parentField);
-    const node = map.get(id);
-    if (parentId && map.has(parentId)) {
-      map.get(parentId).children.push(node);
-    } else {
-      roots.push(node);
-    }
-  });
-
-  return roots;
-}
-
-function findFirstNode(nodes: any[]): any | null {
-  if (nodes.length === 0) {
-    return null;
-  }
-  const [first, ...rest] = nodes;
-  if (first.children?.length) {
-    const found = findFirstNode(first.children);
-    if (found) return found;
-  }
-  return first ?? findFirstNode(rest);
-}
-
-function handleAutoSelect() {
-  if (!props.autoSelect || options.value.length === 0) {
-    return;
-  }
-
-  const hasValue = isMultiple.value
-    ? Array.isArray(modelValue.value) && modelValue.value.length > 0
-    : modelValue.value !== undefined && modelValue.value !== null && modelValue.value !== '';
-  if (hasValue) {
-    return;
-  }
-
-  let first: any;
-  if (isTree.value) {
-    const total = countNodes(options.value);
-    if (props.autoSelect === 'one' && total !== 1) {
-      return;
-    }
-    first = findFirstNode(options.value)?.value;
-  } else {
-    if (props.autoSelect === 'one' && options.value.length !== 1) {
-      return;
-    }
-    first = options.value[0].value;
-  }
-
-  if (first === undefined || first === null) {
-    return;
-  }
-
-  modelValue.value = isMultiple.value ? [first] : first;
-}
-
-function countNodes(nodes: any[]): number {
-  let count = 0;
-  for (const node of nodes) {
-    count += 1;
-    if (node.children?.length) {
-      count += countNodes(node.children);
-    }
-  }
-  return count;
-}
-
+// ---------------- 请求 ----------------
 function extractRows(res: any): { done: boolean; rows: any[] } {
   if (Array.isArray(res)) {
     return { rows: res, done: true };
@@ -289,57 +175,102 @@ function extractRows(res: any): { done: boolean; rows: any[] } {
 
 async function fetchData(append = false) {
   const api = resolvedApi.value;
-  if (!api || loading.value) {
+  if (!api) return;
+
+  if (loading.value) {
+    pendingRefresh.value = true;
     return;
   }
 
   if (!append) {
     page.value = 1;
     finished.value = false;
-  } else if (finished.value || isTree.value) {
+  } else if (finished.value || resolvedTree.value) {
     return;
   }
 
   loading.value = true;
+  pendingRefresh.value = false;
+
   try {
     const requestParams: Record<string, any> = {
       ...props.params,
       [props.keywordField]: keyword.value || undefined,
     };
 
-    if (!isTree.value) {
+    if (!resolvedTree.value) {
       requestParams.page = page.value;
       requestParams.pageSize = resolvedPageSize.value;
     }
 
     const res = await api(requestParams);
-
     const { rows, done } = extractRows(res);
     const list = normalizeOptions(rows);
 
     options.value = append ? [...options.value, ...list] : list;
-    finished.value = isTree.value || list.length === 0 || done;
+    finished.value = resolvedTree.value || list.length === 0 || done;
     isFirstLoaded.value = true;
 
     emit('optionsChange', options.value);
     handleAutoSelect();
   } finally {
     loading.value = false;
+    if (pendingRefresh.value) {
+      fetchData(false);
+    }
   }
 }
 
-function handleSearch(value: string) {
-  if (props.showSearchButton) {
-    return;
-  }
-  keyword.value = value;
+function reload() {
   fetchData(false);
 }
 
-function handlePopupScroll(e: Event) {
-  if (isTree.value) {
-    return;
+// ---------------- 自动选择 ----------------
+function countNodes(nodes: any[]): number {
+  let count = 0;
+  for (const node of nodes) {
+    count += 1;
+    if (node.children?.length) {
+      count += countNodes(node.children);
+    }
   }
+  return count;
+}
+
+function findFirstNode(nodes: any[]): any | null {
+  for (const node of nodes) {
+    if (node.children?.length) {
+      const found = findFirstNode(node.children);
+      if (found) return found;
+    }
+    return node;
+  }
+  return null;
+}
+
+function handleAutoSelect() {
+  if (!props.autoSelect || options.value.length === 0) return;
+
+  const hasValue = Array.isArray(modelValue.value) ? modelValue.value.length > 0 : modelValue.value !== undefined && modelValue.value !== null && modelValue.value !== '';
+  if (hasValue) return;
+
+  let first: any;
+  if (resolvedTree.value) {
+    const total = countNodes(options.value);
+    if (props.autoSelect === 'one' && total !== 1) return;
+    first = findFirstNode(options.value)?.value;
+  } else {
+    if (props.autoSelect === 'one' && options.value.length !== 1) return;
+    first = options.value[0]?.value;
+  }
+
+  if (first === undefined || first === null) return;
+  modelValue.value = Array.isArray(modelValue.value) ? [first] : first;
+}
+
+// ---------------- 事件 ----------------
+function handlePopupScroll(e: Event) {
+  if (resolvedTree.value) return;
   const target = e.target as HTMLElement;
   const bottom = target.scrollHeight - target.scrollTop - target.clientHeight;
   if (bottom < 20 && !loading.value && !finished.value) {
@@ -349,32 +280,73 @@ function handlePopupScroll(e: Event) {
 }
 
 function handleDropdownVisibleChange(visible: boolean) {
-  if (visible && !isFirstLoaded.value && !props.immediate) {
+  if (visible && !isFirstLoaded.value) {
     fetchData(false);
   }
 }
 
-/**
- * 处理 TreeSelect 的值更新，确保多选时返回的是 value 数组而非对象数组.
- */
-function handleTreeValueUpdate(val: any) {
-  if (isTree.value && isMultiple.value && Array.isArray(val) && val.length > 0 && typeof val[0] === 'object') {
-    modelValue.value = val.map((item: any) => item?.value ?? item);
-    return;
-  }
-  modelValue.value = val;
+function handleSearch(value: string) {
+  keyword.value = value;
+  fetchData(false);
 }
 
+const selectListeners = computed(() => {
+  return props.showSearchButton ? {} : { search: handleSearch };
+});
+
+// ---------------- 防抖工具 ----------------
+function debounce<T extends (...args: any[]) => void>(fn: T, wait: number) {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  return (...args: Parameters<T>) => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      timer = null;
+      fn(...args);
+    }, wait);
+  };
+}
+
+// ---------------- 监听 ----------------
+function buildParamsKey(): string {
+  return JSON.stringify(props.params);
+}
+
+function shouldReloadByParams(): boolean {
+  const key = buildParamsKey();
+  if (key === lastParamsKey.value) return false;
+  lastParamsKey.value = key;
+  return true;
+}
+
+// params 连续变化时合并为一次请求（解决 Vben dependencies 先 reset 再赋值导致的重复请求）
+const debouncedFetchByParams = debounce(() => {
+  fetchData(false);
+}, 30);
+
+// 挂载时加载
+if (props.immediate && shouldReloadByParams()) {
+  fetchData(false);
+}
+
+// 配置或 api 变化时重新加载
 watch(
-  () => [resolvedApi.value, props.params, resolvedPageSize.value],
-  () => {
-    if (props.immediate) {
-      fetchData(false);
-    }
-  },
-  { deep: true, immediate: true },
+  () => [resolvedApi.value, resolvedPageSize.value],
+  () => fetchData(false),
+  { deep: true },
 );
 
+// params 变化时按内容去重，并通过防抖合并连续变化
+watch(
+  () => props.params,
+  () => {
+    if (shouldReloadByParams()) {
+      debouncedFetchByParams();
+    }
+  },
+  { deep: true },
+);
+
+// 本地 options 兜底
 watch(
   () => props.options,
   val => {
@@ -385,8 +357,9 @@ watch(
   { immediate: true },
 );
 
+// ---------------- 暴露 ----------------
 defineExpose({
-  reload: () => fetchData(false),
+  reload,
   get options() {
     return options.value;
   },
@@ -395,16 +368,14 @@ defineExpose({
 
 <template>
   <Select
-    v-if="!isTree"
+    v-if="!resolvedTree"
+    v-bind="componentProps"
     v-model:value="modelValue"
-    :allow-clear="allowClear"
-    :dropdown-match-select-width="dropdownMatchSelectWidth"
-    :mode="resolvedMode"
     :options="options"
-    :placeholder="placeholder || $t('ui.placeholder.select')"
-    :show-search="showSearch"
+    :loading="loading"
     :filter-option="false"
-    :on-search="showSearch ? handleSearch : undefined"
+    :show-search="!props.showSearchButton"
+    v-on="selectListeners"
     @dropdown-visible-change="handleDropdownVisibleChange"
     @popup-scroll="handlePopupScroll"
     style="min-width: 160px"
@@ -412,12 +383,13 @@ defineExpose({
     <template #suffixIcon>
       <IconifyIcon :class="loading ? 'animate-spin text-base' : 'text-base'" :icon="loading ? 'mdi:loading' : 'lucide:chevron-down'" />
     </template>
-    <template v-if="showSearchButton" #dropdownRender="{ menuNode }">
+
+    <template v-if="props.showSearchButton" #dropdownRender="{ menuNode }">
       <div class="flex items-center gap-2 p-2">
-        <Input v-model:value="keyword" class="flex-1" :placeholder="$t('common.search.keyword')" @press-enter="fetchData(false)" />
+        <Input v-model:value="keyword" class="flex-1" placeholder="请输入关键词" @press-enter="fetchData(false)" />
         <Button type="primary" :loading="loading" @click="fetchData(false)">
           <IconifyIcon icon="mdi:magnify" />
-          {{ $t('common.search.button') }}
+          搜索
         </Button>
       </div>
       <component :is="menuNode" />
@@ -426,21 +398,16 @@ defineExpose({
 
   <TreeSelect
     v-else
+    v-bind="componentProps"
     :value="modelValue"
-    :allow-clear="allowClear"
-    :dropdown-match-select-width="dropdownMatchSelectWidth"
-    :field-names="{ label: 'label', value: 'value', children: 'children' }"
-    :loading="loading"
-    :placeholder="placeholder || $t('ui.placeholder.select')"
-    :show-search="true"
-    :show-checked-strategy="isMultiple ? TreeSelect.SHOW_ALL : undefined"
-    :tree-checkable="isMultiple"
-    :tree-check-strictly="isMultiple ? resolvedCheckStrictly : undefined"
     :tree-data="options"
+    :loading="loading"
+    :tree-check-strictly="checkStrictly"
+    :show-checked-strategy="TreeSelect.SHOW_ALL"
     :tree-default-expand-all="treeDefaultExpandAll"
     tree-node-filter-prop="label"
     @dropdown-visible-change="handleDropdownVisibleChange"
-    @update:value="handleTreeValueUpdate"
+    @update:value="modelValue = $event"
     style="min-width: 160px"
   >
     <template #suffixIcon>

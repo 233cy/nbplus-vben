@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Page, useVbenDrawer } from '@vben/common-ui';
+import { Page, useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
 
 import { Button } from 'ant-design-vue';
@@ -8,7 +8,9 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { batchDeleteUserApi, batchUpdateUserApi, getUserDetailApi, getUserListApi } from '#/api/sys/user.js';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { $t } from '#/locales';
+import { useTableBatchAction } from '#/utils/table';
 
+import BatchRoleModal from './components/batch-role-modal.vue';
 import Form from './components/form.vue';
 import Online from './components/online.vue';
 import { useUser } from './composables/useUser';
@@ -22,6 +24,20 @@ const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
   destroyOnClose: true,
 });
+
+const [BatchRoleModalComponent, batchRoleModalApi] = useVbenModal({
+  connectedComponent: BatchRoleModal,
+  destroyOnClose: true,
+});
+
+function handleBatchRoleConfirm(roleIds: string[]) {
+  useTableBatchAction(
+    (ids: string[]) => batchUpdateUserApi(ids, 'roleIds', roleIds),
+    user.getSelectedIds(),
+    $t('sys.user.batchRole.action'),
+    () => user.onRefresh(),
+  );
+}
 
 async function onEditClick(id: string) {
   const res = await getUserDetailApi(id);
@@ -67,6 +83,7 @@ const user = useUser(gridApi);
 <template>
   <Page auto-content-height>
     <FormDrawer @success="user.onRefresh" />
+    <BatchRoleModalComponent @confirm="handleBatchRoleConfirm" />
     <Online :ref="user.onlineRef" />
     <Grid :table-title="$t('sys.user.pageTitle')">
       <template #toolbar-tools>
@@ -89,7 +106,7 @@ const user = useUser(gridApi);
 
         <BatchActionDropdown
           v-if="canBatchUpdate"
-          class="ml-2 mr-2"
+          class="ml-2"
           type="multi"
           :action="$t('common.batchUpdate')"
           :api-fn="batchUpdateUserApi"
@@ -100,6 +117,11 @@ const user = useUser(gridApi);
             { fieldName: 'gender', label: $t('sys.user.fields.gender'), dictCode: 'sys_user_gender' },
           ]"
         />
+
+        <Button v-if="canBatchUpdate" class="ml-2 mr-2" @click="batchRoleModalApi.setData({}).open()">
+          <IconifyIcon icon="lucide:user-cog" class="size-4" />
+          {{ $t('sys.user.batchRole.action') }}
+        </Button>
 
         <Button v-if="canCreate" type="primary" @click="formDrawerApi.setData({}).open()">
           <Plus class="size-5" />

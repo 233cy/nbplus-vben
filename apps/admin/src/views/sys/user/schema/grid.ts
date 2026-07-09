@@ -61,5 +61,49 @@ export function useGridFormSchema(): VbenFormSchema[] {
       label: $t('sys.user.fields.lastLoginTime'),
       componentProps: { allowClear: true, showTime: true, valueFormat: 'X' },
     },
+    {
+      component: 'ApiSelect',
+      fieldName: 'deptId',
+      label: $t('sys.user.fields.deptId'),
+      componentProps: {
+        config: 'dept',
+        showSearchButton: true,
+        componentProps: { allowClear: true },
+      },
+    },
+    {
+      component: 'ApiSelect',
+      fieldName: 'dutyId',
+      label: $t('sys.user.fields.dutyId'),
+      componentProps: {
+        config: 'post',
+        immediate: false,
+        showSearchButton: true,
+        componentProps: { allowClear: true },
+      },
+      dependencies: {
+        triggerFields: ['deptId'],
+        componentProps(values) {
+          return {
+            params: { deptId: values.deptId },
+          };
+        },
+        trigger(values, actions) {
+          if (values.dutyId !== undefined && values.dutyId !== null && values.dutyId !== '') {
+            actions.setFieldValue('dutyId', undefined, false);
+          }
+        },
+      },
+    },
+    {
+      component: 'ApiSelect',
+      fieldName: 'roleIds',
+      label: $t('sys.user.fields.roleIds'),
+      componentProps: {
+        config: 'role',
+        showSearchButton: true,
+        componentProps: { allowClear: true, mode: 'multiple' },
+      },
+    },
   ];
 }

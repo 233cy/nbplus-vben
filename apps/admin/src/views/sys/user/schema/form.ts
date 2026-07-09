@@ -59,6 +59,18 @@ export function useFormSchema(isEdit = false, isReadonly = false): VbenFormSchem
       },
     },
     {
+      component: 'ApiSelect',
+      fieldName: 'roleIds',
+      label: $t('sys.user.fields.roleIds'),
+      componentProps: {
+        config: 'role',
+        mode: 'multiple',
+        valueField: 'id',
+        labelField: 'name',
+        placeholder: $t('sys.user.fields.roleIds'),
+      },
+    },
+    {
       component: 'UserOrgEditor',
       fieldName: 'userOrg',
       hideLabel: true,
