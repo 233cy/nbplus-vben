@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { MenuPkgApi } from '#/api/sys/menuPkg';
 
-import { computed, nextTick, ref } from 'vue';
+import { computed, nextTick, reactive, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
@@ -20,10 +20,12 @@ const rowId = ref<string | undefined>();
 const isReadonly = ref(false);
 const isEdit = computed(() => !!rowId.value);
 
-const [Form, formApi] = useVbenForm({
-  schema: computed(() => useFormSchema(isEdit.value)) as any,
-  showDefaultActions: false,
-});
+const [Form, formApi] = useVbenForm(
+  reactive({
+    schema: computed(() => useFormSchema(isEdit.value)),
+    showDefaultActions: false,
+  }) as any,
+);
 
 const [Drawer, drawerApi] = useVbenDrawer({
   async onConfirm() {

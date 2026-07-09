@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UserApi } from '#/api/sys/user';
 
-import { computed, nextTick, ref } from 'vue';
+import { computed, nextTick, reactive, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
@@ -19,10 +19,12 @@ const rowId = ref<string | undefined>();
 const isReadonly = ref(false);
 const isEdit = computed(() => !!rowId.value);
 
-const [Form, formApi] = useVbenForm({
-  schema: computed(() => useFormSchema(isEdit.value, isReadonly.value)) as any,
-  showDefaultActions: false,
-});
+const [Form, formApi] = useVbenForm(
+  reactive({
+    schema: computed(() => useFormSchema(isEdit.value, isReadonly.value)),
+    showDefaultActions: false,
+  }) as any,
+);
 
 function buildUserOrgValue(data?: UserApi.UserItem): UserApi.UserOrgValue {
   if (!data) {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CurdAdminApi } from '#/api/dev/curdAdmin';
 
-import { computed, nextTick } from 'vue';
+import { computed, nextTick, reactive } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 
@@ -14,17 +14,19 @@ const emit = defineEmits<{ success: [] }>();
 
 const tableForm = useTableForm({ onSuccess: () => emit('success') });
 
-const [Form, formApi] = useVbenForm({
-  schema: computed(() =>
-    useTableFormSchema({
-      connectionOptions: tableForm.connectionOptions.value,
-      tableNameOptions: tableForm.tableNameOptions.value,
-      tableNamesLoading: tableForm.tableNamesLoading.value,
-      onConnectionChange: (connection: string) => tableForm.onConnectionChange(connection, formApi),
-    }),
-  ) as any,
-  showDefaultActions: false,
-});
+const [Form, formApi] = useVbenForm(
+  reactive({
+    schema: computed(() =>
+      useTableFormSchema({
+        connectionOptions: tableForm.connectionOptions.value,
+        tableNameOptions: tableForm.tableNameOptions.value,
+        tableNamesLoading: tableForm.tableNamesLoading.value,
+        onConnectionChange: (connection: string) => tableForm.onConnectionChange(connection, formApi),
+      }),
+    ),
+    showDefaultActions: false,
+  }) as any,
+);
 
 const [Modal, modalApi] = useVbenModal({
   async onConfirm() {
