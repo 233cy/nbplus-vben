@@ -26,10 +26,10 @@
     "#/*": "./src/*"
   },
   "dependencies": {
-    "@uppy/core": "^5.2.0",
-    "@uppy/tus": "^5.1.1",
-    "@uppy/vue": "^3.2.0",
-    "@uppy/xhr-upload": "^5.2.0",
+    "@uppy/core": "catalog:admin-local",
+    "@uppy/tus": "catalog:admin-local",
+    "@uppy/vue": "catalog:admin-local",
+    "@uppy/xhr-upload": "catalog:admin-local",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",
@@ -45,23 +45,23 @@
     "@vben/types": "workspace:*",
     "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
-    "@wangeditor/editor": "^5.1.23",
-    "@wangeditor/editor-for-vue": "^5.1.12",
-    "@wangeditor/plugin-upload-attachment": "1.1.0",
+    "@wangeditor/editor": "catalog:admin-local",
+    "@wangeditor/editor-for-vue": "catalog:admin-local",
+    "@wangeditor/plugin-upload-attachment": "catalog:admin-local",
     "ant-design-vue": "catalog:",
-    "crypto-js": "^4.2.0",
+    "crypto-js": "catalog:admin-local",
     "dayjs": "catalog:",
     "pinia": "catalog:",
-    "pinyin-pro": "^3.28.1",
-    "spark-md5": "^3.0.2",
+    "pinyin-pro": "catalog:admin-local",
+    "spark-md5": "catalog:admin-local",
     "vue": "catalog:",
     "vue-router": "catalog:",
-    "vuedraggable": "^4.1.0",
-    "xe-utils": "^3.9.1"
+    "vuedraggable": "catalog:admin-local",
+    "xe-utils": "catalog:admin-local"
   },
   "devDependencies": {
-    "@types/spark-md5": "^3.0.5",
-    "unplugin-auto-import": "^20.3.0",
-    "unplugin-vue-components": "^30.0.0"
+    "@types/spark-md5": "catalog:admin-local",
+    "unplugin-auto-import": "catalog:admin-local",
+    "unplugin-vue-components": "catalog:admin-local"
   }
 }
