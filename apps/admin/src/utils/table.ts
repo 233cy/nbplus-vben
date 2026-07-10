@@ -1,3 +1,6 @@
+import { onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+
 import { message, Modal } from 'ant-design-vue';
 
 import { $t } from '#/locales';
@@ -84,4 +87,95 @@ export function useTableBatchAction(
       });
     }
   }, 1000);
+}
+
+/**
+ * useGridRouteQuery 配置项
+ */
+export interface UseGridRouteQueryOptions<T extends Record<string, any> = Record<string, any>> {
+  /**
+   * 需要从 route.query 中读取的字段白名单，不填则读取全部
+   */
+  pick?: string[];
+  /**
+   * 需要从 route.query 中排除的字段
+   */
+  omit?: string[];
+  /**
+   * 回填表单前的自定义转换，例如把字符串转为数字、数组、日期范围等
+   */
+  transform?: (query: Record<string, any>) => T;
+  /**
+   * 回填表单后是否立即触发查询，默认 true
+   */
+  immediateQuery?: boolean;
+}
+
+interface FormApiLike {
+  setValues: (
+    fields: Record<string, any>,
+    filterFields?: boolean,
+    shouldValidate?: boolean,
+  ) => Promise<void> | void;
+}
+
+interface GridApiLike {
+  formApi: FormApiLike;
+  query: (params?: Record<string, any>) => Promise<void> | void;
+}
+
+/**
+ * 将路由 query 参数回填到表格搜索表单，并触发一次查询。
+ *
+ * 仅在页面首次渲染时执行一次；后续用户在页面内的查询、翻页、重置等操作
+ * 不会再次读取 route.query，避免外部参数覆盖当前页面的搜索状态。
+ *
+ * 适用场景：从工作台、控制台等页面通过路由参数携带状态、部门、关键字等
+ * 搜索条件跳转进列表页。
+ *
+ * 注意：URL 中的参数类型都是字符串，复杂字段（如日期范围、多选数组）需要
+ * 通过 transform 自行转换。
+ */
+export function useGridRouteQuery<T extends Record<string, any> = Record<string, any>>(
+  gridApi: GridApiLike,
+  options: UseGridRouteQueryOptions<T> = {},
+) {
+  const { pick, omit = [], transform, immediateQuery = true } = options;
+  const route = useRoute();
+
+  onMounted(async () => {
+    const query = { ...route.query };
+
+    if (Object.keys(query).length === 0) {
+      return;
+    }
+
+    let values: Record<string, any> = query;
+
+    if (pick?.length) {
+      values = Object.fromEntries(
+        Object.entries(values).filter(([key]) => pick.includes(key)),
+      );
+    }
+
+    if (omit.length) {
+      values = Object.fromEntries(
+        Object.entries(values).filter(([key]) => !omit.includes(key)),
+      );
+    }
+
+    if (Object.keys(values).length === 0) {
+      return;
+    }
+
+    if (transform) {
+      values = transform(values);
+    }
+
+    await gridApi.formApi.setValues(values, true, false);
+
+    if (immediateQuery) {
+      await gridApi.query();
+    }
+  });
 }

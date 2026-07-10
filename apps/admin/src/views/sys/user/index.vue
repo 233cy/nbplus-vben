@@ -8,7 +8,7 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { batchDeleteUserApi, batchUpdateUserApi, getUserDetailApi, getUserListApi } from '#/api/sys/user.js';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { $t } from '#/locales';
-import { useTableBatchAction } from '#/utils/table';
+import { useGridRouteQuery, useTableBatchAction } from '#/utils/table';
 
 import BatchRoleModal from './components/batch-role-modal.vue';
 import Form from './components/form.vue';
@@ -78,6 +78,23 @@ const [Grid, gridApi] = useVbenVxeGrid({
 });
 
 const user = useUser(gridApi);
+
+// 支持从其他页面通过路由参数携带搜索条件进入，例如 /sys/user?status=1
+// 仅在首次渲染时生效一次，页面内后续查询以当前表单条件为准
+useGridRouteQuery(gridApi, {
+  pick: [
+    'keyword',
+    'username',
+    'nickname',
+    'email',
+    'phone',
+    'status',
+    'gender',
+    'deptId',
+    'dutyId',
+    'roleIds',
+  ],
+});
 </script>
 
 <template>

@@ -6,16 +6,16 @@ import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue
 import { IconifyIcon } from '@vben/icons';
 import { useI18n } from '@vben/locales';
 
-import { Boot, i18nChangeLanguage } from '@wangeditor/editor';
+import { i18nChangeLanguage } from '@wangeditor/editor';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
-import attachmentModule from '@wangeditor/plugin-upload-attachment';
 import { message, Modal } from 'ant-design-vue';
 
 import { resolvePageWidthCss } from '#/components/rich-text-view/preset';
 import { useFileUpload, validateFileBySystem } from '#/components/upload/composables/useFileUpload';
 
 import { useRichTextLogical } from './composables/useRichTextLogical';
-import { registerPageWidthEditor, registerPageWidthMenu } from './page-width-menu';
+import { initWangEditor } from './init';
+import { registerPageWidthEditor } from './page-width-menu';
 
 import '@wangeditor/editor/dist/css/style.css';
 // 共享内容样式表（唯一真相），需在 wangEditor 样式之后引入以覆盖其默认内容样式
@@ -60,21 +60,10 @@ const emit = defineEmits<{
 }>();
 
 /* -----------------------
-   注册附件上传插件（uploadAttachment 菜单非内置，需注册模块）
-   Boot.registerModule 全局只能注册一次，重复注册会报错
+   注册附件上传插件与页面宽度菜单（全局仅一次）
+   应用启动时已在 bootstrap 中调用；组件内保留兜底调用，防止独立使用场景下未注册
 ------------------------- */
-if (!(Boot as any).__attachmentRegistered) {
-  Boot.registerModule(attachmentModule);
-  (Boot as any).__attachmentRegistered = true;
-}
-
-/* -----------------------
-   注册页面宽度菜单（全局仅一次）
-------------------------- */
-if (!(Boot as any).__pageWidthMenuRegistered) {
-  registerPageWidthMenu();
-  (Boot as any).__pageWidthMenuRegistered = true;
-}
+initWangEditor();
 
 const { locale, t } = useI18n();
 const { uploadFile } = useFileUpload();

@@ -3,15 +3,14 @@ import type { DictApi } from '#/api/sys/dict';
 
 import { computed, ref, watch } from 'vue';
 
-import { Form, FormItem, Input, Modal, Select, Tag } from 'ant-design-vue';
+import { Form, FormItem, Input, Modal, Select } from 'ant-design-vue';
 
 import { createDictItemApi, updateDictItemApi } from '#/api/sys/dict';
+import DictSelect from '#/components/dict/DictSelect.vue';
 import { $t } from '#/locales';
 
-import { createColorOptions } from '../data';
-
 interface ItemFormModel {
-  color: string;
+  color: null | string;
   label: string;
   remark: string;
   sort: number;
@@ -35,7 +34,7 @@ const loading = ref(false);
 const form = ref<ItemFormModel>({
   label: '',
   value: '',
-  color: '',
+  color: null,
   remark: '',
   sort: 0,
   status: 1,
@@ -50,13 +49,13 @@ watch(
       form.value = {
         label: val.label,
         value: val.value,
-        color: val.color ?? '',
+        color: val.color ?? null,
         remark: val.remark ?? '',
         sort: val.sort,
         status: val.status,
       };
     } else {
-      form.value = { label: '', value: '', color: '', remark: '', sort: 0, status: 1 };
+      form.value = { label: '', value: '', color: null, remark: '', sort: 0, status: 1 };
     }
   },
   { immediate: true },
@@ -66,8 +65,6 @@ const statusOptions = [
   { label: $t('common.enabled'), value: 1 },
   { label: $t('common.disabled'), value: 2 },
 ];
-
-const colorOptions = createColorOptions($t);
 
 async function handleOk() {
   loading.value = true;
@@ -108,12 +105,7 @@ function handleCancel() {
         <Input v-model:value="form.value" />
       </FormItem>
       <FormItem :label="$t('sys.dict.itemFields.color')">
-        <Select v-model:value="form.color" :options="colorOptions" allow-clear>
-          <template #option="{ label, value: val }">
-            <span v-if="val"><Tag :color="val">{{ label }}</Tag></span>
-            <span v-else>{{ label }}</span>
-          </template>
-        </Select>
+        <DictSelect v-model:value="form.color" code="sys_color" class="w-full" />
       </FormItem>
       <FormItem :label="$t('sys.dict.fields.status')">
         <Select v-model:value="form.status" :options="statusOptions" />

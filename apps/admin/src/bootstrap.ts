@@ -11,12 +11,17 @@ import { useTitle } from '@vueuse/core';
 
 import { $t, setupI18n } from '#/locales';
 
+import { initWangEditor } from '#/components/wang-editor/init';
+
 import { initComponentAdapter } from './adapter/component';
 import { initSetupVbenForm } from './adapter/form';
 import App from './app.vue';
 import { router } from './router';
 
 async function bootstrap(namespace: string) {
+  // 初始化 wangEditor 插件（需在首次创建编辑器前完成）
+  initWangEditor();
+
   // 初始化组件适配器
   await initComponentAdapter();
 

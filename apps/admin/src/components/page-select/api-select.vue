@@ -96,7 +96,7 @@ const keyword = ref('');
 const page = ref(1);
 const isFirstLoaded = ref(false);
 const pendingRefresh = ref(false);
-const lastParamsKey = ref<string>();
+const lastParamsKey = ref<string | undefined>('__api_select_initial__');
 
 // ---------------- 数据归一化 ----------------
 function normalizeNode(row: any): any {
@@ -296,7 +296,7 @@ const selectListeners = computed(() => {
 
 // ---------------- 防抖工具 ----------------
 function debounce<T extends (...args: any[]) => void>(fn: T, wait: number) {
-  let timer: ReturnType<typeof setTimeout> | null = null;
+  let timer: null | ReturnType<typeof setTimeout> = null;
   return (...args: Parameters<T>) => {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => {
@@ -307,7 +307,7 @@ function debounce<T extends (...args: any[]) => void>(fn: T, wait: number) {
 }
 
 // ---------------- 监听 ----------------
-function buildParamsKey(): string {
+function buildParamsKey(): string | undefined {
   return JSON.stringify(props.params);
 }
 

@@ -88,7 +88,7 @@ const post = usePost(gridApi);
           :api-fn="batchUpdatePostApi"
           :get-ids="post.getSelectedIds"
           :on-success="post.onRefresh"
-          :fields="[{ fieldName: 'status', label: $t('sys.user-duty.fields.status'), dictCode: 'sys_post_status' }]"
+          :fields="[{ fieldName: 'status', label: $t('sys.user-duty.fields.status'), dictCode: 'is_enable' }]"
         />
 
         <Button v-if="canCreate" type="primary" @click="formDrawerApi.setData({}).open()">

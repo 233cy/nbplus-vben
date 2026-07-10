@@ -93,7 +93,7 @@ const autoAdjustOverflow = { adjustX: 1 as const, adjustY: 1 as const };
       </Button>
     </template>
 
-    <Dropdown v-if="hasMore">
+    <Dropdown v-if="hasMore" trigger="click">
       <Button type="link" size="small">
         <span v-if="moreShowLabel" class="mr-1">{{ $t('common.more') }}</span>
         <IconifyIcon :icon="moreShowLabel ? 'lucide:chevron-down' : 'lucide:more-horizontal'" class="size-4" />
@@ -101,9 +101,9 @@ const autoAdjustOverflow = { adjustX: 1 as const, adjustY: 1 as const };
       <template #overlay>
         <Menu style="min-width: 120px" @click="onMenuClick">
           <MenuItem v-for="item in moreActions" :key="item.key" :disabled="item.disabled">
-            <span :class="{ 'text-red-500': item.danger }">
-              <IconifyIcon v-if="item.icon" :icon="item.icon" class="mr-1 size-4" />
-              {{ item.label }}
+            <span class="inline-flex items-center whitespace-nowrap" :class="{ 'text-red-500': item.danger }">
+              <IconifyIcon v-if="item.icon" :icon="item.icon" class="mr-1 size-4 flex-shrink-0" />
+              <span>{{ item.label }}</span>
             </span>
           </MenuItem>
         </Menu>

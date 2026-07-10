@@ -3,8 +3,8 @@ import type { MenuPkgApi } from '#/api/sys/menuPkg';
 
 import { deleteMenuPkgApi, inlineUpdateMenuPkgApi } from '#/api/sys/menuPkg';
 import { $t } from '#/locales';
-import { formatUnixTime } from '#/utils/time';
 import { useTableDelete } from '#/utils/table';
+import { formatUnixTime } from '#/utils/time';
 
 import { useMenuPkgPermission } from '../permissions';
 
