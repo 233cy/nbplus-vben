@@ -14,7 +14,9 @@ export function initWangEditor() {
   initialized = true;
 
   if (!(Boot as any).__attachmentRegistered) {
-    Boot.registerModule(attachmentModule);
+    // 插件为 UMD 产物，Vite 预构建后默认导出会多包一层 { default: module }，需解包兜底
+    const attachment = (attachmentModule as any).default ?? attachmentModule;
+    Boot.registerModule(attachment);
     (Boot as any).__attachmentRegistered = true;
   }
 

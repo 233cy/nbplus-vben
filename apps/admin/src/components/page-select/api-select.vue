@@ -114,13 +114,13 @@ function listToTree(rows: any[], idField: string, parentField: string): any[] {
   const roots: any[] = [];
 
   for (const row of rows) {
-    const id = get(row, idField);
+    const id = get(row, idField) as number | string;
     map.set(id, { ...row, children: [] });
   }
 
   for (const row of rows) {
-    const id = get(row, idField);
-    const parentId = get(row, parentField);
+    const id = get(row, idField) as number | string;
+    const parentId = get(row, parentField) as number | string;
     const node = map.get(id);
     if (parentId && map.has(parentId)) {
       map.get(parentId).children.push(node);
@@ -143,7 +143,7 @@ function normalizeTreeOptions(rows: any[]): any[] {
     });
   }
 
-  const tree = listToTree(rows, resolvedValueField.value, props.parentField);
+  const tree = listToTree(rows, resolvedValueField.value as string, props.parentField as string);
   return tree.map(row => {
     const node = normalizeNode(row);
     if (row.children?.length) {
@@ -369,7 +369,7 @@ defineExpose({
 <template>
   <Select
     v-if="!resolvedTree"
-    v-bind="componentProps"
+    v-bind="componentProps as any"
     v-model:value="modelValue"
     :options="options"
     :loading="loading"
@@ -398,7 +398,7 @@ defineExpose({
 
   <TreeSelect
     v-else
-    v-bind="componentProps"
+    v-bind="componentProps as any"
     :value="modelValue"
     :tree-data="options"
     :loading="loading"

@@ -51,6 +51,7 @@
     "ant-design-vue": "catalog:",
     "crypto-js": "catalog:admin-local",
     "dayjs": "catalog:",
+    "dompurify": "catalog:admin-local",
     "pinia": "catalog:",
     "pinyin-pro": "catalog:admin-local",
     "spark-md5": "catalog:admin-local",

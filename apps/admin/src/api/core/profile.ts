@@ -14,7 +14,9 @@ export namespace ProfileApi {
     permissions?: string[];
     lastLoginIp: string;
     lastLoginTime: string;
-    roles?: string[];
+    roles?: { id: string; name: string }[];
+    /** 任职列表（主职在前）：isMain 1主 2兼，fullDeptName 为部门树完整路径名 */
+    orgs?: { deptId: string; deptName: string; fullDeptName: string; dutyId: string; dutyName: string; isMain: number }[];
   }
 
   export interface UpdateProfileResult {

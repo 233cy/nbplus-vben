@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { NotificationItem } from './types';
 
-import { Bell, CircleCheckBig, CircleX, MailCheck } from '@vben/icons';
+import { Bell, CircleCheckBig, CircleX, MailCheck, RotateCw } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import {
@@ -19,11 +19,14 @@ withDefaults(
   defineProps<{
     /** 显示圆点 */
     dot?: boolean;
+    /** 列表加载中（刷新按钮显示旋转动画） */
+    loading?: boolean;
     /** 消息列表 */
     notifications?: NotificationItem[];
   }>(),
   {
     dot: false,
+    loading: false,
     notifications: () => [],
   },
 );
@@ -33,6 +36,7 @@ const emit = defineEmits<{
   makeAll: [];
   onClick: [NotificationItem];
   read: [NotificationItem];
+  refresh: [];
   remove: [NotificationItem];
   viewAll: [];
 }>();
@@ -73,13 +77,22 @@ const handleClear = () => {
     <div class="relative">
       <div class="flex items-center justify-between p-4 py-3">
         <div class="text-foreground">{{ $t('ui.widgets.notifications') }}</div>
-        <VbenIconButton
-          :disabled="notifications.length <= 0"
-          :tooltip="$t('ui.widgets.markAllAsRead')"
-          @click="handleMakeAll"
-        >
-          <MailCheck class="size-4" />
-        </VbenIconButton>
+        <div class="flex items-center">
+          <VbenIconButton
+            :disabled="loading"
+            :tooltip="$t('ui.widgets.refresh')"
+            @click="emit('refresh')"
+          >
+            <RotateCw :class="{ 'animate-spin': loading }" class="size-4" />
+          </VbenIconButton>
+          <VbenIconButton
+            :disabled="notifications.length <= 0"
+            :tooltip="$t('ui.widgets.markAllAsRead')"
+            @click="handleMakeAll"
+          >
+            <MailCheck class="size-4" />
+          </VbenIconButton>
+        </div>
       </div>
       <VbenScrollbar v-if="notifications.length > 0">
         <ul class="flex! max-h-90 w-full flex-col">

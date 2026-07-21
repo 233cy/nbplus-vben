@@ -34,6 +34,7 @@ export function useTableDelete(apiFn: (id: string) => Promise<any>, id: string, 
  * @param onSuccess 操作成功后的回调，可接收接口返回结果
  * @param options   可选配置
  * @param options.countdown   倒计时秒数（默认 3）
+ * @param options.content     自定义确认弹窗内容（默认按选中条数+操作名生成）
  * @param options.formatSuccess 自定义成功提示文案，可返回字符串或 { type, content }
  */
 export function useTableBatchAction(
@@ -42,6 +43,7 @@ export function useTableBatchAction(
   action: string,
   onSuccess: (result?: any) => void,
   options: {
+    content?: string;
     countdown?: number;
     formatSuccess?: (result: any) => string | { content: string; type: 'error' | 'success' | 'warning' };
   } = {},
@@ -51,12 +53,12 @@ export function useTableBatchAction(
     return;
   }
 
-  const { countdown = 3, formatSuccess } = options;
+  const { countdown = 3, content, formatSuccess } = options;
   let remaining = countdown;
 
   const modal = Modal.confirm({
     title: $t('common.batchActionConfirmTitle', { action }),
-    content: $t('common.batchActionConfirmContent', { count: ids.length, action }),
+    content: content ?? $t('common.batchActionConfirmContent', { count: ids.length, action }),
     okText: $t('common.batchActionCountdown', { count: remaining }),
     okButtonProps: { disabled: true, danger: true },
     onOk: async () => {

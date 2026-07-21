@@ -231,6 +231,7 @@ catalogs:
     '@wangeditor/editor-for-vue': ^5.1.12
     '@wangeditor/plugin-upload-attachment': 1.1.0
     crypto-js: ^4.2.0
+    dompurify: ^3.4.12
     pinyin-pro: ^3.28.1
     spark-md5: ^3.0.2
     unplugin-auto-import: ^20.3.0

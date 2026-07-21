@@ -20,6 +20,7 @@
   "batchUpdateField": "批量修改{field}",
   "button": "按钮",
   "clearAll": "清空全部",
+  "close": "关闭",
   "code": "编码",
   "name": "名称",
   "username": "用户名",
@@ -29,6 +30,11 @@
   "confirmDelete": "确认删除",
   "confirmDeleteContent": "确定要删除「{name}」吗？",
   "createdAt": "创建时间",
+  "yes": "是",
+  "no": "否",
+  "success": "成功",
+  "fail": "失败",
+  "pending": "发送中",
   "updatedAt": "更新时间",
   "delete": "删除",
   "deleteSuccess": "删除成功",
@@ -67,5 +73,10 @@
   },
   "passwordPlaceholder": "请输入密码",
   "collapseAll": "全部折叠",
-  "expandAll": "全部展开"
+  "expandAll": "全部展开",
+  "status": "状态",
+  "dataScope": "数据范围",
+  "trashedOnly": "回收站",
+  "trashedWith": "包含回收站",
+  "all": "全部"
 }

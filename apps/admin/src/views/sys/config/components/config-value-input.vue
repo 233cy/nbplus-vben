@@ -18,12 +18,19 @@ import { getModelPropName, isOptionsComponent, normalizeComponent, resolveOption
 
 interface Props {
   item: ConfigApi.ConfigItem;
+  /** 只读展示（详情模式），禁用所有输入 */
+  readonly?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  readonly: false,
+});
 const modelValue = defineModel<string>({ default: '' });
 
 const componentType = computed(() => normalizeComponent(props.item.component));
+
+/** 是否加密：后端约定 1开 2关，不能用真值判断（2 也是真值） */
+const encrypted = computed(() => props.item.isEncrypted === 1);
 
 const componentMap: Partial<Record<ComponentType, any>> = {
   Input,
@@ -48,13 +55,13 @@ const renderComponent = computed(() => componentMap[componentType.value] || Inpu
 const modelPropName = computed(() => getModelPropName(componentType.value));
 
 const nativeValue = computed({
-  get: () => stringToValue(modelValue.value, componentType.value, props.item.isEncrypted),
+  get: () => stringToValue(modelValue.value, componentType.value, encrypted.value),
   set: val => {
-    modelValue.value = valueToString(val, componentType.value, props.item.isEncrypted);
+    modelValue.value = valueToString(val, componentType.value, encrypted.value);
   },
 });
 
-const placeholder = computed(() => (props.item.isEncrypted ? $t('sys.config.encryptedPlaceholder') : ''));
+const placeholder = computed(() => (encrypted.value ? $t('sys.config.encryptedPlaceholder') : ''));
 
 const showOptions = computed(() => isOptionsComponent(componentType.value));
 
@@ -71,6 +78,8 @@ const isNumber = computed(() => componentType.value === 'InputNumber');
     v-model:[modelPropName]="nativeValue"
     class="w-full"
     :allow-clear="showOptions ? true : undefined"
+    :disabled="readonly || undefined"
+    :readonly="readonly || undefined"
     :options="showOptions ? options : undefined"
     :placeholder="placeholder"
     :rows="isTextarea ? 3 : undefined"

@@ -133,6 +133,7 @@
     "logoutTip": "Do you want to logout?",
     "viewAll": "View All Messages",
     "notifications": "Notifications",
+    "refresh": "Refresh",
     "markAllAsRead": "Make All as Read",
     "clearNotifications": "Clear",
     "checkUpdatesTitle": "New Version Available",

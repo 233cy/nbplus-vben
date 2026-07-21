@@ -28,17 +28,15 @@ const tabsValue = defineModel<string>('modelValue');
   <Page auto-content-height>
     <div class="flex size-full">
       <Card class="w-1/6 flex-none">
-        <div class="mt-4 flex-col-center h-40 gap-4">
+        <div class="mt-4 flex-col-center min-h-40 gap-4">
           <VbenAvatar
             :src="userInfo?.avatar ?? preferences.app.defaultAvatar"
             class="size-20"
           />
           <span class="text-lg font-semibold">
-            {{ userInfo?.realName ?? '' }}
+            {{ userInfo?.username ?? '' }}（{{ userInfo?.realName ?? '' }}）
           </span>
-          <span class="text-sm text-foreground/80">
-            {{ userInfo?.username ?? '' }}
-          </span>
+          <slot name="header-extra"></slot>
         </div>
         <Separator class="my-4" />
         <Tabs v-model="tabsValue" orientation="vertical" class="m-4">

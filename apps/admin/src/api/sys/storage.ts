@@ -71,7 +71,7 @@ export function createStorageApi(data: StorageApi.SaveParams) {
   return requestClient.post<StorageApi.StorageItem>(`${BASE}/create`, data);
 }
 
-export function updateStorageApi(data: StorageApi.SaveParams & { id: string }) {
+export function updateStorageApi(data: Partial<StorageApi.SaveParams> & { id: string }) {
   return requestClient.put<StorageApi.StorageItem>(`${BASE}/update`, data);
 }
 

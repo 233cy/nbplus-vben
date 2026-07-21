@@ -146,12 +146,14 @@ export const useAuthStore = defineStore('auth', () => {
     const adminUserStore = useAdminUserStore();
 
     // 框架所需字段映射
+    const roleNames = (result.roles ?? []).map(r => r.name);
+    const mainOrg = (result.orgs ?? []).find(o => o.isMain === 1);
     const userInfo: UserInfo = {
       avatar: await resolveLogicalPath(result.avatar),
-      desc: '',
+      desc: mainOrg ? [mainOrg.deptName, mainOrg.dutyName].filter(Boolean).join(' · ') : '',
       homePath: preferences.app.defaultHomePath,
       realName: result.nickname,
-      roles: result.roles ?? [],
+      roles: roleNames,
       token: '',
       userId: result.id,
       username: result.username,
@@ -163,6 +165,8 @@ export const useAuthStore = defineStore('auth', () => {
       email: result.email,
       permissions: result.permissions,
       phone: result.phone,
+      roles: result.roles ?? [],
+      orgs: result.orgs ?? [],
     });
 
     // 将 permissions 作为 accessCodes 注入框架权限系统

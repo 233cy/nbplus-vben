@@ -43,7 +43,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
       onFieldConfigClick,
       onCreateMenuClick,
       onGenerateClick,
-      getGenerateLoading: (row) => curd.generateLoading.value[row.id],
+      getGenerateLoading: (row) => !!curd.generateLoading.value[row.id],
     }),
     height: 'auto',
     proxyConfig: {

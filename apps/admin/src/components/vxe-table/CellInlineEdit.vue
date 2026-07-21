@@ -143,7 +143,7 @@ async function onSelect(newValue: number | string) {
 </script>
 
 <template>
-  <div class="group flex w-full min-w-0 items-center gap-1">
+  <div class="group">
     <!-- 下拉/字典模式 -->
     <template v-if="editType === 'select'">
       <DictTag v-if="dictCode" :code="dictCode" :value="row[field]" />

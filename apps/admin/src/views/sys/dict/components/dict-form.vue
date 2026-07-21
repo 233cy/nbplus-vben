@@ -64,7 +64,7 @@ const statusOptions = [
   { label: $t('common.disabled'), value: 2 },
 ];
 
-const groupRules = [{ required: true, message: $t('sys.dict.placeholder.groups'), trigger: 'change' }];
+const groupRules = [{ required: true, message: $t('sys.dict.placeholder.groups'), trigger: 'change' }] as any;
 
 async function handleSubmit() {
   loading.value = true;

@@ -1,0 +1,28 @@
+{
+  "pageTitle": "通知记录",
+  "detail": "查看通知记录",
+  "resend": "重发",
+  "resendSuccess": "重发成功",
+  "skipped": "跳过",
+  "deliveryInfo": "投递信息",
+  "sendType": {
+    "user": "用户发送",
+    "free": "自由发送"
+  },
+  "fields": {
+    "channel": "发送渠道",
+    "target": "接收目标",
+    "contact": "实际投递地址",
+    "batchNo": "批次号",
+    "templateCode": "模板编码",
+    "subject": "标题",
+    "content": "内容",
+    "status": "发送状态",
+    "sendType": "发送类型",
+    "bizType": "业务类型",
+    "ip": "发送方 IP",
+    "errorMsg": "失败原因",
+    "response": "渠道响应",
+    "isResend": "是否重发"
+  }
+}

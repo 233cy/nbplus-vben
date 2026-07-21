@@ -60,8 +60,9 @@ export function getUploadUrl() {
  * @param file    文件对象
  * @param accessType  访问类型 (authorized|public|login)，默认 public
  * @param accessPolicy  访问策略 (owner|public|login)，可选
+ * @param config  透传给请求客户端的配置（如 AbortSignal 取消、onUploadProgress 进度）
  */
-export function uploadFileApi(file: Blob | File, accessType = 'public', accessPolicy?: string) {
+export function uploadFileApi(file: Blob | File, accessType = 'public', accessPolicy?: string, config?: { onUploadProgress?: (e: any) => void; signal?: AbortSignal }) {
   return requestClient.upload<{
     accessType: string;
     extension: string;
@@ -71,7 +72,7 @@ export function uploadFileApi(file: Blob | File, accessType = 'public', accessPo
     mimeType: string;
     originalName: string;
     sizeByte: string;
-  }>('/admin/upload/file', { file, accessType, ...(accessPolicy ? { accessPolicy } : {}) });
+  }>('/admin/upload/file', { file, accessType, ...(accessPolicy ? { accessPolicy } : {}) }, config);
 }
 
 export function getTusFileInfo(data: uploadType.getTusFileInfo) {

@@ -39,6 +39,7 @@ export namespace RoleApi {
     path: string;
     permission: string;
     sort: number;
+    status?: number;
     checked: boolean;
     children: MenuTreeItem[];
   }

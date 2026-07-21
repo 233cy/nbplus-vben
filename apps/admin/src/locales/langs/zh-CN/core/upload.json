@@ -1,6 +1,7 @@
 {
   "uploadSuccess": "上传成功：{name}",
   "uploadingFile": "上传中：{name}",
+  "uploadCanceled": "已取消上传：{name}",
   "uploadFailedFile": "上传失败：{name}",
   "deleteSourceSuccess": "已彻底抹除服务器上的源文件",
   "deleteFailed": "文件删除失败，请检查网络或权限",

@@ -38,6 +38,12 @@ async function onEditClick(id: string) {
   configFormDrawerApi.setData(res).open();
 }
 
+/** 点击配置键：只读详情 */
+async function onDetailClick(id: string) {
+  const res = await getConfigDetailApi(id);
+  configFormDrawerApi.setData({ ...res, readonly: true }).open();
+}
+
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
     collapsed: true,
@@ -47,7 +53,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     wrapperClass: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
   },
   gridOptions: {
-    columns: useColumns(onEditClick, () => gridApi.query()),
+    columns: useColumns(onDetailClick, onEditClick, () => gridApi.query()),
     height: 'auto',
     keepSource: true,
     proxyConfig: {

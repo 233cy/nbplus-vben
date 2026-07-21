@@ -12,7 +12,11 @@ import { useConfigPermission } from '../permissions';
 /**
  * 系统参数列表列定义
  */
-export function useColumns(onEditClick: (id: string) => Promise<void>, onRefresh: () => void): VxeTableGridOptions['columns'] {
+export function useColumns(
+  onDetailClick: (id: string) => Promise<void>,
+  onEditClick: (id: string) => Promise<void>,
+  onRefresh: () => void,
+): VxeTableGridOptions['columns'] {
   const { canDetail, canUpdate, canDelete, canInlineUpdate } = useConfigPermission();
 
   async function handleToggle(row: ConfigApi.ConfigItem, field: keyof ConfigApi.ConfigItem, newVal: number) {
@@ -31,7 +35,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onRefresh
         name: 'CellLink',
         attrs: {
           hasAccess: canDetail,
-          onClick: async (row: ConfigApi.ConfigItem) => onEditClick(row.id),
+          onClick: async (row: ConfigApi.ConfigItem) => onDetailClick(row.id),
         },
       },
     },

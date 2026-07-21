@@ -177,6 +177,27 @@ export interface UploadOptions {
   accessPolicy?: 'login' | 'owner' | 'public';
   /** 大小阈值（MB），超过则走 TUS 断点续传；不传则读系统参数 storage.chunk_threshold_mb */
   thresholdMB?: number;
+  /** 取消信号：传入后可通过 AbortController 中止本次上传 */
+  signal?: AbortSignal;
+  /** 上传进度回调（XHR / TUS 统一上报） */
+  onProgress?: (info: UploadProgressInfo) => void;
+}
+
+/** 上传进度信息 */
+export interface UploadProgressInfo {
+  percent: number;
+  uploadedBytes: number;
+  totalBytes: number;
+}
+
+/** 判断上传错误是否为用户主动取消（XHR 取消与 TUS 中止统一归一到 ERR_CANCELED） */
+export function isUploadCancelError(error: any): boolean {
+  return error?.code === 'ERR_CANCELED' || error?.name === 'AbortError';
+}
+
+/** 构造统一的「上传已取消」错误 */
+function newUploadCancelError(): Error {
+  return Object.assign(new Error('upload canceled'), { code: 'ERR_CANCELED' });
 }
 
 /** 从 accessType 推算实际的访问类型 */
@@ -203,7 +224,17 @@ export interface UploadResult {
 
 /** 普通 XHR 上传，适合小文件 */
 async function uploadWithXhr(file: File, options: UploadOptions = {}): Promise<UploadResult> {
-  const res = await uploadFileApi(file, resolveAccessType(options), resolveAccessPolicy(options));
+  const res = await uploadFileApi(file, resolveAccessType(options), resolveAccessPolicy(options), {
+    signal: options.signal,
+    onUploadProgress: (e: any) => {
+      const total = e.total ?? file.size;
+      options.onProgress?.({
+        percent: total > 0 ? (e.loaded / total) * 100 : 0,
+        uploadedBytes: e.loaded,
+        totalBytes: total,
+      });
+    },
+  });
   return {
     logicalPath: res.logicalPath,
     fullUrl: res.fullUrl,
@@ -224,6 +255,24 @@ function uploadWithTus(file: File, options: UploadOptions = {}): Promise<UploadR
       headers: getAuthHeaders,
     });
 
+    // 支持外部 AbortSignal 主动取消上传
+    if (options.signal) {
+      if (options.signal.aborted) {
+        uppy.destroy();
+        reject(newUploadCancelError());
+        return;
+      }
+      options.signal.addEventListener(
+        'abort',
+        () => {
+          uppy.cancelAll();
+          uppy.destroy();
+          reject(newUploadCancelError());
+        },
+        { once: true },
+      );
+    }
+
     uppy.addFile({
       name: file.name,
       type: file.type,
@@ -233,6 +282,18 @@ function uploadWithTus(file: File, options: UploadOptions = {}): Promise<UploadR
         accessPolicy: resolveAccessPolicy(options),
       },
     });
+
+    // 进度上报
+    if (options.onProgress) {
+      uppy.on('upload-progress', (_f, progress) => {
+        const total = progress.bytesTotal ?? 0;
+        options.onProgress?.({
+          percent: total > 0 ? (progress.bytesUploaded / total) * 100 : 0,
+          uploadedBytes: progress.bytesUploaded,
+          totalBytes: total,
+        });
+      });
+    }
 
     uppy.on('upload-success', async (_file, response: any) => {
       try {

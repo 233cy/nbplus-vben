@@ -42,7 +42,7 @@ export function useRichTextLogical() {
     if (!html) return html;
     const doc = parse(html);
 
-    for (const el of doc.body.querySelectorAll(MEDIA_SELECTOR)) {
+    for (const el of doc.body.querySelectorAll(MEDIA_SELECTOR) as NodeListOf<HTMLElement>) {
       const src = el.getAttribute('src');
       const logicalPath = src ? urlToLogical.get(src) : undefined;
       if (logicalPath) {
@@ -51,7 +51,7 @@ export function useRichTextLogical() {
       }
     }
 
-    for (const el of doc.body.querySelectorAll(ATTACHMENT_SELECTOR)) {
+    for (const el of doc.body.querySelectorAll(ATTACHMENT_SELECTOR) as NodeListOf<HTMLElement>) {
       const href = el.getAttribute('href');
       const logicalPath = href ? urlToLogical.get(href) : undefined;
       if (logicalPath) {
@@ -70,14 +70,14 @@ export function useRichTextLogical() {
   async function rehydrate(html: string): Promise<string> {
     if (!html) return html;
     const doc = parse(html);
-    const nodes = [...doc.body.querySelectorAll('[data-logical]')];
+    const nodes = [...doc.body.querySelectorAll('[data-logical]')] as HTMLElement[];
     if (nodes.length === 0) return html;
 
     const paths = [...new Set(nodes.map(n => n.dataset.logical).filter(Boolean) as string[])];
     const urlMap = await resolveLogicalPaths(paths);
 
     for (const node of nodes) {
-      const logicalPath = node.dataset.logical;
+      const logicalPath = (node as HTMLElement).dataset.logical;
       const fullUrl = logicalPath ? urlMap[logicalPath] : '';
       if (!logicalPath || !fullUrl) continue;
 

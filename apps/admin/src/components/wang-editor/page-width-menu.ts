@@ -4,8 +4,9 @@ import type { Ref } from 'vue';
 
 import type { PageWidth } from '#/components/rich-text-view/preset';
 
-import { Boot } from '@wangeditor/editor';
 import { $t } from '@vben/locales';
+
+import { Boot } from '@wangeditor/editor';
 
 import { PAGE_WIDTH_OPTIONS } from '#/components/rich-text-view/preset';
 

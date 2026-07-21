@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type { PageWidth } from './preset';
+
 import { computed, ref, watch } from 'vue';
 
 import { useRichTextLogical } from '#/components/wang-editor/composables/useRichTextLogical';
 
-import { type PageWidth, resolvePageWidthCss } from './preset';
+import { resolvePageWidthCss } from './preset';
 
 import './rich-text.css';
 

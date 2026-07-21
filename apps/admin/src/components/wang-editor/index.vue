@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import type { PageWidth } from '#/components/rich-text-view/preset';
 
-import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue';
+import { computed, h, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue';
 
 import { IconifyIcon } from '@vben/icons';
 import { useI18n } from '@vben/locales';
 
 import { i18nChangeLanguage } from '@wangeditor/editor';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
-import { message, Modal } from 'ant-design-vue';
+import { Button, message, Modal, notification, Progress } from 'ant-design-vue';
 
 import { resolvePageWidthCss } from '#/components/rich-text-view/preset';
-import { useFileUpload, validateFileBySystem } from '#/components/upload/composables/useFileUpload';
+import { isUploadCancelError, resolveUploadErrorMsg, useFileUpload, validateFileBySystem } from '#/components/upload/composables/useFileUpload';
 
 import { useRichTextLogical } from './composables/useRichTextLogical';
 import { initWangEditor } from './init';
@@ -171,20 +171,76 @@ function removePlaceholder(uniqueText: string) {
 /* -----------------------
    上传处理
 ------------------------- */
+/** 右上角上传通知：上传中（图标+进度条+取消）→ 成功/失败/取消自动关闭 */
 async function handleUpload(file: File, placeholderText: string) {
-  const hide = message.loading(t('core.upload.uploadingFile', { name: file.name }), 0);
+  const controller = new AbortController();
+  const notifyKey = `wang-editor-upload-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+  const percent = ref(0);
+  let lastPush = 0;
+
+  const uploadingOptions = () => ({
+    key: notifyKey,
+    placement: 'topRight' as const,
+    duration: null as unknown as number,
+    message: t('core.upload.uploadingFile', { name: file.name }),
+    icon: () => h(IconifyIcon, { icon: 'lucide:loader-2', class: 'animate-spin text-primary' }),
+    description: () => h(Progress, { percent: Math.floor(percent.value), size: 'small', status: 'active' }),
+    btn: () =>
+      h(
+        Button,
+        { size: 'small', danger: true, onClick: () => controller.abort() },
+        () => t('common.cancel'),
+      ),
+  });
+
+  notification.open(uploadingOptions());
+
+  /** 进度更新：同 key 覆盖通知实现刷新，200ms 节流 */
+  function pushProgress(value: number) {
+    percent.value = value;
+    const now = Date.now();
+    if (value < 100 && now - lastPush < 200) return;
+    lastPush = now;
+    notification.open(uploadingOptions());
+  }
+
   try {
     const { fullUrl, logicalPath } = await uploadFile(file, {
       accessType: props.accessType,
       accessPolicy: props.accessPolicy,
+      signal: controller.signal,
+      onProgress: info => pushProgress(info.percent),
     });
     register(fullUrl, logicalPath);
-    hide();
-    message.success(t('core.upload.uploadSuccess', { name: file.name }));
+    notification.open({
+      key: notifyKey,
+      placement: 'topRight',
+      duration: 3,
+      message: t('core.upload.uploadSuccess', { name: file.name }),
+      icon: () => h(IconifyIcon, { icon: 'lucide:circle-check-big', class: 'text-success' }),
+      description: () => h(Progress, { percent: 100, size: 'small', status: 'success' }),
+    });
     return fullUrl;
-  } catch {
-    hide();
-    removePlaceholder(placeholderText); // 失败时移除占位，不残留文字
+  } catch (error) {
+    removePlaceholder(placeholderText); // 失败/取消时移除占位，不残留文字
+    if (isUploadCancelError(error)) {
+      notification.open({
+        key: notifyKey,
+        placement: 'topRight',
+        duration: 2.5,
+        message: t('core.upload.uploadCanceled', { name: file.name }),
+        icon: () => h(IconifyIcon, { icon: 'lucide:circle-slash', class: 'text-warning' }),
+      });
+    } else {
+      notification.open({
+        key: notifyKey,
+        placement: 'topRight',
+        duration: 4.5,
+        message: t('core.upload.uploadFailedFile', { name: file.name }),
+        icon: () => h(IconifyIcon, { icon: 'lucide:circle-x', class: 'text-destructive' }),
+        description: resolveUploadErrorMsg(error),
+      });
+    }
     // 失败原因已由全局拦截器（XHR）或 composable（TUS）统一提示，这里不再重复弹通用文案
     throw new Error('upload failed');
   }
@@ -258,11 +314,32 @@ const finalEditorConfig = computed(() => ({
 function handleCreated(editor: any) {
   editorRef.value = editor;
   registerPageWidthEditor(editor, currentWidth);
-  if (props.readonly) editor.disable();
+  if (props.readonly) {
+    editor.disable();
+  } else {
+    // 编辑器在弹窗/异步挂载后可能没有初始选区，导致工具栏部分按钮被禁用。
+    // 初始化完成后主动聚焦，让工具栏进入可用状态。
+    nextTick(() => editor.focus?.());
+  }
 }
 
 onBeforeUnmount(() => {
   editorRef.value?.destroy();
+});
+
+/* -----------------------
+   对外暴露：便于业务侧在编辑器中插入占位符/变量等
+------------------------- */
+defineExpose({
+  getEditor: () => editorRef.value,
+  focus: () => editorRef.value?.focus?.(),
+  insertText: (text: string) => {
+    const editor = editorRef.value;
+    if (!editor) return false;
+    editor.focus?.();
+    editor.insertText(text);
+    return true;
+  },
 });
 
 /* -----------------------
@@ -294,7 +371,7 @@ const pageWidthStyle = computed(() => ({ '--rt-page-width': resolvePageWidthCss(
 
 <template>
   <div v-if="props.mode === 'inline'" class="vben-wangeditor rounded-md border border-border" :class="{ 'vben-wangeditor--readonly': props.readonly }">
-    <Toolbar v-if="!props.readonly" :editor="editorRef" :default-config="finalToolbarConfig" class="vben-wangeditor-toolbar border-b border-border px-2 py-1" />
+    <Toolbar v-if="!props.readonly && editorRef" :editor="editorRef" :default-config="finalToolbarConfig" class="vben-wangeditor-toolbar border-b border-border px-2 py-1" />
     <Editor
       v-model="valueHtml"
       :default-config="finalEditorConfig"
@@ -317,7 +394,7 @@ const pageWidthStyle = computed(() => ({ '--rt-page-width': resolvePageWidthCss(
     </div>
     <Modal v-model:open="showModal" :title="t('common.richTextEditor.editContent')" width="1200px" @ok="handleOk">
       <div class="vben-wangeditor rounded-md border border-border">
-        <Toolbar :editor="editorRef" :default-config="finalToolbarConfig" class="border-b px-2 py-1" />
+        <Toolbar v-if="editorRef" :editor="editorRef" :default-config="finalToolbarConfig" class="border-b px-2 py-1" />
         <Editor
           v-model="valueHtml"
           :default-config="finalEditorConfig"
