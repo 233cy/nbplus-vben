@@ -44,6 +44,7 @@ const CreatableSelect = defineAsyncComponent(() => import('#/components/creatabl
 const DictSelect = defineAsyncComponent(() => import('#/components/dict/DictSelect.vue'));
 const DictRadio = defineAsyncComponent(() => import('#/components/dict/DictRadio.vue'));
 const CaptchaPinInput = defineAsyncComponent(() => import('#/components/captcha-pin-input/index.vue'));
+const CodeInput = defineAsyncComponent(() => import('#/components/code-input/index.vue'));
 const PasswordInput = defineAsyncComponent(() => import('#/components/password-input/index.vue'));
 const ApiSelect = defineAsyncComponent(() => import('#/components/page-select/api-select.vue'));
 const PageSelect = defineAsyncComponent(() => import('#/components/page-select/index.vue'));
@@ -81,6 +82,7 @@ export type ComponentType =
   | 'CaptchaPinInput'
   | 'Checkbox'
   | 'CheckboxGroup'
+  | 'CodeInput'
   | 'CreatableSelect'
   | 'DatePicker'
   | 'DefaultButton'
@@ -172,6 +174,7 @@ async function initComponentAdapter() {
     DictSelect,
     DictRadio,
     CaptchaPinInput,
+    CodeInput,
   };
 
   // 将组件注册到全局共享状态中

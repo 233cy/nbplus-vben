@@ -51,7 +51,7 @@ export function useColumns(
     },
     {
       field: 'status',
-      title: $t('sys.menu-pkg.fields.status'),
+      title: $t('common.status'),
       width: 120,
       sortable: true,
       cellRender: {

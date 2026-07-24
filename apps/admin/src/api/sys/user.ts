@@ -26,6 +26,8 @@ export namespace UserApi {
     email: string;
     phone: string;
     totpSecret: string;
+    /** 是否超级管理员：1是 2否 */
+    isSuper: number;
     gender: string;
     deptId?: string;
     dutyId?: string;
@@ -114,6 +116,11 @@ export function batchDeleteUserApi(ids: string[]) {
 
 export function batchUpdateUserApi(ids: string[], fieldName: string, value: any) {
   return requestClient.put(`${BASE}/batch-update`, { ids, [fieldName]: value });
+}
+
+/** 设为超级管理员（转移语义：原超管自动失效，仅当前超管可操作） */
+export function setUserSuperApi(id: string) {
+  return requestClient.put(`${BASE}/set-super`, { id });
 }
 
 export function getUserOnlineApi(id: string) {

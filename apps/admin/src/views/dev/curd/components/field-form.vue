@@ -18,7 +18,7 @@ const fieldColumns = [
   { title: $t('dev.curd.field.fields.dictCode'), dataIndex: 'dictCode', width: 160 },
   { title: $t('dev.curd.field.fields.label'), dataIndex: 'label', width: 120 },
   { title: $t('dev.curd.field.fields.isList'), dataIndex: 'isList', width: 50 },
-  { title: $t('dev.curd.field.fields.isSearch'), dataIndex: 'isSearch', width: 50 },
+  { title: $t('common.search'), dataIndex: 'isSearch', width: 50 },
   { title: $t('dev.curd.field.fields.isForm'), dataIndex: 'isForm', width: 50 },
   { title: $t('dev.curd.field.fields.isRequired'), dataIndex: 'isRequired', width: 50 },
   { title: $t('dev.curd.field.fields.isBatchUpdate'), dataIndex: 'isBatchUpdate', width: 60 },

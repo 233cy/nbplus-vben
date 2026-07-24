@@ -104,7 +104,7 @@ defineExpose({ refresh });
         @keyup.enter="submit"
       />
       <button type="button" class="h-9 rounded bg-primary px-3 text-sm text-white hover:opacity-90" @click="submit">
-        {{ $t('core.captcha.confirm') || '确认' }}
+        {{ $t('common.confirm') || '确认' }}
       </button>
     </div>
 

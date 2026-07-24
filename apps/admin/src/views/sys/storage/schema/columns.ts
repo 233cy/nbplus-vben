@@ -8,11 +8,12 @@ import { useStoragePermission } from '../permissions';
 
 export function useColumns(
   onEdit: (record: StorageApi.StorageItem) => void,
+  onDetail: (record: StorageApi.StorageItem) => void,
   onSetDefault: (record: StorageApi.StorageItem) => void,
   onToggle: (record: StorageApi.StorageItem, checked: boolean) => void,
   onSingleDelete: (record: StorageApi.StorageItem) => void,
 ): VxeTableGridOptions['columns'] {
-  const { canUpdate, canDelete } = useStoragePermission();
+  const { canUpdate, canDelete, canDetail } = useStoragePermission();
 
   const actions = [];
   if (canUpdate) {
@@ -49,6 +50,13 @@ export function useColumns(
       field: 'name',
       title: $t('sys.storage.fields.name'),
       minWidth: 160,
+      cellRender: {
+        name: 'CellLink',
+        attrs: {
+          hasAccess: canDetail,
+          onClick: (row: StorageApi.StorageItem) => onDetail(row),
+        },
+      },
     },
     {
       field: 'code',
@@ -75,7 +83,7 @@ export function useColumns(
     },
     {
       field: 'status',
-      title: $t('sys.storage.fields.status'),
+      title: $t('common.status'),
       width: 100,
       cellRender: {
         name: 'CellSwitch',

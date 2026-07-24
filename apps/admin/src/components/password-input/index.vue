@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 
 import { $t } from '#/locales';
-import { useSiteStore } from '#/store/site';
+import { isPasswordValid } from '#/utils/password-policy';
 
 export interface Props {
   placeholder?: string;
@@ -20,30 +20,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const modelValue = defineModel<any>('value');
 
-const siteStore = useSiteStore();
-
-// 密码策略
-const policy = computed(() => ({
-  level: siteStore.get('security.password.level', 'medium') as 'medium' | 'strong' | 'weak',
-  minLength: Number.parseInt(siteStore.get('security.password.len', '8'), 10),
-}));
-
-// 是否达标
-const isValid = computed(() => {
-  const password = modelValue.value;
-  if (!password) return false;
-  if (password.length < policy.value.minLength) return false;
-
-  const { level } = policy.value;
-  if (level === 'weak') return true;
-  if (level === 'medium') {
-    return /[a-z]/.test(password) && /[A-Z]/.test(password) && /\d/.test(password);
-  }
-  if (level === 'strong') {
-    return /[a-z]/.test(password) && /[A-Z]/.test(password) && /\d/.test(password) && /[^a-z0-9]/i.test(password);
-  }
-  return false;
-});
+// 是否达标（策略统一取自 utils/password-policy，经 /config/public 与后端 PasswordPolicy 同源）
+const isValid = computed(() => isPasswordValid(modelValue.value ?? ''));
 
 // 强度等级（根据密码实际强度判断）
 const strengthLevel = computed(() => {
@@ -74,52 +52,23 @@ const STRENGTH_CONFIG = {
 
 // 当前强度
 const currentStrength = computed(() => STRENGTH_CONFIG[strengthLevel.value]);
-
-// 提示消息
-const message = computed(() => {
-  const password = modelValue.value;
-  if (!password) return '';
-
-  if (!isValid.value) {
-    const messages: string[] = [];
-    if (password.length < policy.value.minLength) {
-      messages.push($t('common.passwordStrength.minLength', { minLength: policy.value.minLength }));
-    }
-    if (policy.value.level !== 'weak') {
-      if (!/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
-        messages.push($t('common.passwordStrength.letter'));
-      }
-      if (!/\d/.test(password)) {
-        messages.push($t('common.passwordStrength.digit'));
-      }
-      if (policy.value.level === 'strong' && !/[^a-z0-9]/i.test(password)) {
-        messages.push($t('common.passwordStrength.special'));
-      }
-    }
-    return messages.join('，');
-  }
-  return $t('common.passwordStrength.good');
-});
 </script>
 
 <template>
-  <div class="password-input-wrapper">
-    <a-input-password v-model:value="modelValue" :placeholder="props.placeholder" :disabled="props.disabled" class="password-input">
-      <template #suffix>
-        <div v-if="modelValue" class="strength-indicator">
-          <span :style="{ color: currentStrength.color }" class="text-sm font-medium">{{ currentStrength.text }}</span>
-        </div>
-      </template>
-    </a-input-password>
-    <div v-if="modelValue" class="strength-message">
-      <span :style="{ color: currentStrength.color }">{{ currentStrength.text }}</span>
-      <span :class="isValid ? 'text-gray-500' : 'text-red-500'" class="ml-2 text-xs">{{ message }}</span>
-    </div>
-  </div>
+  <!--
+    只负责输入与输入框内的强度指示（弱/中/强）；
+    强度不达标的错误提示由表单校验（zod refine + passwordPolicyDescription）
+    在表单项错误位统一展示，组件不再自渲染消息，避免与表单错误提示重叠。
+  -->
+  <a-input-password v-model:value="modelValue" :placeholder="props.placeholder" :disabled="props.disabled" class="password-input">
+    <template #suffix>
+      <span v-if="modelValue" :style="{ color: currentStrength.color }" class="text-sm font-medium">{{ currentStrength.text }}</span>
+    </template>
+  </a-input-password>
 </template>
 
 <style scoped>
-.password-input-wrapper {
+.password-input {
   width: 100%;
 }
 
@@ -127,10 +76,5 @@ const message = computed(() => {
   display: flex;
   align-items: center;
   padding-right: 8px;
-}
-
-.strength-message {
-  margin-top: 4px;
-  font-size: 12px;
 }
 </style>

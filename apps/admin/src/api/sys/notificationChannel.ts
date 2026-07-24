@@ -49,22 +49,6 @@ export namespace NotificationChannelApi {
     isDefault?: number;
   }
 
-  export interface SendParams {
-    channelCode: string;
-    target: string;
-    subject?: string;
-    content?: string;
-    extra?: Record<string, any>;
-    variables?: Record<string, any>;
-    bizType?: string;
-  }
-
-  export interface SendResult {
-    success: boolean;
-    messageId: string;
-    errorMessage: string;
-    rawResponse: Record<string, any>;
-  }
 }
 
 const BASE = '/admin/sys/notification-channel';
@@ -103,8 +87,4 @@ export function batchDeleteNotificationChannelApi(ids: string[]) {
 
 export function batchUpdateNotificationChannelApi(ids: string[], fieldName: string, value: any) {
   return requestClient.put(`${BASE}/batch-update`, { ids, [fieldName]: value });
-}
-
-export function sendNotificationChannelApi(data: NotificationChannelApi.SendParams) {
-  return requestClient.post<NotificationChannelApi.SendResult>(`${BASE}/send`, data);
 }

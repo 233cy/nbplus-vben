@@ -12,7 +12,7 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { codeLoginApi, getAccessCodesApi, getProfileInfoApi, loginApi, logoutApi, mfaLoginApi, totpLoginApi } from '#/api';
+import { codeLoginApi, getProfileInfoApi, loginApi, logoutApi, mfaLoginApi, totpLoginApi } from '#/api';
 import { resolveLogicalPath } from '#/api/core/upload';
 import { $t } from '#/locales';
 import { useAdminUserStore } from '#/store';
@@ -167,11 +167,11 @@ export const useAuthStore = defineStore('auth', () => {
       phone: result.phone,
       roles: result.roles ?? [],
       orgs: result.orgs ?? [],
+      isSuper: result.isSuper ?? 2,
     });
 
-    // 将 permissions 作为 accessCodes 注入框架权限系统
-    const accessCodes = await getAccessCodesApi();
-    accessStore.setAccessCodes(accessCodes);
+    // 将真实权限码注入框架权限系统（按钮级 hasAccessByCodes 生效）
+    accessStore.setAccessCodes(result.permissions ?? []);
 
     return userInfo;
   }

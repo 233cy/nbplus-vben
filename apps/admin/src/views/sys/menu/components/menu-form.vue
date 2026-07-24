@@ -12,14 +12,13 @@ import DictSelect from '#/components/dict/DictSelect.vue';
 import { $t } from '#/locales';
 import { getDictItems, useDict } from '#/utils/dict';
 
-import { useMenuAccessPermission } from '../permissions';
-
 import { buildParentTreeData, createDefaultForm, findNodeTitle, getAllowedTypes, ROOT_PARENT } from '../data';
+import { useMenuAccessPermission } from '../permissions';
 import MenuPermissionModal from './menu-permission-modal.vue';
 
 interface FormSuccessPayload {
-  parentId?: string | null;
-  originalParentId?: string | null;
+  parentId?: null | string;
+  originalParentId?: null | string;
 }
 
 const emit = defineEmits<{ success: [payload: FormSuccessPayload] }>();
@@ -32,7 +31,7 @@ const form = ref<MenuAdminApi.SaveParams & { id?: string }>(createDefaultForm())
 const treeData = ref<MenuAdminApi.MenuItem[]>([]);
 const treeExpandedKeys = ref<string[]>([]);
 const rowId = ref<string | undefined>();
-const originalParentId = ref<string | null>(null);
+const originalParentId = ref<null | string>(null);
 const isReadonly = ref(false);
 const isEdit = computed(() => !!rowId.value);
 const { items: typeItems } = useDict('sys_menu_type');
@@ -45,7 +44,7 @@ const availableTypes = computed(() => {
 
 const title = computed(() => {
   if (isReadonly.value) return $t('sys.menu.detail');
-  if (isEdit.value) return $t('sys.menu.edit');
+  if (isEdit.value) return $t('common.edit');
   const parentId = form.value.parentId;
   const isRoot = !parentId || parentId === ROOT_PARENT;
   const parentTitle = isRoot ? '' : findNodeTitle(treeData.value, parentId);
@@ -220,7 +219,7 @@ watch(() => form.value.parentId, updateTreeExpandedKeys);
 
 <template>
   <Drawer :title="title" :show-confirm-button="!isReadonly && (isEdit ? canUpdate : canCreate)" width="780px" placement="right">
-    <Form :model="form" layout="vertical">
+    <Form :model="form" layout="vertical" :disabled="isReadonly">
       <div class="grid grid-cols-2 gap-x-4">
         <FormItem :label="$t('sys.menu.fields.type')" required>
           <RadioGroup v-model:value="form.type" button-style="solid" @change="onTypeChange">
@@ -229,15 +228,15 @@ watch(() => form.value.parentId, updateTreeExpandedKeys);
             </RadioButton>
           </RadioGroup>
         </FormItem>
-        <FormItem :label="$t('sys.menu.fields.status')">
-          <DictSelect v-model:value="form.status" code="is_enable" value-type="number" class="w-full" />
+        <FormItem :label="$t('common.status')">
+          <DictSelect v-model:value="form.status" code="is_enable" value-type="number" class="w-full" :disabled="isReadonly" />
         </FormItem>
       </div>
 
       <FormItem :label="$t('sys.menu.fields.parentId')">
         <TreeSelect
           v-model:value="form.parentId"
-          v-model:treeExpandedKeys="treeExpandedKeys"
+          v-model:tree-expanded-keys="treeExpandedKeys"
           :tree-data="[{ label: $t('sys.menu.rootLevel'), value: ROOT_PARENT, children: treeSelectData }]"
           :placeholder="$t('sys.menu.placeholder.parentId')"
           allow-clear
@@ -295,13 +294,13 @@ watch(() => form.value.parentId, updateTreeExpandedKeys);
       <template v-if="form.type !== 3">
         <div class="grid grid-cols-3 gap-x-4">
           <FormItem :label="$t('sys.menu.fields.badgeType')">
-            <DictSelect v-model:value="form.badgeType" code="sys_badge_type" allow-clear class="w-full" />
+            <DictSelect v-model:value="form.badgeType" code="sys_badge_type" allow-clear class="w-full" :disabled="isReadonly" />
           </FormItem>
           <FormItem :label="$t('sys.menu.fields.badge')">
             <Input v-model:value="form.badge" :disabled="form.badgeType !== 'normal'" :placeholder="$t('sys.menu.placeholder.badge')" />
           </FormItem>
           <FormItem :label="$t('sys.menu.fields.badgeVariants')">
-            <DictSelect v-model:value="form.badgeVariants" code="sys_badge_variant" allow-clear class="w-full" />
+            <DictSelect v-model:value="form.badgeVariants" code="sys_badge_variant" allow-clear class="w-full" :disabled="isReadonly" />
           </FormItem>
         </div>
       </template>

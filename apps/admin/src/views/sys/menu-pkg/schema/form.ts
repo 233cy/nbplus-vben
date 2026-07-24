@@ -1,11 +1,6 @@
 import type { VbenFormSchema } from '#/adapter/form';
 
-import { h } from 'vue';
-
-import { Button } from 'ant-design-vue';
-
 import { $t } from '#/locales';
-import { stringToCode } from '#/utils/string-to-code';
 
 /**
  * 权限包新增/编辑表单 Schema
@@ -22,38 +17,20 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
       },
     },
     {
-      component: 'Input',
+      component: 'CodeInput',
       fieldName: 'code',
       label: $t('sys.menu-pkg.fields.code'),
       rules: 'required',
       disabled: isEdit,
-      componentProps: {
+      componentProps: (values: Record<string, any>) => ({
         placeholder: $t('sys.menu-pkg.placeholders.code'),
-      },
-      renderComponentContent: isEdit
-        ? undefined
-        : (values, actions) => ({
-            addonAfter: () =>
-              h(
-                Button,
-                {
-                  type: 'link',
-                  size: 'small',
-                  onClick: () => {
-                    const name = values.name as string;
-                    if (name?.trim()) {
-                      actions.setFieldValue('code', stringToCode(name.trim()));
-                    }
-                  },
-                },
-                { default: () => '生成编码' },
-              ),
-          }),
+        name: values.name,
+      }),
     },
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('sys.menu-pkg.fields.status'),
+      label: $t('common.status'),
       rules: 'required',
       defaultValue: 1,
       componentProps: {

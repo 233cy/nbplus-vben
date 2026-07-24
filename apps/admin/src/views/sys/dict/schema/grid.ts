@@ -28,7 +28,7 @@ export function useGridFormSchema(groupsOptions: Ref<{ label: string; value: str
     {
       component: 'DictSelect',
       fieldName: 'status',
-      label: $t('sys.dict.fields.status'),
+      label: $t('common.status'),
       componentProps: {
         allowClear: true,
         code: 'is_enable',

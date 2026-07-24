@@ -18,6 +18,7 @@ export interface AdminOrgItem {
 
 interface AdminUserState {
   email: string;
+  isSuper: number;
   orgs: AdminOrgItem[];
   permissions: string[];
   phone: string;
@@ -36,6 +37,7 @@ export const useAdminUserStore = defineStore('admin-user', {
       this.permissions = info.permissions ?? [];
       this.roles = info.roles ?? [];
       this.orgs = info.orgs ?? [];
+      this.isSuper = info.isSuper ?? 2;
     },
     $reset() {
       this.email = '';
@@ -43,10 +45,12 @@ export const useAdminUserStore = defineStore('admin-user', {
       this.permissions = [];
       this.roles = [];
       this.orgs = [];
+      this.isSuper = 2;
     },
   },
   state: (): AdminUserState => ({
     email: '',
+    isSuper: 2,
     orgs: [],
     permissions: [],
     phone: '',

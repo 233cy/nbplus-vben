@@ -208,7 +208,7 @@ function onBatchSuccess() {
               </th>
               <th class="px-3 py-2">{{ $t('sys.dict.itemFields.label') }}</th>
               <th class="px-3 py-2">{{ $t('sys.dict.itemFields.value') }}</th>
-              <th class="px-3 py-2 text-center">{{ $t('sys.dict.fields.status') }}</th>
+              <th class="px-3 py-2 text-center">{{ $t('common.status') }}</th>
               <th class="px-3 py-2">{{ $t('sys.dict.fields.remark') }}</th>
               <th class="w-28 px-3 py-2">{{ $t('sys.dict.itemFields.sort') }}</th>
               <th class="px-3 py-2 text-center">{{ $t('common.operation') }}</th>

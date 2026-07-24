@@ -8,8 +8,8 @@ import { Button, Form, FormItem, Input, InputNumber, Textarea } from 'ant-design
 import DictRadio from '#/components/dict/DictRadio.vue';
 
 import { createNotificationTemplateApi, updateNotificationTemplateApi } from '#/api/sys/notificationTemplate';
+import CodeInput from '#/components/code-input/index.vue';
 import { $t } from '#/locales';
-import { stringToCode } from '#/utils/string-to-code';
 
 import { useNotificationTemplatePermission } from '../permissions';
 import TemplateItemEditor from './template-item-editor.vue';
@@ -61,11 +61,6 @@ function addVariable() {
 
 function removeVariable(index: number) {
   variableRows.value.splice(index, 1);
-}
-
-function generateCodeFromName() {
-  if (isEdit.value || isReadonly.value) return;
-  form.value.code = stringToCode(form.value.name ?? '');
 }
 
 async function handleSubmit() {
@@ -158,13 +153,12 @@ const [Drawer, drawerApi] = useVbenDrawer({
       </FormItem>
 
       <FormItem :label="$t('sys.notification-template.fields.code')" name="code" :rules="[{ required: true, message: $t('sys.notification-template.fields.code') + '必填' }]">
-        <Input v-model:value="form.code" :disabled="isEdit || isReadonly" :placeholder="$t('sys.notification-template.fields.code')">
-          <template v-if="!isEdit && !isReadonly" #addonAfter>
-            <Button type="link" size="small" @click="generateCodeFromName">
-              {{ $t('sys.notification-template.generateCode') }}
-            </Button>
-          </template>
-        </Input>
+        <CodeInput
+          v-model="form.code"
+          :name="form.name"
+          :disabled="isEdit || isReadonly"
+          :placeholder="$t('sys.notification-template.fields.code')"
+        />
       </FormItem>
 
       <FormItem :label="$t('sys.notification-template.fields.bizType')" name="bizType">
@@ -210,7 +204,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       </FormItem>
 
       <div class="grid grid-cols-2 gap-x-4">
-        <FormItem :label="$t('sys.notification-template.fields.status')" name="status">
+        <FormItem :label="$t('common.status')" name="status">
           <DictRadio v-model:value="form.status" code="is_enable" value-type="number" :disabled="isReadonly" />
         </FormItem>
         <FormItem :label="$t('sys.notification-template.fields.sort')" name="sort">

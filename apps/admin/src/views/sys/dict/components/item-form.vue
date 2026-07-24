@@ -107,7 +107,7 @@ function handleCancel() {
       <FormItem :label="$t('sys.dict.itemFields.color')">
         <DictSelect v-model:value="form.color" code="sys_color" class="w-full" />
       </FormItem>
-      <FormItem :label="$t('sys.dict.fields.status')">
+      <FormItem :label="$t('common.status')">
         <Select v-model:value="form.status" :options="statusOptions" />
       </FormItem>
       <FormItem :label="$t('sys.dict.fields.remark')">

@@ -31,8 +31,9 @@ export function useFile() {
   }
 
   async function batchMove(ids: string[], storageCode: string) {
-    const res = await batchMoveFileApi(ids, storageCode);
-    message.success($t('sys.file.batchMoveSuccess', { count: res.count || ids.length }));
+    // 异步任务化：接口仅创建任务，真实成败以任务中心执行结果为准
+    await batchMoveFileApi(ids, storageCode);
+    message.success($t('sys.file.batchMoveDispatched'));
   }
 
   return {

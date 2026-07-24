@@ -9,22 +9,23 @@ export function useFormSchema(isEdit = false): VbenFormSchema[] {
   return [
     {
       component: 'Input',
-      fieldName: 'code',
-      label: $t('sys.role.fields.code'),
-      rules: 'required',
-      disabled: isEdit,
-      componentProps: {
-        placeholder: $t('sys.role.placeholders.code'),
-      },
-    },
-    {
-      component: 'Input',
       fieldName: 'name',
       label: $t('sys.role.fields.name'),
       rules: 'required',
       componentProps: {
         placeholder: $t('sys.role.placeholders.name'),
       },
+    },
+    {
+      component: 'CodeInput',
+      fieldName: 'code',
+      label: $t('sys.role.fields.code'),
+      rules: 'required',
+      disabled: isEdit,
+      componentProps: (values: Record<string, any>) => ({
+        placeholder: $t('sys.role.placeholders.code'),
+        name: values.name,
+      }),
     },
     {
       component: 'InputNumber',

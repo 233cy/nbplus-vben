@@ -54,7 +54,7 @@ export function useColumns(handlers: {
     },
     {
       field: 'status',
-      title: $t('sys.user-dept.fields.status'),
+      title: $t('common.status'),
       cellRender: {
         name: 'CellSwitch',
         attrs: {

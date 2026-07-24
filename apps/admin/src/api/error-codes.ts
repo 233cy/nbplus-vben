@@ -49,6 +49,14 @@ export enum BizCode {
   OSS_TRANSFER_ERROR = 20_003,
   /** 上传内容不是文件 */
   OSS_UPLOAD_NOT_FILE = 20_004,
+  /** 文件大小超过限制 */
+  OSS_FILE_TOO_LARGE = 20_005,
+  /** 不支持的文件类型 */
+  OSS_EXT_NOT_ALLOWED = 20_006,
+  /** 秒传源文件不存在 */
+  OSS_RAPID_SOURCE_NOT_FOUND = 20_007,
+  /** 访问策略码缺失或未声明 */
+  OSS_ACCESS_POLICY_INVALID = 20_008,
 
   /* 职务管理 */
   /** 职务编码已存在 */
@@ -90,4 +98,16 @@ export enum BizCode {
   /* 存储配置 / 文件管理 */
   /** 存储桶未配置 */
   STORAGE_BUCKET_NOT_CONFIGURED = 20_056,
+
+  /* 任务中心 */
+  /** 任务不存在或已删除 */
+  TASK_NOT_FOUND = 41_100,
+  /** 当前状态不可取消 */
+  TASK_NOT_CANCELABLE = 41_101,
+  /** 当前状态不可重试 */
+  TASK_NOT_RETRYABLE = 41_102,
+  /** 任务类型未注册处理器 */
+  TASK_TYPE_UNKNOWN = 41_103,
+  /** 单次投递目标过多 */
+  TASK_IDS_TOO_LARGE = 41_104,
 }

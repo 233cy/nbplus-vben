@@ -10,6 +10,7 @@ import { Button, Form, FormItem, Input, InputPassword, message, Steps } from 'an
 
 import { sendPasswordResetCodeApi, submitPasswordResetApi, verifyPasswordResetCodeApi } from '#/api';
 import Verify from '#/components/verifition/Verify.vue';
+import { isPasswordValid, passwordPolicyDescription } from '#/utils/password-policy';
 
 defineOptions({ name: 'ForgetPassword' });
 
@@ -142,8 +143,12 @@ const confirmPassword = ref('');
 const passwordError = ref('');
 
 async function handleResetPassword() {
-  if (!newPassword.value || newPassword.value.length < 8) {
-    passwordError.value = $t('core.authentication.forgetPasswordPage.passwordMinLength');
+  if (!newPassword.value) {
+    passwordError.value = $t('core.authentication.forgetPasswordPage.newPasswordPlaceholder');
+    return;
+  }
+  if (!isPasswordValid(newPassword.value)) {
+    passwordError.value = passwordPolicyDescription();
     return;
   }
   if (newPassword.value !== confirmPassword.value) {
@@ -235,7 +240,7 @@ function goLogin() {
 
     <!-- 步骤二：输入验证码 -->
     <div v-else-if="currentStep === 1" class="space-y-4">
-      <p class="text-sm text-muted-foreground">
+      <p class="mt-4 text-sm text-muted-foreground">
         {{ $t('core.authentication.forgetPasswordPage.codeSentTo', { target }) }}
       </p>
 

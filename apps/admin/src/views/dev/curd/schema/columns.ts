@@ -70,7 +70,7 @@ export function useColumns(options: CurdColumnOptions): VxeTableGridOptions['col
     },
     {
       field: 'status',
-      title: $t('dev.curd.table.fields.status'),
+      title: $t('common.status'),
       width: 90,
       cellRender: {
         name: 'CellTag',

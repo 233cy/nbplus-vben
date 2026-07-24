@@ -118,7 +118,7 @@ async function handleSubmit() {
 <template>
   <Modal :title="$t('sys.role.dataScopeModal.title')" width="640px">
     <div class="mb-4">
-      <label class="mb-2 block text-sm font-medium">{{ $t('sys.role.dataScopeModal.scopeLabel') }}</label>
+      <label class="mb-2 block text-sm font-medium">{{ $t('common.dataScope') }}</label>
       <RadioGroup v-model:value="dataScope" :options="dataScopeOptions" />
     </div>
 

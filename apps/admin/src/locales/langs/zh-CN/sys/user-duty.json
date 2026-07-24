@@ -3,10 +3,7 @@
   "create": "新增职务",
   "edit": "编辑职务",
   "detail": "查看职务",
-  "confirmDelete": "确认删除该职务？",
-  "deleteSuccess": "删除成功",
   "fields": {
-    "id": "ID",
     "code": "职务编码",
     "name": "职务名称",
     "deptId": "所属部门",

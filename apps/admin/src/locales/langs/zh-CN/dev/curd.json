@@ -31,8 +31,7 @@
       "className": "类名前缀",
       "routePrefix": "路由前缀",
       "author": "作者",
-      "remark": "备注",
-      "status": "状态"
+      "remark": "备注"
     },
     "placeholder": {
       "title": "如：用户管理",
@@ -51,24 +50,14 @@
     "dictPlaceholder": "选择字典",
     "fields": {
       "columnName": "字段名",
-      "columnType": "类型",
       "component": "组件",
       "dictCode": "字典",
       "label": "标签",
       "isList": "列表",
-      "isSearch": "搜索",
       "isForm": "表单",
       "isRequired": "必填",
       "isBatchUpdate": "批量改",
       "sort": "排序"
-    },
-    "columnType": {
-      "string": "文本",
-      "int": "整数",
-      "bool": "布尔",
-      "datetime": "日期时间",
-      "enum": "枚举",
-      "relation": "关联"
     }
   },
   "status": {
@@ -77,6 +66,5 @@
   },
   "createSuccess": "创建成功",
   "updateSuccess": "更新成功",
-  "deleteSuccess": "删除成功",
   "syncSuccess": "同步成功"
 }

@@ -14,6 +14,8 @@ export namespace ProfileApi {
     permissions?: string[];
     lastLoginIp: string;
     lastLoginTime: string;
+    /** 是否超级管理员：1是 2否 */
+    isSuper: number;
     roles?: { id: string; name: string }[];
     /** 任职列表（主职在前）：isMain 1主 2兼，fullDeptName 为部门树完整路径名 */
     orgs?: { deptId: string; deptName: string; fullDeptName: string; dutyId: string; dutyName: string; isMain: number }[];

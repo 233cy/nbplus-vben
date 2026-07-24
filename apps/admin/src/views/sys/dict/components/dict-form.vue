@@ -4,6 +4,7 @@ import type { DictApi } from '#/api/sys/dict';
 import { computed, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
+
 import { Form, FormItem, Input, Select } from 'ant-design-vue';
 
 import { createDictApi, getDictOptionsApi, updateDictApi } from '#/api/sys/dict';
@@ -22,8 +23,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
   },
   async onOpenChange(isOpen) {
     if (!isOpen) return;
-    const row = drawerApi.getData<DictApi.DictItem>();
+    const row = drawerApi.getData<DictApi.DictItem & { readonly?: boolean }>();
     allDicts.value = await getDictOptionsApi();
+    isReadonly.value = row?.readonly ?? false;
     if (row?.id) {
       form.value = {
         name: row.name ?? '',
@@ -42,6 +44,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 const loading = ref(false);
 const rowId = ref<string | undefined>();
+const isReadonly = ref(false);
 const allDicts = ref<DictApi.DictItem[]>([]);
 
 const form = ref({
@@ -70,11 +73,7 @@ async function handleSubmit() {
   loading.value = true;
   drawerApi.lock();
   try {
-    if (isEdit.value && rowId.value) {
-      await updateDictApi({ id: rowId.value, ...form.value });
-    } else {
-      await createDictApi(form.value);
-    }
+    await (isEdit.value && rowId.value ? updateDictApi({ id: rowId.value, ...form.value }) : createDictApi(form.value));
     emit('success');
     drawerApi.close();
   } finally {
@@ -85,8 +84,12 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <Drawer :title="isEdit ? $t('sys.dict.editDict') : $t('sys.dict.addDict')" :loading="loading">
-    <Form :model="form" layout="vertical" class="mt-4">
+  <Drawer
+    :title="isReadonly ? $t('common.detail') : isEdit ? $t('sys.dict.editDict') : $t('sys.dict.addDict')"
+    :loading="loading"
+    :show-confirm-button="!isReadonly"
+  >
+    <Form :model="form" layout="vertical" class="mt-4" :disabled="isReadonly">
       <FormItem :label="$t('sys.dict.fields.name')" required>
         <Input v-model:value="form.name" :placeholder="$t('sys.dict.placeholder.name')" />
       </FormItem>
@@ -101,10 +104,11 @@ async function handleSubmit() {
         <CreatableSelect
           v-model:value="form.groups"
           :options="groupOptions"
+          :disabled="isReadonly"
           :placeholder="$t('sys.dict.placeholder.groups')"
         />
       </FormItem>
-      <FormItem :label="$t('sys.dict.fields.status')">
+      <FormItem :label="$t('common.status')">
         <Select v-model:value="form.status" :options="statusOptions" />
       </FormItem>
       <FormItem :label="$t('sys.dict.fields.remark')">

@@ -24,7 +24,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
   },
   async onOpenChange(isOpen) {
     if (!isOpen) return;
-    const row = drawerApi.getData<ConfigApi.ConfigItem>();
+    const row = drawerApi.getData<ConfigApi.ConfigItem & { readonly?: boolean }>();
+    readonly.value = row?.readonly ?? false;
     allOptions.value = await getConfigOptionsApi();
     if (row?.id) {
       form.value = {
@@ -94,8 +95,8 @@ const form = ref<ConfigFormState>({
 
 const isEdit = computed(() => !!rowId.value);
 
-/** 详情（只读）模式：列表点击配置键进入，不显示确认按钮、表单禁用 */
-const readonly = computed(() => !!drawerApi.getData<ConfigApi.ConfigItem & { readonly?: boolean }>()?.readonly);
+/** 详情（只读）模式：列表点击配置键进入，不显示确认按钮、表单禁用（onOpenChange 中赋值） */
+const readonly = ref(false);
 
 const drawerTitle = computed(() => {
   if (readonly.value) return $t('common.detail');
@@ -163,6 +164,7 @@ async function handleSubmit() {
         <CreatableSelect
           v-model:value="form.groups"
           :options="groupOptions"
+          :disabled="readonly"
           :placeholder="$t('sys.config.placeholder.groups')"
         />
       </FormItem>

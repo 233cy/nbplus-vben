@@ -1,14 +1,11 @@
 {
   "pageTitle": "存储配置",
   "fields": {
-    "id": "ID",
     "name": "存储名称",
     "code": "唯一编码",
     "engine": "引擎类型",
-    "status": "状态",
     "isDefault": "是否默认",
-    "sort": "排序",
-    "config": "配置项"
+    "sort": "排序"
   },
   "options": {
     "engine": {
@@ -31,6 +28,5 @@
   "setDefault": "设为默认",
   "defaultSuccess": "已设为默认存储",
   "saveSuccess": "保存成功",
-  "driverSchemas": "驱动配置",
   "configForm": "实例配置"
 }

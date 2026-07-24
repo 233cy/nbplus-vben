@@ -16,7 +16,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'Select',
       fieldName: 'status',
-      label: $t('sys.notification-template.fields.status'),
+      label: $t('common.status'),
       componentProps: {
         allowClear: true,
         options: [

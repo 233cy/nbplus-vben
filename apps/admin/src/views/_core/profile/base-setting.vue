@@ -32,7 +32,7 @@ const [Form, formApi] = useVbenForm({
     {
       fieldName: 'nickname',
       component: 'Input',
-      label: $t('core.profile.basic.nickname'),
+      label: $t('common.nickname'),
       rules: z.string().min(1, { message: $t('core.profile.basic.nicknameRequired') }),
     },
     {

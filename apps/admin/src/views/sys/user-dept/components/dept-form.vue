@@ -205,7 +205,7 @@ watch(() => form.value.parentId, updateTreeExpandedKeys);
         <FormItem :label="$t('sys.user-dept.fields.leaderId')">
           <Input v-model:value="form.leaderId" :disabled="isReadonly" :placeholder="$t('sys.user-dept.placeholder.leaderId')" />
         </FormItem>
-        <FormItem :label="$t('sys.user-dept.fields.status')">
+        <FormItem :label="$t('common.status')">
           <DictSelect v-model:value="form.status" :disabled="isReadonly" code="is_enable" class="w-full" />
         </FormItem>
       </div>

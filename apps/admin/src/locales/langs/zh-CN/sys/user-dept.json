@@ -1,6 +1,5 @@
 {
   "pageTitle": "部门管理",
-  "create": "新增部门",
   "edit": "编辑部门",
   "detail": "查看部门",
   "addRoot": "新增顶级部门",
@@ -12,29 +11,15 @@
   "moveSuccess": "部门移动成功",
   "generateCode": "生成编码",
   "searchPlaceholder": "搜索部门名称/编码",
-  "confirmDelete": "确认删除",
-  "confirmDeleteContent": "确定要删除部门「{name}」及其所有子部门吗？删除前请确保该部门及其子部门下均无关联用户。",
-  "createSuccess": "部门创建成功",
-  "updateSuccess": "部门更新成功",
-  "deleteSuccess": "部门删除成功",
-  "empty": "暂无部门，点击右上角新增",
   "rootLevel": "顶级部门",
-  "status": {
-    "enabled": "启用",
-    "disabled": "禁用"
-  },
   "fields": {
-    "id": "ID",
     "parentId": "上级部门",
     "name": "部门名称",
     "code": "部门编码",
     "sort": "显示排序",
     "leaderId": "负责人",
     "phone": "联系电话",
-    "email": "邮箱",
-    "status": "状态",
-    "createdAt": "创建时间",
-    "updatedAt": "更新时间"
+    "email": "邮箱"
   },
   "placeholder": {
     "name": "请输入部门名称",
@@ -43,8 +28,5 @@
     "leaderId": "请输入负责人用户ID",
     "phone": "请输入部门联系电话",
     "email": "请输入部门邮箱"
-  },
-  "validate": {
-    "codeRequired": "请输入部门编码"
   }
 }

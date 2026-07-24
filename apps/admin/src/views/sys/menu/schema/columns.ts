@@ -116,7 +116,7 @@ export function useColumns(handlers: {
     },
     {
       field: 'status',
-      title: $t('sys.menu.fields.status'),
+      title: $t('common.status'),
       width: 100,
       cellRender: {
         name: 'CellSwitch',
@@ -140,7 +140,7 @@ export function useColumns(handlers: {
       field: 'operation',
       fixed: 'right',
       title: $t('common.operation'),
-      width: 220,
+      width: 200,
       showOverflow: false,
       cellRender: {
         name: 'TableActions',

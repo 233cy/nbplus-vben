@@ -40,6 +40,11 @@ async function onEditClick(id: string) {
   dictFormDrawerApi.setData(res).open();
 }
 
+async function onDetailClick(id: string) {
+  const res = await getDictDetailApi(id);
+  dictFormDrawerApi.setData({ ...res, readonly: true }).open();
+}
+
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
     collapsed: true,
@@ -49,7 +54,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     wrapperClass: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
   },
   gridOptions: {
-    columns: useColumns(onEditClick, () => gridApi.query()),
+    columns: useColumns(onEditClick, onDetailClick, () => gridApi.query()),
     height: 'auto',
     keepSource: true,
     proxyConfig: {

@@ -3,14 +3,11 @@
   "create": "新增通知渠道",
   "edit": "编辑通知渠道",
   "detail": "查看通知渠道",
-  "confirmDelete": "确认删除该通知渠道？",
   "configForm": "驱动配置",
   "fields": {
     "code": "渠道编码",
     "name": "渠道名称",
     "driver": "驱动类型",
-    "config": "渠道配置",
-    "status": "状态",
     "sort": "排序",
     "isDefault": "默认渠道"
   }

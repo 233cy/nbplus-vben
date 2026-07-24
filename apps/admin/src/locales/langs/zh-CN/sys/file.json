@@ -1,39 +1,24 @@
 {
   "pageTitle": "文件管理",
   "fields": {
-    "id": "ID",
     "originalName": "原文件名",
     "extension": "扩展名",
-    "mimeType": "MIME 类型",
     "sizeByte": "文件大小",
-    "hash": "文件哈希",
-    "engine": "存储引擎",
     "storageCode": "存储实例",
-    "logicalPath": "逻辑路径",
     "accessType": "访问类型",
-    "accessPolicy": "访问策略",
     "uploadType": "上传类型",
     "maxCount": "最大数量",
     "maxSize": "最大大小",
     "aspectRatio": "裁剪比例",
     "shape": "头像形状",
     "uploadTarget": "上传目标",
-    "status": "状态",
-    "refCount": "引用计数",
-    "createdBy": "上传人",
-    "createdAt": "创建时间",
-    "updatedAt": "更新时间"
+    "refCount": "引用计数"
   },
   "options": {
     "accessType": {
       "authorized": "授权可见",
       "public": "完全公开",
       "login": "登录可见"
-    },
-    "accessPolicy": {
-      "owner": "仅所有者",
-      "public": "公开",
-      "login": "登录用户"
     },
     "uploadType": {
       "file": "文件",
@@ -54,8 +39,9 @@
   "move": "迁移",
   "batchMove": "批量迁移",
   "preview": "预览",
-  "download": "下载",
   "upload": "上传文件",
   "moveSuccess": "迁移成功",
-  "batchMoveSuccess": "成功迁移 {count} 个文件"
+  "batchMoveDispatched": "迁移任务已创建，可在任务中心查看进度",
+  "moveTaskTip": "将把该文件迁移到选中的存储实例，迁移任务异步执行，真实成败以任务中心执行结果为准。",
+  "batchMoveTaskTip": "将把勾选的 {count} 个文件迁移到选中的存储实例（仅迁移勾选的数据）。迁移任务异步执行，进度与真实成败请在任务中心查看。"
 }

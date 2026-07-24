@@ -90,7 +90,7 @@ export function useColumns(
     },
     {
       field: 'status',
-      title: $t('sys.file.fields.status'),
+      title: $t('common.status'),
       width: 100,
       slots: {
         default: ({ row }: any) => $t(`sys.file.options.status.${row.status}`),
@@ -98,7 +98,7 @@ export function useColumns(
     },
     {
       field: 'createdAt',
-      title: $t('sys.file.fields.createdAt'),
+      title: $t('common.createdAt'),
       width: 180,
       formatter: ({ cellValue }: any) => (cellValue ? formatUnixTime(cellValue) : '-'),
     },

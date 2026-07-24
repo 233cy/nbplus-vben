@@ -18,6 +18,7 @@ export function useMenuAccessPermission() {
     canBatchUpdate: hasAccessByCodes(['adm:sys:menu:update']),
     canInlineUpdate: hasAccessByCodes(['adm:sys:menu:update']),
     canBatchCreate: hasAccessByCodes(['adm:sys:menu:batchCreate']),
-    canControllerMethods: hasAccessByCodes(['adm:sys:menu:controllerMethods']),
+    // 后端 controller-methods/controller-prefixes 接口复用 list 权限码
+    canControllerMethods: hasAccessByCodes(['adm:sys:menu:list']),
   };
 }

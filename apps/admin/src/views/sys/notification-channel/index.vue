@@ -94,7 +94,7 @@ const channel = useNotificationChannel(gridApi);
           :get-ids="channel.getSelectedIds"
           :on-success="channel.onRefresh"
           :fields="[
-            { fieldName: 'status', label: $t('sys.notification-channel.fields.status'), options: [{ label: $t('common.enabled'), value: 1 }, { label: $t('common.disabled'), value: 2 }] },
+            { fieldName: 'status', label: $t('common.status'), options: [{ label: $t('common.enabled'), value: 1 }, { label: $t('common.disabled'), value: 2 }] },
           ]"
         />
 

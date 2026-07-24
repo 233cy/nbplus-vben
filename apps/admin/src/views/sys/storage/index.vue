@@ -56,6 +56,11 @@ async function openEdit(record: StorageApi.StorageItem) {
   formDrawerApi.setData({ form: detail, schemas: storage.schemas.value }).open();
 }
 
+async function openDetail(record: StorageApi.StorageItem) {
+  const detail = await storage.detail(record.id);
+  formDrawerApi.setData({ form: detail, readonly: true, schemas: storage.schemas.value }).open();
+}
+
 async function handleToggle(record: StorageApi.StorageItem, checked: boolean) {
   await storage.updateStatus(record.id, checked ? 1 : 2);
   gridApi.query();
@@ -80,7 +85,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     wrapperClass: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
   },
   gridOptions: {
-    columns: useColumns(openEdit, handleSetDefault, handleToggle, handleSingleDelete),
+    columns: useColumns(openEdit, openDetail, handleSetDefault, handleToggle, handleSingleDelete),
     height: 'auto',
     proxyConfig: {
       ajax: {

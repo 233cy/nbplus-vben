@@ -13,7 +13,11 @@ import { useDictPermission } from '../permissions';
 /**
  * 字典类型列表列定义
  */
-export function useColumns(onEditClick: (id: string) => Promise<void>, onRefresh: () => void): VxeTableGridOptions['columns'] {
+export function useColumns(
+  onEditClick: (id: string) => Promise<void>,
+  onDetailClick: (id: string) => Promise<void>,
+  onRefresh: () => void,
+): VxeTableGridOptions['columns'] {
   const { canDetail, canUpdate, canDelete, canInlineUpdate } = useDictPermission();
 
   return [
@@ -37,7 +41,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onRefresh
         name: 'CellLink',
         attrs: {
           hasAccess: canDetail,
-          onClick: async (row: DictApi.DictItem) => onEditClick(row.id),
+          onClick: async (row: DictApi.DictItem) => onDetailClick(row.id),
         },
       },
     },
@@ -56,7 +60,7 @@ export function useColumns(onEditClick: (id: string) => Promise<void>, onRefresh
     },
     {
       field: 'status',
-      title: $t('sys.dict.fields.status'),
+      title: $t('common.status'),
       width: 100,
       sortable: true,
       cellRender: {

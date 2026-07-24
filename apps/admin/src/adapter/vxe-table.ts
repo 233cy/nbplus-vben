@@ -71,7 +71,6 @@ setupVbenVxeTable({
         },
         round: true,
         showOverflow: true,
-        size: 'small',
       } as VxeTableGridOptions,
     });
 
@@ -114,7 +113,6 @@ setupVbenVxeTable({
         return h(
           Button,
           {
-            size: 'small',
             type: 'link',
             style: 'padding:0;height:auto;',
             onClick: (e: MouseEvent) => {

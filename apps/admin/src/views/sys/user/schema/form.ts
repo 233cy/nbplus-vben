@@ -1,6 +1,8 @@
 import type { VbenFormSchema } from '#/adapter/form';
 
+import { z } from '#/adapter/form';
 import { $t } from '#/locales';
+import { isPasswordValid, passwordPolicyDescription } from '#/utils/password-policy';
 
 /**
  * 用户新增/编辑表单 Schema
@@ -17,7 +19,15 @@ export function useFormSchema(isEdit = false, isReadonly = false): VbenFormSchem
       component: 'PasswordInput',
       fieldName: 'password',
       label: $t('sys.user.fields.password'),
-      rules: isEdit ? undefined : 'required',
+      rules: isEdit
+        ? z
+            .string()
+            .optional()
+            .refine(value => !value || isPasswordValid(value), { message: passwordPolicyDescription() })
+        : z
+            .string()
+            .min(1, { message: $t('sys.user.rules.passwordRequired') })
+            .refine(isPasswordValid, { message: passwordPolicyDescription() }),
     },
     {
       component: 'DictRadio',

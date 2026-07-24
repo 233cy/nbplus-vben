@@ -15,9 +15,10 @@ export function useColumns(
   onEditClick: (id: string) => Promise<void>,
   onDetailClick: (id: string) => Promise<void>,
   onOnlineClick: (row: UserApi.UserItem) => void,
+  onSetSuper: (row: UserApi.UserItem) => void,
   onRefresh: () => void,
 ): VxeTableGridOptions['columns'] {
-  const { canDetail, canUpdate, canDelete, canOnline } = useUserPermission();
+  const { canDetail, canUpdate, canDelete, canOnline, canSetSuper } = useUserPermission();
 
   return [
     { type: 'checkbox', width: 50 },
@@ -34,6 +35,12 @@ export function useColumns(
           onClick: async (row: UserApi.UserItem) => onDetailClick(row.id),
         },
       },
+    },
+    {
+      field: 'isSuper',
+      title: $t('sys.user.fields.isSuper'),
+      width: 70,
+      formatter: ({ row }: { row: UserApi.UserItem }) => (row.isSuper === 1 ? $t('sys.user.fields.isSuper') : '-'),
     },
     {
       field: 'status',
@@ -149,7 +156,7 @@ export function useColumns(
       field: 'operation',
       fixed: 'right',
       title: $t('common.operation'),
-      width: 160,
+      width: 200,
       showOverflow: false,
       cellRender: {
         name: 'TableActions',
@@ -170,6 +177,13 @@ export function useColumns(
               confirmTitle: $t('common.confirmDelete'),
               hidden: !canDelete,
               onClick: (row: UserApi.UserItem) => useTableDelete(deleteUserApi, row.id, row.username, onRefresh),
+            },
+            {
+              key: 'setSuper',
+              label: $t('sys.user.setSuper'),
+              icon: 'lucide:crown',
+              hidden: (row: UserApi.UserItem) => !canSetSuper.value || row.isSuper === 1,
+              onClick: (row: UserApi.UserItem) => onSetSuper(row),
             },
           ],
         },

@@ -3,10 +3,10 @@
   "create": "新增用户管理",
   "edit": "编辑用户管理",
   "detail": "查看用户管理",
-  "confirmDelete": "确认删除该用户管理？",
-  "deleteSuccess": "删除成功",
+  "rules": {
+    "passwordRequired": "请输入登录密码"
+  },
   "fields": {
-    "id": "ID",
     "username": "登录账号",
     "password": "登录密码",
     "status": "帐号状态",
@@ -21,11 +21,11 @@
     "deptName": "部门",
     "dutyName": "职务",
     "roleIds": "角色",
-    "userOrg": "任职信息",
     "isMain": "是否主职",
     "lastLoginIp": "最后登录IP",
     "lastLoginTime": "最后登录时间",
-    "onlineCount": "在线设备"
+    "onlineCount": "在线设备",
+    "isSuper": "超管"
   },
   "batchRole": {
     "title": "批量分配角色",
@@ -42,5 +42,8 @@
     "deptRequired": "请先选择部门",
     "dutyRequired": "请选择职务",
     "duplicate": "该部门与职务组合已存在"
-  }
+  },
+  "setSuper": "设为超管",
+  "setSuperConfirm": "开启后原超管自动失效，全系统仅一个超级管理员，确认移交给该用户吗？",
+  "setSuperSuccess": "超管移交成功"
 }

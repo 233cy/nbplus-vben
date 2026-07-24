@@ -3,7 +3,6 @@
   "create": "新增通知模板",
   "edit": "编辑通知模板",
   "detail": "查看通知模板",
-  "confirmDelete": "确认删除该通知模板？",
   "generateCode": "生成编码",
   "testSend": "测试发送",
   "testSendTitle": "测试发送 - {name}",
@@ -15,7 +14,6 @@
   "testSendNoVariables": "该模板未定义变量",
   "testSendResult": "发送结果",
   "testSendSuccess": "发送成功",
-  "testSendFailed": "发送失败：{msg}",
   "testSendSkipped": "{count} 位用户因缺少联系方式已跳过",
   "variableKey": "变量名",
   "variableDesc": "变量说明",
@@ -28,7 +26,6 @@
     "bizType": "业务类型",
     "variables": "变量声明",
     "remark": "备注",
-    "status": "状态",
     "sort": "排序"
   },
   "items": {
@@ -37,9 +34,6 @@
     "edit": "编辑渠道内容",
     "channelType": "渠道类型",
     "remark": "备注/别名",
-    "remarkPlaceholder": "用于渠道内容列表展示，例如：短信验证码模板",
-    "subject": "标题",
-    "content": "内容",
-    "extra": "渠道参数"
+    "remarkPlaceholder": "用于渠道内容列表展示，例如：短信验证码模板"
   }
 }

@@ -196,7 +196,7 @@ function onPrimaryAction(file: QueueFile) {
               </template>
 
               <a-button type="link" size="small" :disabled="file.status !== 'done'" @click.stop="download(file)"> {{ $t('core.upload.download') }} </a-button>
-              <a-button type="link" danger size="small" @click.stop="remove(file)"> {{ $t('core.upload.delete') }} </a-button>
+              <a-button type="link" danger size="small" @click.stop="remove(file)"> {{ $t('common.delete') }} </a-button>
             </div>
           </a-list-item>
         </template>

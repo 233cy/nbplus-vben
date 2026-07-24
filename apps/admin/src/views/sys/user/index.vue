@@ -2,10 +2,12 @@
 import { Page, useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
 
-import { Button } from 'ant-design-vue';
+import { Button, message, Modal } from 'ant-design-vue';
+
+import type { UserApi } from '#/api/sys/user';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { batchDeleteUserApi, batchUpdateUserApi, getUserDetailApi, getUserListApi } from '#/api/sys/user.js';
+import { batchDeleteUserApi, batchUpdateUserApi, getUserDetailApi, getUserListApi, setUserSuperApi } from '#/api/sys/user.js';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
 import { $t } from '#/locales';
 import { useGridRouteQuery, useTableBatchAction } from '#/utils/table';
@@ -49,6 +51,22 @@ async function onDetailClick(id: string) {
   formDrawerApi.setData({ ...res, readonly: true }).open();
 }
 
+/** 设为超管：确认提示后执行移交 */
+function onSetSuper(row: UserApi.UserItem) {
+  Modal.confirm({
+    title: $t('sys.user.setSuper'),
+    content: $t('sys.user.setSuperConfirm'),
+    okText: $t('common.confirm'),
+    okButtonProps: { danger: true },
+    cancelText: $t('common.cancel'),
+    onOk: async () => {
+      await setUserSuperApi(row.id);
+      message.success($t('sys.user.setSuperSuccess'));
+      user.onRefresh();
+    },
+  });
+}
+
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
     collapsed: true,
@@ -62,6 +80,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
       onEditClick,
       onDetailClick,
       row => user.onlineRef.value?.open(row.id),
+      onSetSuper,
       () => user.onRefresh(),
     ),
     height: 'auto',

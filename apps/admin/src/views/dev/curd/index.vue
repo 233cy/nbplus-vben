@@ -65,7 +65,7 @@ function onEditClick(row: CurdAdminApi.CurdTable) {
 function onDeleteClick(row: CurdAdminApi.CurdTable) {
   deleteCurdTableApi(row.id).then(() => {
     curd.onRefresh();
-    message.success($t('dev.curd.deleteSuccess'));
+    message.success($t('common.deleteSuccess'));
   });
 }
 

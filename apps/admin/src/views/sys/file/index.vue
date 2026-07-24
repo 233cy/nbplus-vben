@@ -14,7 +14,7 @@ import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue'
 import { $t } from '#/locales';
 import QuickConfigDrawer from '#/views/sys/config/shared/quick-config-drawer.vue';
 
-import MoveModal from './components/move-modal.vue';
+import MoveDrawer from './components/move-drawer.vue';
 import UploadDrawer from './components/upload-drawer.vue';
 import { useFile } from './composables/useFile';
 import { useFilePermission } from './permissions';
@@ -26,8 +26,8 @@ const { canDelete, canMove, canSaveConfig } = useFilePermission();
 
 const configDrawerVisible = ref(false);
 
-const [MoveDrawer, moveDrawerApi] = useVbenDrawer({
-  connectedComponent: MoveModal,
+const [MoveDrawerComp, moveDrawerApi] = useVbenDrawer({
+  connectedComponent: MoveDrawer,
   destroyOnClose: true,
 });
 
@@ -78,23 +78,12 @@ function openMove(record: FileApi.FileItem) {
 
 function openBatchMove() {
   const ids = getSelectedIds();
-  if (ids.length > 0) {
-    // 勾选了文件 → 移动指定文件
-    moveDrawerApi.setData({ ids: [...ids] }).open();
-  } else {
-    // 未勾选 → 移动当前页全部文件
-    const allIds = getCurrentPageIds();
-    if (allIds.length === 0) {
-      message.warning($t('common.batchActionNoSelection'));
-      return;
-    }
-    moveDrawerApi.setData({ ids: [...allIds] }).open();
+  if (ids.length === 0) {
+    // 批量迁移等同批量操作：必须先勾选数据，未勾选不兜底当前页
+    message.warning($t('common.batchActionNoSelection'));
+    return;
   }
-}
-
-/** 获取当前页所有行 ID */
-function getCurrentPageIds(): string[] {
-  return (gridApi.grid?.getData() as any[])?.map((r: any) => r.id) ?? [];
+  moveDrawerApi.setData({ ids: [...ids] }).open();
 }
 
 async function handleMoveConfirm(ids: string[], code: string) {
@@ -110,7 +99,7 @@ async function handleSingleDelete(record: FileApi.FileItem) {
 
 <template>
   <Page auto-content-height>
-    <MoveDrawer @confirm="handleMoveConfirm" />
+    <MoveDrawerComp @confirm="handleMoveConfirm" />
     <UploadDrawerComp @success="onRefresh" />
     <QuickConfigDrawer v-model:open="configDrawerVisible" group="storage" :title="$t('common.paramConfig')" :save-api="saveFileConfigApi" />
 

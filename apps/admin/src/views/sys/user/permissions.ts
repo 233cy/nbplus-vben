@@ -1,4 +1,7 @@
+import { computed } from 'vue';
+
 import { useAccess } from '#/composables/use-access';
+import { useAdminUserStore } from '#/store';
 
 /**
  * 用户管理模块权限码集中判断
@@ -7,6 +10,7 @@ import { useAccess } from '#/composables/use-access';
  */
 export function useUserPermission() {
   const { hasAccessByCodes } = useAccess();
+  const adminUserStore = useAdminUserStore();
 
   return {
     canList: hasAccessByCodes(['adm:sys:user:list']),
@@ -20,5 +24,7 @@ export function useUserPermission() {
     canOnline: hasAccessByCodes(['adm:sys:user:list']),
     canKick: hasAccessByCodes(['adm:sys:user:kick']),
     canKickAll: hasAccessByCodes(['adm:sys:user:kick']),
+    /** 设为超管：独立鉴权操作，仅当前超管可见可操作 */
+    canSetSuper: computed(() => adminUserStore.isSuper === 1),
   };
 }

@@ -85,7 +85,7 @@ export function useTableFormSchema(options: TableFormSchemaOptions): VbenFormSch
     {
       component: 'Select',
       fieldName: 'status',
-      label: $t('dev.curd.table.fields.status'),
+      label: $t('common.status'),
       componentProps: {
         options: createStatusOptions($t),
       },

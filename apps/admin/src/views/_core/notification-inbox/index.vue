@@ -260,7 +260,7 @@ onMounted(() => {
               <Empty
                 v-if="items.length === 0 && !loading"
                 class="mt-16"
-                :description="$t('common.noData')"
+                :description="$t('common.noDataAvailable')"
               />
               <div
                 v-for="item in items"

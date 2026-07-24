@@ -760,7 +760,7 @@ onMounted(async () => {
           {{ item[labelField] }}
         </Tag>
 
-        <Button v-if="hasMoreEcho" size="small" :loading="echoLoading" :disabled="echoLoading" @click="loadMoreEcho">
+        <Button v-if="hasMoreEcho" :loading="echoLoading" :disabled="echoLoading" @click="loadMoreEcho">
           {{ $t('common.loadMore') }} ({{ allSelectedIds.length - tempSelectedMap.size }})
         </Button>
       </div>

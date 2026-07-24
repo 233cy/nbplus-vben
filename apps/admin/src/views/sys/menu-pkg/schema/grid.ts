@@ -35,7 +35,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'DictRadio',
       fieldName: 'status',
-      label: $t('sys.menu-pkg.fields.status'),
+      label: $t('common.status'),
       componentProps: {
         allowClear: true,
         code: 'is_enable',

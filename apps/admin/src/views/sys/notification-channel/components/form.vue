@@ -197,7 +197,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       </FormItem>
 
       <div class="grid grid-cols-2 gap-x-4">
-        <FormItem :label="$t('sys.notification-channel.fields.status')" name="status">
+        <FormItem :label="$t('common.status')" name="status">
           <DictRadio v-model:value="form.status" code="is_enable" value-type="number" :disabled="isReadonly" />
         </FormItem>
         <FormItem :label="$t('sys.notification-channel.fields.isDefault')" name="isDefault">

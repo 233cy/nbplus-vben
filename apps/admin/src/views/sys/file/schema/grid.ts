@@ -24,7 +24,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'Select',
       fieldName: 'status',
-      label: $t('sys.file.fields.status'),
+      label: $t('common.status'),
       componentProps: {
         options: [
           { label: $t('sys.file.options.status.1'), value: 1 },

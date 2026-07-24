@@ -61,7 +61,7 @@ export function useColumns(
     },
     {
       field: 'status',
-      title: $t('sys.notification-channel.fields.status'),
+      title: $t('common.status'),
       width: 100,
       cellRender: canInlineUpdate
         ? {

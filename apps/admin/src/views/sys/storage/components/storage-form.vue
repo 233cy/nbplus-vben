@@ -5,7 +5,7 @@ import { computed, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
-import { Form, FormItem, Input, InputNumber, InputPassword, Select, Switch, message } from 'ant-design-vue';
+import { Form, FormItem, Input, InputNumber, InputPassword, message, Select, Switch } from 'ant-design-vue';
 
 import { createStorageApi, updateStorageApi } from '#/api/sys/storage';
 import { $t } from '#/locales';
@@ -21,6 +21,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 const schemas = ref<StorageApi.DriverSchema[]>([]);
 const form = ref<Partial<StorageApi.StorageItem>>({});
 const isEdit = ref(false);
+const isReadonly = ref(false);
 const formRef = ref();
 
 function handleOpenChange(isOpen: boolean) {
@@ -28,10 +29,11 @@ function handleOpenChange(isOpen: boolean) {
     return;
   }
 
-  const data = drawerApi.getData<{ form?: Partial<StorageApi.StorageItem>; schemas?: StorageApi.DriverSchema[] }>();
+  const data = drawerApi.getData<{ form?: Partial<StorageApi.StorageItem>; readonly?: boolean; schemas?: StorageApi.DriverSchema[] }>();
   schemas.value = data?.schemas || [];
-  form.value = { ...(data?.form || {}) };
+  form.value = { ...data?.form };
   isEdit.value = !!form.value.id;
+  isReadonly.value = data?.readonly ?? false;
 
   // 新增时按当前引擎填充默认配置
   if (!isEdit.value && form.value.engine && schemas.value.length > 0) {
@@ -70,7 +72,7 @@ function onEngineChange(engine: string) {
 function updateConfig(key: string, value: any) {
   form.value = {
     ...form.value,
-    config: { ...(form.value.config || {}), [key]: value },
+    config: { ...form.value.config, [key]: value },
   };
 }
 
@@ -84,11 +86,7 @@ async function handleSubmit() {
 
   drawerApi.lock();
   try {
-    if (isEdit.value) {
-      await updateStorageApi(form.value as StorageApi.StorageItem);
-    } else {
-      await createStorageApi(form.value as StorageApi.SaveParams);
-    }
+    await (isEdit.value ? updateStorageApi(form.value as StorageApi.StorageItem) : createStorageApi(form.value as StorageApi.SaveParams));
     message.success($t('sys.storage.saveSuccess'));
     drawerApi.close();
     emit('success');
@@ -99,22 +97,25 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <Drawer :title="isEdit ? $t('sys.storage.edit') : $t('sys.storage.create')">
-    <Form ref="formRef" layout="vertical" :model="form">
-      <FormItem :label="$t('sys.storage.fields.name')" name="name" :rules="[{ required: true, message: $t('sys.storage.fields.name') + '必填' }]">
+  <Drawer
+    :title="isReadonly ? $t('common.detail') : isEdit ? $t('sys.storage.edit') : $t('sys.storage.create')"
+    :show-confirm-button="!isReadonly"
+  >
+    <Form ref="formRef" layout="vertical" :model="form" :disabled="isReadonly">
+      <FormItem :label="$t('sys.storage.fields.name')" name="name" :rules="[{ required: true, message: `${$t('sys.storage.fields.name') }必填` }]">
         <Input v-model:value="form.name" :placeholder="$t('sys.storage.fields.name')" />
       </FormItem>
-      <FormItem :label="$t('sys.storage.fields.code')" name="code" :rules="[{ required: true, message: $t('sys.storage.fields.code') + '必填' }]">
+      <FormItem :label="$t('sys.storage.fields.code')" name="code" :rules="[{ required: true, message: `${$t('sys.storage.fields.code') }必填` }]">
         <Input v-model:value="form.code" :disabled="isEdit" :placeholder="$t('sys.storage.fields.code')" />
       </FormItem>
-      <FormItem :label="$t('sys.storage.fields.engine')" name="engine" :rules="[{ required: true, message: $t('sys.storage.fields.engine') + '必填' }]">
+      <FormItem :label="$t('sys.storage.fields.engine')" name="engine" :rules="[{ required: true, message: `${$t('sys.storage.fields.engine') }必填` }]">
         <Select :value="form.engine" :options="engineOptions" class="w-full" @change="(value: any) => onEngineChange(value as string)" />
       </FormItem>
       <FormItem :label="$t('sys.storage.fields.sort')" name="sort">
         <InputNumber v-model:value="form.sort" class="w-full" :min="0" />
       </FormItem>
-      <FormItem :label="$t('sys.storage.fields.status')" name="status">
-        <Switch v-model:checked="form.status" :checkedValue="1" :unCheckedValue="2" />
+      <FormItem :label="$t('common.status')" name="status">
+        <Switch v-model:checked="form.status" :checked-value="1" :un-checked-value="2" />
       </FormItem>
 
       <div class="mt-4 border-t pt-4">

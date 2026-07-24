@@ -92,7 +92,7 @@ const kindIcon = computed(() => (props.file.kind === 'video' ? 'ant-design:play-
       </div>
       <div class="act act-danger" @click="ctx?.remove(file)">
         <IconifyIcon icon="ant-design:delete-outlined" class="text-lg" />
-        <span class="text-xs">{{ $t('core.upload.delete') }}</span>
+        <span class="text-xs">{{ $t('common.delete') }}</span>
       </div>
     </div>
   </div>

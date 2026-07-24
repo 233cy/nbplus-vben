@@ -100,7 +100,7 @@ const menuPkg = useMenuPkg(gridApi);
           :api-fn="batchUpdateMenuPkgApi"
           :get-ids="menuPkg.getSelectedIds"
           :on-success="menuPkg.onRefresh"
-          :fields="[{ fieldName: 'status', label: $t('sys.menu-pkg.fields.status'), dictCode: 'is_enable' }]"
+          :fields="[{ fieldName: 'status', label: $t('common.status'), dictCode: 'is_enable' }]"
         />
 
         <Button v-if="canCreate" type="primary" @click="formDrawerApi.setData({}).open()">

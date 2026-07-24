@@ -5,20 +5,10 @@
   "detail": "权限包详情",
   "assignMenus": "分配权限",
   "fields": {
-    "id": "ID",
     "code": "权限包编码",
     "name": "权限包名称",
     "sort": "排序",
-    "status": "状态",
-    "remark": "备注",
-    "createdAt": "创建时间",
-    "updatedAt": "更新时间"
-  },
-  "options": {
-    "status": {
-      "1": "启用",
-      "2": "禁用"
-    }
+    "remark": "备注"
   },
   "placeholders": {
     "code": "请输入权限包编码",
@@ -27,13 +17,6 @@
     "remark": "请输入备注"
   },
   "msg": {
-    "CREATE_SUCCESS": "新增成功",
-    "UPDATE_SUCCESS": "更新成功",
-    "DELETE_SUCCESS": "删除成功",
-    "BATCH_DELETE_SUCCESS": "批量删除成功",
-    "BATCH_UPDATE_SUCCESS": "批量更新成功",
-    "ASSIGN_MENUS_SUCCESS": "分配权限成功",
-    "INLINE_UPDATE_SUCCESS": "更新成功",
-    "selectSuccess": "已选择"
+    "ASSIGN_MENUS_SUCCESS": "分配权限成功"
   }
 }

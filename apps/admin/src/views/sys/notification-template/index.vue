@@ -105,7 +105,7 @@ const template = useNotificationTemplate(gridApi);
           :get-ids="template.getSelectedIds"
           :on-success="template.onRefresh"
           :fields="[
-            { fieldName: 'status', label: $t('sys.notification-template.fields.status'), options: [{ label: $t('common.enabled'), value: 1 }, { label: $t('common.disabled'), value: 2 }] },
+            { fieldName: 'status', label: $t('common.status'), options: [{ label: $t('common.enabled'), value: 1 }, { label: $t('common.disabled'), value: 2 }] },
           ]"
         />
 

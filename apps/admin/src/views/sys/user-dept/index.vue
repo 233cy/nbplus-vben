@@ -13,8 +13,11 @@ import { $t } from '#/locales';
 import DeptForm from './components/dept-form.vue';
 import DeptMoveModal from './components/dept-move-modal.vue';
 import { useDept, useDeptMove } from './composables';
+import { useUserDeptPermission } from './permissions';
 import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
+
+const { canCreate } = useUserDeptPermission();
 
 // 先创建 grid，后续把操作回调挂到 handlers 上
 const handlers = {
@@ -113,7 +116,7 @@ async function handleFormSuccess(payload: { originalParentId?: null | string; pa
             </template>
             {{ $t('sys.user-dept.collapseAll') }}
           </Button>
-          <Button type="primary" @click="deptFormDrawerApi.setData({}).open()">
+          <Button v-if="canCreate" type="primary" @click="deptFormDrawerApi.setData({}).open()">
             <Plus class="size-4" />
             {{ $t('sys.user-dept.addRoot') }}
           </Button>

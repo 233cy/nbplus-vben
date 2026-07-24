@@ -3,28 +3,16 @@
   "addRoot": "新增顶级菜单",
   "addChild": "新增子菜单",
   "detail": "查看菜单",
-  "edit": "编辑",
-  "delete": "删除",
   "move": "移动到",
   "moveTitle": "移动「{title}」到",
   "moveSuccess": "移动成功",
-  "confirmDelete": "确认删除该菜单？",
   "expandAll": "全部展开",
   "collapseAll": "全部收起",
   "searchPlaceholder": "搜索菜单名称或路由名称",
-  "batchDeleteEmpty": "请先勾选要删除的菜单",
-  "batchDeleteSuccess": "成功删除 {count} 个菜单",
-  "batchDeleteWarning": "未删除任何菜单，{count} 个菜单包含子节点或不存在",
-  "batchDeletePartial": "成功删除 {deleted} 个菜单，{skipped} 个因包含子节点未删除",
   "generatePermission": "生成标准权限码",
   "pickMethod": "从接口选择",
   "rootLevel": "顶级",
-  "keepAlive": {
-    "on": "缓存",
-    "off": "不缓存"
-  },
   "type": {
-    "label": "菜单类型",
     "dir": "目录",
     "menu": "菜单",
     "button": "按钮/权限码",
@@ -52,42 +40,13 @@
     "isHideBreadcrumb": "隐藏面包屑",
     "isHideTab": "隐藏标签页",
     "isKeepAlive": "缓存页面",
-    "isAffixTab": "固定标签页",
-    "status": "状态"
-  },
-  "status": {
-    "enabled": "启用",
-    "disabled": "禁用"
-  },
-  "badgeType": {
-    "off": "关闭",
-    "dot": "圆点",
-    "normal": "文字"
-  },
-  "badgeVariant": {
-    "default": "默认",
-    "primary": "主色",
-    "success": "成功",
-    "warning": "警告",
-    "destructive": "危险"
+    "isAffixTab": "固定标签页"
   },
   "permission": {
-    "list": "查询",
-    "detail": "详情",
-    "create": "新增",
-    "update": "修改",
-    "delete": "删除",
-    "batchDelete": "批量删除",
-    "batchUpdate": "批量修改",
-    "standardPermissions": "标准权限码",
     "controllerPrefix": "控制器前缀",
     "method": "接口方法",
     "scan": "扫描接口",
     "pickTitle": "从控制器接口选择权限码",
-    "prefixRequired": "请输入权限码前缀",
-    "selectRequired": "请至少选择一个权限码",
-    "controllerPrefixRequired": "请输入控制器前缀",
-    "noMethods": "未找到该前缀对应的控制器或接口",
     "generateTitle": "生成「{title}」标准权限码",
     "generateSuccess": "成功生成 {created} 个权限码，跳过 {skipped} 个已存在权限码",
     "picked": "已填充权限码：{permission}"
@@ -95,7 +54,6 @@
   "placeholder": {
     "component": "如：/system/config/index 或 BasicLayout",
     "permission": "如：system:config:edit",
-    "icon": "如：lucide:settings",
     "parentId": "请选择父级菜单",
     "activePath": "用于高亮侧边栏，如详情页激活列表菜单",
     "badge": "文字内容",
@@ -110,6 +68,5 @@
     "permissionRequired": "请输入权限码"
   },
   "createSuccess": "菜单创建成功",
-  "updateSuccess": "菜单更新成功",
-  "deleteSuccess": "菜单删除成功"
+  "updateSuccess": "菜单更新成功"
 }

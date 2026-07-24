@@ -55,7 +55,7 @@ const formSchema = computed((): VbenFormSchema[] => [
       placeholder: selectedChannel.value === 'sms' ? $t('core.authentication.codeLogin.phonePlaceholder') : $t('core.authentication.codeLogin.emailPlaceholder'),
     },
     fieldName: 'codeTarget',
-    defaultValue: '18700842199',
+    defaultValue: '',
     label: selectedChannel.value === 'sms' ? $t('core.authentication.codeLogin.phone') : $t('core.authentication.codeLogin.email'),
     rules:
       selectedChannel.value === 'sms'

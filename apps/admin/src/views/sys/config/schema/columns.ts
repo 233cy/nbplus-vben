@@ -148,7 +148,7 @@ export function useColumns(
     },
     {
       field: 'createdAt',
-      title: $t('sys.config.fields.createdAt'),
+      title: $t('common.createdAt'),
       width: 170,
       sortable: true,
       formatter: ({ cellValue }: { cellValue: any }) => formatUnixTime(cellValue),

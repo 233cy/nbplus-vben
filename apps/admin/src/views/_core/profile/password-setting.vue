@@ -4,6 +4,7 @@ import { message } from 'ant-design-vue';
 import { useVbenForm, z } from '#/adapter/form';
 import { changePasswordApi } from '#/api';
 import { $t } from '#/locales';
+import { isPasswordValid, passwordPolicyDescription } from '#/utils/password-policy';
 
 const [Form, formApi] = useVbenForm({
   layout: 'horizontal',
@@ -25,7 +26,10 @@ const [Form, formApi] = useVbenForm({
       label: $t('core.profile.password.newPassword'),
       component: 'PasswordInput',
       componentProps: { placeholder: $t('core.profile.password.newPasswordPlaceholder') },
-      rules: 'required',
+      rules: z
+        .string()
+        .min(1, { message: $t('core.profile.password.newPasswordPlaceholder') })
+        .refine(isPasswordValid, { message: passwordPolicyDescription() }),
     },
     {
       fieldName: 'confirmPassword',
