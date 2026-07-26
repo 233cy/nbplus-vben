@@ -51,13 +51,13 @@ const config = defineModel<Record<string, any>>('config', { required: true });
     <DriverConfigForm :driver="driver" v-model:config="config" />
 
     <div class="flex justify-end gap-2">
-      <Button size="small" :disabled="!driver.isValid || !canPreview" @click="emit('preview')">
+      <Button  :disabled="!driver.isValid || !canPreview" @click="emit('preview')">
         <template #icon>
           <IconifyIcon icon="ant-design:eye-outlined" />
         </template>
         {{ $t('sys.captcha-driver.preview') }}
       </Button>
-      <Button type="primary" size="small" :loading="saving" :disabled="!driver.isValid || !canUpdate" @click="emit('save')">
+      <Button type="primary"  :loading="saving" :disabled="!driver.isValid || !canUpdate" @click="emit('save')">
         <template #icon>
           <IconifyIcon icon="ant-design:save-outlined" />
         </template>

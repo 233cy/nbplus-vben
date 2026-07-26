@@ -73,20 +73,20 @@ defineExpose({
     </div>
 
     <Spin :spinning="fieldForm.loading.value">
-      <Table :columns="fieldColumns" :data-source="fieldForm.fields.value" :pagination="false" row-key="columnName" size="small">
+      <Table :columns="fieldColumns" :data-source="fieldForm.fields.value" :pagination="false" row-key="columnName" >
         <template #bodyCell="{ column, record, index }">
           <template v-if="column.dataIndex === 'columnName'">
-            <Input v-model:value="record.columnName" size="small" placeholder="如：userName" />
+            <Input v-model:value="record.columnName"  placeholder="如：userName" />
           </template>
           <template v-else-if="column.dataIndex === 'component'">
-            <Select v-model:value="record.component" :options="COMPONENT_OPTIONS" size="small" class="w-full" @change="onComponentChange(record as CurdAdminApi.CurdField)" />
+            <Select v-model:value="record.component" :options="COMPONENT_OPTIONS"  class="w-full" @change="onComponentChange(record as CurdAdminApi.CurdField)" />
           </template>
           <template v-else-if="column.dataIndex === 'dictCode'">
             <Select
               v-if="DICT_COMPONENTS.has(record.component)"
               :value="getDictCode(record as CurdAdminApi.CurdField)"
               :options="fieldForm.dictOptions.value"
-              size="small"
+              
               class="w-full"
               show-search
               option-filter-prop="label"
@@ -97,7 +97,7 @@ defineExpose({
             <span v-else class="text-xs text-gray-300">—</span>
           </template>
           <template v-else-if="column.dataIndex === 'label'">
-            <Input v-model:value="record.label" size="small" />
+            <Input v-model:value="record.label"  />
           </template>
           <template v-else-if="column.dataIndex === 'isList'">
             <Checkbox v-model:checked="record.isList" />
@@ -115,10 +115,10 @@ defineExpose({
             <Checkbox v-model:checked="record.isBatchUpdate" :disabled="!BATCH_UPDATE_COMPONENTS.includes(record.component)" />
           </template>
           <template v-else-if="column.dataIndex === 'sort'">
-            <InputNumber v-model:value="record.sort" size="small" :min="0" class="w-full" />
+            <InputNumber v-model:value="record.sort"  :min="0" class="w-full" />
           </template>
           <template v-else-if="column.key === 'action'">
-            <Button size="small" type="text" danger @click="fieldForm.removeField(index)">
+            <Button  type="text" danger @click="fieldForm.removeField(index)">
               <IconifyIcon icon="ant-design:delete-outlined" />
             </Button>
           </template>

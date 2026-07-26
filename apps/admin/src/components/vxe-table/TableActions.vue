@@ -82,19 +82,19 @@ const autoAdjustOverflow = { adjustX: 1 as const, adjustY: 1 as const };
         :placement="props.popconfirmPlacement"
         @confirm="item.onClick"
       >
-        <Button type="link" size="small" :danger="item.danger" :disabled="item.disabled" :loading="item.loading">
+        <Button size="small" type="link" :danger="item.danger" :disabled="item.disabled" :loading="item.loading">
           <IconifyIcon v-if="item.icon" :icon="item.icon" class="size-4" :class="{ 'mr-1': showLabel }" />
           <span v-if="showLabel">{{ item.label }}</span>
         </Button>
       </Popconfirm>
-      <Button v-else type="link" size="small" :danger="item.danger" :disabled="item.disabled" :loading="item.loading" @click="item.onClick">
+      <Button v-else size="small" type="link" :danger="item.danger" :disabled="item.disabled" :loading="item.loading" @click="item.onClick">
         <IconifyIcon v-if="item.icon" :icon="item.icon" class="size-4" :class="{ 'mr-1': showLabel }" />
         <span v-if="showLabel">{{ item.label }}</span>
       </Button>
     </template>
 
     <Dropdown v-if="hasMore" trigger="click">
-      <Button type="link" size="small">
+      <Button size="small" type="link">
         <span v-if="moreShowLabel" class="mr-1">{{ $t('common.more') }}</span>
         <IconifyIcon :icon="moreShowLabel ? 'lucide:chevron-down' : 'lucide:more-horizontal'" class="size-4" />
       </Button>

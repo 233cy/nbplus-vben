@@ -181,22 +181,22 @@ function onPrimaryAction(file: QueueFile) {
 
             <!-- 操作按钮：纵向排列，避免挤压 -->
             <div class="mt-2 flex w-full flex-wrap gap-1">
-              <a-button v-if="!file.isStart" type="link" size="small" @click.stop="onPrimaryAction(file)"> {{ $t('core.upload.uploadAction') }} </a-button>
-              <a-button v-else-if="file.status === 'error' && !file.preFailed" type="link" size="small" @click.stop="onPrimaryAction(file)"> {{ $t('core.upload.retry') }} </a-button>
+              <a-button v-if="!file.isStart" type="link" @click.stop="onPrimaryAction(file)"> {{ $t('core.upload.uploadAction') }} </a-button>
+              <a-button v-else-if="file.status === 'error' && !file.preFailed" type="link" @click.stop="onPrimaryAction(file)"> {{ $t('core.upload.retry') }} </a-button>
               <template v-else-if="file.status !== 'done'">
-                <a-button v-if="file.status === 'checking'" type="link" size="small" @click.stop="cancelHashCheck(file)"> {{ $t('core.upload.cancelHashCheck') }} </a-button>
+                <a-button v-if="file.status === 'checking'" type="link" @click.stop="cancelHashCheck(file)"> {{ $t('core.upload.cancelHashCheck') }} </a-button>
 
-                <a-button v-else-if="file.engine === 'tus'" type="link" size="small" :disabled="file.status === 'queued'" @click.stop="onPrimaryAction(file)">
+                <a-button v-else-if="file.engine === 'tus'" type="link" :disabled="file.status === 'queued'" @click.stop="onPrimaryAction(file)">
                   {{ file.status === 'queued' ? $t('core.upload.waiting') : file.paused ? $t('core.upload.resume') : $t('core.upload.pause') }}
                 </a-button>
 
-                <a-button v-else type="link" size="small" disabled>
+                <a-button v-else type="link" disabled>
                   {{ file.status === 'queued' ? $t('core.upload.waiting') : $t('core.upload.uploading') }}
                 </a-button>
               </template>
 
-              <a-button type="link" size="small" :disabled="file.status !== 'done'" @click.stop="download(file)"> {{ $t('core.upload.download') }} </a-button>
-              <a-button type="link" danger size="small" @click.stop="remove(file)"> {{ $t('common.delete') }} </a-button>
+              <a-button type="link" :disabled="file.status !== 'done'" @click.stop="download(file)"> {{ $t('core.upload.download') }} </a-button>
+              <a-button type="link" danger @click.stop="remove(file)"> {{ $t('common.delete') }} </a-button>
             </div>
           </a-list-item>
         </template>

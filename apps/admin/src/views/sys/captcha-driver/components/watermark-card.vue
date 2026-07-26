@@ -53,7 +53,7 @@ function updateFontsize(value: number) {
       </FormItem>
     </Form>
     <div class="mt-2 flex justify-end">
-      <Button type="primary" size="small" :loading="saving" :disabled="!canWatermark" @click="emit('save')">
+      <Button type="primary"  :loading="saving" :disabled="!canWatermark" @click="emit('save')">
         <template #icon>
           <IconifyIcon icon="ant-design:save-outlined" />
         </template>

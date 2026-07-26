@@ -1,13 +1,24 @@
 import { requestClient } from '#/api/request';
 
 export namespace NotificationInboxApi {
+  /** 消息附件（任务产物引用，path 为存储逻辑路径，下载需经预览接口解析） */
+  export interface Attachment {
+    name: string;
+    path: string;
+    size?: number;
+  }
+
+  export interface MessageExtra {
+    attachments?: Attachment[];
+  }
+
   export interface MessageItem {
     id: string;
     userId: string;
     title: string;
     summary: string;
     content: string;
-    extra: Record<string, any>;
+    extra?: MessageExtra;
     isRead: number;
     readAt: number;
     status: number;

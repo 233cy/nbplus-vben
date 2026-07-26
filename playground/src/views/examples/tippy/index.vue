@@ -247,7 +247,7 @@ function goDoc() {
           Tippy
           是一个轻量级的提示工具库，它可以用来创建各种交互式提示，如工具提示、引导提示等。
         </p>
-        <Button type="link" size="small" @click="goDoc">查看文档</Button>
+        <Button type="link" @click="goDoc">查看文档</Button>
       </div>
     </template>
     <Card title="指令形式使用">
@@ -294,7 +294,7 @@ function goDoc() {
           class="cursor-default text-secondary-foreground hover:text-secondary-foreground"
         >
           更多配置请
-          <Button type="link" size="small" @click="goDoc">查看文档</Button>
+          <Button type="link" @click="goDoc">查看文档</Button>
           ，这里只列出了一些常用的配置
         </p>
       </template>

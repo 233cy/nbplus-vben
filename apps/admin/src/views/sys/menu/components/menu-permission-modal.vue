@@ -238,7 +238,7 @@ watch(showVisible, async (visible) => {
           >
             <div class="flex items-center gap-2">
               <template v-if="isSingle">
-                <RadioGroup v-model:value="selectedSingle" size="small">
+                <RadioGroup v-model:value="selectedSingle" >
                   <RadioButton :value="g.permission">{{ g.permission }}</RadioButton>
                 </RadioGroup>
               </template>
@@ -253,7 +253,7 @@ watch(showVisible, async (visible) => {
                 <span class="text-sm text-[hsl(var(--muted-foreground))]">{{ g.titles[0] }}</span>
               </template>
               <template v-else>
-                <RadioGroup v-model:value="titleMap[g.permission]" size="small">
+                <RadioGroup v-model:value="titleMap[g.permission]" >
                   <RadioButton v-for="t in g.titles" :key="t" :value="t">
                     {{ t }}
                   </RadioButton>

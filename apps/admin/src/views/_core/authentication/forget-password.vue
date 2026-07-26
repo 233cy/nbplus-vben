@@ -183,7 +183,7 @@ function goLogin() {
     </div>
 
     <!-- 步骤条 -->
-    <Steps :current="currentStep" class="mb-8" size="small">
+    <Steps :current="currentStep" class="mb-8" >
       <Steps.Step :title="$t('core.authentication.forgetPasswordPage.step1')" />
       <Steps.Step :title="$t('core.authentication.forgetPasswordPage.step2')" />
       <Steps.Step :title="$t('core.authentication.forgetPasswordPage.step3')" />

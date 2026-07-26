@@ -1,5 +1,3 @@
-import type { Ref } from 'vue';
-
 import type { VbenFormSchema } from '#/adapter/form';
 
 import { $t } from '#/locales';
@@ -7,7 +5,7 @@ import { $t } from '#/locales';
 /**
  * 系统参数列表搜索表单 Schema
  */
-export function useGridFormSchema(groupsOptions: Ref<{ label: string; value: string }[]>): VbenFormSchema[] {
+export function useGridFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
@@ -17,16 +15,6 @@ export function useGridFormSchema(groupsOptions: Ref<{ label: string; value: str
         allowClear: true,
         placeholder: $t('sys.config.placeholder.keyword'),
       },
-    },
-    {
-      component: 'Select',
-      fieldName: 'groups',
-      label: $t('sys.config.fields.groups'),
-      componentProps: () => ({
-        allowClear: true,
-        placeholder: $t('sys.config.placeholder.groups'),
-        options: groupsOptions.value,
-      }),
     },
     {
       component: 'DictSelect',

@@ -59,7 +59,7 @@ export function useColumns(
       title: $t('sys.config.fields.groups'),
       minWidth: 120,
       sortable: true,
-      formatter: ({ cellValue }: { cellValue: any }) => cellValue || '-',
+      cellRender: { name: 'CellDict', props: { code: 'sys_config_groups' } },
     },
     {
       field: 'component',

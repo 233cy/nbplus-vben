@@ -212,16 +212,16 @@ defineExpose<PermissionAssignPanelExpose>({
 
       <div class="flex flex-wrap items-center gap-2">
         <div class="inline-flex flex-wrap gap-2 rounded-lg border bg-background p-1.5">
-          <Button size="small" @click="expandAll">展开全部</Button>
-          <Button size="small" @click="collapseAll">收起全部</Button>
-          <Button size="small" :disabled="readonly" @click="checkAll">全选</Button>
-          <Button size="small" :disabled="readonly" @click="uncheckAll">清空</Button>
-          <Button size="small" :disabled="readonly" @click="emit('reset')">恢复默认</Button>
+          <Button  @click="expandAll">展开全部</Button>
+          <Button  @click="collapseAll">收起全部</Button>
+          <Button  :disabled="readonly" @click="checkAll">全选</Button>
+          <Button  :disabled="readonly" @click="uncheckAll">清空</Button>
+          <Button  :disabled="readonly" @click="emit('reset')">恢复默认</Button>
         </div>
 
         <div class="inline-flex flex-wrap gap-2 rounded-lg border bg-background p-1.5">
-          <Button size="small" :disabled="readonly" @click="() => checkByType(2)">菜单</Button>
-          <Button size="small" :disabled="readonly" @click="() => checkByType(3)">按钮</Button>
+          <Button  :disabled="readonly" @click="() => checkByType(2)">菜单</Button>
+          <Button  :disabled="readonly" @click="() => checkByType(3)">按钮</Button>
         </div>
 
         <span class="ml-2 text-sm text-muted-foreground">
@@ -240,7 +240,7 @@ defineExpose<PermissionAssignPanelExpose>({
           @click="!readonly && !isDisabled(group.dir) && toggleCheck(group.dir, getNodeCheckState(group.dir) !== 2)"
         >
           <div class="flex items-center gap-3">
-            <Button type="text" size="small" @click.stop="toggleExpand(group.dir)">
+            <Button type="text"  @click.stop="toggleExpand(group.dir)">
               <IconifyIcon :icon="isExpanded(group.dir) ? 'lucide:chevron-down' : 'lucide:chevron-right'" class="size-4" />
             </Button>
             <button

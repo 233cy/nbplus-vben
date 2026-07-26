@@ -17,23 +17,30 @@
   "testSendSkipped": "{count} 位用户因缺少联系方式已跳过",
   "variableKey": "变量名",
   "variableDesc": "变量说明",
+  "labelVar": "别名",
+  "labelVarTip": "单选一个变量作为合并消息的别名来源（聚合别名列表）；不选则默认取第一个变量",
   "addVariable": "添加变量",
   "availableVariables": "可用变量",
   "clickToInsertVariable": "点击变量可插入到当前输入框",
+  "mergeWindowTip": "0 为不合并；大于 0 时，窗口内同模板同接收人的消息合并为一条",
+  "mergeVars": {
+    "tempMsgCount": "合并条数（开启合并自动可用）",
+    "tempMsgLabels": "各消息别名列表（开启合并自动可用）",
+    "tempMsgOneLabel": "第一条消息的别名（开启合并自动可用）"
+  },
   "fields": {
     "code": "模板编码",
     "name": "模板名称",
     "bizType": "业务类型",
     "variables": "变量声明",
     "remark": "备注",
-    "sort": "排序"
+    "sort": "排序",
+    "mergeWindow": "合并窗口（秒）"
   },
   "items": {
     "title": "渠道内容",
     "add": "添加渠道内容",
     "edit": "编辑渠道内容",
-    "channelType": "渠道类型",
-    "remark": "备注/别名",
-    "remarkPlaceholder": "用于渠道内容列表展示，例如：短信验证码模板"
+    "channelType": "渠道类型"
   }
 }

@@ -57,7 +57,6 @@ export function useNotificationCenter() {
       avatar: NOTICE_AVATAR,
       date: formatUnixTime(msg.createdAt),
       isRead: msg.isRead === 1,
-      link: typeof msg.extra?.url === 'string' && msg.extra.url !== '' ? msg.extra.url : undefined,
       // 铃铛下拉展示摘要（纯文本），正文可能为富文本 HTML
       message: msg.summary || stripHtml(msg.content),
       title: msg.title,

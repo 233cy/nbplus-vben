@@ -49,7 +49,7 @@ defineExpose({ open });
   <Modal v-model:open="visible" title="在线设备" :footer="null" width="600px">
     <div class="mb-3 flex justify-end">
       <Popconfirm title="确认踢出所有设备？" @confirm="kickAll">
-        <Button danger size="small">
+        <Button danger >
           <IconifyIcon icon="lucide:log-out" class="size-4" />
           全部下线
         </Button>
@@ -59,7 +59,7 @@ defineExpose({ open });
     <OnlineDevices :devices="devices" :loading="loading">
       <template #action="{ device }">
         <Popconfirm title="确认下线该设备？" @confirm="kick(device.tmpId)">
-          <Button type="link" danger size="small">下线</Button>
+          <Button type="link" danger >下线</Button>
         </Popconfirm>
       </template>
     </OnlineDevices>

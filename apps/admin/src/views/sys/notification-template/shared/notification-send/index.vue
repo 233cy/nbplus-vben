@@ -93,14 +93,10 @@ const enabledItems = computed(() => (props.template?.items || []).filter(item =>
 
 const templateChannelOptions = computed(() => [
   { label: $t('sys.notification-template.testSendChannelAll'), value: '' },
-  ...enabledItems.value.map(item => {
-    const name = channelNameMap.value[item.channelType] || item.channelType;
-    const display = item.remark || item.subject || '-';
-    return {
-      label: `${name} - ${display}`,
-      value: item.channelType,
-    };
-  }),
+  ...enabledItems.value.map(item => ({
+    label: channelNameMap.value[item.channelType] || item.channelType,
+    value: item.channelType,
+  })),
 ]);
 
 watch(
@@ -393,11 +389,11 @@ defineExpose({ submit, submitting });
             <div v-for="(row, index) in variableRows" :key="index" class="flex items-center gap-2">
               <Input v-model:value="row.key" class="w-1/3" :placeholder="$t('sys.notification-send.variableKey')" />
               <Input v-model:value="row.value" class="flex-1" :placeholder="$t('sys.notification-send.variableValue')" />
-              <Button size="small" type="link" danger @click="removeVariableRow(index)">
+              <Button type="link" danger @click="removeVariableRow(index)">
                 {{ $t('common.delete') }}
               </Button>
             </div>
-            <Button size="small" type="dashed" block @click="addVariableRow">
+            <Button type="dashed" block @click="addVariableRow">
               + {{ $t('sys.notification-send.variableAdd') }}
             </Button>
           </div>

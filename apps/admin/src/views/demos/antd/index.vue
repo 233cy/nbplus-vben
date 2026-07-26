@@ -330,7 +330,7 @@ const apiSelectStorageCode = ref('');
     <a-card class="mb-5" title="按钮">
       <a-space>
         <a-button>Default</a-button>
-        <a-button type="primary" size="small">
+        <a-button type="primary" >
           <template #icon>
             <IconifyIcon icon="ant-design:alert-filled" />
           </template>

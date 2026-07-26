@@ -96,8 +96,10 @@ export function deleteMenuApi(id: string) {
 }
 
 export interface BatchDeleteResult {
-  deleted: string[];
-  skipped: string[];
+  total: number;
+  success: number;
+  failed: number;
+  errors: { id: string; reason: string }[];
 }
 
 export function batchDeleteMenuApi(ids: string[]) {

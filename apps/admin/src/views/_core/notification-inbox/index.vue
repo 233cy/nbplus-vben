@@ -308,7 +308,7 @@ onMounted(() => {
                       >
                         <Button
                           type="text"
-                          size="small"
+                          
                           danger
                           class="invisible size-5 p-0 group-hover:visible"
                           @click.stop

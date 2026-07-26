@@ -194,7 +194,7 @@ watch(() => form.value.parentId, updateTreeExpandedKeys);
       <FormItem :label="$t('sys.user-dept.fields.code')">
         <Input v-model:value="form.code" :disabled="isReadonly || isEdit" :placeholder="$t('sys.user-dept.placeholder.code')">
           <template v-if="!isEdit && !isReadonly" #addonAfter>
-            <Button type="link" size="small" @click="generateCodeFromName">
+            <Button type="link"  @click="generateCodeFromName">
               {{ $t('sys.user-dept.generateCode') }}
             </Button>
           </template>

@@ -7,11 +7,9 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { Form, FormItem, Input, Select } from 'ant-design-vue';
 
-import { createDictApi, getDictOptionsApi, updateDictApi } from '#/api/sys/dict';
-import CreatableSelect from '#/components/creatable-select/index.vue';
+import { createDictApi, updateDictApi } from '#/api/sys/dict';
+import DictSelect from '#/components/dict/DictSelect.vue';
 import { $t } from '#/locales';
-
-import { getAllGroups } from '../data';
 
 const emit = defineEmits<{
   success: [];
@@ -24,7 +22,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
   async onOpenChange(isOpen) {
     if (!isOpen) return;
     const row = drawerApi.getData<DictApi.DictItem & { readonly?: boolean }>();
-    allDicts.value = await getDictOptionsApi();
     isReadonly.value = row?.readonly ?? false;
     if (row?.id) {
       form.value = {
@@ -45,7 +42,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
 const loading = ref(false);
 const rowId = ref<string | undefined>();
 const isReadonly = ref(false);
-const allDicts = ref<DictApi.DictItem[]>([]);
 
 const form = ref({
   name: '',
@@ -56,11 +52,6 @@ const form = ref({
 });
 
 const isEdit = computed(() => !!rowId.value);
-
-const groupOptions = computed(() => {
-  const groups = getAllGroups(allDicts.value);
-  return groups.map(g => ({ label: g, value: g }));
-});
 
 const statusOptions = [
   { label: $t('common.enabled'), value: 1 },
@@ -101,9 +92,9 @@ async function handleSubmit() {
         />
       </FormItem>
       <FormItem :label="$t('sys.dict.fields.groups')" required :rules="groupRules">
-        <CreatableSelect
+        <DictSelect
           v-model:value="form.groups"
-          :options="groupOptions"
+          code="sys_dict_groups"
           :disabled="isReadonly"
           :placeholder="$t('sys.dict.placeholder.groups')"
         />

@@ -16,14 +16,17 @@ function statusText(status: TaskApi.Status): string {
 export function useColumns(
   onCancel: (row: TaskApi.TaskItem) => Promise<void>,
   onRetry: (row: TaskApi.TaskItem) => Promise<void>,
+  onDelete: (row: TaskApi.TaskItem) => Promise<void>,
 ): VxeTableGridOptions['columns'] {
-  const { canCancel, canRetry } = useTaskPermission();
+  const { canCancel, canRetry, canDelete } = useTaskPermission();
 
   return [
+    { type: 'checkbox', width: 50 },
     { field: 'id', title: 'ID', visible: false },
     {
       field: 'type',
       title: $t('sys.task.type'),
+      cellRender: { name: 'CellDict', props: { code: 'sys_task_type' } },
     },
     {
       field: 'name',
@@ -77,7 +80,14 @@ export function useColumns(
       field: 'error',
       title: $t('sys.task.errorDetail'),
       showOverflow: 'tooltip',
-      formatter: ({ cellValue }: { cellValue: null | string }) => cellValue || '-',
+      formatter: ({ row }: { row: TaskApi.TaskItem }) => {
+        if (row.error) return row.error;
+        const failures = row.result?.failures;
+        if (failures?.length) {
+          return failures.map(f => `${f.id}：${f.reason}`).join('；');
+        }
+        return '-';
+      },
     },
     {
       field: 'createdAt',
@@ -111,6 +121,15 @@ export function useColumns(
               confirmTitle: $t('sys.task.retryConfirm'),
               hidden: (row: TaskApi.TaskItem) => !(canRetry && (row.status === 4 || row.status === 5)),
               onClick: (row: TaskApi.TaskItem) => onRetry(row),
+            },
+            {
+              key: 'delete',
+              label: $t('common.delete'),
+              icon: 'lucide:trash-2',
+              danger: true,
+              confirmTitle: $t('sys.task.deleteConfirm'),
+              hidden: (row: TaskApi.TaskItem) => !(canDelete && row.status !== 1 && row.status !== 2),
+              onClick: (row: TaskApi.TaskItem) => onDelete(row),
             },
           ],
         },

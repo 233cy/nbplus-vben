@@ -16,14 +16,6 @@ export function useGridFormSchema(): VbenFormSchema[] {
       },
     },
     {
-      component: 'Input',
-      fieldName: 'type',
-      label: $t('sys.task.type'),
-      componentProps: {
-        allowClear: true,
-      },
-    },
-    {
       component: 'Select',
       fieldName: 'status',
       label: $t('sys.task.status'),

@@ -61,7 +61,7 @@ const formattedResponse = computed(() => {
       <!-- 头部：标题 + 状态 + 时间/渠道 -->
       <div>
         <div class="flex items-start justify-between gap-3">
-          <h3 class="text-lg font-semibold leading-7">{{ data.channelContentRemark || data.subject || '-' }}</h3>
+          <h3 class="text-lg font-semibold leading-7">{{ data.templateName || data.subject || '-' }}</h3>
           <div class="mt-1 flex shrink-0 gap-1">
             <Tag v-if="data.isResend === 1" color="blue">{{ $t('sys.notification-message.resend') }}</Tag>
             <Tag :color="statusMeta.color">{{ statusMeta.label }}</Tag>

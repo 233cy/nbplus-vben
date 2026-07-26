@@ -33,9 +33,9 @@ const nextPage = () => {
 
 <template>
   <div class="flex gap-4">
-    <Button size="small" @click="prevPage">上一页</Button>
+    <Button @click="prevPage">上一页</Button>
     <p>当前页: {{ page }}</p>
-    <Button size="small" @click="nextPage">下一页</Button>
+    <Button @click="nextPage">下一页</Button>
   </div>
   <div class="p-4">
     <div v-if="isPending">加载中...</div>

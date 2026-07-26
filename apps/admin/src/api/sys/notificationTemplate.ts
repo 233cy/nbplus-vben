@@ -5,7 +5,6 @@ export namespace NotificationTemplateApi {
     id: string;
     templateId: string;
     channelType: string;
-    remark: string;
     subject: string;
     summary: string;
     content: string;
@@ -17,7 +16,6 @@ export namespace NotificationTemplateApi {
 
   export interface TemplateItemSave {
     channelType: string;
-    remark?: string;
     subject?: string;
     summary?: string;
     content?: string;
@@ -34,6 +32,10 @@ export namespace NotificationTemplateApi {
     remark: string;
     status: number;
     sort: number;
+    /** 延迟合并窗口（秒，0=不合并） */
+    mergeWindow: number;
+    /** 别名来源变量（变量声明中单选，合并时聚合别名列表） */
+    mergeLabelVar?: string;
     createdAt: number;
     updatedAt: number;
     items: TemplateItem[];
@@ -54,6 +56,8 @@ export namespace NotificationTemplateApi {
     remark?: string;
     status?: number;
     sort?: number;
+    mergeWindow?: number;
+    mergeLabelVar?: string;
     items?: TemplateItemSave[];
   }
 

@@ -181,7 +181,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       <FormItem :label="$t('sys.notification-channel.fields.code')" name="code" :rules="[{ required: true, message: `${$t('sys.notification-channel.fields.code') }必填` }]">
         <Input v-model:value="form.code" :disabled="isEdit || isReadonly" :placeholder="$t('sys.notification-channel.fields.code')">
           <template v-if="!isEdit && !isReadonly" #addonAfter>
-            <Button type="link" size="small" @click="generateCodeFromName">
+            <Button type="link"  @click="generateCodeFromName">
               {{ $t('sys.user-dept.generateCode') }}
             </Button>
           </template>

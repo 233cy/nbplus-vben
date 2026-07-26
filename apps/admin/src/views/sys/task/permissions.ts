@@ -10,5 +10,7 @@ export function useTaskPermission() {
     canList: hasAccessByCodes(['adm:sys:task:list']),
     canCancel: hasAccessByCodes(['adm:sys:task:cancel']),
     canRetry: hasAccessByCodes(['adm:sys:task:retry']),
+    canDelete: hasAccessByCodes(['adm:sys:task:delete']),
+    canBatchDelete: hasAccessByCodes(['adm:sys:task:batch-delete']),
   };
 }

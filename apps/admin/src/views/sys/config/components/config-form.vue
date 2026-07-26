@@ -7,8 +7,8 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { Form, FormItem, Input, Select, Switch, Textarea } from 'ant-design-vue';
 
-import { createConfigApi, getConfigOptionsApi, updateConfigApi } from '#/api/sys/config';
-import CreatableSelect from '#/components/creatable-select/index.vue';
+import { createConfigApi, updateConfigApi } from '#/api/sys/config';
+import DictSelect from '#/components/dict/DictSelect.vue';
 import { $t } from '#/locales';
 
 import { COMPONENT_OPTIONS } from '../data';
@@ -26,7 +26,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (!isOpen) return;
     const row = drawerApi.getData<ConfigApi.ConfigItem & { readonly?: boolean }>();
     readonly.value = row?.readonly ?? false;
-    allOptions.value = await getConfigOptionsApi();
     if (row?.id) {
       form.value = {
         groups: row.groups,
@@ -62,7 +61,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 const loading = ref(false);
 const rowId = ref<string | undefined>();
-const allOptions = ref<ConfigApi.GroupOption[]>([]);
 
 interface ConfigFormState {
   groups: string;
@@ -103,8 +101,6 @@ const drawerTitle = computed(() => {
   return isEdit.value ? $t('sys.config.editItem') : $t('sys.config.addItem');
 });
 
-const groupOptions = computed(() => allOptions.value);
-
 const valueInputItem = computed(() => ({
   component: form.value.component ?? 'Input',
   isEncrypted: form.value.isEncrypted ?? 2,
@@ -112,7 +108,6 @@ const valueInputItem = computed(() => ({
   label: form.value.label,
   value: form.value.value,
   groups: form.value.groups,
-  groupsLabel: form.value.groups,
   isPublic: form.value.isPublic ?? 2,
   isSys: 2,
   sort: form.value.sort ?? 0,
@@ -161,9 +156,9 @@ async function handleSubmit() {
   <Drawer :title="drawerTitle" :loading="loading" :show-confirm-button="!readonly" width="520">
     <Form :model="form" layout="vertical" class="mt-4" :disabled="readonly">
       <FormItem :label="$t('sys.config.fields.groups')" required :rules="groupRules">
-        <CreatableSelect
+        <DictSelect
           v-model:value="form.groups"
-          :options="groupOptions"
+          code="sys_config_groups"
           :disabled="readonly"
           :placeholder="$t('sys.config.placeholder.groups')"
         />

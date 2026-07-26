@@ -125,10 +125,10 @@ async function handleSubmit() {
     <div class="mb-2 flex items-center justify-between">
       <span class="text-sm font-medium">{{ $t('sys.role.fields.dataScopeCustom') }}</span>
       <Space v-if="isCustom">
-        <Button size="small" @click="handleExpandAll">{{ $t('sys.role.dataScopeModal.expandAll') }}</Button>
-        <Button size="small" @click="handleCollapseAll">{{ $t('sys.role.dataScopeModal.collapseAll') }}</Button>
-        <Button size="small" @click="handleCheckAll">{{ $t('sys.role.dataScopeModal.checkAll') }}</Button>
-        <Button size="small" @click="handleUncheckAll">{{ $t('sys.role.dataScopeModal.uncheckAll') }}</Button>
+        <Button  @click="handleExpandAll">{{ $t('sys.role.dataScopeModal.expandAll') }}</Button>
+        <Button  @click="handleCollapseAll">{{ $t('sys.role.dataScopeModal.collapseAll') }}</Button>
+        <Button  @click="handleCheckAll">{{ $t('sys.role.dataScopeModal.checkAll') }}</Button>
+        <Button  @click="handleUncheckAll">{{ $t('sys.role.dataScopeModal.uncheckAll') }}</Button>
       </Space>
     </div>
 

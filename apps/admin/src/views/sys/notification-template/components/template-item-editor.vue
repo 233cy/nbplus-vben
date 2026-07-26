@@ -17,11 +17,14 @@ interface Props {
   modelValue?: NotificationTemplateApi.TemplateItemSave[];
   isReadonly?: boolean;
   variables?: Record<string, string>;
+  /** 延迟合并窗口（秒），>0 时渠道编辑器的可用变量追加三个固定合并变量 */
+  mergeWindow?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: () => [],
   isReadonly: false,
+  mergeWindow: 0,
 });
 
 const emit = defineEmits<{
@@ -33,14 +36,17 @@ const schemas = ref<NotificationChannelApi.DriverSchema[]>([]);
 
 const channelNameMap = computed(() => {
   const map: Record<string, string> = {};
-  schemas.value.forEach(item => {
+  schemas.value.forEach((item) => {
     map[item.code] = item.label;
   });
   return map;
 });
 
 function syncFromProps() {
-  items.value = (props.modelValue || []).map(item => ({ ...item, extra: item.extra || {} }));
+  items.value = (props.modelValue || []).map((item) => ({
+    ...item,
+    extra: item.extra || {},
+  }));
 }
 
 async function loadSchemas() {
@@ -66,10 +72,25 @@ function openModal(data?: any) {
   templateItemModalApi.setData({
     data: (data as NotificationTemplateApi.TemplateItemSave) ?? null,
     existingItems: items.value,
-    variables: props.variables,
+    variables: availableVariables.value,
   });
   templateItemModalApi.open();
 }
+
+/** 可用变量 = 模板声明变量 + （开启合并时）三个固定合并变量 */
+const availableVariables = computed<Record<string, string>>(() => {
+  if ((props.mergeWindow ?? 0) <= 0) {
+    return { ...props.variables };
+  }
+  return {
+    ...props.variables,
+    temp_msg_count: $t('sys.notification-template.mergeVars.tempMsgCount'),
+    temp_msg_labels: $t('sys.notification-template.mergeVars.tempMsgLabels'),
+    temp_msg_one_label: $t(
+      'sys.notification-template.mergeVars.tempMsgOneLabel',
+    ),
+  };
+});
 
 function handleDelete(index: number) {
   const nextItems = [...items.value];
@@ -79,7 +100,7 @@ function handleDelete(index: number) {
 
 function handleSubmit(item: NotificationTemplateApi.TemplateItemSave) {
   const nextItems = [...items.value];
-  const index = nextItems.findIndex(i => i.channelType === item.channelType);
+  const index = nextItems.findIndex((i) => i.channelType === item.channelType);
   if (index === -1) {
     nextItems.push(item);
   } else {
@@ -95,15 +116,9 @@ const columns = [
     key: 'channelType',
   },
   {
-    title: $t('sys.notification-template.items.remark'),
-    dataIndex: 'remark',
-    key: 'remark',
-  },
-  {
     title: $t('common.status'),
     dataIndex: 'status',
     key: 'status',
-    width: 100,
   },
   {
     title: $t('common.operation'),
@@ -117,30 +132,48 @@ const columns = [
 <template>
   <div class="w-full space-y-3">
     <div class="flex items-center justify-between">
-      <div class="text-base font-medium">{{ $t('sys.notification-template.items.title') }}</div>
-      <Button v-if="!props.isReadonly" type="primary" size="small" @click="openModal()">
+      <div class="text-base font-medium">
+        {{ $t('sys.notification-template.items.title') }}
+      </div>
+      <Button v-if="!props.isReadonly" type="primary" @click="openModal()">
         {{ $t('sys.notification-template.items.add') }}
       </Button>
     </div>
 
-    <Table :columns="columns" :data-source="items" :pagination="false" size="small" bordered class="w-full">
+    <Table
+      :columns="columns"
+      :data-source="items"
+      :pagination="false"
+      bordered
+      class="w-full"
+    >
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'channelType'">
           {{ channelNameMap[record.channelType] || record.channelType }}
         </template>
-        <template v-if="column.key === 'remark'">
-          {{ record.remark || record.subject || '-' }}
-        </template>
         <template v-if="column.key === 'status'">
-          <Tag v-if="record.status === 1" color="blue">{{ $t('common.enabled') }}</Tag>
+          <Tag v-if="record.status === 1" color="blue">
+{{
+            $t('common.enabled')
+          }}
+</Tag>
           <Tag v-else>{{ $t('common.disabled') }}</Tag>
         </template>
         <template v-if="column.key === 'action'">
           <div class="flex gap-2">
-            <Button type="link" size="small" :disabled="props.isReadonly" @click="openModal(record)">
+            <Button
+              type="link"
+              :disabled="props.isReadonly"
+              @click="openModal(record)"
+            >
               {{ $t('common.edit') }}
             </Button>
-            <Button type="link" danger size="small" :disabled="props.isReadonly" @click="handleDelete(index)">
+            <Button
+              type="link"
+              danger
+              :disabled="props.isReadonly"
+              @click="handleDelete(index)"
+            >
               {{ $t('common.delete') }}
             </Button>
           </div>

@@ -151,7 +151,7 @@ function onBatchSuccess() {
           :on-success="onBatchSuccess"
         >
           <template #default="{ onClick }">
-            <Button danger size="small" @click="onClick">
+            <Button danger  @click="onClick">
               <IconifyIcon icon="lucide:trash-2" class="size-4" />
               {{ $t('common.batchDelete') }}
             </Button>
@@ -169,7 +169,7 @@ function onBatchSuccess() {
           dict-code="is_enable"
         >
           <template #default>
-            <Button size="small">
+            <Button >
               <IconifyIcon icon="lucide:layers" class="size-4" />
               {{ $t('common.batchUpdate') }}
               <IconifyIcon icon="lucide:chevron-down" class="size-4" />
@@ -187,7 +187,7 @@ function onBatchSuccess() {
             <IconifyIcon icon="ant-design:search-outlined" class="text-gray-400" />
           </template>
         </Input>
-        <Button v-if="canItemsCreate" type="primary" size="small" @click="openCreateItem">
+        <Button v-if="canItemsCreate" type="primary"  @click="openCreateItem">
           <IconifyIcon icon="ant-design:plus-outlined" />
           {{ $t('sys.dict.addItem') }}
         </Button>
@@ -263,7 +263,7 @@ function onBatchSuccess() {
       </div>
 
       <Empty v-else :description="$t('sys.dict.itemsEmpty')">
-        <Button v-if="canItemsCreate" type="primary" size="small" @click="openCreateItem">
+        <Button v-if="canItemsCreate" type="primary"  @click="openCreateItem">
           {{ $t('sys.dict.addItem') }}
         </Button>
       </Empty>

@@ -155,13 +155,13 @@ async function onSelect(newValue: number | string) {
       <a-popover v-if="!isDisabled" v-model:open="open" trigger="click" placement="bottom">
         <template #content>
           <div class="flex min-w-24 flex-col gap-1">
-            <a-button v-for="opt in selectOptions" :key="opt.value" size="small" type="text" class="justify-start text-left" @click="onSelect(opt.value)">
+            <a-button v-for="opt in selectOptions" :key="opt.value"  type="text" class="justify-start text-left" @click="onSelect(opt.value)">
               <a-tag v-if="opt.color" :color="opt.color" class="pointer-events-none mr-1">{{ opt.label }}</a-tag>
               <span v-else>{{ opt.label }}</span>
             </a-button>
           </div>
         </template>
-        <a-button size="small" type="text" class="!px-1 opacity-0 transition-opacity group-hover:opacity-100" :loading="loading">
+        <a-button  type="text" class="!px-1 opacity-0 transition-opacity group-hover:opacity-100" :loading="loading">
           <template #icon><IconifyIcon icon="lucide:pencil" class="size-3" /></template>
         </a-button>
       </a-popover>
@@ -169,18 +169,18 @@ async function onSelect(newValue: number | string) {
 
     <!-- 文本输入模式 -->
     <template v-else-if="editType === 'input'">
-      <Input v-if="editing" ref="inputRef" v-model:value="editValue" size="small" class="w-full min-w-[80px]" @blur="onBlur" @keydown="onKeydown" />
+      <Input v-if="editing" ref="inputRef" v-model:value="editValue"  class="w-full min-w-[80px]" @blur="onBlur" @keydown="onKeydown" />
       <span v-else class="inline-edit-text">{{ displayValue }}</span>
-      <a-button v-if="!isDisabled" size="small" type="text" class="!px-1 opacity-0 transition-opacity group-hover:opacity-100" :loading="loading" @click="startEdit">
+      <a-button v-if="!isDisabled"  type="text" class="!px-1 opacity-0 transition-opacity group-hover:opacity-100" :loading="loading" @click="startEdit">
         <template #icon><IconifyIcon icon="lucide:pencil" class="size-3" /></template>
       </a-button>
     </template>
 
     <!-- 数字输入模式 -->
     <template v-else-if="editType === 'number'">
-      <InputNumber v-if="editing" ref="inputRef" v-model:value="editValue" size="small" class="w-full min-w-[80px]" @blur="onBlur" @keydown="onKeydown" />
+      <InputNumber v-if="editing" ref="inputRef" v-model:value="editValue"  class="w-full min-w-[80px]" @blur="onBlur" @keydown="onKeydown" />
       <span v-else class="inline-edit-text">{{ displayValue }}</span>
-      <a-button v-if="!isDisabled" size="small" type="text" class="!px-1 opacity-0 transition-opacity group-hover:opacity-100" :loading="loading" @click="startEdit">
+      <a-button v-if="!isDisabled"  type="text" class="!px-1 opacity-0 transition-opacity group-hover:opacity-100" :loading="loading" @click="startEdit">
         <template #icon><IconifyIcon icon="lucide:pencil" class="size-3" /></template>
       </a-button>
     </template>

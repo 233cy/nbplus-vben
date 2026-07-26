@@ -9,14 +9,19 @@ import { IconifyIcon } from '@vben/icons';
 import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { cancelTaskApi, getTaskListApi, retryTaskApi } from '#/api/sys/task';
+import { batchDeleteTaskApi, cancelTaskApi, deleteTaskApi, getTaskListApi, retryTaskApi } from '#/api/sys/task';
+import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
+import DictSideFilter from '#/components/dict/dict-side-filter.vue';
 import { $t } from '#/locales';
 
 import { useTaskPermission } from './permissions';
 import { useColumns } from './schema/columns';
 import { useGridFormSchema } from './schema/grid';
 
-useTaskPermission();
+const { canBatchDelete } = useTaskPermission();
+
+/** 当前选中的任务类型分组（查询层唯一数据源，与搜索表单解耦） */
+const activeGroup = ref('');
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
@@ -27,18 +32,29 @@ const [Grid, gridApi] = useVbenVxeGrid({
     wrapperClass: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
   },
   gridOptions: {
-    columns: useColumns(onCancel, onRetry),
+    columns: useColumns(onCancel, onRetry, onDelete),
     height: 'auto',
     keepSource: true,
     proxyConfig: {
       ajax: {
-        queryApi: getTaskListApi,
+        queryApi: (params: any) => getTaskListApi({ ...params, type: activeGroup.value || undefined }),
       } as any,
     },
     rowConfig: { keyField: 'id' },
+    checkboxConfig: { reserve: true, highlight: true },
     toolbarConfig: { custom: true, export: false, refresh: false, search: true, zoom: true },
   },
 });
+
+function getSelectedIds(): string[] {
+  return (gridApi.grid?.getCheckboxRecords() as { id: string }[])?.map(r => r.id) ?? [];
+}
+
+/** 左栏分组点选：更新类型条件并重新查询（右表搜索/重置不影响左栏选中态） */
+function onGroupSelect(value: string) {
+  activeGroup.value = value;
+  gridApi.query();
+}
 
 async function onCancel(row: TaskApi.TaskItem) {
   await cancelTaskApi(row.id);
@@ -49,6 +65,12 @@ async function onCancel(row: TaskApi.TaskItem) {
 async function onRetry(row: TaskApi.TaskItem) {
   await retryTaskApi(row.id);
   message.success($t('sys.task.retrySuccess'));
+  reload();
+}
+
+async function onDelete(row: TaskApi.TaskItem) {
+  await deleteTaskApi(row.id);
+  message.success($t('sys.task.deleteSuccess'));
   reload();
 }
 
@@ -91,8 +113,28 @@ onUnmounted(() => {
 
 <template>
   <Page auto-content-height>
-    <Grid :table-title="$t('sys.task.pageTitle')">
-      <template #toolbar-tools>
+    <div class="flex h-full gap-3">
+      <DictSideFilter code="sys_task_type" @update:value="onGroupSelect" />
+      <div class="min-w-0 flex-1">
+        <Grid :table-title="$t('sys.task.pageTitle')">
+          <template #toolbar-tools>
+        <BatchActionDropdown
+          v-if="canBatchDelete"
+          class="mr-2"
+          type="direct"
+          :action="$t('common.delete')"
+          :api-fn="(ids: string[]) => batchDeleteTaskApi(ids)"
+          :get-ids="getSelectedIds"
+          :on-success="reload"
+        >
+          <template #default="{ onClick }">
+            <Button danger @click="onClick">
+              <IconifyIcon icon="lucide:trash-2" class="size-4" />
+              {{ $t('common.batchDelete') }}
+            </Button>
+          </template>
+        </BatchActionDropdown>
+
         <Button
           :type="ready ? 'primary' : 'text'"
           :class="{ 'animate-pulse': ready }"
@@ -102,6 +144,8 @@ onUnmounted(() => {
           {{ ready ? $t('sys.task.refreshNow') : `${countdown}s` }}
         </Button>
       </template>
-    </Grid>
+        </Grid>
+      </div>
+    </div>
   </Page>
 </template>

@@ -143,12 +143,12 @@ if (!props.isReadonly) {
   <div class="w-full space-y-3">
     <div class="flex items-center justify-between">
       <div class="text-base font-medium">{{ $t('sys.user.userOrg.listTitle') }}</div>
-      <Button v-if="!props.isReadonly" type="primary" size="small" @click="modalVisible = true">
+      <Button v-if="!props.isReadonly" type="primary" @click="modalVisible = true">
         {{ $t('sys.user.userOrg.add') }}
       </Button>
     </div>
 
-    <Table :columns="columns" :data-source="items" :pagination="false" size="small" bordered class="w-full">
+    <Table :columns="columns" :data-source="items" :pagination="false" bordered class="w-full">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'isMain'">
           <div class="text-center">
@@ -159,12 +159,12 @@ if (!props.isReadonly) {
 
         <template v-if="column.key === 'action'">
           <div class="text-center">
-            <Button v-if="record.isMain !== 1" type="link" size="small" @click="handleSetMain(index)">
+            <Button v-if="record.isMain !== 1" type="link" @click="handleSetMain(index)">
               {{ $t('sys.user.userOrg.setMain') }}
             </Button>
           </div>
           <div class="text-center">
-            <Button type="link" danger size="small" @click="handleDelete(index)">
+            <Button type="link" danger @click="handleDelete(index)">
               {{ $t('common.delete') }}
             </Button>
           </div>

@@ -1,4 +1,4 @@
-import { onMounted } from 'vue';
+import { h, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { message, Modal } from 'ant-design-vue';
@@ -26,7 +26,32 @@ export function useTableDelete(apiFn: (id: string) => Promise<any>, id: string, 
 }
 
 /**
+ * 后端批量删除统一回执（BatchResultResponse）
+ */
+interface BatchResult {
+  total: number;
+  success: number;
+  failed: number;
+  errors: { id: string; reason: string }[];
+}
+
+/**
+ * 判断接口返回是否为 BatchResult 形状（含数值型 success/failed）
+ */
+function isBatchResult(result: any): result is BatchResult {
+  return (
+    result !== null &&
+    typeof result === 'object' &&
+    typeof result.success === 'number' &&
+    typeof result.failed === 'number'
+  );
+}
+
+/**
  * 通用表格批量操作（带倒计时防误操作）
+ *
+ * 未传 formatSuccess 时自动识别 BatchResult 回执：有失败项弹 Modal.warning
+ * 展示"成功 X 条、失败 Y 条"及逐条失败明细（id + reason），全部成功按原逻辑 toast。
  *
  * @param apiFn     批量操作接口，接收 id 数组
  * @param ids       要操作的 id 列表
@@ -65,6 +90,30 @@ export function useTableBatchAction(
       const hide = message.loading({ content: $t('common.batchActionProcessing', { action }), duration: 0, key: 'batch-action' });
       try {
         const result = await apiFn(ids);
+        // BatchResult 回执：一律按 data 组装提示（失败弹明细，全成功报条数）
+        if (!formatSuccess && isBatchResult(result)) {
+          hide();
+          if (result.failed > 0) {
+            Modal.warning({
+              title: $t('common.batchActionResultTitle', { action }),
+              content: h('div', [
+                h('p', $t('common.batchActionPartialFail', { success: result.success, failed: result.failed })),
+                h(
+                  'ul',
+                  { style: 'max-height: 240px; overflow: auto; margin: 0; padding-left: 18px;' },
+                  (result.errors ?? []).map(item => h('li', `${item.id}：${item.reason}`)),
+                ),
+              ]),
+            });
+          } else {
+            message.success({
+              content: $t('common.batchActionAllSuccess', { success: result.success }),
+              key: 'batch-action',
+            });
+          }
+          onSuccess(result);
+          return;
+        }
         const successMsg = formatSuccess ? formatSuccess(result) : $t('common.batchActionSuccess', { action });
         const msg = typeof successMsg === 'string' ? { type: 'success' as const, content: successMsg } : successMsg;
         message[msg.type]({ content: msg.content, key: 'batch-action' });

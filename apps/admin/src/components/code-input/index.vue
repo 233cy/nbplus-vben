@@ -40,7 +40,7 @@ function generate() {
 <template>
   <Input v-model:value="modelValue" :disabled="disabled" :placeholder="placeholder">
     <template v-if="!disabled" #addonAfter>
-      <Button type="link" size="small" @click="generate">
+      <Button type="link" @click="generate">
         {{ $t('components.code-input.generateCode') }}
       </Button>
     </template>

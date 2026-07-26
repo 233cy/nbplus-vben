@@ -56,7 +56,7 @@ export function useColumns(
       title: $t('sys.dict.fields.groups'),
       minWidth: 120,
       sortable: true,
-      formatter: ({ cellValue }: { cellValue: any }) => cellValue || '-',
+      cellRender: { name: 'CellDict', props: { code: 'sys_dict_groups' } },
     },
     {
       field: 'status',

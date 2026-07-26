@@ -6,7 +6,7 @@ import { computed, ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 
-import { Form, FormItem, Input, Select, Switch } from 'ant-design-vue';
+import { Form, FormItem, Select, Switch } from 'ant-design-vue';
 
 import { getNotificationChannelDriverSchemasApi } from '#/api/sys/notificationChannel';
 import { $t } from '#/locales';
@@ -27,7 +27,6 @@ const schemas = ref<NotificationChannelApi.DriverSchema[]>([]);
 const loading = ref(false);
 const formData = ref<NotificationTemplateApi.TemplateItemSave>({
   channelType: '',
-  remark: '',
   subject: '',
   content: '',
   extra: {},
@@ -84,8 +83,8 @@ const [Modal, modalApi] = useVbenModal({
     templateVariables.value = payload?.variables || {};
 
     formData.value = data
-      ? { remark: '', subject: '', summary: '', content: '', extra: {}, status: 1, ...data }
-      : { channelType: '', remark: '', subject: '', summary: '', content: '', extra: {}, status: 1 };
+      ? { subject: '', summary: '', content: '', extra: {}, status: 1, ...data }
+      : { channelType: '', subject: '', summary: '', content: '', extra: {}, status: 1 };
   },
 });
 
@@ -93,7 +92,6 @@ function handleSubmit() {
   modalApi.close();
   emit('submit', {
     channelType: formData.value.channelType,
-    remark: formData.value.remark ?? '',
     subject: formData.value.subject ?? '',
     summary: formData.value.summary ?? '',
     content: formData.value.content ?? '',
@@ -123,10 +121,6 @@ function filterOption(input: string | undefined, option: any) {
           show-search
           :filter-option="filterOption"
         />
-      </FormItem>
-
-      <FormItem :label="$t('sys.notification-template.items.remark')">
-        <Input v-model:value="formData.remark" :placeholder="$t('sys.notification-template.items.remarkPlaceholder')" />
       </FormItem>
 
       <FormItem v-if="formData.channelType" :label="$t('sys.notification-template.availableVariables')">

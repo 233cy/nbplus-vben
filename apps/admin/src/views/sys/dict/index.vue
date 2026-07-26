@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
+
+import { ref } from 'vue';
 
 import { Button } from 'ant-design-vue';
 
@@ -12,9 +13,9 @@ import {
   batchUpdateDictApi,
   getDictDetailApi,
   getDictListApi,
-  getDictOptionsApi,
 } from '#/api/sys/dict';
 import BatchActionDropdown from '#/components/vxe-table/BatchActionDropdown.vue';
+import DictSideFilter from '#/components/dict/dict-side-filter.vue';
 import { $t } from '#/locales';
 
 import DictForm from './components/dict-form.vue';
@@ -24,11 +25,8 @@ import { useGridFormSchema } from './schema/grid';
 
 const { canCreate, canBatchDelete, canBatchUpdate } = useDictPermission();
 
-const groupsOptions = ref<{ label: string; value: string }[]>([]);
-getDictOptionsApi().then((dicts) => {
-  const groups = [...new Set(dicts.map(d => d.groups).filter(Boolean))] as string[];
-  groupsOptions.value = groups.map(g => ({ label: g, value: g }));
-});
+/** 当前选中的分组（查询层唯一数据源，与搜索表单解耦，重置/搜索不影响） */
+const activeGroup = ref('');
 
 const [DictFormDrawer, dictFormDrawerApi] = useVbenDrawer({
   connectedComponent: DictForm,
@@ -48,7 +46,7 @@ async function onDetailClick(id: string) {
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
     collapsed: true,
-    schema: useGridFormSchema(groupsOptions),
+    schema: useGridFormSchema(),
     showCollapseButton: true,
     submitOnChange: false,
     wrapperClass: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
@@ -59,7 +57,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     keepSource: true,
     proxyConfig: {
       ajax: {
-        queryApi: getDictListApi,
+        queryApi: (params: any) => getDictListApi({ ...params, groups: activeGroup.value || undefined }),
       } as any,
     },
     rowConfig: { keyField: 'id' },
@@ -78,13 +76,22 @@ function onRefresh() {
 function getSelectedIds(): string[] {
   return (gridApi.grid?.getCheckboxRecords() as { id: string }[])?.map(r => r.id) ?? [];
 }
+
+/** 左栏分组点选：更新分组条件并重新查询（条件在查询层持续生效，右表行为不影响左栏选中态） */
+function onGroupSelect(value: string) {
+  activeGroup.value = value;
+  gridApi.query();
+}
 </script>
 
 <template>
   <Page auto-content-height>
     <DictFormDrawer @success="onRefresh" />
-    <Grid :table-title="$t('sys.dict.pageTitle')">
-      <template #toolbar-tools>
+    <div class="flex h-full gap-3">
+      <DictSideFilter code="sys_dict_groups" @update:value="onGroupSelect" />
+      <div class="min-w-0 flex-1">
+        <Grid :table-title="$t('sys.dict.pageTitle')">
+          <template #toolbar-tools>
         <BatchActionDropdown
           v-if="canBatchDelete"
           class="ml-2"
@@ -119,6 +126,8 @@ function getSelectedIds(): string[] {
           {{ $t('sys.dict.addDict') }}
         </Button>
       </template>
-    </Grid>
+        </Grid>
+      </div>
+    </div>
   </Page>
 </template>

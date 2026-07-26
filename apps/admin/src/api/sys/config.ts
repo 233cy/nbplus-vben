@@ -4,7 +4,6 @@ export namespace ConfigApi {
   export interface ConfigItem {
     id: string;
     groups: string;
-    groupsLabel: string;
     key: string;
     value: string;
     component: string;
@@ -16,11 +15,6 @@ export namespace ConfigApi {
     remark: null | string;
     createdAt: number;
     updatedAt: number;
-  }
-
-  export interface GroupOption {
-    label: string;
-    value: string;
   }
 
   export interface PageParams {
@@ -70,10 +64,6 @@ export namespace ConfigApi {
 
 export function getConfigListApi(params: ConfigApi.PageParams) {
   return requestClient.get<{ items: ConfigApi.ConfigItem[]; meta: any }>('/admin/sys/config/list', { params });
-}
-
-export function getConfigOptionsApi() {
-  return requestClient.get<ConfigApi.GroupOption[]>('/admin/sys/config/options');
 }
 
 export function getConfigDetailApi(id: string) {

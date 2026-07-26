@@ -46,7 +46,7 @@ export function useColumns(
       title: $t('sys.notification-message.fields.subject'),
       minWidth: 160,
       formatter: ({ row }: { row: NotificationMessageApi.MessageItem }) =>
-        row.channelContentRemark || row.subject || '-',
+        row.templateName || row.subject || '-',
       cellRender: {
         name: 'CellLink',
         attrs: {

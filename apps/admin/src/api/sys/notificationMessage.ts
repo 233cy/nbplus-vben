@@ -16,7 +16,7 @@ export namespace NotificationMessageApi {
     label: string;
     templateCode: string;
     subject: string;
-    channelContentRemark?: string;
+    templateName?: string;
     content: string;
     variables: Record<string, any>;
     extra: Record<string, any>;

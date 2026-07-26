@@ -8,6 +8,7 @@ import { IconifyIcon } from '@vben/icons';
 import { Tag } from 'ant-design-vue';
 import DOMPurify from 'dompurify';
 
+import { previewFileApi } from '#/api/sys/file';
 import RichTextView from '#/components/rich-text-view/index.vue';
 import { $t } from '#/locales';
 import { formatUnixTime } from '#/utils/time';
@@ -15,7 +16,7 @@ import { formatUnixTime } from '#/utils/time';
 /**
  * 通知详情内容（模块内共享组件）
  *
- * 只封装标题、正文、跳转链接、阅读时间等内容区，
+ * 只封装标题、正文、附件、阅读时间等内容区，
  * 外层容器（抽屉/弹窗）与操作按钮由使用方决定。
  */
 const props = defineProps<{
@@ -25,10 +26,20 @@ const props = defineProps<{
 const isUnread = computed(() => Number(props.data.isRead) !== 1);
 // 正文为富文本 HTML，渲染前统一消毒防 XSS
 const sanitizedContent = computed(() => DOMPurify.sanitize(props.data.content || ''));
-const jumpUrl = computed(() => {
-  const url = props.data.extra?.url;
-  return typeof url === 'string' && url !== '' ? url : '';
-});
+const attachments = computed(() => props.data.extra?.attachments ?? []);
+
+/** 附件大小的人类可读格式 */
+function formatSize(size?: number) {
+  if (!size || size <= 0) return '';
+  if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)}KB`;
+  return `${(size / 1024 / 1024).toFixed(1)}MB`;
+}
+
+/** 下载附件：逻辑路径经预览接口解析为可访问 URL（天然继承存储鉴权） */
+async function downloadAttachment(att: NotificationInboxApi.Attachment) {
+  const res = await previewFileApi(att.path);
+  window.open(res.url, '_blank');
+}
 </script>
 
 <template>
@@ -50,17 +61,19 @@ const jumpUrl = computed(() => {
       <RichTextView :html="sanitizedContent" rehydrate page-width="common" />
     </div>
 
-    <!-- 跳转链接（extra.url 存在时展示） -->
-    <a
-      v-if="jumpUrl"
-      :href="jumpUrl"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline"
-    >
-      <IconifyIcon icon="lucide:link" class="size-4" />
-      {{ $t('core.notification-inbox.goTo') }}
-    </a>
+    <!-- 附件（任务产物引用，点击经逻辑路径解析后下载） -->
+    <div v-if="attachments.length > 0" class="mt-4 flex flex-wrap gap-2">
+      <a
+        v-for="att in attachments"
+        :key="att.path"
+        class="attachment-capsule"
+        :title="att.name"
+        @click.prevent="downloadAttachment(att)"
+      >
+        <span class="truncate">{{ att.name }}</span>
+        <span v-if="(att.size ?? 0) > 0" class="ml-1 shrink-0 text-gray-400">{{ formatSize(att.size) }}</span>
+      </a>
+    </div>
 
     <!-- 底部元信息 -->
     <div v-if="!isUnread && data.readAt" class="mt-4 text-xs text-gray-400">
@@ -68,3 +81,30 @@ const jumpUrl = computed(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* 附件胶囊：复用 rich-text.css 中 wangEditor 附件的统一视觉 */
+.attachment-capsule {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 2px 10px;
+  margin: 0 2px;
+  font-size: 0.92em;
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+}
+
+.attachment-capsule::before {
+  margin-right: 4px;
+  content: '📎';
+}
+
+.attachment-capsule:hover {
+  text-decoration: none;
+  border-color: hsl(var(--primary));
+}
+</style>

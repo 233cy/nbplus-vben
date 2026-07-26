@@ -17,6 +17,11 @@ defineOptions({ name: 'NotificationPopup' });
 
 withDefaults(
   defineProps<{
+    /**
+     * 当前激活的 Tab（应用层多 Tab 扩展点，默认 notifications 为通知列表）；
+     * 非 notifications 时列表区/底部操作条替换为 tab-panel 插槽，由应用层注入面板
+     */
+    activeTab?: string;
     /** 显示圆点 */
     dot?: boolean;
     /** 列表加载中（刷新按钮显示旋转动画） */
@@ -25,6 +30,7 @@ withDefaults(
     notifications?: NotificationItem[];
   }>(),
   {
+    activeTab: 'notifications',
     dot: false,
     loading: false,
     notifications: () => [],
@@ -61,7 +67,7 @@ const handleClear = () => {
 };
 </script>
 <template>
-  <VbenPopover v-model:open="open" content-class="relative right-2 w-90 p-0">
+  <VbenPopover v-model:open="open" content-class="relative right-2 w-105 p-0">
     <template #trigger>
       <div class="mr-2 flex-center h-full" @click.stop="toggle()">
         <VbenIconButton class="bell-button relative text-foreground">
@@ -86,6 +92,7 @@ const handleClear = () => {
             <RotateCw :class="{ 'animate-spin': loading }" class="size-4" />
           </VbenIconButton>
           <VbenIconButton
+            v-if="activeTab === 'notifications'"
             :disabled="notifications.length <= 0"
             :tooltip="$t('ui.widgets.markAllAsRead')"
             @click="handleMakeAll"
@@ -94,11 +101,14 @@ const handleClear = () => {
           </VbenIconButton>
         </div>
       </div>
+      <!-- 应用层 Tab 切换条（如「通知 / 我的任务」Segmented） -->
+      <slot name="tabs"></slot>
+      <template v-if="activeTab === 'notifications'">
       <VbenScrollbar v-if="notifications.length > 0">
         <ul class="flex! max-h-90 w-full flex-col">
           <template v-for="item in notifications" :key="item.id ?? item.title">
             <li
-              class="relative flex w-full cursor-pointer items-start gap-5 border-t border-border p-3 hover:bg-accent"
+              class="relative flex w-full cursor-pointer items-start gap-4 border-t border-border px-4 py-3.5 hover:bg-accent"
               @click="emit('onClick', item)"
             >
               <slot name="content" :item="item">
@@ -115,12 +125,12 @@ const handleClear = () => {
                     class="aspect-square size-full object-cover"
                   />
                 </span>
-                <div class="flex flex-col gap-1 leading-none">
-                  <p class="font-semibold">{{ item.title }}</p>
-                  <p class="my-1 line-clamp-2 text-xs text-muted-foreground">
+                <div class="flex min-w-0 flex-1 flex-col gap-1.5 pr-9 leading-normal">
+                  <p class="truncate font-semibold">{{ item.title }}</p>
+                  <p class="line-clamp-2 break-all text-xs text-muted-foreground">
                     {{ item.message }}
                   </p>
-                  <p class="line-clamp-2 text-xs text-muted-foreground">
+                  <p class="truncate text-xs text-muted-foreground">
                     {{ item.date }}
                   </p>
                 </div>
@@ -179,6 +189,9 @@ const handleClear = () => {
           {{ $t('ui.widgets.viewAll') }}
         </VbenButton>
       </div>
+      </template>
+      <!-- 非通知 Tab：面板整体由应用层注入 -->
+      <slot v-else name="tab-panel" :active-tab="activeTab"></slot>
     </div>
   </VbenPopover>
 </template>

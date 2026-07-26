@@ -253,7 +253,7 @@ defineExpose({ toggleOpenState, open, close });
           :sibling-count="1"
           :total="total"
           show-edges
-          size="small"
+          
           @update:page="handlePageChange"
         >
           <PaginationList
