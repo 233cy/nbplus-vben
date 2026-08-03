@@ -38,6 +38,8 @@ const props = withDefaults(
      * 传入该 prop 时优先级高于 config 中的配置
      */
     multiple?: boolean;
+    /** 透传给 config.api 的固定查询参数（如 { deptId } 过滤），变化时防抖重载 */
+    params?: Record<string, any>;
     /** 是否展示页面回显区域（slot 区域），默认 true */
     showEchoSlot?: boolean;
     /**
@@ -50,6 +52,7 @@ const props = withDefaults(
   {
     maxEchoCount: 20,
     modelValue: '',
+    params: undefined,
     showEchoSlot: true,
     valueType: 'string',
   },
@@ -154,7 +157,8 @@ const [Modal, modalApi] = useVbenModal({
    API
    ============================================================ */
 async function fetchData(params: Record<string, any>): Promise<any[] | { items: any[]; total: number }> {
-  const res = await api.value(params);
+  // props.params 为固定过滤参数（如 deptId），调用方传入的分页/ids 等参数优先级更高
+  const res = await api.value({ ...props.params, ...params });
   if (Array.isArray(res)) {
     return { items: res, total: res.length };
   }
@@ -577,6 +581,25 @@ watch(showSelectedOnly, async () => {
   await gridApi.query();
   await handleQuerySuccess();
 });
+
+/* ============================================================
+   params 变化：防抖重载（对齐 ApiSelect.params 语义）
+   ============================================================ */
+let paramsTimer: null | ReturnType<typeof setTimeout> = null;
+watch(
+  () => props.params,
+  () => {
+    if (paramsTimer) clearTimeout(paramsTimer);
+    paramsTimer = setTimeout(() => {
+      // 树形数据标记为未加载，下次打开弹窗强制重新查询；弹窗打开期间立即重载
+      hasTreeLoaded.value = false;
+      if (gridApi.grid) {
+        handleRefresh();
+      }
+    }, 300);
+  },
+  { deep: true },
+);
 
 /* ============================================================
    确认选择

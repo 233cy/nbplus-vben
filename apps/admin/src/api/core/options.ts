@@ -6,6 +6,8 @@ export interface OptionsParams {
   keyword?: string;
   code?: string;
   ids?: string;
+  /** 按部门过滤（post 职务选项联动使用） */
+  deptId?: string;
 }
 
 export interface OptionItem {

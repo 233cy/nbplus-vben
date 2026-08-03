@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { UserApi } from '#/api/sys/user';
+import type { DeptDutyValue } from '#/views/sys/user-duty/shared/dept-duty-select';
 
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 
 import { IconifyIcon } from '@vben/icons';
 
-import { Form, FormItem, message, Modal } from 'ant-design-vue';
+import { message, Modal } from 'ant-design-vue';
 
-import ApiSelect from '#/components/page-select/api-select.vue';
 import { $t } from '#/locales';
+import DeptDutySelect from '#/views/sys/user-duty/shared/dept-duty-select.vue';
 
 interface Props {
   visible: boolean;
@@ -24,16 +25,11 @@ const emit = defineEmits<{
   'update:visible': [value: boolean];
 }>();
 
-const deptId = ref<string>('');
-const dutyId = ref<string>('');
+/** 部门+职务联动选择的当前值（部门/职务名称由共享组件一并回写） */
+const org = ref<DeptDutyValue>({ deptId: '' });
 const loading = ref(false);
 
-const deptSelectRef = ref<InstanceType<typeof ApiSelect> | null>(null);
-const dutySelectRef = ref<InstanceType<typeof ApiSelect> | null>(null);
-
-const postParams = computed(() => ({
-  deptId: deptId.value || 'null',
-}));
+const selectRef = ref<InstanceType<typeof DeptDutySelect> | null>(null);
 
 const open = computed({
   get: () => props.visible,
@@ -41,59 +37,38 @@ const open = computed({
 });
 
 function reset() {
-  deptId.value = '';
-  dutyId.value = '';
-}
-
-function findName(options: any[], id: string): string {
-  for (const option of options) {
-    if (String(option.value) === String(id) || String(option.id) === String(id)) {
-      return option?.fullName || option?.label || option?.name || '';
-    }
-    if (option.children?.length) {
-      const found = findName(option.children, id);
-      if (found) return found;
-    }
-  }
-  return '';
+  org.value = { deptId: '' };
 }
 
 function handleRefresh() {
-  deptSelectRef.value?.reload();
-  dutySelectRef.value?.reload();
+  selectRef.value?.reload();
 }
-
-watch(deptId, async () => {
-  dutyId.value = '';
-  await nextTick();
-  dutySelectRef.value?.reload();
-});
 
 function handleCancel() {
   open.value = false;
 }
 
 function handleOk() {
-  if (!deptId.value) {
+  if (!org.value.deptId) {
     message.warning($t('sys.user.userOrg.deptRequired'));
     return;
   }
-  if (!dutyId.value) {
+  if (!org.value.dutyId) {
     message.warning($t('sys.user.userOrg.dutyRequired'));
     return;
   }
 
-  const exists = props.existingItems.some(item => item.deptId === deptId.value && item.dutyId === dutyId.value);
+  const exists = props.existingItems.some(item => item.deptId === org.value.deptId && item.dutyId === org.value.dutyId);
   if (exists) {
     message.warning($t('sys.user.userOrg.duplicate'));
     return;
   }
 
   emit('submit', {
-    deptId: deptId.value,
-    deptName: findName(deptSelectRef.value?.options || [], deptId.value),
-    dutyId: dutyId.value,
-    dutyName: findName(dutySelectRef.value?.options || [], dutyId.value),
+    deptId: org.value.deptId,
+    deptName: org.value.deptName ?? '',
+    dutyId: org.value.dutyId,
+    dutyName: org.value.dutyName ?? '',
     isMain: 2,
     sort: (props.existingItems.length + 1) * 10,
   });
@@ -117,14 +92,6 @@ reset();
       </div>
     </template>
 
-    <Form layout="vertical" class="mt-4">
-      <FormItem :label="$t('sys.user.fields.deptId')" required>
-        <ApiSelect ref="deptSelectRef" v-model:value="deptId" config="dept" :immediate="false" :placeholder="$t('ui.placeholder.select')" class="w-full" />
-      </FormItem>
-
-      <FormItem :label="$t('sys.user.fields.dutyId')" required>
-        <ApiSelect ref="dutySelectRef" v-model:value="dutyId" config="post" :immediate="false" :params="postParams" :placeholder="$t('ui.placeholder.select')" class="w-full" />
-      </FormItem>
-    </Form>
+    <DeptDutySelect ref="selectRef" v-model="org" dept-required duty-required class="mt-4" />
   </Modal>
 </template>

@@ -1,0 +1,11 @@
+{
+    "pageTitle": "审批实例",
+    "detail": "实例详情",
+    "fields": {
+        "bizType": "业务类型",
+        "bizId": "业务单据",
+        "title": "标题",
+        "applicantName": "申请人",
+        "createdAt": "发起时间"
+    }
+}

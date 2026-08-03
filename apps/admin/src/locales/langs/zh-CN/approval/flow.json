@@ -1,0 +1,18 @@
+{
+    "pageTitle": "审批流程",
+    "detail": "流程详情",
+    "design": "设计",
+    "enable": "启用",
+    "disable": "停用",
+    "confirmEnable": "确定要启用该流程吗？",
+    "confirmDisable": "确定要停用该流程吗？停用后新业务单据将无法发起审批",
+    "enableSuccess": "启用成功",
+    "disableSuccess": "停用成功",
+    "fieldsPreview": "表单字段",
+    "nodesPreview": "审批节点",
+    "fields": {
+        "bizType": "业务类型",
+        "name": "流程名称",
+        "remark": "备注"
+    }
+}

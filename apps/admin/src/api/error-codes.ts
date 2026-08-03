@@ -110,4 +110,34 @@ export enum BizCode {
   TASK_TYPE_UNKNOWN = 41_103,
   /** 单次投递目标过多 */
   TASK_IDS_TOO_LARGE = 41_104,
+
+  /* 审批引擎 */
+  /** 审批流不存在 */
+  APPROVAL_FLOW_NOT_FOUND = 41_201,
+  /** 审批流已停用 */
+  APPROVAL_FLOW_DISABLED = 41_202,
+  /** 审批流配置无效 */
+  APPROVAL_FLOW_INVALID = 41_203,
+  /** 条件节点引用的表单字段缺失 */
+  APPROVAL_CONDITION_FIELD_MISSING = 41_204,
+  /** 该业务单据已存在审批实例 */
+  APPROVAL_INSTANCE_EXISTS = 41_205,
+  /** 审批实例不存在 */
+  APPROVAL_INSTANCE_NOT_FOUND = 41_206,
+  /** 审批任务不存在 */
+  APPROVAL_TASK_NOT_FOUND = 41_207,
+  /** 当前用户不是该任务的审批人 */
+  APPROVAL_NOT_APPROVER = 41_208,
+  /** 当前状态不允许该操作 */
+  APPROVAL_INVALID_STATUS = 41_209,
+  /** 审批人解析结果为空 */
+  APPROVAL_APPROVER_EMPTY = 41_210,
+  /** 审批人解析失败 */
+  APPROVAL_RESOLVE_FAILED = 41_211,
+  /** 自选审批人不合法 */
+  APPROVAL_SELF_SELECT_INVALID = 41_212,
+  /** 审批回调执行失败 */
+  APPROVAL_CALLBACK_FAILED = 41_213,
+  /** 当前用户不在该流程的发起人范围内 */
+  APPROVAL_NOT_INITIATOR = 41_214,
 }

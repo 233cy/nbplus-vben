@@ -56,6 +56,7 @@ export PATH=/www/server/nodejs/v22.18.0/bin:$PATH
 | 样式、暗色模式、字号、主题适配 | `.agents/theme.md` |
 | 组件命名、shared/ 目录、composables、拖拽 | `.agents/components.md` |
 | 语言包与翻译 | `.agents/i18n.md` |
+| 审批引擎页面（流程/实例/待办 + registry 详情跳转注册） | `apps/admin/src/views/approval/`、`apps/admin/src/views/demos/approval/` |
 
 **写页面前务必先读典范源码**（上表三个模块），以标杆代码为准，文字规范只是索引。
 
