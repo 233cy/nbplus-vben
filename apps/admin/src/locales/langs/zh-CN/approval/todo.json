@@ -1,0 +1,24 @@
+{
+    "pageTitle": "待办中心",
+    "approve": "通过",
+    "reject": "驳回",
+    "approveConfirm": "确定要通过该申请吗？",
+    "approveSuccess": "已通过",
+    "rejectSuccess": "已驳回",
+    "rejectTitle": "驳回申请",
+    "commentRequired": "请填写驳回意见",
+    "commentPlaceholder": "请输入驳回意见",
+    "snapshotTitle": "审批详情",
+    "tabs": {
+        "todo": "待审",
+        "done": "已办"
+    },
+    "fields": {
+        "title": "标题",
+        "applicantName": "申请人",
+        "nodeName": "当前节点",
+        "createdAt": "发起时间",
+        "myAction": "我的操作",
+        "finishedAt": "办理时间"
+    }
+}

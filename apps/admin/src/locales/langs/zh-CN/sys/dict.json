@@ -1,0 +1,30 @@
+{
+  "pageTitle": "字典管理",
+  "addDict": "新增字典",
+  "editDict": "编辑字典",
+  "addItem": "新增字典项",
+  "editItem": "编辑字典项",
+  "itemListTitle": "「{name}」字典项",
+  "itemFormBelong": "所属字典：{name}",
+  "itemsEmpty": "暂无字典项",
+  "itemSearchPlaceholder": "搜索显示名称或字典值",
+  "fields": {
+    "name": "字典名称",
+    "code": "字典编码",
+    "groups": "分组",
+    "remark": "备注",
+    "sort": "排序"
+  },
+  "itemFields": {
+    "label": "显示名称",
+    "value": "字典值",
+    "color": "标签颜色",
+    "sort": "排序"
+  },
+  "placeholder": {
+    "name": "请输入字典名称",
+    "code": "字母开头，仅限字母/数字/下划线，编码创建后不可修改",
+    "groups": "选择或输入分组名称",
+    "keyword": "搜索名称、编码或分组"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "pageTitle": "权限包管理",
+  "create": "新增权限包",
+  "edit": "编辑权限包",
+  "detail": "权限包详情",
+  "assignMenus": "分配权限",
+  "fields": {
+    "code": "权限包编码",
+    "name": "权限包名称",
+    "sort": "排序",
+    "remark": "备注"
+  },
+  "placeholders": {
+    "code": "请输入权限包编码",
+    "name": "请输入权限包名称",
+    "sort": "请输入排序",
+    "remark": "请输入备注"
+  },
+  "msg": {
+    "ASSIGN_MENUS_SUCCESS": "分配权限成功"
+  }
+}

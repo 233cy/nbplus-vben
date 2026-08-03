@@ -1,0 +1,193 @@
+import type { VxeTableGridOptions } from '#/adapter/vxe-table';
+import type { UserApi } from '#/api/sys/user';
+
+import { deleteUserApi, inlineUpdateUserApi } from '#/api/sys/user';
+import { $t } from '#/locales';
+import { useTableDelete } from '#/utils/table';
+import { formatUnixTime } from '#/utils/time';
+
+import { useUserPermission } from '../permissions';
+
+/**
+ * 用户列表列定义
+ */
+export function useColumns(
+  onEditClick: (id: string) => Promise<void>,
+  onDetailClick: (id: string) => Promise<void>,
+  onOnlineClick: (row: UserApi.UserItem) => void,
+  onSetSuper: (row: UserApi.UserItem) => void,
+  onRefresh: () => void,
+): VxeTableGridOptions['columns'] {
+  const { canDetail, canUpdate, canDelete, canOnline, canSetSuper } = useUserPermission();
+
+  return [
+    { type: 'checkbox', width: 50 },
+    { field: 'id', title: 'ID', visible: false },
+    {
+      field: 'username',
+      title: $t('sys.user.fields.username'),
+      minWidth: 120,
+      sortable: true,
+      cellRender: {
+        name: 'CellLink',
+        attrs: {
+          hasAccess: canDetail,
+          onClick: async (row: UserApi.UserItem) => onDetailClick(row.id),
+        },
+      },
+    },
+    {
+      field: 'isSuper',
+      title: $t('sys.user.fields.isSuper'),
+      width: 70,
+      formatter: ({ row }: { row: UserApi.UserItem }) => (row.isSuper === 1 ? $t('sys.user.fields.isSuper') : '-'),
+    },
+    {
+      field: 'status',
+      title: $t('sys.user.fields.status'),
+      cellRender: {
+        name: 'CellDict',
+        props: { code: 'sys_user_status' },
+      },
+      width: 100,
+      sortable: true,
+    },
+    {
+      field: 'nickname',
+      title: $t('sys.user.fields.nickname'),
+      minWidth: 120,
+      sortable: true,
+    },
+    {
+      field: 'avatar',
+      title: $t('sys.user.fields.avatar'),
+      cellRender: { name: 'CellImages' },
+      width: 80,
+    },
+    {
+      field: 'email',
+      title: $t('sys.user.fields.email'),
+      minWidth: 120,
+      sortable: true,
+    },
+    {
+      field: 'phone',
+      title: $t('sys.user.fields.phone'),
+      minWidth: 120,
+      sortable: true,
+    },
+    {
+      field: 'totpSecret',
+      title: $t('sys.user.fields.totpSecret'),
+      cellRender: {
+        name: 'CellInlineEdit',
+        attrs: {
+          dictCode: 'is_bind_totp',
+          disabled: (row: any) => row.totpSecret === 2,
+          apiFn: (id: string, field: string, value: any) => inlineUpdateUserApi(id, field, value),
+        },
+      },
+      width: 100,
+    },
+    {
+      field: 'gender',
+      title: $t('sys.user.fields.gender'),
+      cellRender: {
+        name: 'CellInlineEdit',
+        attrs: {
+          dictCode: 'sys_user_gender',
+          apiFn: (id: string, field: string, value: any) => inlineUpdateUserApi(id, field, value),
+        },
+      },
+      width: 100,
+      sortable: true,
+    },
+    {
+      field: 'deptName',
+      title: $t('sys.user.fields.deptId'),
+      minWidth: 160,
+      formatter: ({ row }: { row: UserApi.UserItem }) => row.deptName || '-',
+    },
+    {
+      field: 'dutyName',
+      title: $t('sys.user.fields.dutyId'),
+      minWidth: 140,
+      formatter: ({ row }: { row: UserApi.UserItem }) => row.dutyName || '-',
+    },
+    {
+      field: 'roleNames',
+      title: $t('sys.user.fields.roleIds'),
+      minWidth: 180,
+      formatter: ({ row }: { row: UserApi.UserItem }) => row.roleNames || '-',
+    },
+    {
+      field: 'lastLoginIp',
+      title: $t('sys.user.fields.lastLoginIp'),
+      minWidth: 120,
+      sortable: true,
+    },
+    {
+      field: 'lastLoginTime',
+      title: $t('sys.user.fields.lastLoginTime'),
+      formatter: ({ cellValue }: { cellValue: number }) => formatUnixTime(cellValue),
+      width: 160,
+      sortable: true,
+    },
+    {
+      field: 'onlineCount',
+      title: $t('sys.user.fields.onlineCount'),
+      width: 90,
+      cellRender: {
+        name: 'CellLink',
+        attrs: {
+          hasAccess: canOnline,
+          onClick: (row: UserApi.UserItem) => onOnlineClick(row),
+        },
+      },
+    },
+    {
+      field: 'createdAt',
+      title: $t('common.createdAt'),
+      formatter: ({ cellValue }: { cellValue: number }) => formatUnixTime(cellValue),
+      width: 160,
+    },
+    {
+      align: 'center',
+      field: 'operation',
+      fixed: 'right',
+      title: $t('common.operation'),
+      width: 200,
+      showOverflow: false,
+      cellRender: {
+        name: 'TableActions',
+        attrs: {
+          actions: [
+            {
+              key: 'edit',
+              label: $t('common.edit'),
+              icon: 'lucide:pencil',
+              hidden: !canUpdate,
+              onClick: (row: UserApi.UserItem) => onEditClick(row.id),
+            },
+            {
+              key: 'delete',
+              label: $t('common.delete'),
+              icon: 'lucide:trash-2',
+              danger: true,
+              confirmTitle: $t('common.confirmDelete'),
+              hidden: !canDelete,
+              onClick: (row: UserApi.UserItem) => useTableDelete(deleteUserApi, row.id, row.username, onRefresh),
+            },
+            {
+              key: 'setSuper',
+              label: $t('sys.user.setSuper'),
+              icon: 'lucide:crown',
+              hidden: (row: UserApi.UserItem) => !canSetSuper.value || row.isSuper === 1,
+              onClick: (row: UserApi.UserItem) => onSetSuper(row),
+            },
+          ],
+        },
+      },
+    },
+  ];
+}

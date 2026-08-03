@@ -1,0 +1,72 @@
+{
+  "pageTitle": "菜单管理",
+  "addRoot": "新增顶级菜单",
+  "addChild": "新增子菜单",
+  "detail": "查看菜单",
+  "move": "移动到",
+  "moveTitle": "移动「{title}」到",
+  "moveSuccess": "移动成功",
+  "expandAll": "全部展开",
+  "collapseAll": "全部收起",
+  "searchPlaceholder": "搜索菜单名称或路由名称",
+  "generatePermission": "生成标准权限码",
+  "pickMethod": "从接口选择",
+  "rootLevel": "顶级",
+  "type": {
+    "dir": "目录",
+    "menu": "菜单",
+    "button": "按钮/权限码",
+    "embedded": "内嵌",
+    "external": "外链"
+  },
+  "fields": {
+    "parentId": "父级菜单",
+    "type": "类型",
+    "title": "标题",
+    "name": "路由名称",
+    "path": "路由路径",
+    "activePath": "激活路径",
+    "linkSrc": "链接地址",
+    "component": "组件路径",
+    "icon": "图标",
+    "activeIcon": "激活图标",
+    "permission": "权限码",
+    "sort": "排序",
+    "badge": "徽标内容",
+    "badgeType": "徽标类型",
+    "badgeVariants": "徽标样式",
+    "isHidden": "隐藏菜单",
+    "isHideChildren": "隐藏子菜单",
+    "isHideBreadcrumb": "隐藏面包屑",
+    "isHideTab": "隐藏标签页",
+    "isKeepAlive": "缓存页面",
+    "isAffixTab": "固定标签页"
+  },
+  "permission": {
+    "controllerPrefix": "控制器前缀",
+    "method": "接口方法",
+    "scan": "扫描接口",
+    "pickTitle": "从控制器接口选择权限码",
+    "generateTitle": "生成「{title}」标准权限码",
+    "generateSuccess": "成功生成 {created} 个权限码，跳过 {skipped} 个已存在权限码",
+    "picked": "已填充权限码：{permission}"
+  },
+  "placeholder": {
+    "component": "如：/system/config/index 或 BasicLayout",
+    "permission": "如：system:config:edit",
+    "parentId": "请选择父级菜单",
+    "activePath": "用于高亮侧边栏，如详情页激活列表菜单",
+    "badge": "文字内容",
+    "controllerPrefix": "如：/admin/system/dict"
+  },
+  "validate": {
+    "titleRequired": "请输入菜单标题",
+    "nameRequired": "请输入路由名称",
+    "pathRequired": "请输入路由路径",
+    "componentRequired": "请输入组件路径",
+    "linkRequired": "请输入链接地址",
+    "permissionRequired": "请输入权限码"
+  },
+  "createSuccess": "菜单创建成功",
+  "updateSuccess": "菜单更新成功"
+}

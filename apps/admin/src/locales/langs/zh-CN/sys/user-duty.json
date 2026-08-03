@@ -1,0 +1,23 @@
+{
+  "pageTitle": "职务管理",
+  "create": "新增职务",
+  "edit": "编辑职务",
+  "detail": "查看职务",
+  "fields": {
+    "code": "职务编码",
+    "name": "职务名称",
+    "deptId": "所属部门",
+    "level": "职级权重",
+    "status": "职务状态",
+    "sort": "显示顺序",
+    "remark": "备注"
+  },
+  "placeholders": {
+    "code": "请输入职务编码，如 P8、MANAGER",
+    "name": "请输入职务名称，如高级专家、部门经理",
+    "deptId": "请选择所属部门",
+    "level": "数值越大级别越高",
+    "sort": "升序排列，越小越靠前",
+    "remark": "请输入备注信息"
+  }
+}

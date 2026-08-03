@@ -1,0 +1,3595 @@
+[
+  {
+    "id": "1001",
+    "type": 1,
+    "status": 1,
+    "title": "系统管理",
+    "name": "系统管理",
+    "sort": 4,
+    "children": [
+      {
+        "id": "1002",
+        "type": 1,
+        "status": 1,
+        "title": "用户管理",
+        "name": "用户管理",
+        "sort": 32,
+        "children": [
+          {
+            "id": "1003",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1004",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1005",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1006",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1007",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1008",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1009",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1010",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1011",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1012",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1013",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1014",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1015",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1016",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1017",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1018",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例1",
+            "name": "link_0",
+            "path": "/embedded/frame",
+            "sort": 0
+          },
+          {
+            "id": "1019",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例2",
+            "name": "link_1",
+            "path": "https://example.com",
+            "sort": 1
+          }
+        ]
+      },
+      {
+        "id": "1020",
+        "type": 1,
+        "status": 1,
+        "title": "角色管理",
+        "name": "角色管理",
+        "sort": 46,
+        "children": [
+          {
+            "id": "1021",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1022",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1023",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1024",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1025",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1026",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1027",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1028",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1029",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1030",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1031",
+            "type": 2,
+            "status": 2,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1032",
+                "type": 3,
+                "status": 2,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1033",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1034",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1035",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1036",
+            "type": 2,
+            "status": 1,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1037",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1038",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1039",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1040",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例1",
+            "name": "link_0",
+            "path": "https://example.com",
+            "sort": 0
+          },
+          {
+            "id": "1041",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例2",
+            "name": "link_1",
+            "path": "/embedded/frame",
+            "sort": 1
+          }
+        ]
+      },
+      {
+        "id": "1042",
+        "type": 1,
+        "status": 1,
+        "title": "部门管理",
+        "name": "部门管理",
+        "sort": 88,
+        "children": [
+          {
+            "id": "1043",
+            "type": 2,
+            "status": 2,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1044",
+                "type": 3,
+                "status": 2,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1045",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1046",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1047",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1048",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1049",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1050",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1051",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1052",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1053",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1054",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1055",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1056",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1057",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1058",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1059",
+            "type": 2,
+            "status": 1,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1060",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1061",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1062",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1063",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1064",
+            "type": 2,
+            "status": 1,
+            "title": "导入",
+            "name": "导入",
+            "path": "/admin/导入",
+            "sort": 4,
+            "children": [
+              {
+                "id": "1065",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1066",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1067",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1068",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1069",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1070",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1071",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例1",
+            "name": "link_0",
+            "path": "/embedded/frame",
+            "sort": 0
+          },
+          {
+            "id": "1072",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例2",
+            "name": "link_1",
+            "path": "/embedded/frame",
+            "sort": 1
+          }
+        ]
+      },
+      {
+        "id": "1073",
+        "type": 1,
+        "status": 1,
+        "title": "岗位管理",
+        "name": "岗位管理",
+        "sort": 15,
+        "children": [
+          {
+            "id": "1074",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1075",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1076",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1077",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1078",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1079",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1080",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1081",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1082",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1083",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1084",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1085",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1086",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1087",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1088",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1089",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例1",
+            "name": "link_0",
+            "path": "https://example.com",
+            "sort": 0
+          },
+          {
+            "id": "1090",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例2",
+            "name": "link_1",
+            "path": "https://example.com",
+            "sort": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1091",
+    "type": 1,
+    "status": 1,
+    "title": "权限管理",
+    "name": "权限管理",
+    "sort": 82,
+    "children": [
+      {
+        "id": "1092",
+        "type": 1,
+        "status": 1,
+        "title": "菜单管理",
+        "name": "菜单管理",
+        "sort": 26,
+        "children": [
+          {
+            "id": "1093",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1094",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1095",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1096",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1097",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1098",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1099",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1100",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1101",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1102",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1103",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1104",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1105",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1106",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1107",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例1",
+            "name": "link_0",
+            "path": "https://example.com",
+            "sort": 0
+          },
+          {
+            "id": "1108",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例2",
+            "name": "link_1",
+            "path": "https://example.com",
+            "sort": 1
+          }
+        ]
+      },
+      {
+        "id": "1109",
+        "type": 1,
+        "status": 1,
+        "title": "权限包",
+        "name": "权限包",
+        "sort": 71,
+        "children": [
+          {
+            "id": "1110",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1111",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1112",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1113",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1114",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1115",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1116",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1117",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1118",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1119",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1120",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1121",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1122",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1123",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1124",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1125",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1126",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1127",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1128",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例1",
+            "name": "link_0",
+            "path": "https://example.com",
+            "sort": 0
+          }
+        ]
+      },
+      {
+        "id": "1129",
+        "type": 1,
+        "status": 2,
+        "title": "数据规则",
+        "name": "数据规则",
+        "sort": 31,
+        "children": [
+          {
+            "id": "1130",
+            "type": 2,
+            "status": 2,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1131",
+                "type": 3,
+                "status": 2,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1132",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1133",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1134",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1135",
+                "type": 3,
+                "status": 2,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1136",
+                "type": 3,
+                "status": 2,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1137",
+            "type": 2,
+            "status": 2,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1138",
+                "type": 3,
+                "status": 2,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1139",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1140",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1141",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1142",
+            "type": 2,
+            "status": 2,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1143",
+                "type": 3,
+                "status": 2,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1144",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1145",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1146",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1147",
+            "type": 2,
+            "status": 2,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1148",
+                "type": 3,
+                "status": 2,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1149",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1150",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1151",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1152",
+                "type": 3,
+                "status": 2,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1153",
+                "type": 3,
+                "status": 2,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1154",
+            "type": 5,
+            "status": 2,
+            "title": "外链示例1",
+            "name": "link_0",
+            "path": "https://example.com",
+            "sort": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1155",
+    "type": 1,
+    "status": 1,
+    "title": "运维中心",
+    "name": "运维中心",
+    "sort": 25,
+    "children": [
+      {
+        "id": "1156",
+        "type": 1,
+        "status": 1,
+        "title": "任务调度",
+        "name": "任务调度",
+        "sort": 85,
+        "children": [
+          {
+            "id": "1157",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1158",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1159",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1160",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1161",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1162",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1163",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1164",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1165",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1166",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1167",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1168",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1169",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1170",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1171",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1172",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1173",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1174",
+            "type": 2,
+            "status": 1,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1175",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1176",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1177",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1178",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例1",
+            "name": "link_0",
+            "path": "/embedded/frame",
+            "sort": 0
+          }
+        ]
+      },
+      {
+        "id": "1179",
+        "type": 1,
+        "status": 1,
+        "title": "系统监控",
+        "name": "系统监控",
+        "sort": 8,
+        "children": [
+          {
+            "id": "1180",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1181",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1182",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1183",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1184",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1185",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1186",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1187",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1188",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1189",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1190",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1191",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1192",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1193",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1194",
+            "type": 2,
+            "status": 2,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1195",
+                "type": 3,
+                "status": 2,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1196",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1197",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1198",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1199",
+                "type": 3,
+                "status": 2,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1200",
+                "type": 3,
+                "status": 2,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1201",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例1",
+            "name": "link_0",
+            "path": "/embedded/frame",
+            "sort": 0
+          }
+        ]
+      },
+      {
+        "id": "1202",
+        "type": 1,
+        "status": 1,
+        "title": "缓存管理",
+        "name": "缓存管理",
+        "sort": 9,
+        "children": [
+          {
+            "id": "1203",
+            "type": 2,
+            "status": 2,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1204",
+                "type": 3,
+                "status": 2,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1205",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1206",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1207",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1208",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1209",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1210",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1211",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1212",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1213",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1214",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1215",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1216",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1217",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1218",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1219",
+            "type": 2,
+            "status": 1,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1220",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1221",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1222",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1223",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1224",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1225",
+            "type": 2,
+            "status": 1,
+            "title": "导入",
+            "name": "导入",
+            "path": "/admin/导入",
+            "sort": 4,
+            "children": [
+              {
+                "id": "1226",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1227",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1228",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1229",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例1",
+            "name": "link_0",
+            "path": "https://example.com",
+            "sort": 0
+          },
+          {
+            "id": "1230",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例2",
+            "name": "link_1",
+            "path": "/embedded/frame",
+            "sort": 1
+          }
+        ]
+      },
+      {
+        "id": "1231",
+        "type": 1,
+        "status": 1,
+        "title": "消息队列",
+        "name": "消息队列",
+        "sort": 91,
+        "children": [
+          {
+            "id": "1232",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1233",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1234",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1235",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1236",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1237",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1238",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1239",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1240",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1241",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1242",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1243",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1244",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1245",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1246",
+            "type": 2,
+            "status": 1,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1247",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1248",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1249",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1250",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例1",
+            "name": "link_0",
+            "path": "/embedded/frame",
+            "sort": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1251",
+    "type": 1,
+    "status": 1,
+    "title": "日志审计",
+    "name": "日志审计",
+    "sort": 21,
+    "children": [
+      {
+        "id": "1252",
+        "type": 1,
+        "status": 1,
+        "title": "登录日志",
+        "name": "登录日志",
+        "sort": 71,
+        "children": [
+          {
+            "id": "1253",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1254",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1255",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1256",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1257",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1258",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1259",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1260",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1261",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1262",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1263",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1264",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1265",
+                "type": 3,
+                "status": 2,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1266",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1267",
+            "type": 2,
+            "status": 1,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1268",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1269",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1270",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1271",
+            "type": 2,
+            "status": 1,
+            "title": "导入",
+            "name": "导入",
+            "path": "/admin/导入",
+            "sort": 4,
+            "children": [
+              {
+                "id": "1272",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1273",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1274",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1275",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1276",
+            "type": 5,
+            "status": 2,
+            "title": "外链示例1",
+            "name": "link_0",
+            "path": "https://example.com",
+            "sort": 0
+          }
+        ]
+      },
+      {
+        "id": "1277",
+        "type": 1,
+        "status": 1,
+        "title": "操作日志",
+        "name": "操作日志",
+        "sort": 43,
+        "children": [
+          {
+            "id": "1278",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1279",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1280",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1281",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1282",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1283",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1284",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1285",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1286",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1287",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1288",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1289",
+                "type": 3,
+                "status": 2,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1290",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1291",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1292",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1293",
+            "type": 2,
+            "status": 1,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1294",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1295",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1296",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1297",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1298",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1299",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例1",
+            "name": "link_0",
+            "path": "/embedded/frame",
+            "sort": 0
+          }
+        ]
+      },
+      {
+        "id": "1300",
+        "type": 1,
+        "status": 1,
+        "title": "异常日志",
+        "name": "异常日志",
+        "sort": 34,
+        "children": [
+          {
+            "id": "1301",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1302",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1303",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1304",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1305",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1306",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1307",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1308",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1309",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1310",
+                "type": 3,
+                "status": 2,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1311",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1312",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1313",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1314",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1315",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1316",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1317",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例1",
+            "name": "link_0",
+            "path": "https://example.com",
+            "sort": 0
+          },
+          {
+            "id": "1318",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例2",
+            "name": "link_1",
+            "path": "https://example.com",
+            "sort": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1319",
+    "type": 1,
+    "status": 1,
+    "title": "配置中心",
+    "name": "配置中心",
+    "sort": 42,
+    "children": [
+      {
+        "id": "1320",
+        "type": 1,
+        "status": 1,
+        "title": "参数配置",
+        "name": "参数配置",
+        "sort": 38,
+        "children": [
+          {
+            "id": "1321",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1322",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1323",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1324",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1325",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1326",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1327",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1328",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1329",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1330",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1331",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1332",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1333",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1334",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1335",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1336",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1337",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1338",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1339",
+            "type": 2,
+            "status": 1,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1340",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1341",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1342",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1343",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1344",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1345",
+            "type": 2,
+            "status": 1,
+            "title": "导入",
+            "name": "导入",
+            "path": "/admin/导入",
+            "sort": 4,
+            "children": [
+              {
+                "id": "1346",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1347",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1348",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1349",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1350",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例1",
+            "name": "link_0",
+            "path": "/embedded/frame",
+            "sort": 0
+          }
+        ]
+      },
+      {
+        "id": "1351",
+        "type": 1,
+        "status": 1,
+        "title": "字典管理",
+        "name": "字典管理",
+        "sort": 92,
+        "children": [
+          {
+            "id": "1352",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1353",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1354",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1355",
+                "type": 3,
+                "status": 2,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1356",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1357",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1358",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1359",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1360",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1361",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1362",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1363",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1364",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1365",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1366",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1367",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              }
+            ]
+          },
+          {
+            "id": "1368",
+            "type": 2,
+            "status": 1,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1369",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1370",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1371",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1372",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1373",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              }
+            ]
+          },
+          {
+            "id": "1374",
+            "type": 2,
+            "status": 1,
+            "title": "导入",
+            "name": "导入",
+            "path": "/admin/导入",
+            "sort": 4,
+            "children": [
+              {
+                "id": "1375",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1376",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1377",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1378",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1379",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1380",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1381",
+            "type": 5,
+            "status": 1,
+            "title": "外链示例1",
+            "name": "link_0",
+            "path": "https://example.com",
+            "sort": 0
+          },
+          {
+            "id": "1382",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例2",
+            "name": "link_1",
+            "path": "/embedded/frame",
+            "sort": 1
+          }
+        ]
+      },
+      {
+        "id": "1383",
+        "type": 1,
+        "status": 1,
+        "title": "通知模板",
+        "name": "通知模板",
+        "sort": 41,
+        "children": [
+          {
+            "id": "1384",
+            "type": 2,
+            "status": 1,
+            "title": "列表",
+            "name": "列表",
+            "path": "/admin/列表",
+            "sort": 0,
+            "children": [
+              {
+                "id": "1385",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1386",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1387",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1388",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1389",
+            "type": 2,
+            "status": 1,
+            "title": "新增",
+            "name": "新增",
+            "path": "/admin/新增",
+            "sort": 1,
+            "children": [
+              {
+                "id": "1390",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1391",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1392",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1393",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1394",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1395",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1396",
+            "type": 2,
+            "status": 1,
+            "title": "编辑",
+            "name": "编辑",
+            "path": "/admin/编辑",
+            "sort": 2,
+            "children": [
+              {
+                "id": "1397",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1398",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1399",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1400",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1401",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1402",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1403",
+            "type": 2,
+            "status": 1,
+            "title": "详情",
+            "name": "详情",
+            "path": "/admin/详情",
+            "sort": 3,
+            "children": [
+              {
+                "id": "1404",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1405",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1406",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1407",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              }
+            ]
+          },
+          {
+            "id": "1408",
+            "type": 2,
+            "status": 1,
+            "title": "导入",
+            "name": "导入",
+            "path": "/admin/导入",
+            "sort": 4,
+            "children": [
+              {
+                "id": "1409",
+                "type": 3,
+                "status": 1,
+                "title": "查询",
+                "permission": "adm:sys:查询:0",
+                "sort": 0
+              },
+              {
+                "id": "1410",
+                "type": 3,
+                "status": 1,
+                "title": "新增",
+                "permission": "adm:sys:新增:1",
+                "sort": 1
+              },
+              {
+                "id": "1411",
+                "type": 3,
+                "status": 1,
+                "title": "编辑",
+                "permission": "adm:sys:编辑:2",
+                "sort": 2
+              },
+              {
+                "id": "1412",
+                "type": 3,
+                "status": 1,
+                "title": "删除",
+                "permission": "adm:sys:删除:3",
+                "sort": 3
+              },
+              {
+                "id": "1413",
+                "type": 3,
+                "status": 1,
+                "title": "详情",
+                "permission": "adm:sys:详情:4",
+                "sort": 4
+              },
+              {
+                "id": "1414",
+                "type": 3,
+                "status": 1,
+                "title": "导出",
+                "permission": "adm:sys:导出:5",
+                "sort": 5
+              }
+            ]
+          },
+          {
+            "id": "1415",
+            "type": 4,
+            "status": 1,
+            "title": "内嵌示例1",
+            "name": "link_0",
+            "path": "/embedded/frame",
+            "sort": 0
+          }
+        ]
+      }
+    ]
+  }
+]

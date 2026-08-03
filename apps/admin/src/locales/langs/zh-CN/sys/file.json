@@ -1,0 +1,47 @@
+{
+  "pageTitle": "文件管理",
+  "fields": {
+    "originalName": "原文件名",
+    "extension": "扩展名",
+    "sizeByte": "文件大小",
+    "storageCode": "存储实例",
+    "accessType": "访问类型",
+    "uploadType": "上传类型",
+    "maxCount": "最大数量",
+    "maxSize": "最大大小",
+    "aspectRatio": "裁剪比例",
+    "shape": "头像形状",
+    "uploadTarget": "上传目标",
+    "refCount": "引用计数"
+  },
+  "options": {
+    "accessType": {
+      "authorized": "授权可见",
+      "public": "完全公开",
+      "login": "登录可见"
+    },
+    "uploadType": {
+      "file": "文件",
+      "image": "图片",
+      "media": "媒体",
+      "avatar": "头像"
+    },
+    "avatarShape": {
+      "circle": "圆形",
+      "square": "方形"
+    },
+    "status": {
+      "1": "已完成",
+      "2": "上传中",
+      "3": "失败"
+    }
+  },
+  "move": "迁移",
+  "batchMove": "批量迁移",
+  "preview": "预览",
+  "upload": "上传文件",
+  "moveSuccess": "迁移成功",
+  "batchMoveDispatched": "迁移任务已创建，可在任务中心查看进度",
+  "moveTaskTip": "将把该文件迁移到选中的存储实例，迁移任务异步执行，真实成败以任务中心执行结果为准。",
+  "batchMoveTaskTip": "将把勾选的 {count} 个文件迁移到选中的存储实例（仅迁移勾选的数据）。迁移任务异步执行，进度与真实成败请在任务中心查看。"
+}

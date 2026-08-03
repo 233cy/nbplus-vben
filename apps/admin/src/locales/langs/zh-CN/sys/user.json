@@ -1,0 +1,49 @@
+{
+  "pageTitle": "用户管理",
+  "create": "新增用户管理",
+  "edit": "编辑用户管理",
+  "detail": "查看用户管理",
+  "rules": {
+    "passwordRequired": "请输入登录密码"
+  },
+  "fields": {
+    "username": "登录账号",
+    "password": "登录密码",
+    "status": "帐号状态",
+    "nickname": "真实姓名|昵称",
+    "avatar": "用户头像",
+    "email": "邮箱",
+    "phone": "手机号码",
+    "totpSecret": "启用TOTP",
+    "gender": "性别",
+    "deptId": "部门",
+    "dutyId": "职务",
+    "deptName": "部门",
+    "dutyName": "职务",
+    "roleIds": "角色",
+    "isMain": "是否主职",
+    "lastLoginIp": "最后登录IP",
+    "lastLoginTime": "最后登录时间",
+    "onlineCount": "在线设备",
+    "isSuper": "超管"
+  },
+  "batchRole": {
+    "title": "批量分配角色",
+    "action": "分配角色"
+  },
+  "userOrg": {
+    "add": "添加任职",
+    "addTitle": "添加任职",
+    "listTitle": "任职列表",
+    "setMain": "设为主职",
+    "main": "主职",
+    "secondary": "兼职",
+    "empty": "暂无任职信息",
+    "deptRequired": "请先选择部门",
+    "dutyRequired": "请选择职务",
+    "duplicate": "该部门与职务组合已存在"
+  },
+  "setSuper": "设为超管",
+  "setSuperConfirm": "开启后原超管自动失效，全系统仅一个超级管理员，确认移交给该用户吗？",
+  "setSuperSuccess": "超管移交成功"
+}

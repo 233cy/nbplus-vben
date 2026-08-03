@@ -1,0 +1,35 @@
+{
+  "pageTitle": "系统参数",
+  "save": "保存配置",
+  "saveSuccess": "配置保存成功",
+  "addItem": "新增配置项",
+  "editItem": "编辑配置项",
+  "encryptedPlaceholder": "已加密，留空则不修改",
+  "fields": {
+    "groups": "分组标识",
+    "key": "配置键",
+    "label": "显示名称",
+    "value": "配置值",
+    "component": "组件类型",
+    "isEncrypted": "加密存储",
+    "isPublic": "公开访问",
+    "isSys": "系统参数",
+    "sort": "排序",
+    "remark": "备注"
+  },
+  "placeholder": {
+    "keyword": "搜索配置键、显示名称或分组",
+    "groups": "选择或输入分组标识"
+  },
+  "components": {
+    "Input": "单行文本",
+    "InputPassword": "密码输入",
+    "Textarea": "多行文本",
+    "InputNumber": "数字输入",
+    "Switch": "开关",
+    "UpImg": "图片上传",
+    "Edit": "富文本编辑器",
+    "DictSelect": "字典下拉",
+    "DictRadio": "字典单选"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "pageTitle": "部门管理",
+  "edit": "编辑部门",
+  "detail": "查看部门",
+  "addRoot": "新增顶级部门",
+  "addChild": "新增子部门",
+  "expandAll": "展开全部",
+  "collapseAll": "折叠全部",
+  "move": "移动",
+  "moveTitle": "移动部门「{title}」",
+  "moveSuccess": "部门移动成功",
+  "generateCode": "生成编码",
+  "searchPlaceholder": "搜索部门名称/编码",
+  "rootLevel": "顶级部门",
+  "fields": {
+    "parentId": "上级部门",
+    "name": "部门名称",
+    "code": "部门编码",
+    "sort": "显示排序",
+    "leaderId": "负责人",
+    "phone": "联系电话",
+    "email": "邮箱"
+  },
+  "placeholder": {
+    "name": "请输入部门名称",
+    "code": "留空将根据名称自动生成拼音编码，也可点击右侧按钮生成",
+    "parentId": "请选择上级部门",
+    "leaderId": "请输入负责人用户ID",
+    "phone": "请输入部门联系电话",
+    "email": "请输入部门邮箱"
+  }
+}

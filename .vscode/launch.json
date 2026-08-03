@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "name": "vben admin playground dev",
+      "request": "launch",
+      "url": "http://localhost:5555",
+      "env": { "NODE_ENV": "development" },
+      "sourceMaps": true,
+      "webRoot": "${workspaceFolder}/playground"
+    },
+    {
+      "type": "chrome",
+      "name": "vben admin antd dev",
+      "request": "launch",
+      "url": "http://localhost:5666",
+      "env": { "NODE_ENV": "development" },
+      "sourceMaps": true,
+      "webRoot": "${workspaceFolder}/apps/web-antd"
+    },
+    {
+      "type": "chrome",
+      "name": "233cy admin public",
+      "request": "launch",
+      "url": "http://localhost:2300",
+      "env": { "NODE_ENV": "development" },
+      "sourceMaps": true,
+      "webRoot": "${workspaceFolder}/apps/admin"
+    }
+  ]
+}

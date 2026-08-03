@@ -1,0 +1,67 @@
+<script setup lang="ts">
+import type { PostApi } from '#/api/sys/userDuty';
+
+import { computed, nextTick, reactive, ref } from 'vue';
+
+import { useVbenDrawer } from '@vben/common-ui';
+
+import { useVbenForm } from '#/adapter/form';
+import { createPostApi, getPostDetailApi, updatePostApi } from '#/api/sys/userDuty';
+import { $t } from '#/locales';
+
+import { useUserDutyPermission } from '../permissions';
+import { useFormSchema } from '../schema/form';
+
+const emit = defineEmits<{ success: [] }>();
+
+const permission = useUserDutyPermission();
+const canUpdate = computed(() => permission.canUpdate);
+const rowId = ref<string | undefined>();
+const isReadonly = ref(false);
+const isEdit = computed(() => !!rowId.value);
+
+const [Form, formApi] = useVbenForm(
+  reactive({
+    schema: computed(() => useFormSchema(isEdit.value)),
+    showDefaultActions: false,
+  }) as any,
+);
+
+const [Drawer, drawerApi] = useVbenDrawer({
+  async onConfirm() {
+    const { valid } = await formApi.validate();
+    if (!valid) return;
+    const values = await formApi.getValues<PostApi.SaveParams>();
+    drawerApi.lock();
+    try {
+      await (rowId.value ? updatePostApi({ id: rowId.value, ...values }) : createPostApi(values));
+      emit('success');
+      drawerApi.close();
+    } finally {
+      drawerApi.unlock();
+    }
+  },
+  async onOpenChange(isOpen) {
+    if (isOpen) {
+      const data = drawerApi.getData<PostApi.PostItem & { readonly?: boolean }>();
+      formApi.resetForm();
+      isReadonly.value = data?.readonly ?? false;
+      if (data?.id) {
+        rowId.value = data.id;
+        await nextTick();
+        // 优先使用传入的完整数据，缺失字段再调用详情接口补齐
+        const detail = data.code ? data : await getPostDetailApi(data.id);
+        formApi.setValues(detail);
+      } else {
+        rowId.value = undefined;
+      }
+    }
+  },
+});
+</script>
+
+<template>
+  <Drawer :title="isReadonly ? $t('sys.user-duty.detail') : rowId ? $t('sys.user-duty.edit') : $t('sys.user-duty.create')" :show-confirm-button="!isReadonly && (!!rowId ? canUpdate : true)">
+    <Form :disabled="isReadonly" />
+  </Drawer>
+</template>

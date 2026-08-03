@@ -1,0 +1,30 @@
+import { computed } from 'vue';
+
+import { useAccess } from '#/composables/use-access';
+import { useAdminUserStore } from '#/store';
+
+/**
+ * 用户管理模块权限码集中判断
+ *
+ * 权限码与后端 `app/Http/Admin/Controller/Sys/UserController.php` 保持一致。
+ */
+export function useUserPermission() {
+  const { hasAccessByCodes } = useAccess();
+  const adminUserStore = useAdminUserStore();
+
+  return {
+    canList: hasAccessByCodes(['adm:sys:user:list']),
+    canDetail: hasAccessByCodes(['adm:sys:user:detail']),
+    canCreate: hasAccessByCodes(['adm:sys:user:create']),
+    canUpdate: hasAccessByCodes(['adm:sys:user:update']),
+    canDelete: hasAccessByCodes(['adm:sys:user:delete']),
+    canBatchDelete: hasAccessByCodes(['adm:sys:user:delete']),
+    canBatchUpdate: hasAccessByCodes(['adm:sys:user:update']),
+    canInlineUpdate: hasAccessByCodes(['adm:sys:user:update']),
+    canOnline: hasAccessByCodes(['adm:sys:user:list']),
+    canKick: hasAccessByCodes(['adm:sys:user:kick']),
+    canKickAll: hasAccessByCodes(['adm:sys:user:kick']),
+    /** 设为超管：独立鉴权操作，仅当前超管可见可操作 */
+    canSetSuper: computed(() => adminUserStore.isSuper === 1),
+  };
+}
