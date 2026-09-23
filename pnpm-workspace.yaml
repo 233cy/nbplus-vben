@@ -237,4 +237,4 @@ catalogs:
     unplugin-auto-import: ^20.3.0
     unplugin-vue-components: ^30.0.0
     vuedraggable: ^4.1.0
-    xe-utils: ^3.9.1
+    xe-utils: ^4.0.14
