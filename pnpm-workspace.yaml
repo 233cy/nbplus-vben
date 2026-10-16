@@ -223,7 +223,7 @@ allowBuilds:
 catalogs:
   admin-local:
     '@types/spark-md5': ^3.0.5
-    '@uppy/core': ^5.2.0
+    '@uppy/core': ^6.2.0
     '@uppy/tus': ^5.1.1
     '@uppy/vue': ^3.2.0
     '@uppy/xhr-upload': ^5.2.0
